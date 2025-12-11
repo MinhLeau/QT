@@ -3,38 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Từ vựng Phần 4: Our Australian community and values</title>
+    <title>Từ vựng Phần 1: Our Australian community and values</title>
     <style>
         body {font-family: Arial, sans-serif; background:#f0f8ff; padding:20px; line-height:1.6;}
-		h3 {text-align:right; color:#006400; margin-bottom:1px; margin-top:0px; font-size:10px;}
-        h1 {text-align:center; color:#006400; margin-bottom:-10px; margin-top:-25px;}
-		h2 {text-align:left; color:#e51803; margin-bottom:0px; margin-bottom:10px; font-size:15px;}
-		
-		
-        .controls {background:#fff; padding:15px; border-radius:8px; margin-bottom:20px; box-shadow:0 4px 10px rgba(0,0,0,0.1); text-align:left;}
-        select, button {padding:8px 12px; font-size:16px; margin:0 8px; border-radius:4px;}
+        h1 {text-align:center; color:#006400; margin:-20px 0 0 10px;}
+        h2 {text-align:left; color:#e51803; margin:0 0 15px; font-size:15px;}
+        h3 {text-align:right; color:#006400; margin:0; font-size:10px;}
+        .controls {background:#fff; padding:15px; border-radius:8px; margin-bottom:20px; box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+        select, button {padding:8px 12px; font-size:16px; margin:0 8px 8px 8px 0; border-radius:6px;}
         .notice {color:#d32f2f; font-weight:bold; margin-top:5px;}
-        .btn {background:#006400; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-weight:bold;}
+        .btn {background:#006400; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:bold;}
         .btn:hover {background:#004d00;}
+        
+        
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin: 10px 0;
+            justify-content: flex-start;
+        }
+        .filter-btn {
+            padding: 10px 11px;
+            background: #e8f5e8;
+            border: 2px solid #006400;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #006400;
+            min-width: 80px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-btn.active {
+            background: #006400;
+            color: white;
+        }
+        /* HẾT PHẦN MỚI */
+        
         table {width:100%; border-collapse:collapse; margin-top:20px; background:white; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
-        th {background:#006400; color:white; padding:12px; text-align:center; position:relative; cursor:pointer;}
-        th .dropdown {position:absolute; top:100%; left:0; background:#006400; z-index:10; display:none; min-width:160px;}
-        th:hover .dropdown {display:block;}
-        th .dropdown select {width:100%; padding:8px;}
+        th {background:#006400; color:white; padding:12px; text-align:center;}
         td {padding:10px; vertical-align:top; border-bottom:1px solid #ddd; text-align:center;}
         td.example {font-style:italic; color:#333; font-size:0.95em; text-align:left;}
         tr:nth-child(even) {background:#f9f9f9;}
         tr:hover {background:#e6f7e6;}
         input[type="checkbox"] {transform:scale(1.3); cursor:pointer;}
         .hidden {display:none;}
-        .nav-bar {text-align:left; margin:20px 0;}
+        .nav-bar {margin:20px 0;}
         .nav-bar .btn {margin:5px; font-size:15px;}
         table, th, td {border:1px solid #000;}
         td, th {padding:6px;}
     </style>
 </head>
 <body>
-
 
 <h1>Australian Citizenship - Our Common Bond</h1><h3>Created by Thomas</h3>
 <h2>TỪ VỰNG PHẦN 1: OUR AUSTRALIAN COMMUNITY AND VALUES</h2>
@@ -52,7 +73,11 @@
    
     <div id="notice" class="notice" style="display:none;">Không tìm thấy giọng Australian? Cài đặt ngôn ngữ English (Australia) trong máy!</div>
 </div>
-
+<div class="filter-bar">
+    <div class="filter-btn active" data-mode="all">Show All</div>
+    <div class="filter-btn" data-mode="checked">Checked</div>
+    <div class="filter-btn" data-mode="unchecked">Unchecked</div>
+</div>
 <table id="vocabTable">
     <thead>
         <tr>
@@ -232,6 +257,7 @@
 </table>
 
 <script>
+// === TẤT CẢ CÁC HÀM CŨ VẪN GIỮ NGUYÊN + THÊM MỚI ===
 let voices = [];
 let originalOrder = [];
 let isSorted = false;
@@ -239,28 +265,21 @@ let isSorted = false;
 const voiceSelect = document.getElementById('voiceSelect');
 const notice = document.getElementById('notice');
 const tbody = document.querySelector('#vocabTable tbody');
-const filterSelect = document.getElementById('filterSelect');
+const filterButtons = document.querySelectorAll('.filter-btn');
 
-// Tiền tố lưu trữ riêng cho từng file (Voc1.html, Voc2.html, Voc4.html, Glossary.html...)
 const STORAGE_PREFIX = 'CITIZENSHIP_VOCAB_' + location.pathname.replace(/[^a-zA-Z0-9]/g, '_');
 
-// Lưu tất cả trạng thái
+// Lưu trạng thái
 function saveAll() {
-    // Lưu các ô đã tick
     const checked = Array.from(tbody.querySelectorAll('.row-check:checked'))
         .map(cb => cb.closest('tr').cells[0].textContent.trim());
     localStorage.setItem(STORAGE_PREFIX + '_checked', JSON.stringify(checked));
-
-    // Lưu droplist Options
-    localStorage.setItem(STORAGE_PREFIX + '_filter', filterSelect.value);
-
-    // Lưu giọng đọc
+    localStorage.setItem(STORAGE_PREFIX + '_filter', document.querySelector('.filter-btn.active').dataset.mode);
     localStorage.setItem(STORAGE_PREFIX + '_voice', voiceSelect.value);
 }
 
-// Khôi phục tất cả trạng thái khi load trang
+// Khôi phục trạng thái
 function loadAll() {
-    // Khôi phục checkbox
     const savedChecked = localStorage.getItem(STORAGE_PREFIX + '_checked');
     if (savedChecked) {
         const checkedNos = JSON.parse(savedChecked);
@@ -270,26 +289,30 @@ function loadAll() {
         });
     }
 
-    // Khôi phục droplist Options
-    const savedFilter = localStorage.getItem(STORAGE_PREFIX + '_filter');
-    if (savedFilter && ['all','checked','unchecked'].includes(savedFilter)) {
-        filterSelect.value = savedFilter;
-        filterRows(savedFilter);
-    }
+    const savedFilter = localStorage.getItem(STORAGE_PREFIX + '_filter') || 'all';
+    setActiveFilter(savedFilter);
+    filterRows(savedFilter);
 
-    // Khôi phục giọng đọc (sẽ được áp dụng sau khi loadVoices hoàn tất)
     const savedVoice = localStorage.getItem(STORAGE_PREFIX + '_voice');
     if (savedVoice) voiceSelect.dataset.saved = savedVoice;
 }
 
-// Lưu khi người dùng thay đổi bất kỳ thứ gì
-filterSelect.addEventListener('change', () => {
-    filterRows(filterSelect.value);
-    renumberVisible();
-    saveAll();
-});
+// Đổi nút active + lọc
+function setActiveFilter(mode) {
+    filterButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+    });
+}
 
-voiceSelect.addEventListener('change', saveAll);
+filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const mode = btn.dataset.mode;
+        setActiveFilter(mode);
+        filterRows(mode);
+        renumberVisible();
+        saveAll();
+    });
+});
 
 tbody.addEventListener('change', (e) => {
     if (e.target.classList.contains('row-check')) {
@@ -298,20 +321,22 @@ tbody.addEventListener('change', (e) => {
     }
 });
 
+voiceSelect.addEventListener('change', saveAll);
+
 document.addEventListener('DOMContentLoaded', () => {
     originalOrder = Array.from(tbody.rows);
     loadVoices();
     loadAll();
-    renumberVisible();  // Renumber ban đầu nếu cần
+    renumberVisible();
 });
 
+// === CÁC HÀM CŨ GIỮ NGUYÊN ===
 function loadVoices() {
     voices = speechSynthesis.getVoices();
     if (voices.length === 0) {
         speechSynthesis.onvoiceschanged = loadVoices;
         return;
     }
-
     let ausVoices = voices.filter(v => v.lang === 'en-AU' || v.name.toLowerCase().includes('australian'));
     let otherVoices = voices.filter(v => v.lang.startsWith('en-') && !ausVoices.includes(v));
     voices = [...ausVoices, ...otherVoices];
@@ -327,7 +352,6 @@ function loadVoices() {
         voiceSelect.appendChild(opt);
     });
 
-    // Áp dụng giọng đã lưu (nếu có)
     const saved = voiceSelect.dataset.saved || localStorage.getItem(STORAGE_PREFIX + '_voice');
     if (saved !== null && voiceSelect.options[saved]) {
         voiceSelect.value = saved;
@@ -350,15 +374,20 @@ function speak(text) {
 function filterRows(mode) {
     for (let row of tbody.rows) {
         const checked = row.querySelector('.row-check').checked;
-        row.classList.toggle('hidden', mode === 'checked' ? !checked : (mode === 'unchecked' ? checked : false));
+        row.classList.toggle('hidden', 
+            mode === 'checked' ? !checked : 
+            mode === 'unchecked' ? checked : false
+        );
     }
-    renumberVisible();  // Renumber sau khi lọc
+    renumberVisible();
 }
 
 function renumberVisible() {
-    let visibleRows = Array.from(tbody.rows).filter(row => !row.classList.contains('hidden'));
-    visibleRows.forEach((row, index) => {
-        row.cells[0].textContent = index + 1;
+    let count = 1;
+    tbody.querySelectorAll('tr').forEach(row => {
+        if (!row.classList.contains('hidden')) {
+            row.cells[0].textContent = count++;
+        }
     });
 }
 
@@ -372,7 +401,7 @@ function sortTable() {
         isSorted = false;
     }
     rows.forEach(r => tbody.appendChild(r));
-    renumberVisible();  // Renumber sau khi sort
+    renumberVisible();
 }
 
 document.querySelectorAll('[data-sentence]').forEach(btn => {
