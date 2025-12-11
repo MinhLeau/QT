@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Từ vựng Phần 1: Our Australian community and values</title>
+    <title>TỪ VỰNG PHẦN 1: OUR AUSTRALIAN COMMUNITY AND VALUES</title>
     <style>
         body {font-family: Arial, sans-serif; background:#f0f8ff; padding:20px; line-height:1.6;}
         h1 {text-align:center; color:#006400; margin:-20px 0 0 10px;}
@@ -39,7 +39,7 @@
             background: #006400;
             color: white;
         }
-        /* HẾT PHẦN MỚI */
+        
         
         table {width:100%; border-collapse:collapse; margin-top:20px; background:white; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
         th {background:#006400; color:white; padding:12px; text-align:center;}
@@ -59,6 +59,7 @@
 
 <h1>Australian Citizenship - Our Common Bond</h1><h3>Created by Thomas</h3>
 <h2>TỪ VỰNG PHẦN 1: OUR AUSTRALIAN COMMUNITY AND VALUES</h2>
+
 <div class="nav-bar">
     <a href="V1.html" class="btn">PART_ONE</a>
     <a href="V2.html" class="btn">PART_TWO</a>
@@ -70,14 +71,17 @@
 <div class="controls">
     <strong>Chọn giọng đọc:</strong>
     <select id="voiceSelect"></select>
-   
     <div id="notice" class="notice" style="display:none;">Không tìm thấy giọng Australian? Cài đặt ngôn ngữ English (Australia) trong máy!</div>
 </div>
+
+
 <div class="filter-bar">
     <div class="filter-btn active" data-mode="all">Show All</div>
     <div class="filter-btn" data-mode="checked">Checked</div>
     <div class="filter-btn" data-mode="unchecked">Unchecked</div>
 </div>
+
+
 <table id="vocabTable">
     <thead>
         <tr>
@@ -248,7 +252,7 @@
 </table>
 
 <script>
-// === TẤT CẢ CÁC HÀM CŨ VẪN GIỮ NGUYÊN + THÊM MỚI ===
+
 let voices = [];
 let originalOrder = [];
 let isSorted = false;
@@ -321,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renumberVisible();
 });
 
-// === CÁC HÀM CŨ GIỮ NGUYÊN ===
+
 function loadVoices() {
     voices = speechSynthesis.getVoices();
     if (voices.length === 0) {
@@ -402,3 +406,5 @@ document.querySelectorAll('[data-sentence]').forEach(btn => {
 
 </body>
 </html>
+
+
