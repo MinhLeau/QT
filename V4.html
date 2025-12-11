@@ -15,7 +15,7 @@
         .btn {background:#006400; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:bold;}
         .btn:hover {background:#004d00;}
         
-        /* PHẦN MỚI – 3 NÚT FILTER ĐẸP & DỄ BẤM TRÊN ĐIỆN THOẠI */
+        
         .filter-bar {
             display: flex;
             flex-wrap: wrap;
@@ -39,7 +39,7 @@
             background: #006400;
             color: white;
         }
-        /* HẾT PHẦN MỚI */
+        
         
         table {width:100%; border-collapse:collapse; margin-top:20px; background:white; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
         th {background:#006400; color:white; padding:12px; text-align:center;}
@@ -74,13 +74,13 @@
     <div id="notice" class="notice" style="display:none;">Không tìm thấy giọng Australian? Cài đặt ngôn ngữ English (Australia) trong máy!</div>
 </div>
 
-<!-- PHẦN MỚI – 3 NÚT LỚN DỄ BẤM TRÊN iPHONE -->
+
 <div class="filter-bar">
     <div class="filter-btn active" data-mode="all">Show All</div>
     <div class="filter-btn" data-mode="checked">Checked</div>
     <div class="filter-btn" data-mode="unchecked">Unchecked</div>
 </div>
-<!-- HẾT PHẦN MỚI -->
+
 
 <table id="vocabTable">
     <thead>
@@ -96,7 +96,7 @@
         </tr>
     </thead>
     <tbody>
-        <!-- Dán hết các <tr> từ vựng của bạn vào đây như cũ -->
+        
         <tr><td>1</td><td><input type="checkbox" class="row-check"></td><td>congratulations</td><td>/kənˌɡrætʃ.uˈleɪ.ʃənz/</td><td>chúc mừng</td><td><button class="btn" onclick="speak('congratulations')">Nghe</button></td><td class="example">Congratulations on choosing to become an Australian citizen. [Chúc mừng bạn đã chọn trở thành công dân Úc.]</td><td><button class="btn" data-sentence="Congratulations on choosing to become an Australian citizen.">Read</button></td></tr>
         <tr><td>2</td><td><input type="checkbox" class="row-check"></td><td>choosing</td><td>/ˈtʃuː.zɪŋ/</td><td>chọn</td><td><button class="btn" onclick="speak('choosing')">Nghe</button></td><td class="example">Congratulations on choosing to become an Australian citizen. [Chúc mừng bạn đã chọn trở thành công dân Úc.]</td><td><button class="btn" data-sentence="Congratulations on choosing to become an Australian citizen.">Read</button></td></tr>
         <tr><td>3</td><td><input type="checkbox" class="row-check"></td><td>courage</td><td>/ˈkʌr.ɪdʒ/</td><td>dũng cảm</td><td><button class="btn" onclick="speak('courage')">Nghe</button></td><td class="example">It takes courage, endeavour and commitment to live in a new country and participate fully as a citizen. [Cần có lòng dũng cảm, nỗ lực và cam kết để sống ở một đất nước mới và tham gia đầy đủ với tư cách công dân.]</td><td><button class="btn" data-sentence="It takes courage, endeavour and commitment to live in a new country and participate fully as a citizen.">Read</button></td></tr>
@@ -138,12 +138,12 @@
         <tr><td>39</td><td><input type="checkbox" class="row-check"></td><td>ethnic</td><td>/ˈeθ.nɪk/</td><td>dân tộc</td><td><button class="btn" onclick="speak('ethnic')">Nghe</button></td><td class="example">Australia successfully combines ethnic and cultural diversity with national unity. [Úc thành công kết hợp sự đa dạng dân tộc và văn hóa với sự thống nhất quốc gia.]</td><td><button class="btn" data-sentence="Australia successfully combines ethnic and cultural diversity with national unity.">Read</button></td></tr>
         <tr><td>40</td><td><input type="checkbox" class="row-check"></td><td>cultural</td><td>/ˈkʌl.tʃɚ.əl/</td><td>văn hóa</td><td><button class="btn" onclick="speak('cultural')">Nghe</button></td><td class="example">Australia successfully combines ethnic and cultural diversity with national unity. [Úc thành công kết hợp sự đa dạng dân tộc và văn hóa với sự thống nhất quốc gia.]</td><td><button class="btn" data-sentence="Australia successfully combines ethnic and cultural diversity with national unity.">Read</button></td></tr>
         
-        <!-- ... các dòng còn lại giữ nguyên ... -->
+        
     </tbody>
 </table>
 
 <script>
-// === TẤT CẢ CÁC HÀM CŨ VẪN GIỮ NGUYÊN + THÊM MỚI ===
+
 let voices = [];
 let originalOrder = [];
 let isSorted = false;
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renumberVisible();
 });
 
-// === CÁC HÀM CŨ GIỮ NGUYÊN ===
+
 function loadVoices() {
     voices = speechSynthesis.getVoices();
     if (voices.length === 0) {
@@ -297,7 +297,5 @@ document.querySelectorAll('[data-sentence]').forEach(btn => {
 
 </body>
 </html>
-
-
 
 
