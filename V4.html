@@ -149,6 +149,7 @@
 </table>
 
 <script>
+// === TẤT CẢ CÁC HÀM CŨ VẪN GIỮ NGUYÊN + THÊM MỚI ===
 let voices = [];
 let originalOrder = [];
 let isSorted = false;
@@ -156,28 +157,21 @@ let isSorted = false;
 const voiceSelect = document.getElementById('voiceSelect');
 const notice = document.getElementById('notice');
 const tbody = document.querySelector('#vocabTable tbody');
-const filterSelect = document.getElementById('filterSelect');
+const filterButtons = document.querySelectorAll('.filter-btn');
 
-// Tiền tố lưu trữ riêng cho từng file (Voc1.html, Voc2.html, Voc4.html, Glossary.html...)
 const STORAGE_PREFIX = 'CITIZENSHIP_VOCAB_' + location.pathname.replace(/[^a-zA-Z0-9]/g, '_');
 
-// Lưu tất cả trạng thái
+// Lưu trạng thái
 function saveAll() {
-    // Lưu các ô đã tick
     const checked = Array.from(tbody.querySelectorAll('.row-check:checked'))
         .map(cb => cb.closest('tr').cells[0].textContent.trim());
     localStorage.setItem(STORAGE_PREFIX + '_checked', JSON.stringify(checked));
-
-    // Lưu droplist Options
-    localStorage.setItem(STORAGE_PREFIX + '_filter', filterSelect.value);
-
-    // Lưu giọng đọc
+    localStorage.setItem(STORAGE_PREFIX + '_filter', document.querySelector('.filter-btn.active').dataset.mode);
     localStorage.setItem(STORAGE_PREFIX + '_voice', voiceSelect.value);
 }
 
-// Khôi phục tất cả trạng thái khi load trang
+// Khôi phục trạng thái
 function loadAll() {
-    // Khôi phục checkbox
     const savedChecked = localStorage.getItem(STORAGE_PREFIX + '_checked');
     if (savedChecked) {
         const checkedNos = JSON.parse(savedChecked);
@@ -187,26 +181,30 @@ function loadAll() {
         });
     }
 
-    // Khôi phục droplist Options
-    const savedFilter = localStorage.getItem(STORAGE_PREFIX + '_filter');
-    if (savedFilter && ['all','checked','unchecked'].includes(savedFilter)) {
-        filterSelect.value = savedFilter;
-        filterRows(savedFilter);
-    }
+    const savedFilter = localStorage.getItem(STORAGE_PREFIX + '_filter') || 'all';
+    setActiveFilter(savedFilter);
+    filterRows(savedFilter);
 
-    // Khôi phục giọng đọc (sẽ được áp dụng sau khi loadVoices hoàn tất)
     const savedVoice = localStorage.getItem(STORAGE_PREFIX + '_voice');
     if (savedVoice) voiceSelect.dataset.saved = savedVoice;
 }
 
-// Lưu khi người dùng thay đổi bất kỳ thứ gì
-filterSelect.addEventListener('change', () => {
-    filterRows(filterSelect.value);
-    renumberVisible();
-    saveAll();
-});
+// Đổi nút active + lọc
+function setActiveFilter(mode) {
+    filterButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+    });
+}
 
-voiceSelect.addEventListener('change', saveAll);
+filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const mode = btn.dataset.mode;
+        setActiveFilter(mode);
+        filterRows(mode);
+        renumberVisible();
+        saveAll();
+    });
+});
 
 tbody.addEventListener('change', (e) => {
     if (e.target.classList.contains('row-check')) {
@@ -215,20 +213,22 @@ tbody.addEventListener('change', (e) => {
     }
 });
 
+voiceSelect.addEventListener('change', saveAll);
+
 document.addEventListener('DOMContentLoaded', () => {
     originalOrder = Array.from(tbody.rows);
     loadVoices();
     loadAll();
-    renumberVisible();  // Renumber ban đầu nếu cần
+    renumberVisible();
 });
 
+// === CÁC HÀM CŨ GIỮ NGUYÊN ===
 function loadVoices() {
     voices = speechSynthesis.getVoices();
     if (voices.length === 0) {
         speechSynthesis.onvoiceschanged = loadVoices;
         return;
     }
-
     let ausVoices = voices.filter(v => v.lang === 'en-AU' || v.name.toLowerCase().includes('australian'));
     let otherVoices = voices.filter(v => v.lang.startsWith('en-') && !ausVoices.includes(v));
     voices = [...ausVoices, ...otherVoices];
@@ -244,7 +244,6 @@ function loadVoices() {
         voiceSelect.appendChild(opt);
     });
 
-    // Áp dụng giọng đã lưu (nếu có)
     const saved = voiceSelect.dataset.saved || localStorage.getItem(STORAGE_PREFIX + '_voice');
     if (saved !== null && voiceSelect.options[saved]) {
         voiceSelect.value = saved;
@@ -267,15 +266,20 @@ function speak(text) {
 function filterRows(mode) {
     for (let row of tbody.rows) {
         const checked = row.querySelector('.row-check').checked;
-        row.classList.toggle('hidden', mode === 'checked' ? !checked : (mode === 'unchecked' ? checked : false));
+        row.classList.toggle('hidden', 
+            mode === 'checked' ? !checked : 
+            mode === 'unchecked' ? checked : false
+        );
     }
-    renumberVisible();  // Renumber sau khi lọc
+    renumberVisible();
 }
 
 function renumberVisible() {
-    let visibleRows = Array.from(tbody.rows).filter(row => !row.classList.contains('hidden'));
-    visibleRows.forEach((row, index) => {
-        row.cells[0].textContent = index + 1;
+    let count = 1;
+    tbody.querySelectorAll('tr').forEach(row => {
+        if (!row.classList.contains('hidden')) {
+            row.cells[0].textContent = count++;
+        }
     });
 }
 
@@ -289,7 +293,7 @@ function sortTable() {
         isSorted = false;
     }
     rows.forEach(r => tbody.appendChild(r));
-    renumberVisible();  // Renumber sau khi sort
+    renumberVisible();
 }
 
 document.querySelectorAll('[data-sentence]').forEach(btn => {
@@ -300,4 +304,4 @@ document.querySelectorAll('[data-sentence]').forEach(btn => {
 </body>
 </html>
 
-```
+
