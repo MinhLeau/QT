@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Từ vựng Phần 4: Our Australian community and values</title>
+    <style>
+        body {font-family: Arial, sans-serif; background:#f0f8ff; padding:20px; line-height:1.6;}
+		h3 {text-align:right; color:#006400; margin-bottom:1px; margin-top:0px; font-size:10px;}
+        h1 {text-align:center; color:#006400; margin-bottom:-10px; margin-top:-25px;}
+		h2 {text-align:left; color:#e51803; margin-bottom:0px; margin-bottom:10px; font-size:15px;}
+		
+		
+        .controls {background:#fff; padding:15px; border-radius:8px; margin-bottom:20px; box-shadow:0 4px 10px rgba(0,0,0,0.1); text-align:left;}
+        select, button {padding:8px 12px; font-size:16px; margin:0 8px; border-radius:4px;}
+        .notice {color:#d32f2f; font-weight:bold; margin-top:5px;}
+        .btn {background:#006400; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-weight:bold;}
+        .btn:hover {background:#004d00;}
+        table {width:100%; border-collapse:collapse; margin-top:20px; background:white; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+        th {background:#006400; color:white; padding:12px; text-align:center; position:relative; cursor:pointer;}
+        th .dropdown {position:absolute; top:100%; left:0; background:#006400; z-index:10; display:none; min-width:160px;}
+        th:hover .dropdown {display:block;}
+        th .dropdown select {width:100%; padding:8px;}
+        td {padding:10px; vertical-align:top; border-bottom:1px solid #ddd; text-align:center;}
+        td.example {font-style:italic; color:#333; font-size:0.95em; text-align:left;}
+        tr:nth-child(even) {background:#f9f9f9;}
+        tr:hover {background:#e6f7e6;}
+        input[type="checkbox"] {transform:scale(1.3); cursor:pointer;}
+        .hidden {display:none;}
+        .nav-bar {text-align:left; margin:20px 0;}
+        .nav-bar .btn {margin:5px; font-size:15px;}
+        table, th, td {border:1px solid #000;}
+        td, th {padding:6px;}
+    </style>
+</head>
+<body>
+
+
+<h1>Australian Citizenship - Our Common Bond</h1><h3>Created by Thomas</h3>
+<h2>TỪ VỰNG PHẦN 4: AUSTRALIAN VALUES</h2>
+<div class="nav-bar">
+    <a href="V1.html" class="btn">PART_ONE</a>
+    <a href="V2.html" class="btn">PART_TWO</a>
+    <a href="V3.html" class="btn">PART_THREE</a>
+    <a href="V4.html" class="btn">PART_FOUR</a>
+    <a href="Glossary.html" class="btn">Glossary</a>
+</div>
+
+<div class="controls">
+    <strong>Chọn giọng đọc:</strong>
+    <select id="voiceSelect"></select>
+   
+    <div id="notice" class="notice" style="display:none;">Không tìm thấy giọng Australian? Cài đặt ngôn ngữ English (Australia) trong máy!</div>
+</div>
+
+<table id="vocabTable">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th style="position:relative;">
+                Options
+                <div class="dropdown">
+                    <select id="filterSelect">
+                        <option value="all">Show All</option>
+                        <option value="checked">Show Checked</option>
+                        <option value="unchecked">Show Unchecked</option>
+                    </select>
+                </div>
+            </th>
+            <th onclick="sortTable()" style="cursor:pointer;">Vocabulary</th>
+            <th>Pronunciation</th>
+            <th>Translation</th>
+            <th>Audio</th>
+            <th>Example</th>
+            <th>Read</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>1</td><td><input type="checkbox" class="row-check"></td><td>congratulations</td><td>/kənˌɡrætʃ.uˈleɪ.ʃənz/</td><td>chúc mừng</td><td><button class="btn" onclick="speak('congratulations')">Nghe</button></td><td class="example">Congratulations on choosing to become an Australian citizen. [Chúc mừng bạn đã chọn trở thành công dân Úc.]</td><td><button class="btn" data-sentence="Congratulations on choosing to become an Australian citizen.">Read</button></td></tr>
+        <tr><td>2</td><td><input type="checkbox" class="row-check"></td><td>choosing</td><td>/ˈtʃuː.zɪŋ/</td><td>chọn</td><td><button class="btn" onclick="speak('choosing')">Nghe</button></td><td class="example">Congratulations on choosing to become an Australian citizen. [Chúc mừng bạn đã chọn trở thành công dân Úc.]</td><td><button class="btn" data-sentence="Congratulations on choosing to become an Australian citizen.">Read</button></td></tr>
+        <tr><td>3</td><td><input type="checkbox" class="row-check"></td><td>courage</td><td>/ˈkʌr.ɪdʒ/</td><td>dũng cảm</td><td><button class="btn" onclick="speak('courage')">Nghe</button></td><td class="example">It takes courage, endeavour and commitment to live in a new country and participate fully as a citizen. [Cần có lòng dũng cảm, nỗ lực và cam kết để sống ở một đất nước mới và tham gia đầy đủ với tư cách công dân.]</td><td><button class="btn" data-sentence="It takes courage, endeavour and commitment to live in a new country and participate fully as a citizen.">Read</button></td></tr>
+        <tr><td>4</td><td><input type="checkbox" class="row-check"></td><td>endeavour</td><td>/ɪnˈdev.ɚ/</td><td>nỗ lực</td><td><button class="btn" onclick="speak('endeavour')">Nghe</button></td><td class="example">It takes courage, endeavour and commitment to live in a new country and participate fully as a citizen. [Cần có lòng dũng cảm, nỗ lực và cam kết để sống ở một đất nước mới và tham gia đầy đủ với tư cách công dân.]</td><td><button class="btn" data-sentence="It takes courage, endeavour and commitment to live in a new country and participate fully as a citizen.">Read</button></td></tr>
+        <tr><td>5</td><td><input type="checkbox" class="row-check"></td><td>commitment</td><td>/kəˈmɪt.mənt/</td><td>cam kết</td><td><button class="btn" onclick="speak('commitment')">Nghe</button></td><td class="example">It takes courage, endeavour and commitment to live in a new country and participate fully as a citizen. [Cần có lòng dũng cảm, nỗ lực và cam kết để sống ở một đất nước mới và tham gia đầy đủ với tư cách công dân.]</td><td><button class="btn" data-sentence="It takes courage, endeavour and commitment to live in a new country and participate fully as a citizen.">Read</button></td></tr>
+        <tr><td>6</td><td><input type="checkbox" class="row-check"></td><td>participate</td><td>/pɑːrˈtɪs.ɪ.peɪt/</td><td>tham gia</td><td><button class="btn" onclick="speak('participate')">Nghe</button></td><td class="example">It takes courage, endeavour and commitment to live in a new country and participate fully as a citizen. [Cần có lòng dũng cảm, nỗ lực và cam kết để sống ở một đất nước mới và tham gia đầy đủ với tư cách công dân.]</td><td><button class="btn" data-sentence="It takes courage, endeavour and commitment to live in a new country and participate fully as a citizen.">Read</button></td></tr>
+        <tr><td>7</td><td><input type="checkbox" class="row-check"></td><td>fully</td><td>/ˈfʊl.i/</td><td>đầy đủ</td><td><button class="btn" onclick="speak('fully')">Nghe</button></td><td class="example">It takes courage, endeavour and commitment to live in a new country and participate fully as a citizen. [Cần có lòng dũng cảm, nỗ lực và cam kết để sống ở một đất nước mới và tham gia đầy đủ với tư cách công dân.]</td><td><button class="btn" data-sentence="It takes courage, endeavour and commitment to live in a new country and participate fully as a citizen.">Read</button></td></tr>
+        <tr><td>8</td><td><input type="checkbox" class="row-check"></td><td>contribution</td><td>/ˌkɑːn.trɪˈbjuː.ʃən/</td><td>sự đóng góp</td><td><button class="btn" onclick="speak('contribution')">Nghe</button></td><td class="example">We value your contribution to our peaceful and democratic society. [Chúng tôi trân trọng sự đóng góp của bạn vào xã hội hòa bình và dân chủ của chúng tôi.]</td><td><button class="btn" data-sentence="We value your contribution to our peaceful and democratic society.">Read</button></td></tr>
+        <tr><td>9</td><td><input type="checkbox" class="row-check"></td><td>peaceful</td><td>/ˈpiːs.fəl/</td><td>hòa bình</td><td><button class="btn" onclick="speak('peaceful')">Nghe</button></td><td class="example">We value your contribution to our peaceful and democratic society. [Chúng tôi trân trọng sự đóng góp của bạn vào xã hội hòa bình và dân chủ của chúng tôi.]</td><td><button class="btn" data-sentence="We value your contribution to our peaceful and democratic society.">Read</button></td></tr>
+        <tr><td>10</td><td><input type="checkbox" class="row-check"></td><td>democratic</td><td>/ˌdem.əˈkræt.ɪk/</td><td>dân chủ</td><td><button class="btn" onclick="speak('democratic')">Nghe</button></td><td class="example">We value your contribution to our peaceful and democratic society. [Chúng tôi trân trọng sự đóng góp của bạn vào xã hội hòa bình và dân chủ của chúng tôi.]</td><td><button class="btn" data-sentence="We value your contribution to our peaceful and democratic society.">Read</button></td></tr>
+        <tr><td>11</td><td><input type="checkbox" class="row-check"></td><td>ongoing</td><td>/ˈɑːnˌɡoʊ.ɪŋ/</td><td>liên tục</td><td><button class="btn" onclick="speak('ongoing')">Nghe</button></td><td class="example">Australian citizenship is an important step in your ongoing commitment to Australia and our shared values. [Quốc tịch Úc là một bước quan trọng trong cam kết liên tục của bạn đối với Úc và các giá trị chung của chúng ta.]</td><td><button class="btn" data-sentence="Australian citizenship is an important step in your ongoing commitment to Australia and our shared values.">Read</button></td></tr>
+        <tr><td>12</td><td><input type="checkbox" class="row-check"></td><td>shared</td><td>/ʃerd/</td><td>chia sẻ</td><td><button class="btn" onclick="speak('shared')">Nghe</button></td><td class="example">Australian citizenship is an important step in your ongoing commitment to Australia and our shared values. [Quốc tịch Úc là một bước quan trọng trong cam kết liên tục của bạn đối với Úc và các giá trị chung của chúng ta.]</td><td><button class="btn" data-sentence="Australian citizenship is an important step in your ongoing commitment to Australia and our shared values.">Read</button></td></tr>
+        <tr><td>13</td><td><input type="checkbox" class="row-check"></td><td>values</td><td>/ˈvæl.juːz/</td><td>giá trị</td><td><button class="btn" onclick="speak('values')">Nghe</button></td><td class="example">Australian citizenship is an important step in your ongoing commitment to Australia and our shared values. [Quốc tịch Úc là một bước quan trọng trong cam kết liên tục của bạn đối với Úc và các giá trị chung của chúng ta.]</td><td><button class="btn" data-sentence="Australian citizenship is an important step in your ongoing commitment to Australia and our shared values.">Read</button></td></tr>
+        <tr><td>14</td><td><input type="checkbox" class="row-check"></td><td>privilege</td><td>/ˈprɪv.əl.ɪdʒ/</td><td>đặc quyền</td><td><button class="btn" onclick="speak('privilege')">Nghe</button></td><td class="example">It is the step that will enable you to say ‘I am Australian’. [Đó là bước sẽ cho phép bạn nói “Tôi là người Úc”.]</td><td><button class="btn" data-sentence="It is the step that will enable you to say ‘I am Australian’.">Read</button></td></tr>
+        <tr><td>15</td><td><input type="checkbox" class="row-check"></td><td>enable</td><td>/ɪˈneɪ.bəl/</td><td>cho phép</td><td><button class="btn" onclick="speak('enable')">Nghe</button></td><td class="example">It is the step that will enable you to say ‘I am Australian’. [Đó là bước sẽ cho phép bạn nói “Tôi là người Úc”.]</td><td><button class="btn" data-sentence="It is the step that will enable you to say ‘I am Australian’.">Read</button></td></tr>
+        <tr><td>16</td><td><input type="checkbox" class="row-check"></td><td>unique</td><td>/juːˈniːk/</td><td>độc đáo</td><td><button class="btn" onclick="speak('unique')">Nghe</button></td><td class="example">Our country has been built on the contributions of our Aboriginal and Torres Strait Islander peoples, the democratic institutions we inherited from Britain, and migrants from all over the world. [Đất nước chúng ta được xây dựng trên sự đóng góp của người Thổ dân và người Đảo eo biển Torres, các thể chế dân chủ chúng ta thừa kế từ Anh, và người di cư từ khắp nơi trên thế giới.]</td><td><button class="btn" data-sentence="Our country has been built on the contributions of our Aboriginal and Torres Strait Islander peoples, the democratic institutions we inherited from Britain, and migrants from all over the world.">Read</button></td></tr>
+        <tr><td>17</td><td><input type="checkbox" class="row-check"></td><td>inherited</td><td>/ɪnˈher.ɪ.t̬ɪd/</td><td>thừa kế</td><td><button class="btn" onclick="speak('inherited')">Nghe</button></td><td class="example">Our country has been built on the contributions of our Aboriginal and Torres Strait Islander peoples, the democratic institutions we inherited from Britain, and migrants from all over the world. [Đất nước chúng ta được xây dựng trên sự đóng góp của người Thổ dân và người Đảo eo biển Torres, các thể chế dân chủ chúng ta thừa kế từ Anh, và người di cư từ khắp nơi trên thế giới.]</td><td><button class="btn" data-sentence="Our country has been built on the contributions of our Aboriginal and Torres Strait Islander peoples, the democratic institutions we inherited from Britain, and migrants from all over the world.">Read</button></td></tr>
+        <tr><td>18</td><td><input type="checkbox" class="row-check"></td><td>diversity</td><td>/dɪˈvɝː.sə.t̬i/</td><td>đa dạng</td><td><button class="btn" onclick="speak('diversity')">Nghe</button></td><td class="example">We celebrate our diversity, and at the same time strive for a unified and harmonious nation. [Chúng ta ăn mừng sự đa dạng của mình, và đồng thời phấn đấu cho một quốc gia thống nhất và hài hòa.]</td><td><button class="btn" data-sentence="We celebrate our diversity, and at the same time strive for a unified and harmonious nation.">Read</button></td></tr>
+        <tr><td>19</td><td><input type="checkbox" class="row-check"></td><td>celebrate</td><td>/ˈsel.ə.breɪt/</td><td>ăn mừng</td><td><button class="btn" onclick="speak('celebrate')">Nghe</button></td><td class="example">We celebrate our diversity, and at the same time strive for a unified and harmonious nation. [Chúng ta ăn mừng sự đa dạng của mình, và đồng thời phấn đấu cho một quốc gia thống nhất và hài hòa.]</td><td><button class="btn" data-sentence="We celebrate our diversity, and at the same time strive for a unified and harmonious nation.">Read</button></td></tr>
+        <tr><td>20</td><td><input type="checkbox" class="row-check"></td><td>strive</td><td>/straɪv/</td><td>phấn đấu</td><td><button class="btn" onclick="speak('strive')">Nghe</button></td><td class="example">We celebrate our diversity, and at the same time strive for a unified and harmonious nation. [Chúng ta ăn mừng sự đa dạng của mình, và đồng thời phấn đấu cho một quốc gia thống nhất và hài hòa.]</td><td><button class="btn" data-sentence="We celebrate our diversity, and at the same time strive for a unified and harmonious nation.">Read</button></td></tr>
+        <tr><td>21</td><td><input type="checkbox" class="row-check"></td><td>unified</td><td>/ˈjuː.nə.faɪd/</td><td>thống nhất</td><td><button class="btn" onclick="speak('unified')">Nghe</button></td><td class="example">We celebrate our diversity, and at the same time strive for a unified and harmonious nation. [Chúng ta ăn mừng sự đa dạng của mình, và đồng thời phấn đấu cho một quốc gia thống nhất và hài hòa.]</td><td><button class="btn" data-sentence="We celebrate our diversity, and at the same time strive for a unified and harmonious nation.">Read</button></td></tr>
+        <tr><td>22</td><td><input type="checkbox" class="row-check"></td><td>harmonious</td><td>/hɑːrˈmoʊ.ni.əs/</td><td>hài hòa</td><td><button class="btn" onclick="speak('harmonious')">Nghe</button></td><td class="example">We celebrate our diversity, and at the same time strive for a unified and harmonious nation. [Chúng ta ăn mừng sự đa dạng của mình, và đồng thời phấn đấu cho một quốc gia thống nhất và hài hòa.]</td><td><button class="btn" data-sentence="We celebrate our diversity, and at the same time strive for a unified and harmonious nation.">Read</button></td></tr>
+        <tr><td>23</td><td><input type="checkbox" class="row-check"></td><td>stable</td><td>/ˈsteɪ.bəl/</td><td>ổn định</td><td><button class="btn" onclick="speak('stable')">Nghe</button></td><td class="example">We have a stable system of government, and Australians respect the authority and laws of the government. [Chúng ta có một hệ thống chính phủ ổn định, và người Úc tôn trọng quyền lực và luật pháp của chính phủ.]</td><td><button class="btn" data-sentence="We have a stable system of government, and Australians respect the authority and laws of the government.">Read</button></td></tr>
+        <tr><td>24</td><td><input type="checkbox" class="row-check"></td><td>respect</td><td>/rɪˈspekt/</td><td>tôn trọng</td><td><button class="btn" onclick="speak('respect')">Nghe</button></td><td class="example">We have a stable system of government, and Australians respect the authority and laws of the government. [Chúng ta có một hệ thống chính phủ ổn định, và người Úc tôn trọng quyền lực và luật pháp của chính phủ.]</td><td><button class="btn" data-sentence="We have a stable system of government, and Australians respect the authority and laws of the government.">Read</button></td></tr>
+        <tr><td>25</td><td><input type="checkbox" class="row-check"></td><td>authority</td><td>/əˈθɔːr.ə.t̬i/</td><td>quyền lực</td><td><button class="btn" onclick="speak('authority')">Nghe</button></td><td class="example">We have a stable system of government, and Australians respect the authority and laws of the government. [Chúng ta có một hệ thống chính phủ ổn định, và người Úc tôn trọng quyền lực và luật pháp của chính phủ.]</td><td><button class="btn" data-sentence="We have a stable system of government, and Australians respect the authority and laws of the government.">Read</button></td></tr>
+        <tr><td>26</td><td><input type="checkbox" class="row-check"></td><td>vast</td><td>/væst/</td><td>rộng lớn</td><td><button class="btn" onclick="speak('vast')">Nghe</button></td><td class="example">Australia is an ancient land. It is vast and unique. [Úc là một vùng đất cổ xưa. Nó rộng lớn và độc đáo.]</td><td><button class="btn" data-sentence="Australia is an ancient land. It is vast and unique.">Read</button></td></tr>
+        <tr><td>27</td><td><input type="checkbox" class="row-check"></td><td>ancient</td><td>/ˈeɪn.ʃənt/</td><td>cổ xưa</td><td><button class="btn" onclick="speak('ancient')">Nghe</button></td><td class="example">Australia is an ancient land. It is vast and unique. [Úc là một vùng đất cổ xưa. Nó rộng lớn và độc đáo.]</td><td><button class="btn" data-sentence="Australia is an ancient land. It is vast and unique.">Read</button></td></tr>
+        <tr><td>28</td><td><input type="checkbox" class="row-check"></td><td>rainforests</td><td>/ˈreɪnˌfɔːr.ɪsts/</td><td>rừng mưa</td><td><button class="btn" onclick="speak('rainforests')">Nghe</button></td><td class="example">Its landscape is one of contrasts – rainforests, deserts, and cities and farms. [Phong cảnh của nó là một trong những sự tương phản – rừng mưa, sa mạc, và thành phố cùng nông trại.]</td><td><button class="btn" data-sentence="Its landscape is one of contrasts – rainforests, deserts, and cities and farms.">Read</button></td></tr>
+        <tr><td>29</td><td><input type="checkbox" class="row-check"></td><td>deserts</td><td>/ˈdez.ɚts/</td><td>sa mạc</td><td><button class="btn" onclick="speak('deserts')">Nghe</button></td><td class="example">Its landscape is one of contrasts – rainforests, deserts, and cities and farms. [Phong cảnh của nó là một trong những sự tương phản – rừng mưa, sa mạc, và thành phố cùng nông trại.]</td><td><button class="btn" data-sentence="Its landscape is one of contrasts – rainforests, deserts, and cities and farms.">Read</button></td></tr>
+        <tr><td>30</td><td><input type="checkbox" class="row-check"></td><td>oldest</td><td>/ˈoʊl.dɪst/</td><td>cổ xưa nhất</td><td><button class="btn" onclick="speak('oldest')">Nghe</button></td><td class="example">Our Indigenous cultures are the oldest continuous cultures in the world. [Văn hóa Bản địa của chúng ta là những văn hóa liên tục cổ xưa nhất trên thế giới.]</td><td><button class="btn" data-sentence="Our Indigenous cultures are the oldest continuous cultures in the world.">Read</button></td></tr>
+        <tr><td>31</td><td><input type="checkbox" class="row-check"></td><td>continuous</td><td>/kənˈtɪn.ju.əs/</td><td>liên tục</td><td><button class="btn" onclick="speak('continuous')">Nghe</button></td><td class="example">Our Indigenous cultures are the oldest continuous cultures in the world. [Văn hóa Bản địa của chúng ta là những văn hóa liên tục cổ xưa nhất trên thế giới.]</td><td><button class="btn" data-sentence="Our Indigenous cultures are the oldest continuous cultures in the world.">Read</button></td></tr>
+        <tr><td>32</td><td><input type="checkbox" class="row-check"></td><td>settlement</td><td>/ˈset.əl.mənt/</td><td>định cư</td><td><button class="btn" onclick="speak('settlement')">Nghe</button></td><td class="example">European settlement in Australia began in 1788 and we continue to welcome new migrants today. [Việc định cư châu Âu ở Úc bắt đầu năm 1788 và chúng ta tiếp tục chào đón người di cư mới ngày nay.]</td><td><button class="btn" data-sentence="European settlement in Australia began in 1788 and we continue to welcome new migrants today.">Read</button></td></tr>
+        <tr><td>33</td><td><input type="checkbox" class="row-check"></td><td>began</td><td>/bɪˈɡæn/</td><td>bắt đầu</td><td><button class="btn" onclick="speak('began')">Nghe</button></td><td class="example">European settlement in Australia began in 1788 and we continue to welcome new migrants today. [Việc định cư châu Âu ở Úc bắt đầu năm 1788 và chúng ta tiếp tục chào đón người di cư mới ngày nay.]</td><td><button class="btn" data-sentence="European settlement in Australia began in 1788 and we continue to welcome new migrants today.">Read</button></td></tr>
+        <tr><td>34</td><td><input type="checkbox" class="row-check"></td><td>welcome</td><td>/ˈwel.kəm/</td><td>chào đón</td><td><button class="btn" onclick="speak('welcome')">Nghe</button></td><td class="example">European settlement in Australia began in 1788 and we continue to welcome new migrants today. [Việc định cư châu Âu ở Úc bắt đầu năm 1788 và chúng ta tiếp tục chào đón người di cư mới ngày nay.]</td><td><button class="btn" data-sentence="European settlement in Australia began in 1788 and we continue to welcome new migrants today.">Read</button></td></tr>
+        <tr><td>35</td><td><input type="checkbox" class="row-check"></td><td>migrants</td><td>/ˈmaɪ.ɡrənts/</td><td>người di cư</td><td><button class="btn" onclick="speak('migrants')">Nghe</button></td><td class="example">European settlement in Australia began in 1788 and we continue to welcome new migrants today. [Việc định cư châu Âu ở Úc bắt đầu năm 1788 và chúng ta tiếp tục chào đón người di cư mới ngày nay.]</td><td><button class="btn" data-sentence="European settlement in Australia began in 1788 and we continue to welcome new migrants today.">Read</button></td></tr>
+        <tr><td>36</td><td><input type="checkbox" class="row-check"></td><td>countries</td><td>/ˈkʌn.triz/</td><td>các quốc gia</td><td><button class="btn" onclick="speak('countries')">Nghe</button></td><td class="example">People from more than 200 countries have made Australia their home. [Người từ hơn 200 quốc gia đã biến Úc thành quê hương của họ.]</td><td><button class="btn" data-sentence="People from more than 200 countries have made Australia their home.">Read</button></td></tr>
+        <tr><td>37</td><td><input type="checkbox" class="row-check"></td><td>home</td><td>/hoʊm/</td><td>quê hương</td><td><button class="btn" onclick="speak('home')">Nghe</button></td><td class="example">People from more than 200 countries have made Australia their home. [Người từ hơn 200 quốc gia đã biến Úc thành quê hương của họ.]</td><td><button class="btn" data-sentence="People from more than 200 countries have made Australia their home.">Read</button></td></tr>
+        <tr><td>38</td><td><input type="checkbox" class="row-check"></td><td>diverse</td><td>/daɪˈvɝːs/</td><td>đa dạng</td><td><button class="btn" onclick="speak('diverse')">Nghe</button></td><td class="example">Australia successfully combines ethnic and cultural diversity with national unity. [Úc thành công kết hợp sự đa dạng dân tộc và văn hóa với sự thống nhất quốc gia.]</td><td><button class="btn" data-sentence="Australia successfully combines ethnic and cultural diversity with national unity.">Read</button></td></tr>
+        <tr><td>39</td><td><input type="checkbox" class="row-check"></td><td>ethnic</td><td>/ˈeθ.nɪk/</td><td>dân tộc</td><td><button class="btn" onclick="speak('ethnic')">Nghe</button></td><td class="example">Australia successfully combines ethnic and cultural diversity with national unity. [Úc thành công kết hợp sự đa dạng dân tộc và văn hóa với sự thống nhất quốc gia.]</td><td><button class="btn" data-sentence="Australia successfully combines ethnic and cultural diversity with national unity.">Read</button></td></tr>
+        <tr><td>40</td><td><input type="checkbox" class="row-check"></td><td>cultural</td><td>/ˈkʌl.tʃɚ.əl/</td><td>văn hóa</td><td><button class="btn" onclick="speak('cultural')">Nghe</button></td><td class="example">Australia successfully combines ethnic and cultural diversity with national unity. [Úc thành công kết hợp sự đa dạng dân tộc và văn hóa với sự thống nhất quốc gia.]</td><td><button class="btn" data-sentence="Australia successfully combines ethnic and cultural diversity with national unity.">Read</button></td></tr>
+        
+    </tbody>
+</table>
+
+<script>
+let voices = [];
+let originalOrder = [];
+let isSorted = false;
+
+const voiceSelect = document.getElementById('voiceSelect');
+const notice = document.getElementById('notice');
+const tbody = document.querySelector('#vocabTable tbody');
+const filterSelect = document.getElementById('filterSelect');
+
+// Tiền tố lưu trữ riêng cho từng file (Voc1.html, Voc2.html, Voc4.html, Glossary.html...)
+const STORAGE_PREFIX = 'CITIZENSHIP_VOCAB_' + location.pathname.replace(/[^a-zA-Z0-9]/g, '_');
+
+// Lưu tất cả trạng thái
+function saveAll() {
+    // Lưu các ô đã tick
+    const checked = Array.from(tbody.querySelectorAll('.row-check:checked'))
+        .map(cb => cb.closest('tr').cells[0].textContent.trim());
+    localStorage.setItem(STORAGE_PREFIX + '_checked', JSON.stringify(checked));
+
+    // Lưu droplist Options
+    localStorage.setItem(STORAGE_PREFIX + '_filter', filterSelect.value);
+
+    // Lưu giọng đọc
+    localStorage.setItem(STORAGE_PREFIX + '_voice', voiceSelect.value);
+}
+
+// Khôi phục tất cả trạng thái khi load trang
+function loadAll() {
+    // Khôi phục checkbox
+    const savedChecked = localStorage.getItem(STORAGE_PREFIX + '_checked');
+    if (savedChecked) {
+        const checkedNos = JSON.parse(savedChecked);
+        tbody.querySelectorAll('.row-check').forEach(cb => {
+            const no = cb.closest('tr').cells[0].textContent.trim();
+            cb.checked = checkedNos.includes(no);
+        });
+    }
+
+    // Khôi phục droplist Options
+    const savedFilter = localStorage.getItem(STORAGE_PREFIX + '_filter');
+    if (savedFilter && ['all','checked','unchecked'].includes(savedFilter)) {
+        filterSelect.value = savedFilter;
+        filterRows(savedFilter);
+    }
+
+    // Khôi phục giọng đọc (sẽ được áp dụng sau khi loadVoices hoàn tất)
+    const savedVoice = localStorage.getItem(STORAGE_PREFIX + '_voice');
+    if (savedVoice) voiceSelect.dataset.saved = savedVoice;
+}
+
+// Lưu khi người dùng thay đổi bất kỳ thứ gì
+filterSelect.addEventListener('change', () => {
+    filterRows(filterSelect.value);
+    renumberVisible();
+    saveAll();
+});
+
+voiceSelect.addEventListener('change', saveAll);
+
+tbody.addEventListener('change', (e) => {
+    if (e.target.classList.contains('row-check')) {
+        renumberVisible();
+        saveAll();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    originalOrder = Array.from(tbody.rows);
+    loadVoices();
+    loadAll();
+    renumberVisible();  // Renumber ban đầu nếu cần
+});
+
+function loadVoices() {
+    voices = speechSynthesis.getVoices();
+    if (voices.length === 0) {
+        speechSynthesis.onvoiceschanged = loadVoices;
+        return;
+    }
+
+    let ausVoices = voices.filter(v => v.lang === 'en-AU' || v.name.toLowerCase().includes('australian'));
+    let otherVoices = voices.filter(v => v.lang.startsWith('en-') && !ausVoices.includes(v));
+    voices = [...ausVoices, ...otherVoices];
+
+    voiceSelect.innerHTML = '';
+    if (ausVoices.length === 0) notice.style.display = 'block';
+
+    voices.forEach((voice, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        const gender = (voice.name.toLowerCase().includes('female') || ['karen','catherine','lee'].some(n=>voice.name.toLowerCase().includes(n))) ? '(Nữ)' : '(Nam)';
+        opt.textContent = `${voice.name} (${voice.lang}) ${gender}`;
+        voiceSelect.appendChild(opt);
+    });
+
+    // Áp dụng giọng đã lưu (nếu có)
+    const saved = voiceSelect.dataset.saved || localStorage.getItem(STORAGE_PREFIX + '_voice');
+    if (saved !== null && voiceSelect.options[saved]) {
+        voiceSelect.value = saved;
+    } else {
+        const ausIdx = voices.findIndex(v => v.lang === 'en-AU');
+        voiceSelect.value = ausIdx !== -1 ? ausIdx : 0;
+    }
+}
+
+function speak(text) {
+    speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    const idx = voiceSelect.value;
+    if (idx && voices[idx]) utterance.voice = voices[idx];
+    else utterance.lang = 'en-AU';
+    utterance.rate = 0.9;
+    speechSynthesis.speak(utterance);
+}
+
+function filterRows(mode) {
+    for (let row of tbody.rows) {
+        const checked = row.querySelector('.row-check').checked;
+        row.classList.toggle('hidden', mode === 'checked' ? !checked : (mode === 'unchecked' ? checked : false));
+    }
+    renumberVisible();  // Renumber sau khi lọc
+}
+
+function renumberVisible() {
+    let visibleRows = Array.from(tbody.rows).filter(row => !row.classList.contains('hidden'));
+    visibleRows.forEach((row, index) => {
+        row.cells[0].textContent = index + 1;
+    });
+}
+
+function sortTable() {
+    const rows = Array.from(tbody.rows);
+    if (!isSorted) {
+        rows.sort((a, b) => a.cells[2].textContent.localeCompare(b.cells[2].textContent));
+        isSorted = true;
+    } else {
+        rows.sort((a, b) => originalOrder.indexOf(a) - originalOrder.indexOf(b));
+        isSorted = false;
+    }
+    rows.forEach(r => tbody.appendChild(r));
+    renumberVisible();  // Renumber sau khi sort
+}
+
+document.querySelectorAll('[data-sentence]').forEach(btn => {
+    btn.onclick = () => speak(btn.dataset.sentence);
+});
+</script>
+
+</body>
+</html>
+```
