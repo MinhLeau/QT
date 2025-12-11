@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Từ vựng Phần 4: Our Australian community and values</title>
+    <style>
+        body {font-family: Arial, sans-serif; background:#f0f8ff; padding:20px; line-height:1.6;}
+		h3 {text-align:right; color:#006400; margin-bottom:1px; margin-top:0px; font-size:10px;}
+        h1 {text-align:center; color:#006400; margin-bottom:-10px; margin-top:-25px;}
+		h2 {text-align:left; color:#e51803; margin-bottom:0px; margin-bottom:10px; font-size:15px;}
+		
+		
+        .controls {background:#fff; padding:15px; border-radius:8px; margin-bottom:20px; box-shadow:0 4px 10px rgba(0,0,0,0.1); text-align:left;}
+        select, button {padding:8px 12px; font-size:16px; margin:0 8px; border-radius:4px;}
+        .notice {color:#d32f2f; font-weight:bold; margin-top:5px;}
+        .btn {background:#006400; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-weight:bold;}
+        .btn:hover {background:#004d00;}
+        table {width:100%; border-collapse:collapse; margin-top:20px; background:white; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+        th {background:#006400; color:white; padding:12px; text-align:center; position:relative; cursor:pointer;}
+        th .dropdown {position:absolute; top:100%; left:0; background:#006400; z-index:10; display:none; min-width:160px;}
+        th:hover .dropdown {display:block;}
+        th .dropdown select {width:100%; padding:8px;}
+        td {padding:10px; vertical-align:top; border-bottom:1px solid #ddd; text-align:center;}
+        td.example {font-style:italic; color:#333; font-size:0.95em; text-align:left;}
+        tr:nth-child(even) {background:#f9f9f9;}
+        tr:hover {background:#e6f7e6;}
+        input[type="checkbox"] {transform:scale(1.3); cursor:pointer;}
+        .hidden {display:none;}
+        .nav-bar {text-align:left; margin:20px 0;}
+        .nav-bar .btn {margin:5px; font-size:15px;}
+        table, th, td {border:1px solid #000;}
+        td, th {padding:6px;}
+    </style>
+</head>
+<body>
+
+
+<h1>Australian Citizenship - Our Common Bond</h1><h3>Created by Thomas</h3>
+<h2>TỪ VỰNG PHẦN 2: AUSTRALIA’S DEMOCRATIC BELIEFS, RIGHTS AND LIBERTIES</h2>
+<div class="nav-bar">
+    <a href="V1.html" class="btn">PART_ONE</a>
+    <a href="V2.html" class="btn">PART_TWO</a>
+    <a href="V3.html" class="btn">PART_THREE</a>
+    <a href="V4.html" class="btn">PART_FOUR</a>
+    <a href="Glossary.html" class="btn">Glossary</a>
+</div>
+
+<div class="controls">
+    <strong>Chọn giọng đọc:</strong>
+    <select id="voiceSelect"></select>
+   
+    <div id="notice" class="notice" style="display:none;">Không tìm thấy giọng Australian? Cài đặt ngôn ngữ English (Australia) trong máy!</div>
+</div>
+
+<table id="vocabTable">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th style="position:relative;">
+                Options
+                <div class="dropdown">
+                    <select id="filterSelect">
+                        <option value="all">Show All</option>
+                        <option value="checked">Show Checked</option>
+                        <option value="unchecked">Show Unchecked</option>
+                    </select>
+                </div>
+            </th>
+            <th onclick="sortTable()" style="cursor:pointer;">Vocabulary</th>
+            <th>Pronunciation</th>
+            <th>Translation</th>
+            <th>Audio</th>
+            <th>Example</th>
+            <th>Read</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>1</td><td><input type="checkbox" class="row-check"></td><td>democratic</td><td>/ˌdem.əˈkræt.ɪk/</td><td>dân chủ</td><td><button class="btn" onclick="speak('democratic')">Nghe</button></td><td class="example">At the citizenship ceremony, you pledge that you will share Australia's democratic beliefs and respect its rights and liberties. [Tại lễ nhập quốc tịch, bạn cam kết rằng bạn sẽ chia sẻ niềm tin dân chủ của Úc và tôn trọng quyền và tự do của nó.]</td><td><button class="btn" data-sentence="At the citizenship ceremony, you pledge that you will share Australia's democratic beliefs and respect its rights and liberties.">Read</button></td></tr>
+        <tr><td>2</td><td><input type="checkbox" class="row-check"></td><td>beliefs</td><td>/bɪˈliːfs/</td><td>niềm tin</td><td><button class="btn" onclick="speak('beliefs')">Nghe</button></td><td class="example">At the citizenship ceremony, you pledge that you will share Australia's democratic beliefs and respect its rights and liberties. [Tại lễ nhập quốc tịch, bạn cam kết rằng bạn sẽ chia sẻ niềm tin dân chủ của Úc và tôn trọng quyền và tự do của nó.]</td><td><button class="btn" data-sentence="At the citizenship ceremony, you pledge that you will share Australia's democratic beliefs and respect its rights and liberties.">Read</button></td></tr>
+        <tr><td>3</td><td><input type="checkbox" class="row-check"></td><td>rights</td><td>/raɪts/</td><td>quyền</td><td><button class="btn" onclick="speak('rights')">Nghe</button></td><td class="example">At the citizenship ceremony, you pledge that you will share Australia's democratic beliefs and respect its rights and liberties. [Tại lễ nhập quốc tịch, bạn cam kết rằng bạn sẽ chia sẻ niềm tin dân chủ của Úc và tôn trọng quyền và tự do của nó.]</td><td><button class="btn" data-sentence="At the citizenship ceremony, you pledge that you will share Australia's democratic beliefs and respect its rights and liberties.">Read</button></td></tr>
+        <tr><td>4</td><td><input type="checkbox" class="row-check"></td><td>liberties</td><td>/ˈlɪb.ər.tiz/</td><td>tự do</td><td><button class="btn" onclick="speak('liberties')">Nghe</button></td><td class="example">At the citizenship ceremony, you pledge that you will share Australia's democratic beliefs and respect its rights and liberties. [Tại lễ nhập quốc tịch, bạn cam kết rằng bạn sẽ chia sẻ niềm tin dân chủ của Úc và tôn trọng quyền và tự do của nó.]</td><td><button class="btn" data-sentence="At the citizenship ceremony, you pledge that you will share Australia's democratic beliefs and respect its rights and liberties.">Read</button></td></tr>
+        <tr><td>5</td><td><input type="checkbox" class="row-check"></td><td>pledge</td><td>/pledʒ/</td><td>cam kết</td><td><button class="btn" onclick="speak('pledge')">Nghe</button></td><td class="example">At the citizenship ceremony, you pledge that you will share Australia's democratic beliefs and respect its rights and liberties. [Tại lễ nhập quốc tịch, bạn cam kết rằng bạn sẽ chia sẻ niềm tin dân chủ của Úc và tôn trọng quyền và tự do của nó.]</td><td><button class="btn" data-sentence="At the citizenship ceremony, you pledge that you will share Australia's democratic beliefs and respect its rights and liberties.">Read</button></td></tr>
+        <tr><td>6</td><td><input type="checkbox" class="row-check"></td><td>share</td><td>/ʃer/</td><td>chia sẻ</td><td><button class="btn" onclick="speak('share')">Nghe</button></td><td class="example">At the citizenship ceremony, you pledge that you will share Australia's democratic beliefs and respect its rights and liberties. [Tại lễ nhập quốc tịch, bạn cam kết rằng bạn sẽ chia sẻ niềm tin dân chủ của Úc và tôn trọng quyền và tự do của nó.]</td><td><button class="btn" data-sentence="At the citizenship ceremony, you pledge that you will share Australia's democratic beliefs and respect its rights and liberties.">Read</button></td></tr>
+        <tr><td>7</td><td><input type="checkbox" class="row-check"></td><td>respect</td><td>/rɪˈspekt/</td><td>tôn trọng</td><td><button class="btn" onclick="speak('respect')">Nghe</button></td><td class="example">At the citizenship ceremony, you pledge that you will share Australia's democratic beliefs and respect its rights and liberties. [Tại lễ nhập quốc tịch, bạn cam kết rằng bạn sẽ chia sẻ niềm tin dân chủ của Úc và tôn trọng quyền và tự do của nó.]</td><td><button class="btn" data-sentence="At the citizenship ceremony, you pledge that you will share Australia's democratic beliefs and respect its rights and liberties.">Read</button></td></tr>
+        <tr><td>8</td><td><input type="checkbox" class="row-check"></td><td>understand</td><td>/ˌʌn.dərˈstænd/</td><td>hiểu</td><td><button class="btn" onclick="speak('understand')">Nghe</button></td><td class="example">It is very important that you understand Australia's democratic beliefs, and the rights and liberties shared by Australians. [Điều rất quan trọng là bạn hiểu niềm tin dân chủ của Úc, và các quyền và tự do được chia sẻ bởi người Úc.]</td><td><button class="btn" data-sentence="It is very important that you understand Australia's democratic beliefs, and the rights and liberties shared by Australians.">Read</button></td></tr>
+        <tr><td>9</td><td><input type="checkbox" class="row-check"></td><td>part</td><td>/pɑːrt/</td><td>phần</td><td><button class="btn" onclick="speak('part')">Nghe</button></td><td class="example">This part of the booklet lists these beliefs, rights and liberties. [Phần này của sách liệt kê những niềm tin, quyền và tự do này.]</td><td><button class="btn" data-sentence="This part of the booklet lists these beliefs, rights and liberties.">Read</button></td></tr>
+        <tr><td>10</td><td><input type="checkbox" class="row-check"></td><td>booklet</td><td>/ˈbʊk.lɪt/</td><td>sách nhỏ</td><td><button class="btn" onclick="speak('booklet')">Nghe</button></td><td class="example">This part of the booklet lists these beliefs, rights and liberties. [Phần này của sách liệt kê những niềm tin, quyền và tự do này.]</td><td><button class="btn" data-sentence="This part of the booklet lists these beliefs, rights and liberties.">Read</button></td></tr>
+        <tr><td>11</td><td><input type="checkbox" class="row-check"></td><td>list</td><td>/lɪst/</td><td>liệt kê</td><td><button class="btn" onclick="speak('list')">Nghe</button></td><td class="example">This part of the booklet lists these beliefs, rights and liberties. [Phần này của sách liệt kê những niềm tin, quyền và tự do này.]</td><td><button class="btn" data-sentence="This part of the booklet lists these beliefs, rights and liberties.">Read</button></td></tr>
+        <tr><td>12</td><td><input type="checkbox" class="row-check"></td><td>freedoms</td><td>/ˈfriː.dəmz/</td><td>tự do</td><td><button class="btn" onclick="speak('freedoms')">Nghe</button></td><td class="example">Our freedoms. [Tự do của chúng tôi.]</td><td><button class="btn" data-sentence="Our freedoms.">Read</button></td></tr>
+        <tr><td>13</td><td><input type="checkbox" class="row-check"></td><td>equalities</td><td>/iːˈkwɑː.lə.tiz/</td><td>bình đẳng</td><td><button class="btn" onclick="speak('equalities')">Nghe</button></td><td class="example">Our equalities. [Bình đẳng của chúng tôi.]</td><td><button class="btn" data-sentence="Our equalities.">Read</button></td></tr>
+        <tr><td>14</td><td><input type="checkbox" class="row-check"></td><td>parliamentary</td><td>/ˌpɑːr.ləˈmen.tər.i/</td><td>nghị viện</td><td><button class="btn" onclick="speak('parliamentary')">Nghe</button></td><td class="example">Australia's system of government is a parliamentary democracy. [Hệ thống chính phủ của Úc là dân chủ nghị viện.]</td><td><button class="btn" data-sentence="Australia's system of government is a parliamentary democracy.">Read</button></td></tr>
+        <tr><td>15</td><td><input type="checkbox" class="row-check"></td><td>democracy</td><td>/dɪˈmɑː.krə.si/</td><td>dân chủ</td><td><button class="btn" onclick="speak('democracy')">Nghe</button></td><td class="example">Australia's system of government is a parliamentary democracy. [Hệ thống chính phủ của Úc là dân chủ nghị viện.]</td><td><button class="btn" data-sentence="Australia's system of government is a parliamentary democracy.">Read</button></td></tr>
+        <tr><td>16</td><td><input type="checkbox" class="row-check"></td><td>system</td><td>/ˈsɪs.təm/</td><td>hệ thống</td><td><button class="btn" onclick="speak('system')">Nghe</button></td><td class="example">Australia's system of government is a parliamentary democracy. [Hệ thống chính phủ của Úc là dân chủ nghị viện.]</td><td><button class="btn" data-sentence="Australia's system of government is a parliamentary democracy.">Read</button></td></tr>
+        <tr><td>17</td><td><input type="checkbox" class="row-check"></td><td>government</td><td>/ˈɡʌv.ərn.mənt/</td><td>chính phủ</td><td><button class="btn" onclick="speak('government')">Nghe</button></td><td class="example">Australia's system of government is a parliamentary democracy. [Hệ thống chính phủ của Úc là dân chủ nghị viện.]</td><td><button class="btn" data-sentence="Australia's system of government is a parliamentary democracy.">Read</button></td></tr>
+        <tr><td>18</td><td><input type="checkbox" class="row-check"></td><td>power</td><td>/ˈpaʊ.ər/</td><td>quyền lực</td><td><button class="btn" onclick="speak('power')">Nghe</button></td><td class="example">As part of this system, the power of the government comes from the Australian people because Australian citizens vote for people to represent them in parliament. [Là một phần của hệ thống này, quyền lực của chính phủ đến từ người dân Úc vì công dân Úc bỏ phiếu cho người đại diện họ trong nghị viện.]</td><td><button class="btn" data-sentence="As part of this system, the power of the government comes from the Australian people because Australian citizens vote for people to represent them in parliament.">Read</button></td></tr>
+        <tr><td>19</td><td><input type="checkbox" class="row-check"></td><td>people</td><td>/ˈpiː.pəl/</td><td>người dân</td><td><button class="btn" onclick="speak('people')">Nghe</button></td><td class="example">As part of this system, the power of the government comes from the Australian people because Australian citizens vote for people to represent them in parliament. [Là một phần của hệ thống này, quyền lực của chính phủ đến từ người dân Úc vì công dân Úc bỏ phiếu cho người đại diện họ trong nghị viện.]</td><td><button class="btn" data-sentence="As part of this system, the power of the government comes from the Australian people because Australian citizens vote for people to represent them in parliament.">Read</button></td></tr>
+        <tr><td>20</td><td><input type="checkbox" class="row-check"></td><td>vote</td><td>/voʊt/</td><td>bỏ phiếu</td><td><button class="btn" onclick="speak('vote')">Nghe</button></td><td class="example">As part of this system, the power of the government comes from the Australian people because Australian citizens vote for people to represent them in parliament. [Là một phần của hệ thống này, quyền lực của chính phủ đến từ người dân Úc vì công dân Úc bỏ phiếu cho người đại diện họ trong nghị viện.]</td><td><button class="btn" data-sentence="As part of this system, the power of the government comes from the Australian people because Australian citizens vote for people to represent them in parliament.">Read</button></td></tr>
+        <tr><td>21</td><td><input type="checkbox" class="row-check"></td><td>represent</td><td>/ˌrep.rɪˈzent/</td><td>đại diện</td><td><button class="btn" onclick="speak('represent')">Nghe</button></td><td class="example">As part of this system, the power of the government comes from the Australian people because Australian citizens vote for people to represent them in parliament. [Là một phần của hệ thống này, quyền lực của chính phủ đến từ người dân Úc vì công dân Úc bỏ phiếu cho người đại diện họ trong nghị viện.]</td><td><button class="btn" data-sentence="As part of this system, the power of the government comes from the Australian people because Australian citizens vote for people to represent them in parliament.">Read</button></td></tr>
+        <tr><td>22</td><td><input type="checkbox" class="row-check"></td><td>parliament</td><td>/ˈpɑːr.lə.mənt/</td><td>nghị viện</td><td><button class="btn" onclick="speak('parliament')">Nghe</button></td><td class="example">As part of this system, the power of the government comes from the Australian people because Australian citizens vote for people to represent them in parliament. [Là một phần của hệ thống này, quyền lực của chính phủ đến từ người dân Úc vì công dân Úc bỏ phiếu cho người đại diện họ trong nghị viện.]</td><td><button class="btn" data-sentence="As part of this system, the power of the government comes from the Australian people because Australian citizens vote for people to represent them in parliament.">Read</button></td></tr>
+        <tr><td>23</td><td><input type="checkbox" class="row-check"></td><td>answer</td><td>/ˈæn.sɚ/</td><td>trả lời</td><td><button class="btn" onclick="speak('answer')">Nghe</button></td><td class="example">The representatives in parliament must answer to the people, through elections, for the decisions they make. [Các đại diện trong nghị viện phải trả lời cho người dân, qua các cuộc bầu cử, về các quyết định họ đưa ra.]</td><td><button class="btn" data-sentence="The representatives in parliament must answer to the people, through elections, for the decisions they make.">Read</button></td></tr>
+        <tr><td>24</td><td><input type="checkbox" class="row-check"></td><td>elections</td><td>/ɪˈlek.ʃənz/</td><td>bầu cử</td><td><button class="btn" onclick="speak('elections')">Nghe</button></td><td class="example">The representatives in parliament must answer to the people, through elections, for the decisions they make. [Các đại diện trong nghị viện phải trả lời cho người dân, qua các cuộc bầu cử, về các quyết định họ đưa ra.]</td><td><button class="btn" data-sentence="The representatives in parliament must answer to the people, through elections, for the decisions they make.">Read</button></td></tr>
+        <tr><td>25</td><td><input type="checkbox" class="row-check"></td><td>decisions</td><td>/dɪˈsɪʒ.ənz/</td><td>quyết định</td><td><button class="btn" onclick="speak('decisions')">Nghe</button></td><td class="example">The representatives in parliament must answer to the people, through elections, for the decisions they make. [Các đại diện trong nghị viện phải trả lời cho người dân, qua các cuộc bầu cử, về các quyết định họ đưa ra.]</td><td><button class="btn" data-sentence="The representatives in parliament must answer to the people, through elections, for the decisions they make.">Read</button></td></tr>
+        <tr><td>26</td><td><input type="checkbox" class="row-check"></td><td>rule</td><td>/ruːl/</td><td>quy tắc</td><td><button class="btn" onclick="speak('rule')">Nghe</button></td><td class="example">The Rule of Law means that no person, group or religious rule is above the law. [Luật Pháp có nghĩa là không người, nhóm hoặc quy tắc tôn giáo nào đứng trên luật pháp.]</td><td><button class="btn" data-sentence="The Rule of Law means that no person, group or religious rule is above the law.">Read</button></td></tr>
+        <tr><td>27</td><td><input type="checkbox" class="row-check"></td><td>law</td><td>/lɔː/</td><td>luật pháp</td><td><button class="btn" onclick="speak('law')">Nghe</button></td><td class="example">The Rule of Law means that no person, group or religious rule is above the law. [Luật Pháp có nghĩa là không người, nhóm hoặc quy tắc tôn giáo nào đứng trên luật pháp.]</td><td><button class="btn" data-sentence="The Rule of Law means that no person, group or religious rule is above the law.">Read</button></td></tr>
+        <tr><td>28</td><td><input type="checkbox" class="row-check"></td><td>equal</td><td>/ˈiː.kwəl/</td><td>bình đẳng</td><td><button class="btn" onclick="speak('equal')">Nghe</button></td><td class="example">All Australians are equal under the law. [Tất cả người Úc đều bình đẳng trước luật pháp.]</td><td><button class="btn" data-sentence="All Australians are equal under the law.">Read</button></td></tr>
+        <tr><td>29</td><td><input type="checkbox" class="row-check"></td><td>person</td><td>/ˈpɝː.sən/</td><td>người</td><td><button class="btn" onclick="speak('person')">Nghe</button></td><td class="example">The Rule of Law means that no person, group or religious rule is above the law. [Luật Pháp có nghĩa là không người, nhóm hoặc quy tắc tôn giáo nào đứng trên luật pháp.]</td><td><button class="btn" data-sentence="The Rule of Law means that no person, group or religious rule is above the law.">Read</button></td></tr>
+        <tr><td>30</td><td><input type="checkbox" class="row-check"></td><td>group</td><td>/ɡruːp/</td><td>nhóm</td><td><button class="btn" onclick="speak('group')">Nghe</button></td><td class="example">The Rule of Law means that no person, group or religious rule is above the law. [Luật Pháp có nghĩa là không người, nhóm hoặc quy tắc tôn giáo nào đứng trên luật pháp.]</td><td><button class="btn" data-sentence="The Rule of Law means that no person, group or religious rule is above the law.">Read</button></td></tr>
+        <tr><td>31</td><td><input type="checkbox" class="row-check"></td><td>religious</td><td>/rɪˈlɪdʒ.əs/</td><td>tôn giáo</td><td><button class="btn" onclick="speak('religious')">Nghe</button></td><td class="example">The Rule of Law means that no person, group or religious rule is above the law. [Luật Pháp có nghĩa là không người, nhóm hoặc quy tắc tôn giáo nào đứng trên luật pháp.]</td><td><button class="btn" data-sentence="The Rule of Law means that no person, group or religious rule is above the law.">Read</button></td></tr>
+        <tr><td>32</td><td><input type="checkbox" class="row-check"></td><td>rule</td><td>/ruːl/</td><td>quy tắc</td><td><button class="btn" onclick="speak('rule')">Nghe</button></td><td class="example">The Rule of Law means that no person, group or religious rule is above the law. [Luật Pháp có nghĩa là không người, nhóm hoặc quy tắc tôn giáo nào đứng trên luật pháp.]</td><td><button class="btn" data-sentence="The Rule of Law means that no person, group or religious rule is above the law.">Read</button></td></tr>
+        <tr><td>33</td><td><input type="checkbox" class="row-check"></td><td>above</td><td>/əˈbʌv/</td><td>trên</td><td><button class="btn" onclick="speak('above')">Nghe</button></td><td class="example">The Rule of Law means that no person, group or religious rule is above the law. [Luật Pháp có nghĩa là không người, nhóm hoặc quy tắc tôn giáo nào đứng trên luật pháp.]</td><td><button class="btn" data-sentence="The Rule of Law means that no person, group or religious rule is above the law.">Read</button></td></tr>
+        <tr><td>34</td><td><input type="checkbox" class="row-check"></td><td>everyone</td><td>/ˈev.ri.wʌn/</td><td>mọi người</td><td><button class="btn" onclick="speak('everyone')">Nghe</button></td><td class="example">Everyone, including people who hold positions of power in the Australian community, must obey Australia's laws. [Mọi người, bao gồm những người nắm giữ vị trí quyền lực trong cộng đồng Úc, phải tuân thủ luật pháp Úc.]</td><td><button class="btn" data-sentence="Everyone, including people who hold positions of power in the Australian community, must obey Australia's laws.">Read</button></td></tr>
+        <tr><td>35</td><td><input type="checkbox" class="row-check"></td><td>hold</td><td>/hoʊld/</td><td>giữ</td><td><button class="btn" onclick="speak('hold')">Nghe</button></td><td class="example">Everyone, including people who hold positions of power in the Australian community, must obey Australia's laws. [Mọi người, bao gồm những người nắm giữ vị trí quyền lực trong cộng đồng Úc, phải tuân thủ luật pháp Úc.]</td><td><button class="btn" data-sentence="Everyone, including people who hold positions of power in the Australian community, must obey Australia's laws.">Read</button></td></tr>
+        <tr><td>36</td><td><input type="checkbox" class="row-check"></td><td>positions</td><td>/pəˈzɪʃ.ənz/</td><td>vị trí</td><td><button class="btn" onclick="speak('positions')">Nghe</button></td><td class="example">Everyone, including people who hold positions of power in the Australian community, must obey Australia's laws. [Mọi người, bao gồm những người nắm giữ vị trí quyền lực trong cộng đồng Úc, phải tuân thủ luật pháp Úc.]</td><td><button class="btn" data-sentence="Everyone, including people who hold positions of power in the Australian community, must obey Australia's laws.">Read</button></td></tr>
+        <tr><td>37</td><td><input type="checkbox" class="row-check"></td><td>community</td><td>/kəˈmjuː.nə.ti/</td><td>cộng đồng</td><td><button class="btn" onclick="speak('community')">Nghe</button></td><td class="example">Everyone, including people who hold positions of power in the Australian community, must obey Australia's laws. [Mọi người, bao gồm những người nắm giữ vị trí quyền lực trong cộng đồng Úc, phải tuân thủ luật pháp Úc.]</td><td><button class="btn" data-sentence="Everyone, including people who hold positions of power in the Australian community, must obey Australia's laws.">Read</button></td></tr>
+        <tr><td>38</td><td><input type="checkbox" class="row-check"></td><td>must</td><td>/mʌst/</td><td>phải</td><td><button class="btn" onclick="speak('must')">Nghe</button></td><td class="example">Everyone, including people who hold positions of power in the Australian community, must obey Australia's laws. [Mọi người, bao gồm những người nắm giữ vị trí quyền lực trong cộng đồng Úc, phải tuân thủ luật pháp Úc.]</td><td><button class="btn" data-sentence="Everyone, including people who hold positions of power in the Australian community, must obey Australia's laws.">Read</button></td></tr>
+        <tr><td>39</td><td><input type="checkbox" class="row-check"></td><td>obey</td><td>/oʊˈbeɪ/</td><td>tuân thủ</td><td><button class="btn" onclick="speak('obey')">Nghe</button></td><td class="example">Everyone, including people who hold positions of power in the Australian community, must obey Australia's laws. [Mọi người, bao gồm những người nắm giữ vị trí quyền lực trong cộng đồng Úc, phải tuân thủ luật pháp Úc.]</td><td><button class="btn" data-sentence="Everyone, including people who hold positions of power in the Australian community, must obey Australia's laws.">Read</button></td></tr>
+        <tr><td>40</td><td><input type="checkbox" class="row-check"></td><td>laws</td><td>/lɔːz/</td><td>luật pháp</td><td><button class="btn" onclick="speak('laws')">Nghe</button></td><td class="example">Everyone, including people who hold positions of power in the Australian community, must obey Australia's laws. [Mọi người, bao gồm những người nắm giữ vị trí quyền lực trong cộng đồng Úc, phải tuân thủ luật pháp Úc.]</td><td><button class="btn" data-sentence="Everyone, including people who hold positions of power in the Australian community, must obey Australia's laws.">Read</button></td></tr>
+        <tr><td>41</td><td><input type="checkbox" class="row-check"></td><td>including</td><td>/ɪnˈkluː.dɪŋ/</td><td>bao gồm</td><td><button class="btn" onclick="speak('including')">Nghe</button></td><td class="example">Everyone, including people who hold positions of power in the Australian community, must obey Australia's laws. [Mọi người, bao gồm những người nắm giữ vị trí quyền lực trong cộng đồng Úc, phải tuân thủ luật pháp Úc.]</td><td><button class="btn" data-sentence="Everyone, including people who hold positions of power in the Australian community, must obey Australia's laws.">Read</button></td></tr>
+        <tr><td>42</td><td><input type="checkbox" class="row-check"></td><td>leaders</td><td>/ˈliː.dɚz/</td><td>lãnh đạo</td><td><button class="btn" onclick="speak('leaders')">Nghe</button></td><td class="example">This includes government, community and religious leaders, as well as business people and the police. [Điều này bao gồm chính phủ, cộng đồng và lãnh đạo tôn giáo, cũng như doanh nhân và cảnh sát.]</td><td><button class="btn" data-sentence="This includes government, community and religious leaders, as well as business people and the police.">Read</button></td></tr>
+        <tr><td>43</td><td><input type="checkbox" class="row-check"></td><td>business</td><td>/ˈbɪz.nɪs/</td><td>kinh doanh</td><td><button class="btn" onclick="speak('business')">Nghe</button></td><td class="example">This includes government, community and religious leaders, as well as business people and the police. [Điều này bao gồm chính phủ, cộng đồng và lãnh đạo tôn giáo, cũng như doanh nhân và cảnh sát.]</td><td><button class="btn" data-sentence="This includes government, community and religious leaders, as well as business people and the police.">Read</button></td></tr>
+        <tr><td>44</td><td><input type="checkbox" class="row-check"></td><td>police</td><td>/pəˈliːs/</td><td>cảnh sát</td><td><button class="btn" onclick="speak('police')">Nghe</button></td><td class="example">This includes government, community and religious leaders, as well as business people and the police. [Điều này bao gồm chính phủ, cộng đồng và lãnh đạo tôn giáo, cũng như doanh nhân và cảnh sát.]</td><td><button class="btn" data-sentence="This includes government, community and religious leaders, as well as business people and the police.">Read</button></td></tr>
+        <tr><td>45</td><td><input type="checkbox" class="row-check"></td><td>living</td><td>/ˈlɪv.ɪŋ/</td><td>sống</td><td><button class="btn" onclick="speak('living')">Nghe</button></td><td class="example">Living peacefully. [Sống hòa bình.]</td><td><button class="btn" data-sentence="Living peacefully.">Read</button></td></tr>
+        <tr><td>46</td><td><input type="checkbox" class="row-check"></td><td>peacefully</td><td>/ˈpiːs.fəl.i/</td><td>hòa bình</td><td><button class="btn" onclick="speak('peacefully')">Nghe</button></td><td class="example">Australians are proud to live in a peaceful country with a stable system of government. [Người Úc tự hào sống trong một quốc gia hòa bình với hệ thống chính phủ ổn định.]</td><td><button class="btn" data-sentence="Australians are proud to live in a peaceful country with a stable system of government.">Read</button></td></tr>
+        <tr><td>47</td><td><input type="checkbox" class="row-check"></td><td>proud</td><td>/praʊd/</td><td>tự hào</td><td><button class="btn" onclick="speak('proud')">Nghe</button></td><td class="example">Australians are proud to live in a peaceful country with a stable system of government. [Người Úc tự hào sống trong một quốc gia hòa bình với hệ thống chính phủ ổn định.]</td><td><button class="btn" data-sentence="Australians are proud to live in a peaceful country with a stable system of government.">Read</button></td></tr>
+        <tr><td>48</td><td><input type="checkbox" class="row-check"></td><td>live</td><td>/lɪv/</td><td>sống</td><td><button class="btn" onclick="speak('live')">Nghe</button></td><td class="example">Australians are proud to live in a peaceful country with a stable system of government. [Người Úc tự hào sống trong một quốc gia hòa bình với hệ thống chính phủ ổn định.]</td><td><button class="btn" data-sentence="Australians are proud to live in a peaceful country with a stable system of government.">Read</button></td></tr>
+        <tr><td>49</td><td><input type="checkbox" class="row-check"></td><td>peaceful</td><td>/ˈpiːs.fəl/</td><td>hòa bình</td><td><button class="btn" onclick="speak('peaceful')">Nghe</button></td><td class="example">Australians are proud to live in a peaceful country with a stable system of government. [Người Úc tự hào sống trong một quốc gia hòa bình với hệ thống chính phủ ổn định.]</td><td><button class="btn" data-sentence="Australians are proud to live in a peaceful country with a stable system of government.">Read</button></td></tr>
+        <tr><td>50</td><td><input type="checkbox" class="row-check"></td><td>country</td><td>/ˈkʌn.tri/</td><td>quốc gia</td><td><button class="btn" onclick="speak('country')">Nghe</button></td><td class="example">Australians are proud to live in a peaceful country with a stable system of government. [Người Úc tự hào sống trong một quốc gia hòa bình với hệ thống chính phủ ổn định.]</td><td><button class="btn" data-sentence="Australians are proud to live in a peaceful country with a stable system of government.">Read</button></td></tr>
+        <tr><td>51</td><td><input type="checkbox" class="row-check"></td><td>stable</td><td>/ˈsteɪ.bəl/</td><td>ổn định</td><td><button class="btn" onclick="speak('stable')">Nghe</button></td><td class="example">Australians are proud to live in a peaceful country with a stable system of government. [Người Úc tự hào sống trong một quốc gia hòa bình với hệ thống chính phủ ổn định.]</td><td><button class="btn" data-sentence="Australians are proud to live in a peaceful country with a stable system of government.">Read</button></td></tr>
+        <tr><td>52</td><td><input type="checkbox" class="row-check"></td><td>believe</td><td>/bɪˈliːv/</td><td>tin</td><td><button class="btn" onclick="speak('believe')">Nghe</button></td><td class="example">Australians believe that change should occur through discussion, peaceful persuasion, and the democratic process. [Người Úc tin rằng sự thay đổi nên xảy ra qua thảo luận, thuyết phục hòa bình, và quá trình dân chủ.]</td><td><button class="btn" data-sentence="Australians believe that change should occur through discussion, peaceful persuasion, and the democratic process.">Read</button></td></tr>
+        <tr><td>53</td><td><input type="checkbox" class="row-check"></td><td>change</td><td>/tʃeɪndʒ/</td><td>thay đổi</td><td><button class="btn" onclick="speak('change')">Nghe</button></td><td class="example">Australians believe that change should occur through discussion, peaceful persuasion, and the democratic process. [Người Úc tin rằng sự thay đổi nên xảy ra qua thảo luận, thuyết phục hòa bình, và quá trình dân chủ.]</td><td><button class="btn" data-sentence="Australians believe that change should occur through discussion, peaceful persuasion, and the democratic process.">Read</button></td></tr>
+        <tr><td>54</td><td><input type="checkbox" class="row-check"></td><td>occur</td><td>/əˈkɝː/</td><td>xảy ra</td><td><button class="btn" onclick="speak('occur')">Nghe</button></td><td class="example">Australians believe that change should occur through discussion, peaceful persuasion, and the democratic process. [Người Úc tin rằng sự thay đổi nên xảy ra qua thảo luận, thuyết phục hòa bình, và quá trình dân chủ.]</td><td><button class="btn" data-sentence="Australians believe that change should occur through discussion, peaceful persuasion, and the democratic process.">Read</button></td></tr>
+        <tr><td>55</td><td><input type="checkbox" class="row-check"></td><td>discussion</td><td>/dɪˈskʌʃ.ən/</td><td>thảo luận</td><td><button class="btn" onclick="speak('discussion')">Nghe</button></td><td class="example">Australians believe that change should occur through discussion, peaceful persuasion, and the democratic process. [Người Úc tin rằng sự thay đổi nên xảy ra qua thảo luận, thuyết phục hòa bình, và quá trình dân chủ.]</td><td><button class="btn" data-sentence="Australians believe that change should occur through discussion, peaceful persuasion, and the democratic process.">Read</button></td></tr>
+        <tr><td>56</td><td><input type="checkbox" class="row-check"></td><td>peaceful</td><td>/ˈpiːs.fəl/</td><td>hòa bình</td><td><button class="btn" onclick="speak('peaceful')">Nghe</button></td><td class="example">Australians believe that change should occur through discussion, peaceful persuasion, and the democratic process. [Người Úc tin rằng sự thay đổi nên xảy ra qua thảo luận, thuyết phục hòa bình, và quá trình dân chủ.]</td><td><button class="btn" data-sentence="Australians believe that change should occur through discussion, peaceful persuasion, and the democratic process.">Read</button></td></tr>
+        <tr><td>57</td><td><input type="checkbox" class="row-check"></td><td>persuasion</td><td>/pɚˈsweɪ.ʒən/</td><td>thuyết phục</td><td><button class="btn" onclick="speak('persuasion')">Nghe</button></td><td class="example">Australians believe that change should occur through discussion, peaceful persuasion, and the democratic process. [Người Úc tin rằng sự thay đổi nên xảy ra qua thảo luận, thuyết phục hòa bình, và quá trình dân chủ.]</td><td><button class="btn" data-sentence="Australians believe that change should occur through discussion, peaceful persuasion, and the democratic process.">Read</button></td></tr>
+        <tr><td>58</td><td><input type="checkbox" class="row-check"></td><td>democratic</td><td>/ˌdem.əˈkræt.ɪk/</td><td>dân chủ</td><td><button class="btn" onclick="speak('democratic')">Nghe</button></td><td class="example">Australians believe that change should occur through discussion, peaceful persuasion, and the democratic process. [Người Úc tin rằng sự thay đổi nên xảy ra qua thảo luận, thuyết phục hòa bình, và quá trình dân chủ.]</td><td><button class="btn" data-sentence="Australians believe that change should occur through discussion, peaceful persuasion, and the democratic process.">Read</button></td></tr>
+        <tr><td>59</td><td><input type="checkbox" class="row-check"></td><td>process</td><td>/ˈprɑː.ses/</td><td>quá trình</td><td><button class="btn" onclick="speak('process')">Nghe</button></td><td class="example">Australians believe that change should occur through discussion, peaceful persuasion, and the democratic process. [Người Úc tin rằng sự thay đổi nên xảy ra qua thảo luận, thuyết phục hòa bình, và quá trình dân chủ.]</td><td><button class="btn" data-sentence="Australians believe that change should occur through discussion, peaceful persuasion, and the democratic process.">Read</button></td></tr>
+        <tr><td>60</td><td><input type="checkbox" class="row-check"></td><td>reject</td><td>/rɪˈdʒekt/</td><td>từ chối</td><td><button class="btn" onclick="speak('reject')">Nghe</button></td><td class="example">We reject violence as a way to change a person's mind or the law. [Chúng tôi từ chối bạo lực như một cách để thay đổi suy nghĩ của một người hoặc luật pháp.]</td><td><button class="btn" data-sentence="We reject violence as a way to change a person's mind or the law.">Read</button></td></tr>
+        <tr><td>61</td><td><input type="checkbox" class="row-check"></td><td>violence</td><td>/ˈvaɪ.ə.ləns/</td><td>bạo lực</td><td><button class="btn" onclick="speak('violence')">Nghe</button></td><td class="example">We reject violence as a way to change a person's mind or the law. [Chúng tôi từ chối bạo lực như một cách để thay đổi suy nghĩ của một người hoặc luật pháp.]</td><td><button class="btn" data-sentence="We reject violence as a way to change a person's mind or the law.">Read</button></td></tr>
+        <tr><td>62</td><td><input type="checkbox" class="row-check"></td><td>way</td><td>/weɪ/</td><td>cách</td><td><button class="btn" onclick="speak('way')">Nghe</button></td><td class="example">We reject violence as a way to change a person's mind or the law. [Chúng tôi từ chối bạo lực như một cách để thay đổi suy nghĩ của một người hoặc luật pháp.]</td><td><button class="btn" data-sentence="We reject violence as a way to change a person's mind or the law.">Read</button></td></tr>
+		<tr><td>63</td><td><input type="checkbox" class="row-check"></td><td>mind</td><td>/maɪnd/</td><td>tâm trí</td><td><button class="btn" onclick="speak('mind')">Nghe</button></td><td class="example">We reject violence as a way to change a person's mind or the law. [Chúng tôi từ chối bạo lực như một cách để thay đổi suy nghĩ của một người hoặc luật pháp.]</td><td><button class="btn" data-sentence="We reject violence as a way to change a person's mind or the law.">Read</button></td></tr>
+		<tr><td>64</td><td><input type="checkbox" class="row-check"></td><td>freedom</td><td>/ˈfriː.dəm/</td><td>tự do</td><td><button class="btn" onclick="speak('freedom')">Nghe</button></td><td class="example">Freedom of speech. [Tự do ngôn luận.]</td><td><button class="btn" data-sentence="Freedom of speech.">Read</button></td></tr>
+		<tr><td>65</td><td><input type="checkbox" class="row-check"></td><td>speech</td><td>/spiːtʃ/</td><td>ngôn luận</td><td><button class="btn" onclick="speak('speech')">Nghe</button></td><td class="example">Freedom of speech. [Tự do ngôn luận.]</td><td><button class="btn" data-sentence="Freedom of speech.">Read</button></td></tr>
+		<tr><td>66</td><td><input type="checkbox" class="row-check"></td><td>express</td><td>/ɪkˈspres/</td><td>bày tỏ</td><td><button class="btn" onclick="speak('express')">Nghe</button></td><td class="example">Australians are free to express their opinions and beliefs. [Người Úc được tự do bày tỏ ý kiến và niềm tin của mình.]</td><td><button class="btn" data-sentence="Australians are free to express their opinions and beliefs.">Read</button></td></tr>
+		<tr><td>67</td><td><input type="checkbox" class="row-check"></td><td>opinions</td><td>/əˈpɪn.jənz/</td><td>ý kiến</td><td><button class="btn" onclick="speak('opinions')">Nghe</button></td><td class="example">Australians are free to express their opinions and beliefs. [Người Úc được tự do bày tỏ ý kiến và niềm tin của mình.]</td><td><button class="btn" data-sentence="Australians are free to express their opinions and beliefs.">Read</button></td></tr>
+		<tr><td>68</td><td><input type="checkbox" class="row-check"></td><td>beliefs</td><td>/bɪˈliːfs/</td><td>niềm tin</td><td><button class="btn" onclick="speak('beliefs')">Nghe</button></td><td class="example">Australians are free to express their opinions and beliefs. [Người Úc được tự do bày tỏ ý kiến và niềm tin của mình.]</td><td><button class="btn" data-sentence="Australians are free to express their opinions and beliefs.">Read</button></td></tr>
+		<tr><td>69</td><td><input type="checkbox" class="row-check"></td><td>peacefully</td><td>/ˈpiːs.fəl.i/</td><td>hòa bình</td><td><button class="btn" onclick="speak('peacefully')">Nghe</button></td><td class="example">Australians are free to peacefully protest the decisions or actions of the government. [Người Úc được tự do biểu tình hòa bình phản đối các quyết định hoặc hành động của chính phủ.]</td><td><button class="btn" data-sentence="Australians are free to peacefully protest the decisions or actions of the government.">Read</button></td></tr>
+		<tr><td>70</td><td><input type="checkbox" class="row-check"></td><td>protest</td><td>/ˈproʊ.test/</td><td>biểu tình</td><td><button class="btn" onclick="speak('protest')">Nghe</button></td><td class="example">Australians are free to peacefully protest the decisions or actions of the government. [Người Úc được tự do biểu tình hòa bình phản đối các quyết định hoặc hành động của chính phủ.]</td><td><button class="btn" data-sentence="Australians are free to peacefully protest the decisions or actions of the government.">Read</button></td></tr>
+		<tr><td>71</td><td><input type="checkbox" class="row-check"></td><td>decisions</td><td>/dɪˈsɪʒ.ənz/</td><td>quyết định</td><td><button class="btn" onclick="speak('decisions')">Nghe</button></td><td class="example">Australians are free to peacefully protest the decisions or actions of the government. [Người Úc được tự do biểu tình hòa bình phản đối các quyết định hoặc hành động của chính phủ.]</td><td><button class="btn" data-sentence="Australians are free to peacefully protest the decisions or actions of the government.">Read</button></td></tr>
+		<tr><td>72</td><td><input type="checkbox" class="row-check"></td><td>actions</td><td>/ˈæk.ʃənz/</td><td>hành động</td><td><button class="btn" onclick="speak('actions')">Nghe</button></td><td class="example">Australians are free to peacefully protest the decisions or actions of the government. [Người Úc được tự do biểu tình hòa bình phản đối các quyết định hoặc hành động của chính phủ.]</td><td><button class="btn" data-sentence="Australians are free to peacefully protest the decisions or actions of the government.">Read</button></td></tr>
+		<tr><td>73</td><td><input type="checkbox" class="row-check"></td><td>freedom</td><td>/ˈfriː.dəm/</td><td>tự do</td><td><button class="btn" onclick="speak('freedom')">Nghe</button></td><td class="example">Freedom of association. [Tự do lập hội.]</td><td><button class="btn" data-sentence="Freedom of association.">Read</button></td></tr>
+		<tr><td>74</td><td><input type="checkbox" class="row-check"></td><td>association</td><td>/əˌsoʊ.siˈeɪ.ʃən/</td><td>lập hội</td><td><button class="btn" onclick="speak('association')">Nghe</button></td><td class="example">Freedom of association. [Tự do lập hội.]</td><td><button class="btn" data-sentence="Freedom of association.">Read</button></td></tr>
+		<tr><td>75</td><td><input type="checkbox" class="row-check"></td><td>gather</td><td>/ˈɡæð.ɚ/</td><td>tập hợp</td><td><button class="btn" onclick="speak('gather')">Nghe</button></td><td class="example">Australians are free to gather peacefully with family, friends or others. [Người Úc được tự do tụ tập hòa bình với gia đình, bạn bè hoặc những người khác.]</td><td><button class="btn" data-sentence="Australians are free to gather peacefully with family, friends or others.">Read</button></td></tr>
+		<tr><td>76</td><td><input type="checkbox" class="row-check"></td><td>family</td><td>/ˈfæm.ɪ.li/</td><td>gia đình</td><td><button class="btn" onclick="speak('family')">Nghe</button></td><td class="example">Australians are free to gather peacefully with family, friends or others. [Người Úc được tự do tụ tập hòa bình với gia đình, bạn bè hoặc những người khác.]</td><td><button class="btn" data-sentence="Australians are free to gather peacefully with family, friends or others.">Read</button></td></tr>
+		<tr><td>77</td><td><input type="checkbox" class="row-check"></td><td>friends</td><td>/frendz/</td><td>bạn bè</td><td><button class="btn" onclick="speak('friends')">Nghe</button></td><td class="example">Australians are free to gather peacefully with family, friends or others. [Người Úc được tự do tụ tập hòa bình với gia đình, bạn bè hoặc những người khác.]</td><td><button class="btn" data-sentence="Australians are free to gather peacefully with family, friends or others.">Read</button></td></tr>
+		<tr><td>78</td><td><input type="checkbox" class="row-check"></td><td>religion</td><td>/rɪˈlɪdʒ.ən/</td><td>tôn giáo</td><td><button class="btn" onclick="speak('religion')">Nghe</button></td><td class="example">Freedom of religion and secular government. [Tự do tôn giáo và chính phủ thế tục.]</td><td><button class="btn" data-sentence="Freedom of religion and secular government.">Read</button></td></tr>
+		<tr><td>79</td><td><input type="checkbox" class="row-check"></td><td>secular</td><td>/ˈsek.jə.lɚ/</td><td>thế tục</td><td><button class="btn" onclick="speak('secular')">Nghe</button></td><td class="example">Freedom of religion and secular government. [Tự do tôn giáo và chính phủ thế tục.]</td><td><button class="btn" data-sentence="Freedom of religion and secular government.">Read</button></td></tr>
+		<tr><td>80</td><td><input type="checkbox" class="row-check"></td><td>choose</td><td>/tʃuːz/</td><td>chọn</td><td><button class="btn" onclick="speak('choose')">Nghe</button></td><td class="example">Australians are free to choose to follow a religion or not to follow a religion. [Người Úc được tự do chọn theo một tôn giáo hoặc không theo tôn giáo nào.]</td><td><button class="btn" data-sentence="Australians are free to choose to follow a religion or not to follow a religion.">Read</button></td></tr>
+		<tr><td>81</td><td><input type="checkbox" class="row-check"></td><td>follow</td><td>/ˈfɑː.loʊ/</td><td>theo</td><td><button class="btn" onclick="speak('follow')">Nghe</button></td><td class="example">Australians are free to choose to follow a religion or not to follow a religion. [Người Úc được tự do chọn theo một tôn giáo hoặc không theo tôn giáo nào.]</td><td><button class="btn" data-sentence="Australians are free to choose to follow a religion or not to follow a religion.">Read</button></td></tr>
+		<tr><td>82</td><td><input type="checkbox" class="row-check"></td><td>equality</td><td>/ɪˈkwɑː.lə.t̬i/</td><td>bình đẳng</td><td><button class="btn" onclick="speak('equality')">Nghe</button></td><td class="example">Equality under the law. [Bình đẳng trước pháp luật.]</td><td><button class="btn" data-sentence="Equality under the law.">Read</button></td></tr>
+		<tr><td>83</td><td><input type="checkbox" class="row-check"></td><td>regardless</td><td>/rɪˈɡɑːrd.ləs/</td><td>bất kể</td><td><button class="btn" onclick="speak('regardless')">Nghe</button></td><td class="example">All Australians are equal under the law, regardless of where they were born or how they came to live in Australia. [Tất cả người Úc đều bình đẳng trước pháp luật, bất kể họ sinh ra ở đâu hoặc làm thế nào để đến sống ở Úc.]</td><td><button class="btn" data-sentence="All Australians are equal under the law, regardless of where they were born or how they came to live in Australia.">Read</button></td></tr>
+		<tr><td>84</td><td><input type="checkbox" class="row-check"></td><td>born</td><td>/bɔːrn/</td><td>sinh ra</td><td><button class="btn" onclick="speak('born')">Nghe</button></td><td class="example">All Australians are equal under the law, regardless of where they were born or how they came to live in Australia. [Tất cả người Úc đều bình đẳng trước pháp luật, bất kể họ sinh ra ở đâu hoặc làm thế nào để đến sống ở Úc.]</td><td><button class="btn" data-sentence="All Australians are equal under the law, regardless of where they were born or how they came to live in Australia.">Read</button></td></tr>
+		<tr><td>85</td><td><input type="checkbox" class="row-check"></td><td>equality</td><td>/ɪˈkwɑː.lə.t̬i/</td><td>bình đẳng</td><td><button class="btn" onclick="speak('equality')">Nghe</button></td><td class="example">Equality of opportunity. [Bình đẳng cơ hội.]</td><td><button class="btn" data-sentence="Equality of opportunity.">Read</button></td></tr>
+		<tr><td>86</td><td><input type="checkbox" class="row-check"></td><td>opportunity</td><td>/ˌɑː.pɚˈtuː.nə.t̬i/</td><td>cơ hội</td><td><button class="btn" onclick="speak('opportunity')">Nghe</button></td><td class="example">Equality of opportunity. [Bình đẳng cơ hội.]</td><td><button class="btn" data-sentence="Equality of opportunity.">Read</button></td></tr>
+		<tr><td>87</td><td><input type="checkbox" class="row-check"></td><td>background</td><td>/ˈbæk.ɡraʊnd/</td><td>nền tảng</td><td><button class="btn" onclick="speak('background')">Nghe</button></td><td class="example">All Australians have the right to be respected and treated fairly, regardless of their background. [Tất cả người Úc đều có quyền được tôn trọng và đối xử công bằng, bất kể nền tảng của họ.]</td><td><button class="btn" data-sentence="All Australians have the right to be respected and treated fairly, regardless of their background.">Read</button></td></tr>
+		<tr><td>88</td><td><input type="checkbox" class="row-check"></td><td>treated</td><td>/ˈtriː.t̬ɪd/</td><td>đối xử</td><td><button class="btn" onclick="speak('treated')">Nghe</button></td><td class="example">All Australians have the right to be respected and treated fairly, regardless of their background. [Tất cả người Úc đều có quyền được tôn trọng và đối xử công bằng, bất kể nền tảng của họ.]</td><td><button class="btn" data-sentence="All Australians have the right to be respected and treated fairly, regardless of their background.">Read</button></td></tr>
+		<tr><td>89</td><td><input type="checkbox" class="row-check"></td><td>fairly</td><td>/ˈfer.li/</td><td>công bằng</td><td><button class="btn" onclick="speak('fairly')">Nghe</button></td><td class="example">All Australians have the right to be respected and treated fairly, regardless of their background. [Tất cả người Úc đều có quyền được tôn trọng và đối xử công bằng, bất kể nền tảng của họ.]</td><td><button class="btn" data-sentence="All Australians have the right to be respected and treated fairly, regardless of their background.">Read</button></td></tr>
+		<tr><td>90</td><td><input type="checkbox" class="row-check"></td><td>equality</td><td>/ɪˈkwɑː.lə.t̬i/</td><td>bình đẳng</td><td><button class="btn" onclick="speak('equality')">Nghe</button></td><td class="example">Equality in Australia means that men and women have equal rights and opportunities. [Bình đẳng ở Úc có nghĩa là nam và nữ có quyền và cơ hội bình đẳng.]</td><td><button class="btn" data-sentence="Equality in Australia means that men and women have equal rights and opportunities.">Read</button></td></tr>
+		<tr><td>91</td><td><input type="checkbox" class="row-check"></td><td>men</td><td>/men/</td><td>đàn ông</td><td><button class="btn" onclick="speak('men')">Nghe</button></td><td class="example">Equality in Australia means that men and women have equal rights and opportunities. [Bình đẳng ở Úc có nghĩa là nam và nữ có quyền và cơ hội bình đẳng.]</td><td><button class="btn" data-sentence="Equality in Australia means that men and women have equal rights and opportunities.">Read</button></td></tr>
+		<tr><td>92</td><td><input type="checkbox" class="row-check"></td><td>women</td><td>/ˈwɪm.ɪn/</td><td>phụ nữ</td><td><button class="btn" onclick="speak('women')">Nghe</button></td><td class="example">Equality in Australia means that men and women have equal rights and opportunities. [Bình đẳng ở Úc có nghĩa là nam và nữ có quyền và cơ hội bình đẳng.]</td><td><button class="btn" data-sentence="Equality in Australia means that men and women have equal rights and opportunities.">Read</button></td></tr>
+		<tr><td>93</td><td><input type="checkbox" class="row-check"></td><td>mutual</td><td>/ˈmjuː.tʃu.əl/</td><td>lẫn nhau</td><td><button class="btn" onclick="speak('mutual')">Nghe</button></td><td class="example">Mutual respect. [Tôn trọng lẫn nhau.]</td><td><button class="btn" data-sentence="Mutual respect.">Read</button></td></tr>
+		<tr><td>94</td><td><input type="checkbox" class="row-check"></td><td>respect</td><td>/rɪˈspekt/</td><td>tôn trọng</td><td><button class="btn" onclick="speak('respect')">Nghe</button></td><td class="example">Mutual respect. [Tôn trọng lẫn nhau.]</td><td><button class="btn" data-sentence="Mutual respect.">Read</button></td></tr>
+		<tr><td>95</td><td><input type="checkbox" class="row-check"></td><td>tolerance</td><td>/ˈtɑː.lɚ.əns/</td><td>khoan dung</td><td><button class="btn" onclick="speak('tolerance')">Nghe</button></td><td class="example">Australians respect the freedom and dignity of every person and practise tolerance. [Người Úc tôn trọng tự do và phẩm giá của mỗi người và thực hành sự khoan dung.]</td><td><button class="btn" data-sentence="Australians respect the freedom and dignity of every person and practise tolerance.">Read</button></td></tr>
+		<tr><td>96</td><td><input type="checkbox" class="row-check"></td><td>dignity</td><td>/ˈdɪɡ.nə.t̬i/</td><td>phẩm giá</td><td><button class="btn" onclick="speak('dignity')">Nghe</button></td><td class="example">Australians respect the freedom and dignity of every person and practise tolerance. [Người Úc tôn trọng tự do và phẩm giá của mỗi người và thực hành sự khoan dung.]</td><td><button class="btn" data-sentence="Australians respect the freedom and dignity of every person and practise tolerance.">Read</button></td></tr>
+		<tr><td>97</td><td><input type="checkbox" class="row-check"></td><td>practise</td><td>/ˈpræk.tɪs/</td><td>thực hành</td><td><button class="btn" onclick="speak('practise')">Nghe</button></td><td class="example">Australians respect the freedom and dignity of every person and practise tolerance. [Người Úc tôn trọng tự do và phẩm giá của mỗi người và thực hành sự khoan dung.]</td><td><button class="btn" data-sentence="Australians respect the freedom and dignity of every person and practise tolerance.">Read</button></td></tr>
+		<tr><td>98</td><td><input type="checkbox" class="row-check"></td><td>compassion</td><td>/kəmˈpæʃ.ən/</td><td>lòng trắc ẩn</td><td><button class="btn" onclick="speak('compassion')">Nghe</button></td><td class="example">A fair go. [Cơ hội công bằng.]</td><td><button class="btn" data-sentence="A fair go.">Read</button></td></tr>
+		<tr><td>99</td><td><input type="checkbox" class="row-check"></td><td>fair</td><td>/fer/</td><td>công bằng</td><td><button class="btn" onclick="speak('fair')">Nghe</button></td><td class="example">A fair go. [Cơ hội công bằng.]</td><td><button class="btn" data-sentence="A fair go.">Read</button></td></tr>
+		<tr><td>100</td><td><input type="checkbox" class="row-check"></td><td>go</td><td>/ɡoʊ/</td><td>đi</td><td><button class="btn" onclick="speak('go')">Nghe</button></td><td class="example">A fair go. [Cơ hội công bằng.]</td><td><button class="btn" data-sentence="A fair go.">Read</button></td></tr>
+</tbody>
+</table>
+
+<script>
+let voices = [];
+let originalOrder = [];
+let isSorted = false;
+
+const voiceSelect = document.getElementById('voiceSelect');
+const notice = document.getElementById('notice');
+const tbody = document.querySelector('#vocabTable tbody');
+const filterSelect = document.getElementById('filterSelect');
+
+// Tiền tố lưu trữ riêng cho từng file (Voc1.html, Voc2.html, Voc4.html, Glossary.html...)
+const STORAGE_PREFIX = 'CITIZENSHIP_VOCAB_' + location.pathname.replace(/[^a-zA-Z0-9]/g, '_');
+
+// Lưu tất cả trạng thái
+function saveAll() {
+    // Lưu các ô đã tick
+    const checked = Array.from(tbody.querySelectorAll('.row-check:checked'))
+        .map(cb => cb.closest('tr').cells[0].textContent.trim());
+    localStorage.setItem(STORAGE_PREFIX + '_checked', JSON.stringify(checked));
+
+    // Lưu droplist Options
+    localStorage.setItem(STORAGE_PREFIX + '_filter', filterSelect.value);
+
+    // Lưu giọng đọc
+    localStorage.setItem(STORAGE_PREFIX + '_voice', voiceSelect.value);
+}
+
+// Khôi phục tất cả trạng thái khi load trang
+function loadAll() {
+    // Khôi phục checkbox
+    const savedChecked = localStorage.getItem(STORAGE_PREFIX + '_checked');
+    if (savedChecked) {
+        const checkedNos = JSON.parse(savedChecked);
+        tbody.querySelectorAll('.row-check').forEach(cb => {
+            const no = cb.closest('tr').cells[0].textContent.trim();
+            cb.checked = checkedNos.includes(no);
+        });
+    }
+
+    // Khôi phục droplist Options
+    const savedFilter = localStorage.getItem(STORAGE_PREFIX + '_filter');
+    if (savedFilter && ['all','checked','unchecked'].includes(savedFilter)) {
+        filterSelect.value = savedFilter;
+        filterRows(savedFilter);
+    }
+
+    // Khôi phục giọng đọc (sẽ được áp dụng sau khi loadVoices hoàn tất)
+    const savedVoice = localStorage.getItem(STORAGE_PREFIX + '_voice');
+    if (savedVoice) voiceSelect.dataset.saved = savedVoice;
+}
+
+// Lưu khi người dùng thay đổi bất kỳ thứ gì
+filterSelect.addEventListener('change', () => {
+    filterRows(filterSelect.value);
+    renumberVisible();
+    saveAll();
+});
+
+voiceSelect.addEventListener('change', saveAll);
+
+tbody.addEventListener('change', (e) => {
+    if (e.target.classList.contains('row-check')) {
+        renumberVisible();
+        saveAll();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    originalOrder = Array.from(tbody.rows);
+    loadVoices();
+    loadAll();
+    renumberVisible();  // Renumber ban đầu nếu cần
+});
+
+function loadVoices() {
+    voices = speechSynthesis.getVoices();
+    if (voices.length === 0) {
+        speechSynthesis.onvoiceschanged = loadVoices;
+        return;
+    }
+
+    let ausVoices = voices.filter(v => v.lang === 'en-AU' || v.name.toLowerCase().includes('australian'));
+    let otherVoices = voices.filter(v => v.lang.startsWith('en-') && !ausVoices.includes(v));
+    voices = [...ausVoices, ...otherVoices];
+
+    voiceSelect.innerHTML = '';
+    if (ausVoices.length === 0) notice.style.display = 'block';
+
+    voices.forEach((voice, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        const gender = (voice.name.toLowerCase().includes('female') || ['karen','catherine','lee'].some(n=>voice.name.toLowerCase().includes(n))) ? '(Nữ)' : '(Nam)';
+        opt.textContent = `${voice.name} (${voice.lang}) ${gender}`;
+        voiceSelect.appendChild(opt);
+    });
+
+    // Áp dụng giọng đã lưu (nếu có)
+    const saved = voiceSelect.dataset.saved || localStorage.getItem(STORAGE_PREFIX + '_voice');
+    if (saved !== null && voiceSelect.options[saved]) {
+        voiceSelect.value = saved;
+    } else {
+        const ausIdx = voices.findIndex(v => v.lang === 'en-AU');
+        voiceSelect.value = ausIdx !== -1 ? ausIdx : 0;
+    }
+}
+
+function speak(text) {
+    speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    const idx = voiceSelect.value;
+    if (idx && voices[idx]) utterance.voice = voices[idx];
+    else utterance.lang = 'en-AU';
+    utterance.rate = 0.9;
+    speechSynthesis.speak(utterance);
+}
+
+function filterRows(mode) {
+    for (let row of tbody.rows) {
+        const checked = row.querySelector('.row-check').checked;
+        row.classList.toggle('hidden', mode === 'checked' ? !checked : (mode === 'unchecked' ? checked : false));
+    }
+    renumberVisible();  // Renumber sau khi lọc
+}
+
+function renumberVisible() {
+    let visibleRows = Array.from(tbody.rows).filter(row => !row.classList.contains('hidden'));
+    visibleRows.forEach((row, index) => {
+        row.cells[0].textContent = index + 1;
+    });
+}
+
+function sortTable() {
+    const rows = Array.from(tbody.rows);
+    if (!isSorted) {
+        rows.sort((a, b) => a.cells[2].textContent.localeCompare(b.cells[2].textContent));
+        isSorted = true;
+    } else {
+        rows.sort((a, b) => originalOrder.indexOf(a) - originalOrder.indexOf(b));
+        isSorted = false;
+    }
+    rows.forEach(r => tbody.appendChild(r));
+    renumberVisible();  // Renumber sau khi sort
+}
+
+document.querySelectorAll('[data-sentence]').forEach(btn => {
+    btn.onclick = () => speak(btn.dataset.sentence);
+});
+</script>
+
+</body>
+</html>

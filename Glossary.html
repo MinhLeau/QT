@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Từ vựng Phần 4: Our Australian community and values</title>
+    <style>
+        body {font-family: Arial, sans-serif; background:#f0f8ff; padding:20px; line-height:1.6;}
+		h3 {text-align:right; color:#006400; margin-bottom:1px; margin-top:0px; font-size:10px;}
+        h1 {text-align:center; color:#006400; margin-bottom:-10px; margin-top:-25px;}
+		h2 {text-align:left; color:#e51803; margin-bottom:0px; margin-bottom:10px; font-size:15px;}
+		
+		
+        .controls {background:#fff; padding:15px; border-radius:8px; margin-bottom:20px; box-shadow:0 4px 10px rgba(0,0,0,0.1); text-align:left;}
+        select, button {padding:8px 12px; font-size:16px; margin:0 8px; border-radius:4px;}
+        .notice {color:#d32f2f; font-weight:bold; margin-top:5px;}
+        .btn {background:#006400; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-weight:bold;}
+        .btn:hover {background:#004d00;}
+        table {width:100%; border-collapse:collapse; margin-top:20px; background:white; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+        th {background:#006400; color:white; padding:12px; text-align:center; position:relative; cursor:pointer;}
+        th .dropdown {position:absolute; top:100%; left:0; background:#006400; z-index:10; display:none; min-width:160px;}
+        th:hover .dropdown {display:block;}
+        th .dropdown select {width:100%; padding:8px;}
+        td {padding:10px; vertical-align:top; border-bottom:1px solid #ddd; text-align:center;}
+        td.example {font-style:italic; color:#333; font-size:0.95em; text-align:left;}
+        tr:nth-child(even) {background:#f9f9f9;}
+        tr:hover {background:#e6f7e6;}
+        input[type="checkbox"] {transform:scale(1.3); cursor:pointer;}
+        .hidden {display:none;}
+        .nav-bar {text-align:left; margin:20px 0;}
+        .nav-bar .btn {margin:5px; font-size:15px;}
+        table, th, td {border:1px solid #000;}
+        td, th {padding:6px;}
+    </style>
+</head>
+<body>
+
+
+<h1>Australian Citizenship - Our Common Bond</h1><h3>Created by Thomas</h3>
+<h2>TỪ VỰNG PHẦN 4: AUSTRALIAN VALUES</h2>
+
+<div class="nav-bar">
+    <a href="V1.html" class="btn">PART_ONE</a>
+    <a href="V2.html" class="btn">PART_TWO</a>
+    <a href="V3.html" class="btn">PART_THREE</a>
+    <a href="V4.html" class="btn">PART_FOUR</a>
+    <a href="Glossary.html" class="btn">Glossary</a>
+</div>
+
+<div class="controls">
+    <strong>Chọn giọng đọc:</strong>
+    <select id="voiceSelect"></select>
+   
+    <div id="notice" class="notice" style="display:none;">Không tìm thấy giọng Australian? Cài đặt ngôn ngữ English (Australia) trong máy!</div>
+</div>
+
+<table id="vocabTable">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th style="position:relative;">
+                Options
+                <div class="dropdown">
+                    <select id="filterSelect">
+                        <option value="all">Show All</option>
+                        <option value="checked">Show Checked</option>
+                        <option value="unchecked">Show Unchecked</option>
+                    </select>
+                </div>
+            </th>
+            <th onclick="sortTable()" style="cursor:pointer;">Vocabulary</th>
+            <th>Pronunciation</th>
+            <th>Translation</th>
+            <th>Audio</th>
+            <th>Example</th>
+            <th>Read</th>
+        </tr>
+    </thead>
+   <tbody>
+        <tr><td>1</td><td><input type="checkbox" class="row-check"></td><td>Aboriginal and Torres Strait Islander peoples</td><td>/ˌæb.əˈrɪdʒ.ən.əl ænd ˈtɔːr.ɪz streɪt ˈaɪ.lən.dər ˈpiː.pəlz/</td><td>người Thổ dân và người Đảo eo biển Torres</td><td><button class="btn" onclick="speak('Aboriginal and Torres Strait Islander peoples')">Nghe</button></td><td class="example">the Aboriginal and Torres Strait Islander peoples are the original inhabitants of the land in Australia [Người Thổ dân và người Đảo eo biển Torres là những cư dân ban đầu của đất đai ở Úc.]</td><td><button class="btn" data-sentence="the Aboriginal and Torres Strait Islander peoples are the original inhabitants of the land in Australia">Read</button></td></tr>
+        <tr><td>2</td><td><input type="checkbox" class="row-check"></td><td>Australian Human Rights Commission</td><td>/ɔːˈstreɪ.li.ən ˈhjuː.mən raɪts kəˈmɪʃ.ən/</td><td>Ủy ban Nhân quyền Úc</td><td><button class="btn" onclick="speak('Australian Human Rights Commission')">Nghe</button></td><td class="example">an independent Commission which investigates complaints about discrimination and human rights breaches [một Ủy ban độc lập điều tra các khiếu nại về phân biệt đối xử và vi phạm nhân quyền.]</td><td><button class="btn" data-sentence="an independent Commission which investigates complaints about discrimination and human rights breaches">Read</button></td></tr>
+        <tr><td>3</td><td><input type="checkbox" class="row-check"></td><td>Australian Public Service</td><td>/ɔːˈstreɪ.li.ən ˈpʌb.lɪk ˈsɝː.vɪs/</td><td>Dịch vụ Công Úc</td><td><button class="btn" onclick="speak('Australian Public Service')">Nghe</button></td><td class="example">government departments and people employed by them [các bộ chính phủ và những người được họ雇 dụng.]</td><td><button class="btn" data-sentence="government departments and people employed by them">Read</button></td></tr>
+        <tr><td>4</td><td><input type="checkbox" class="row-check"></td><td>civil unrest</td><td>/ˈsɪv.əl ʌnˈrest/</td><td>bất ổn dân sự</td><td><button class="btn" onclick="speak('civil unrest')">Nghe</button></td><td class="example">demonstrations and riots by large numbers of people, usually protesting against a government decision or policy [các cuộc biểu tình và bạo loạn bởi số lượng lớn người, thường phản đối quyết định hoặc chính sách của chính phủ.]</td><td><button class="btn" data-sentence="demonstrations and riots by large numbers of people, usually protesting against a government decision or policy">Read</button></td></tr>
+        <tr><td>5</td><td><input type="checkbox" class="row-check"></td><td>coalition</td><td>/ˌkoʊ.əˈlɪʃ.ən/</td><td>liên minh</td><td><button class="btn" onclick="speak('coalition')">Nghe</button></td><td class="example">the joining of two or more political parties, usually to form a government or opposition [sự liên kết của hai hoặc nhiều đảng chính trị, thường để hình thành chính phủ hoặc phe đối lập.]</td><td><button class="btn" data-sentence="the joining of two or more political parties, usually to form a government or opposition">Read</button></td></tr>
+        <tr><td>6</td><td><input type="checkbox" class="row-check"></td><td>commission</td><td>/kəˈmɪʃ.ən/</td><td>ủy ban</td><td><button class="btn" onclick="speak('commission')">Nghe</button></td><td class="example">a group of people with an official responsibility [một nhóm người với trách nhiệm chính thức.]</td><td><button class="btn" data-sentence="a group of people with an official responsibility">Read</button></td></tr>
+        <tr><td>7</td><td><input type="checkbox" class="row-check"></td><td>Constitution</td><td>/ˌkɑːn.stəˈtuː.ʃən/</td><td>Hiến pháp</td><td><button class="btn" onclick="speak('Constitution')">Nghe</button></td><td class="example">the supreme law of Australia by which the government must abide [luật tối thượng của Úc mà chính phủ phải tuân thủ.]</td><td><button class="btn" data-sentence="the supreme law of Australia by which the government must abide">Read</button></td></tr>
+        <tr><td>8</td><td><input type="checkbox" class="row-check"></td><td>constitutional monarchy</td><td>/ˌkɑːn.stəˈtuː.ʃən.əl ˈmɑː.nɑːr.ki/</td><td>quân chủ lập hiến</td><td><button class="btn" onclick="speak('constitutional monarchy')">Nghe</button></td><td class="example">a country in which a king or queen is the head of state, whose powers are limited by the Constitution [một quốc gia mà vua hoặc nữ hoàng là nguyên thủ quốc gia, quyền lực của họ bị giới hạn bởi Hiến pháp.]</td><td><button class="btn" data-sentence="a country in which a king or queen is the head of state, whose powers are limited by the Constitution">Read</button></td></tr>
+        <tr><td>9</td><td><input type="checkbox" class="row-check"></td><td>court</td><td>/kɔːrt/</td><td>tòa án</td><td><button class="btn" onclick="speak('court')">Nghe</button></td><td class="example">a place where legal cases are heard by a judge or magistrate [một nơi mà các vụ việc pháp lý được nghe bởi thẩm phán hoặc chánh án.]</td><td><button class="btn" data-sentence="a place where legal cases are heard by a judge or magistrate">Read</button></td></tr>
+        <tr><td>10</td><td><input type="checkbox" class="row-check"></td><td>criminal trial</td><td>/ˈkrɪm.ɪ.nəl ˈtraɪ.əl/</td><td>phiên tòa hình sự</td><td><button class="btn" onclick="speak('criminal trial')">Nghe</button></td><td class="example">a hearing of facts by a court to decide if a person is guilty or not guilty of a crime [một buổi nghe sự kiện bởi tòa án để quyết định một người có tội hay không có tội về một tội phạm.]</td><td><button class="btn" data-sentence="a hearing of facts by a court to decide if a person is guilty or not guilty of a crime">Read</button></td></tr>
+        <tr><td>11</td><td><input type="checkbox" class="row-check"></td><td>cyber abuse</td><td>/ˈsaɪ.bɚ əˈbjuːs/</td><td>lạm dụng mạng</td><td><button class="btn" onclick="speak('cyber abuse')">Nghe</button></td><td class="example">behaviour that uses technology to threaten, intimidate, harass or humiliate someone with the intent to hurt them [hành vi sử dụng công nghệ để đe dọa, dọa nạt, quấy rối hoặc làm nhục ai đó với ý định làm hại họ.]</td><td><button class="btn" data-sentence="behaviour that uses technology to threaten, intimidate, harass or humiliate someone with the intent to hurt them">Read</button></td></tr>
+        <tr><td>12</td><td><input type="checkbox" class="row-check"></td><td>democracy</td><td>/dɪˈmɑː.krə.si/</td><td>dân chủ</td><td><button class="btn" onclick="speak('democracy')">Nghe</button></td><td class="example">government by the people through elected representatives [chính phủ bởi nhân dân thông qua các đại diện được bầu.]</td><td><button class="btn" data-sentence="government by the people through elected representatives">Read</button></td></tr>
+        <tr><td>13</td><td><input type="checkbox" class="row-check"></td><td>domestic and family violence</td><td>/dəˈmes.tɪk ænd ˈfæm.ə.li ˈvaɪ.ə.ləns/</td><td>bạo lực gia đình và gia đình</td><td><button class="btn" onclick="speak('domestic and family violence')">Nghe</button></td><td class="example">Behaviour or threats that aim to control a partner by causing fear or threatening their safety. Domestic and family violence is not accepted and is against the law [Hành vi hoặc đe dọa nhằm kiểm soát đối tác bằng cách gây sợ hãi hoặc đe dọa an toàn của họ. Bạo lực gia đình và gia đình không được chấp nhận và là trái luật.]</td><td><button class="btn" data-sentence="Behaviour or threats that aim to control a partner by causing fear or threatening their safety. Domestic and family violence is not accepted and is against the law">Read</button></td></tr>
+        <tr><td>14</td><td><input type="checkbox" class="row-check"></td><td>drug trafficking</td><td>/drʌɡ ˈtræf.ɪ.kɪŋ/</td><td>buôn bán ma túy</td><td><button class="btn" onclick="speak('drug trafficking')">Nghe</button></td><td class="example">carrying or buying drugs to sell illegally [mang hoặc mua ma túy để bán trái phép.]</td><td><button class="btn" data-sentence="carrying or buying drugs to sell illegally">Read</button></td></tr>
+        <tr><td>15</td><td><input type="checkbox" class="row-check"></td><td>election</td><td>/ɪˈlek.ʃən/</td><td>bầu cử</td><td><button class="btn" onclick="speak('election')">Nghe</button></td><td class="example">a process through which citizens choose people to represent them in Parliament [một quá trình mà công dân chọn người đại diện họ trong Nghị viện.]</td><td><button class="btn" data-sentence="a process through which citizens choose people to represent them in Parliament">Read</button></td></tr>
+        <tr><td>16</td><td><input type="checkbox" class="row-check"></td><td>electoral roll</td><td>/ɪˈlek.tɚ.əl roʊl/</td><td>danh sách cử tri</td><td><button class="btn" onclick="speak('electoral roll')">Nghe</button></td><td class="example">the list of people registered to vote in an election or referendum [danh sách những người đăng ký bỏ phiếu trong bầu cử hoặc trưng cầu dân ý.]</td><td><button class="btn" data-sentence="the list of people registered to vote in an election or referendum">Read</button></td></tr>
+        <tr><td>17</td><td><input type="checkbox" class="row-check"></td><td>electorate</td><td>/ɪˈlek.tɚ.ət/</td><td>quận bầu cử</td><td><button class="btn" onclick="speak('electorate')">Nghe</button></td><td class="example">districts made up of voters who vote to elect politicians in the House of Representatives [các quận gồm cử tri bỏ phiếu để bầu nghị sĩ trong Hạ viện.]</td><td><button class="btn" data-sentence="districts made up of voters who vote to elect politicians in the House of Representatives">Read</button></td></tr>
+        <tr><td>18</td><td><input type="checkbox" class="row-check"></td><td>enforce the law</td><td>/ɪnˈfɔːrs ðə lɔː/</td><td>thực thi luật pháp</td><td><button class="btn" onclick="speak('enforce the law')">Nghe</button></td><td class="example">to make sure that people follow the law [để đảm bảo rằng mọi người tuân theo luật pháp.]</td><td><button class="btn" data-sentence="to make sure that people follow the law">Read</button></td></tr>
+        <tr><td>19</td><td><input type="checkbox" class="row-check"></td><td>equality</td><td>/iˈkwɑː.lə.ti/</td><td>bình đẳng</td><td><button class="btn" onclick="speak('equality')">Nghe</button></td><td class="example">the same in status [giống nhau về địa vị.]</td><td><button class="btn" data-sentence="the same in status">Read</button></td></tr>
+        <tr><td>20</td><td><input type="checkbox" class="row-check"></td><td>executive power</td><td>/ɪɡˈzek.jə.tɪv ˈpaʊ.ɚ/</td><td>quyền hành pháp</td><td><button class="btn" onclick="speak('executive power')">Nghe</button></td><td class="example">the power and authority to administer the laws, one of the three powers under the Australian Constitution [quyền lực và thẩm quyền để quản lý luật pháp, một trong ba quyền lực theo Hiến pháp Úc.]</td><td><button class="btn" data-sentence="the power and authority to administer the laws, one of the three powers under the Australian Constitution">Read</button></td></tr>
+        <tr><td>21</td><td><input type="checkbox" class="row-check"></td><td>fair go</td><td>/fer ɡoʊ/</td><td>cơ hội công bằng</td><td><button class="btn" onclick="speak('fair go')">Nghe</button></td><td class="example">everyone, regardless of their background, is given an equal opportunity to achieve success in life [mọi người, bất kể nền tảng của họ, được trao cơ hội bình đẳng để đạt thành công trong cuộc sống.]</td><td><button class="btn" data-sentence="everyone, regardless of their background, is given an equal opportunity to achieve success in life">Read</button></td></tr>
+        <tr><td>22</td><td><input type="checkbox" class="row-check"></td><td>federation</td><td>/ˌfed.əˈreɪ.ʃən/</td><td>liên bang</td><td><button class="btn" onclick="speak('federation')">Nghe</button></td><td class="example">the union of colonies into one nation with the colonies retaining certain powers [sự liên hợp của các thuộc địa thành một quốc gia với các thuộc địa giữ lại một số quyền lực.]</td><td><button class="btn" data-sentence="the union of colonies into one nation with the colonies retaining certain powers">Read</button></td></tr>
+        <tr><td>23</td><td><input type="checkbox" class="row-check"></td><td>First Fleet</td><td>/fɜːrst fliːt/</td><td>Hạm đội Đầu tiên</td><td><button class="btn" onclick="speak('First Fleet')">Nghe</button></td><td class="example">the group of 11 ships that set out from Britain under Captain Arthur Phillip to establish a convict settlement in New South Wales [nhóm 11 tàu khởi hành từ Anh dưới quyền Thuyền trưởng Arthur Phillip để thiết lập một khu định cư tù nhân ở New South Wales.]</td><td><button class="btn" data-sentence="the group of 11 ships that set out from Britain under Captain Arthur Phillip to establish a convict settlement in New South Wales">Read</button></td></tr>
+        <tr><td>24</td><td><input type="checkbox" class="row-check"></td><td>floral emblem</td><td>/ˈflɔːr.əl ˈem.bləm/</td><td>biểu tượng hoa</td><td><button class="btn" onclick="speak('floral emblem')">Nghe</button></td><td class="example">national flower [hoa quốc gia.]</td><td><button class="btn" data-sentence="national flower">Read</button></td></tr>
+        <tr><td>25</td><td><input type="checkbox" class="row-check"></td><td>forced marriage</td><td>/fɔːrst ˈmer.ɪdʒ/</td><td>hôn nhân cưỡng ép</td><td><button class="btn" onclick="speak('forced marriage')">Nghe</button></td><td class="example">a marriage where one or both of the couple did not have a free choice [một cuộc hôn nhân mà một hoặc cả hai bên không có lựa chọn tự do.]</td><td><button class="btn" data-sentence="a marriage where one or both of the couple did not have a free choice">Read</button></td></tr>
+        <tr><td>26</td><td><input type="checkbox" class="row-check"></td><td>from this time forward</td><td>/frʌm ðɪs taɪm ˈfɔːr.wɚd/</td><td>từ thời điểm này trở đi</td><td><button class="btn" onclick="speak('from this time forward')">Nghe</button></td><td class="example">from now and in the future [từ nay và trong tương lai.]</td><td><button class="btn" data-sentence="from now and in the future">Read</button></td></tr>
+        <tr><td>27</td><td><input type="checkbox" class="row-check"></td><td>icon</td><td>/ˈaɪ.kɑːn/</td><td>biểu tượng</td><td><button class="btn" onclick="speak('icon')">Nghe</button></td><td class="example">a well-known image [một hình ảnh nổi tiếng.]</td><td><button class="btn" data-sentence="a well-known image">Read</button></td></tr>
+        <tr><td>28</td><td><input type="checkbox" class="row-check"></td><td>Indigenous</td><td>/ɪnˈdɪdʒ.ə.nəs/</td><td>bản địa</td><td><button class="btn" onclick="speak('Indigenous')">Nghe</button></td><td class="example">The Aboriginal and/or Torres Strait Islander peoples of Australia [Người Thổ dân và/hoặc người Đảo eo biển Torres của Úc.]</td><td><button class="btn" data-sentence="The Aboriginal and/or Torres Strait Islander peoples of Australia">Read</button></td></tr>
+        <tr><td>29</td><td><input type="checkbox" class="row-check"></td><td>integration</td><td>/ˌɪn.t̬əˈɡreɪ.ʃən/</td><td>hòa nhập</td><td><button class="btn" onclick="speak('integration')">Nghe</button></td><td class="example">the process of adaptation by migrants so that they can participate in and contribute to their new, evolving society [quá trình thích nghi của người di cư để họ có thể tham gia và đóng góp vào xã hội mới, đang phát triển của họ.]</td><td><button class="btn" data-sentence="the process of adaptation by migrants so that they can participate in and contribute to their new, evolving society">Read</button></td></tr>
+        <tr><td>30</td><td><input type="checkbox" class="row-check"></td><td>judicial power</td><td>/dʒuːˈdɪʃ.əl ˈpaʊ.ər/</td><td>quyền tư pháp</td><td><button class="btn" onclick="speak('judicial power')">Nghe</button></td><td class="example">the power and authority to interpret and apply the laws, one of the three powers under the Australian Constitution [quyền lực và thẩm quyền để giải thích và áp dụng luật pháp, một trong ba quyền lực theo Hiến pháp Úc.]</td><td><button class="btn" data-sentence="the power and authority to interpret and apply the laws, one of the three powers under the Australian Constitution">Read</button></td></tr>
+        <tr><td>31</td><td><input type="checkbox" class="row-check"></td><td>legislative power</td><td>/ˈledʒ.ɪ.slə.tɪv ˈpaʊ.ər/</td><td>quyền lập pháp</td><td><button class="btn" onclick="speak('legislative power')">Nghe</button></td><td class="example">the power and authority to make and change the laws, one of the three powers under the Australian Constitution [quyền lực và thẩm quyền để ban hành và thay đổi luật pháp, một trong ba quyền lực theo Hiến pháp Úc.]</td><td><button class="btn" data-sentence="the power and authority to make and change the laws, one of the three powers under the Australian Constitution">Read</button></td></tr>
+        <tr><td>32</td><td><input type="checkbox" class="row-check"></td><td>liberties</td><td>/ˈlɪb.ɚ.t̬iz/</td><td>tự do</td><td><button class="btn" onclick="speak('liberties')">Nghe</button></td><td class="example">personal freedom and independence [tự do và độc lập cá nhân.]</td><td><button class="btn" data-sentence="personal freedom and independence">Read</button></td></tr>
+        <tr><td>33</td><td><input type="checkbox" class="row-check"></td><td>magistrate</td><td>/ˈmædʒ.ɪ.streɪt/</td><td>chánh án</td><td><button class="btn" onclick="speak('magistrate')">Nghe</button></td><td class="example">a judge of a lower court [thẩm phán của tòa án cấp dưới.]</td><td><button class="btn" data-sentence="a judge of a lower court">Read</button></td></tr>
+        <tr><td>34</td><td><input type="checkbox" class="row-check"></td><td>mateship</td><td>/ˈmeɪt.ʃɪp/</td><td>tình bạn</td><td><button class="btn" onclick="speak('mateship')">Nghe</button></td><td class="example">helping and receiving help from others, especially in difficult times [giúp đỡ và nhận giúp đỡ từ người khác, đặc biệt trong thời gian khó khăn.]</td><td><button class="btn" data-sentence="helping and receiving help from others, especially in difficult times">Read</button></td></tr>
+        <tr><td>35</td><td><input type="checkbox" class="row-check"></td><td>national anthem</td><td>/ˈnæʃ.ən.əl ˈæn.θəm/</td><td>quốc ca</td><td><button class="btn" onclick="speak('national anthem')">Nghe</button></td><td class="example">national song [bài hát quốc gia.]</td><td><button class="btn" data-sentence="national song">Read</button></td></tr>
+        <tr><td>36</td><td><input type="checkbox" class="row-check"></td><td>parliamentary democracy</td><td>/ˌpɑːr.ləˈmen.t̬ɚ.i dɪˈmɑː.krə.si/</td><td>dân chủ nghị viện</td><td><button class="btn" onclick="speak('parliamentary democracy')">Nghe</button></td><td class="example">a system of government based on the regular election of representatives to parliament by the citizens [một hệ thống chính phủ dựa trên việc bầu cử định kỳ các đại diện vào nghị viện bởi công dân.]</td><td><button class="btn" data-sentence="a system of government based on the regular election of representatives to parliament by the citizens">Read</button></td></tr>
+        <tr><td>37</td><td><input type="checkbox" class="row-check"></td><td>political party</td><td>/pəˈlɪt̬.ɪ.kəl ˈpɑːr.t̬i/</td><td>đảng chính trị</td><td><button class="btn" onclick="speak('political party')">Nghe</button></td><td class="example">a group of people who share similar ideas about how a country should be governed and usually seek to be elected [một nhóm người chia sẻ ý tưởng tương tự về cách một quốc gia nên được quản lý và thường tìm cách được bầu.]</td><td><button class="btn" data-sentence="a group of people who share similar ideas about how a country should be governed and usually seek to be elected">Read</button></td></tr>
+        <tr><td>38</td><td><input type="checkbox" class="row-check"></td><td>racism</td><td>/ˈreɪ.sɪ.zəm/</td><td>phân biệt chủng tộc</td><td><button class="btn" onclick="speak('racism')">Nghe</button></td><td class="example">prejudice, discrimination, harassment or hatred directed at someone because of their race, colour, national or ethnic origin [thành kiến, phân biệt đối xử, quấy rối hoặc thù địch hướng đến ai đó vì chủng tộc, màu da, quốc gia hoặc nguồn gốc dân tộc của họ.]</td><td><button class="btn" data-sentence="prejudice, discrimination, harassment or hatred directed at someone because of their race, colour, national or ethnic origin">Read</button></td></tr>
+        <tr><td>39</td><td><input type="checkbox" class="row-check"></td><td>referendum</td><td>/ˌref.əˈren.dəm/</td><td>trưng cầu dân ý</td><td><button class="btn" onclick="speak('referendum')">Nghe</button></td><td class="example">a vote by all voters on a proposed change to the Australian Constitution [một cuộc bỏ phiếu bởi tất cả cử tri về đề xuất thay đổi Hiến pháp Úc.]</td><td><button class="btn" data-sentence="a vote by all voters on a proposed change to the Australian Constitution">Read</button></td></tr>
+        <tr><td>40</td><td><input type="checkbox" class="row-check"></td><td>representative</td><td>/ˌrep.rɪˈzen.t̬ə.tɪv/</td><td>đại diện</td><td><button class="btn" onclick="speak('representative')">Nghe</button></td><td class="example">a person who acts or speaks for others [một người hành động hoặc nói thay cho người khác.]</td><td><button class="btn" data-sentence="a person who acts or speaks for others">Read</button></td></tr>
+        <tr><td>41</td><td><input type="checkbox" class="row-check"></td><td>respect</td><td>/rɪˈspekt/</td><td>tôn trọng</td><td><button class="btn" onclick="speak('respect')">Nghe</button></td><td class="example">show consideration for someone as a person, or a decision they have made [thể hiện sự cân nhắc cho ai đó như một con người, hoặc một quyết định họ đã đưa ra.]</td><td><button class="btn" data-sentence="show consideration for someone as a person, or a decision they have made">Read</button></td></tr>
+        <tr><td>42</td><td><input type="checkbox" class="row-check"></td><td>Rule of Law</td><td>/ruːl əv lɔː/</td><td>Luật Pháp</td><td><button class="btn" onclick="speak('Rule of Law')">Nghe</button></td><td class="example">all people, including citizens and the government, are bound by the law [tất cả mọi người, bao gồm công dân và chính phủ, đều bị ràng buộc bởi luật pháp.]</td><td><button class="btn" data-sentence="all people, including citizens and the government, are bound by the law">Read</button></td></tr>
+        <tr><td>43</td><td><input type="checkbox" class="row-check"></td><td>Services Australia</td><td>/ˈsɝː.vɪ.sɪz ɔːˈstreɪ.li.ə/</td><td>Dịch vụ Úc</td><td><button class="btn" onclick="speak('Services Australia')">Nghe</button></td><td class="example">an Australian Government agency that delivers a range of health, social and welfare payments and services through Medicare, Centrelink, and Child Support [một cơ quan Chính phủ Úc cung cấp một loạt thanh toán và dịch vụ y tế, xã hội và phúc lợi qua Medicare, Centrelink, và Hỗ trợ Trẻ em.]</td><td><button class="btn" data-sentence="an Australian Government agency that delivers a range of health, social and welfare payments and services through Medicare, Centrelink, and Child Support">Read</button></td></tr>
+        <tr><td>44</td><td><input type="checkbox" class="row-check"></td><td>secret ballot</td><td>/ˈsiː.krət ˈbæl.ət/</td><td>bỏ phiếu kín</td><td><button class="btn" onclick="speak('secret ballot')">Nghe</button></td><td class="example">a system of voting where people vote privately, so no one can influence or pressure them to vote in a certain way [một hệ thống bỏ phiếu mà mọi người bỏ phiếu riêng tư, để không ai có thể ảnh hưởng hoặc ép buộc họ bỏ phiếu theo cách nhất định.]</td><td><button class="btn" data-sentence="a system of voting where people vote privately, so no one can influence or pressure them to vote in a certain way">Read</button></td></tr>
+        <tr><td>45</td><td><input type="checkbox" class="row-check"></td><td>secular</td><td>/ˈsek.jə.lɚ/</td><td>thế tục</td><td><button class="btn" onclick="speak('secular')">Nghe</button></td><td class="example">separate from religion [tách biệt khỏi tôn giáo.]</td><td><button class="btn" data-sentence="separate from religion">Read</button></td></tr>
+        <tr><td>46</td><td><input type="checkbox" class="row-check"></td><td>self-sufficient</td><td>/ˌself səˈfɪʃ.ənt/</td><td>tự cung tự cấp</td><td><button class="btn" onclick="speak('self-sufficient')">Nghe</button></td><td class="example">able to provide for your own needs, without the help of other people [có thể cung cấp cho nhu cầu của chính mình, mà không cần sự giúp đỡ của người khác.]</td><td><button class="btn" data-sentence="able to provide for your own needs, without the help of other people">Read</button></td></tr>
+        <tr><td>47</td><td><input type="checkbox" class="row-check"></td><td>set up</td><td>/set ʌp/</td><td>thiết lập</td><td><button class="btn" onclick="speak('set up')">Nghe</button></td><td class="example">to build, establish, start [xây dựng, thiết lập, bắt đầu.]</td><td><button class="btn" data-sentence="to build, establish, start">Read</button></td></tr>
+        <tr><td>48</td><td><input type="checkbox" class="row-check"></td><td>shire</td><td>/ʃaɪər/</td><td>huyện</td><td><button class="btn" onclick="speak('shire')">Nghe</button></td><td class="example">a local government area [một khu vực chính quyền địa phương.]</td><td><button class="btn" data-sentence="a local government area">Read</button></td></tr>
+        <tr><td>49</td><td><input type="checkbox" class="row-check"></td><td>social security</td><td>/ˈsoʊ.ʃəl sɪˈkjʊr.ə.t̬i/</td><td>an sinh xã hội</td><td><button class="btn" onclick="speak('social security')">Nghe</button></td><td class="example">government pensions or benefits to help unemployed people, disabled people, elderly people and others in need [các khoản lương hưu hoặc lợi ích của chính phủ để giúp người thất nghiệp, người khuyết tật, người cao tuổi và những người khác đang cần.]</td><td><button class="btn" data-sentence="government pensions or benefits to help unemployed people, disabled people, elderly people and others in need">Read</button></td></tr>
+        <tr><td>50</td><td><input type="checkbox" class="row-check"></td><td>The Australian Taxation Office (ATO)</td><td>/ði ɔːˈstreɪ.li.ən tækˈseɪ.ʃən ˈɔː.fɪs (eɪ.ti.oʊ)/</td><td>Cục Thuế Úc (ATO)</td><td><button class="btn" onclick="speak('The Australian Taxation Office (ATO)')">Nghe</button></td><td class="example">an Australian Government agency that manages the tax and superannuation systems that support and fund services for Australians [một cơ quan Chính phủ Úc quản lý hệ thống thuế và hưu trí hỗ trợ và tài trợ cho các dịch vụ cho người Úc.]</td><td><button class="btn" data-sentence="an Australian Government agency that manages the tax and superannuation systems that support and fund services for Australians">Read</button></td></tr>
+        <tr><td>51</td><td><input type="checkbox" class="row-check"></td><td>values</td><td>/ˈvæl.juːz/</td><td>giá trị</td><td><button class="btn" onclick="speak('values')">Nghe</button></td><td class="example">the principles that help a person decide what is right and wrong, and how to act in various situations [các nguyên tắc giúp một người quyết định cái gì đúng và sai, và cách hành động trong các tình huống khác nhau.]</td><td><button class="btn" data-sentence="the principles that help a person decide what is right and wrong, and how to act in various situations">Read</button></td></tr>
+        <tr><td>52</td><td><input type="checkbox" class="row-check"></td><td>volunteer</td><td>/ˌvɑː.lənˈtɪr/</td><td>tình nguyện viên</td><td><button class="btn" onclick="speak('volunteer')">Nghe</button></td><td class="example">a person who gives their time to a person or organisation without expecting payment [một người dành thời gian cho một người hoặc tổ chức mà không mong đợi thanh toán.]</td><td><button class="btn" data-sentence="a person who gives their time to a person or organisation without expecting payment">Read</button></td></tr>
+        
+    </tbody>
+</table>
+
+<script>
+let voices = [];
+let originalOrder = [];
+let isSorted = false;
+
+const voiceSelect = document.getElementById('voiceSelect');
+const notice = document.getElementById('notice');
+const tbody = document.querySelector('#vocabTable tbody');
+const filterSelect = document.getElementById('filterSelect');
+
+// Tiền tố lưu trữ riêng cho từng file (Voc1.html, Voc2.html, Voc4.html, Glossary.html...)
+const STORAGE_PREFIX = 'CITIZENSHIP_VOCAB_' + location.pathname.replace(/[^a-zA-Z0-9]/g, '_');
+
+// Lưu tất cả trạng thái
+function saveAll() {
+    // Lưu các ô đã tick
+    const checked = Array.from(tbody.querySelectorAll('.row-check:checked'))
+        .map(cb => cb.closest('tr').cells[0].textContent.trim());
+    localStorage.setItem(STORAGE_PREFIX + '_checked', JSON.stringify(checked));
+
+    // Lưu droplist Options
+    localStorage.setItem(STORAGE_PREFIX + '_filter', filterSelect.value);
+
+    // Lưu giọng đọc
+    localStorage.setItem(STORAGE_PREFIX + '_voice', voiceSelect.value);
+}
+
+// Khôi phục tất cả trạng thái khi load trang
+function loadAll() {
+    // Khôi phục checkbox
+    const savedChecked = localStorage.getItem(STORAGE_PREFIX + '_checked');
+    if (savedChecked) {
+        const checkedNos = JSON.parse(savedChecked);
+        tbody.querySelectorAll('.row-check').forEach(cb => {
+            const no = cb.closest('tr').cells[0].textContent.trim();
+            cb.checked = checkedNos.includes(no);
+        });
+    }
+
+    // Khôi phục droplist Options
+    const savedFilter = localStorage.getItem(STORAGE_PREFIX + '_filter');
+    if (savedFilter && ['all','checked','unchecked'].includes(savedFilter)) {
+        filterSelect.value = savedFilter;
+        filterRows(savedFilter);
+    }
+
+    // Khôi phục giọng đọc (sẽ được áp dụng sau khi loadVoices hoàn tất)
+    const savedVoice = localStorage.getItem(STORAGE_PREFIX + '_voice');
+    if (savedVoice) voiceSelect.dataset.saved = savedVoice;
+}
+
+// Lưu khi người dùng thay đổi bất kỳ thứ gì
+filterSelect.addEventListener('change', () => {
+    filterRows(filterSelect.value);
+    renumberVisible();
+    saveAll();
+});
+
+voiceSelect.addEventListener('change', saveAll);
+
+tbody.addEventListener('change', (e) => {
+    if (e.target.classList.contains('row-check')) {
+        renumberVisible();
+        saveAll();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    originalOrder = Array.from(tbody.rows);
+    loadVoices();
+    loadAll();
+    renumberVisible();  // Renumber ban đầu nếu cần
+});
+
+function loadVoices() {
+    voices = speechSynthesis.getVoices();
+    if (voices.length === 0) {
+        speechSynthesis.onvoiceschanged = loadVoices;
+        return;
+    }
+
+    let ausVoices = voices.filter(v => v.lang === 'en-AU' || v.name.toLowerCase().includes('australian'));
+    let otherVoices = voices.filter(v => v.lang.startsWith('en-') && !ausVoices.includes(v));
+    voices = [...ausVoices, ...otherVoices];
+
+    voiceSelect.innerHTML = '';
+    if (ausVoices.length === 0) notice.style.display = 'block';
+
+    voices.forEach((voice, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        const gender = (voice.name.toLowerCase().includes('female') || ['karen','catherine','lee'].some(n=>voice.name.toLowerCase().includes(n))) ? '(Nữ)' : '(Nam)';
+        opt.textContent = `${voice.name} (${voice.lang}) ${gender}`;
+        voiceSelect.appendChild(opt);
+    });
+
+    // Áp dụng giọng đã lưu (nếu có)
+    const saved = voiceSelect.dataset.saved || localStorage.getItem(STORAGE_PREFIX + '_voice');
+    if (saved !== null && voiceSelect.options[saved]) {
+        voiceSelect.value = saved;
+    } else {
+        const ausIdx = voices.findIndex(v => v.lang === 'en-AU');
+        voiceSelect.value = ausIdx !== -1 ? ausIdx : 0;
+    }
+}
+
+function speak(text) {
+    speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    const idx = voiceSelect.value;
+    if (idx && voices[idx]) utterance.voice = voices[idx];
+    else utterance.lang = 'en-AU';
+    utterance.rate = 0.9;
+    speechSynthesis.speak(utterance);
+}
+
+function filterRows(mode) {
+    for (let row of tbody.rows) {
+        const checked = row.querySelector('.row-check').checked;
+        row.classList.toggle('hidden', mode === 'checked' ? !checked : (mode === 'unchecked' ? checked : false));
+    }
+    renumberVisible();  // Renumber sau khi lọc
+}
+
+function renumberVisible() {
+    let visibleRows = Array.from(tbody.rows).filter(row => !row.classList.contains('hidden'));
+    visibleRows.forEach((row, index) => {
+        row.cells[0].textContent = index + 1;
+    });
+}
+
+function sortTable() {
+    const rows = Array.from(tbody.rows);
+    if (!isSorted) {
+        rows.sort((a, b) => a.cells[2].textContent.localeCompare(b.cells[2].textContent));
+        isSorted = true;
+    } else {
+        rows.sort((a, b) => originalOrder.indexOf(a) - originalOrder.indexOf(b));
+        isSorted = false;
+    }
+    rows.forEach(r => tbody.appendChild(r));
+    renumberVisible();  // Renumber sau khi sort
+}
+
+document.querySelectorAll('[data-sentence]').forEach(btn => {
+    btn.onclick = () => speak(btn.dataset.sentence);
+});
+</script>
+
+</body>
+</html>
