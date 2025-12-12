@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Australian Citizenship - Our Common Bond</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #000 url('home.png') center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            position: relative;
+        }
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 70, 90, 0.65);
+            z-index: 1;
+        }
+
+        /* Dòng "Created by Thomas" - bên phải trên cùng */
+        .credit {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            z-index: 10;
+            font-size: 0.8rem;
+            color: #bfff00;
+            text-shadow: 1px 1px 6px rgba(0,0,0,0.8);
+            font-weight: normal;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 90%;
+            padding: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: block;
+            background: #005a9e;
+            color: white;
+            font-size: 1.6rem;
+            font-weight: bold;
+            padding: 22px 50px;
+            border-radius: 12px;
+            text-decoration: none;
+            min-width: 280px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+            border: 3px solid #ffffff44;
+        }
+
+        .btn:hover {
+            background: #003e72;
+            transform: translateY(-10px);
+            box-shadow: 0 18px 35px rgba(0,0,0,0.6);
+        }
+
+        /* Dòng chữ mới "Tài liệu" */
+        .subtitle {
+            font-size: 2.8rem;        /* tương đương h2 */
+            font-weight: bold;
+            color: #ffffff;           /* xanh lá đậm đẹp */
+            margin: 30px 0 10px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+        }
+
+        @media (max-width: 768px) {
+            .credit { font-size: 0.8rem; top: 10px; right: 15px; }
+            .subtitle { font-size: 2.2rem; margin: 20px 0 10px; }
+            .btn {
+                font-size: 1.4rem;
+                padding: 18px 35px;
+                min-width: 240px;
+            }
+            .button-container { gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Created by Thomas -->
+    <h4 class="credit">Created by Thomas</h4>
+
+    <div class="container">
+
+        <!-- Dòng chữ mới yêu cầu -->
+       
+
+        <div class="button-container">
+            <a href="V1.html" class="btn">Từ vựng</a>
+            <a href="audio.html" class="btn">Audio</a>
+            <a href="test.html" class="btn">Test</a>
+            <a href="our-common-bond-testable.pdf" class="btn">Book</a>
+        </div>
+		 <h2 class="subtitle">Tài liệu Ôn-Luyện thi quốc tịch Úc</h2>
+    </div>
+
+</body>
+</html>
