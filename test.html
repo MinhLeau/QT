@@ -278,7 +278,7 @@
         <a><b>Chọn bài Test:</b></a>
         <select id="quizSelect" style="padding:12px; font-size:18px; border-radius:8px; width:90%; max-width:500px;">
             
-			
+            
             <option value="all-vi">Practice Quiz All (200 questions Anh-Việt)</option>
 			<option value="all">Practice Quiz All (200 questions)</option>
             <option value="1">Practice Quiz 1</option>
@@ -291,6 +291,10 @@
             <option value="8">Practice Quiz 8</option>
             <option value="9">Practice Quiz 9</option>
             <option value="10">Practice Quiz 10</option>
+  <option value="part1">Practice Quiz Part_One(Australia and its people)</option>
+  <option value="part2">Practice Quiz Part_Two(Democratic beliefs, rights and liberties)</option>
+  <option value="part3">Practice Quiz Part_Three(Government and the law)</option>
+  <option value="part4">Practice Quiz Part_Four(Australian values)</option>
         </select>
     </div>
 
@@ -325,7 +329,7 @@
     <script>
         // ============ DỮ LIỆU CÂU HỎI (giữ nguyên như cũ) ============
         
-		const QUESTION_BANK = [
+const QUESTION_BANK = [
   // PART 1: Australia and its people (40 questions)
   {q:"Who are Australia's first inhabitants?", qVi:"Ai là cư dân đầu tiên của Úc?", opts:["British settlers","Aboriginal and Torres Strait Islander peoples","Dutch explorers"], optsVi:["Người định cư Anh","Thổ dân Aboriginal và Torres Strait Islander","Người thám hiểm Hà Lan"], a:1},
   {q:"How long have Aboriginal peoples been in Australia?", qVi:"Người Aboriginal đã ở Úc bao lâu?", opts:["10,000 years","Between 65,000 and 40,000 years","200 years"], optsVi:["10,000 năm","Từ 65,000 đến 40,000 năm","200 năm"], a:1},
@@ -386,24 +390,107 @@
   {q:"Is jury service compulsory if called?", qVi:"Phục vụ bồi thẩm đoàn có bắt buộc nếu được gọi không?", opts:["Yes","No","Optional"], optsVi:["Có","Không","Tùy chọn"], a:0},
   {q:"Who can apply for Australian Public Service jobs?", qVi:"Ai có thể xin việc trong Công vụ Úc?", opts:["Anyone","Only Australian citizens","Only permanent residents"], optsVi:["Bất kỳ ai","Chỉ công dân Úc","Chỉ thường trú nhân"], a:1},
   {q:"Can Australian citizens have dual citizenship?", qVi:"Công dân Úc có thể có quốc tịch kép không?", opts:["Yes","No","Only from birth"], optsVi:["Có","Không","Chỉ từ khi sinh"], a:0},
-  {q:"What must you do if called for jury duty?", qVi:"Bạn phải làm gì nếu được gọi phục vụ bồi thẩm đoàn?", opts:["Ignore it","Serve unless exempted","Only if you want"], optsVi:["Bỏ qua","Phục vụ trừ khi được miễn","Chỉ nếu bạn muốn"], a:1},
-  {q:"What is freedom of religion?", qVi:"Tự do tôn giáo là gì?", opts:["No religion allowed","Believe or not believe as you wish","Only Christianity"], optsVi:["Không tôn giáo nào được phép","Tin hoặc không tin theo ý muốn","Chỉ Cơ đốc giáo"], a:1},
-  {q:"Can you encourage violence based on religion?", qVi:"Bạn có thể khuyến khích bạo lực dựa trên tôn giáo không?", opts:["Yes","No","Only if justified"], optsVi:["Có","Không","Chỉ nếu hợp lý"], a:1},
-  {q:"Is separation of powers into 3 arms important?", qVi:"Việc phân chia quyền lực thành 3 nhánh có quan trọng không?", opts:["Yes","No","Only 2 arms"], optsVi:["Có","Không","Chỉ 2 nhánh"], a:0},
-  {q:"Who maintains peace and order?", qVi:"Ai duy trì hòa bình và trật tự?", opts:["Military","Police","Citizens"], optsVi:["Quân đội","Cảnh sát","Công dân"], a:1},
-  {q:"Are police allowed to stop you without reason?", qVi:"Cảnh sát có được phép dừng bạn mà không có lý do không?", opts:["Yes","No","Always"], optsVi:["Có","Không","Luôn luôn"], a:1},
-  {q:"What is judicial independence?", qVi:"Độc lập tư pháp là gì?", opts:["Courts controlled by government","Courts and judges make decisions independently of government","Judges appointed by public vote"], optsVi:["Tòa án bị kiểm soát bởi chính phủ","Tòa án và thẩm phán đưa ra quyết định độc lập với chính phủ","Thẩm phán được bầu bởi công chúng"], a:1},
-  {q:"What are the levels of government?", qVi:"Các cấp chính quyền là gì?", opts:["Federal only","Federal, state/territory, local","State only"], optsVi:["Chỉ liên bang","Liên bang, bang/lãnh thổ, địa phương","Chỉ bang"], a:1},
-  {q:"What does freedom of speech allow?", qVi:"Tự do ngôn luận cho phép gì?", opts:["Incite violence","Peacefully protest government decisions","Only positive comments"], optsVi:["Kích động bạo lực","Biểu tình hòa bình chống quyết định chính phủ","Chỉ bình luận tích cực"], a:1},
-  {q:"What is equality of opportunity?", qVi:"Bình đẳng cơ hội là gì?", opts:["Same wealth for all","Everyone has a 'fair go'","Only for citizens"], optsVi:["Của cải như nhau cho tất cả","Mọi người có 'fair go'","Chỉ cho công dân"], a:1},
-  {q:"What is mutual respect?", qVi:"Tôn trọng lẫn nhau là gì?", opts:["Accept differences","Only respect similar people","Ignore others"], optsVi:["Chấp nhận sự khác biệt","Chỉ tôn trọng người tương tự","Bỏ qua người khác"], a:0},
-  {q:"What is compassion?", qVi:"Lòng trắc ẩn là gì?", opts:["Helping less fortunate","Ignoring problems","Only family help"], optsVi:["Giúp đỡ người kém may mắn","Bỏ qua vấn đề","Chỉ giúp gia đình"], a:0},
-  {q:"Is racial hatred speech allowed?", qVi:"Lời nói thù địch chủng tộc có được phép không?", opts:["Yes","No","Only privately"], optsVi:["Có","Không","Chỉ riêng tư"], a:1},
-  {q:"Can you join political parties?", qVi:"Bạn có thể tham gia đảng chính trị không?", opts:["Yes","No","Only major parties"], optsVi:["Có","Không","Chỉ đảng lớn"], a:0},
-  {q:"Can you join other groups?", qVi:"Bạn có thể tham gia các nhóm khác không?", opts:["Yes, if lawful","Only government approved","No"], optsVi:["Có, nếu hợp pháp","Chỉ được chính phủ phê duyệt","Không"], a:0},
-  {q:"What beliefs are protected?", qVi:"Những niềm tin nào được bảo vệ?", opts:["Religious or non-religious, if not breaking law","Only religious","Only atheism"], optsVi:["Tôn giáo hoặc không tôn giáo, nếu không vi phạm luật","Chỉ tôn giáo","Chỉ vô thần"], a:0},
-  {q:"Is changing beliefs allowed?", qVi:"Thay đổi niềm tin có được phép không?", opts:["Yes","No","Only once"], optsVi:["Có","Không","Chỉ một lần"], a:0},
-  {q:"Do men and women have equal rights?", qVi:"Nam và nữ có quyền bình đẳng không?", opts:["Yes","No","Only in marriage"], optsVi:["Có","Không","Chỉ trong hôn nhân"], a:0},
+  {q:"What must you do if called for jury duty?", qVi:"Bạn phải làm gì nếu được gọi làm bồi thẩm đoàn?", opts:["Serve on jury","Pay someone else","Ignore it"], optsVi:["Phục vụ trong bồi thẩm đoàn","Trả tiền cho người khác","Bỏ qua"], a:0},
+  {q:"Who can seek election to parliament?", qVi:"Ai có thể tranh cử vào nghị viện?", opts:["Any resident","Australian citizens 18+ who are not dual citizens","Only people born in Australia"], optsVi:["Bất kỳ cư dân nào","Công dân Úc 18+ không có quốc tịch kép","Chỉ người sinh ra ở Úc"], a:1},
+  {q:"Can Australian citizens apply for an Australian passport?", qVi:"Công dân Úc có thể xin hộ chiếu Úc không?", opts:["Yes","No","Only if born here"], optsVi:["Có","Không","Chỉ nếu sinh ở đây"], a:0},
+  {q:"What is compulsory for Australian citizens 18+?", qVi:"Điều gì bắt buộc cho công dân Úc 18+?", opts:["Military service","Voting","University education"], optsVi:["Nghĩa vụ quân sự","Bầu cử","Giáo dục đại học"], a:1},
+  {q:"Should Australians defend Australia if needed?", qVi:"Người Úc có nên bảo vệ Úc nếu cần không?", opts:["Yes","No","Optional"], optsVi:["Có","Không","Tùy chọn"], a:0},
+  {q:"What does secular government mean?", qVi:"Chính phủ thế tục có nghĩa là gì?", opts:["Religious rule","Separate from religion","Only for Christians"], optsVi:["Cai trị tôn giáo","Tách biệt khỏi tôn giáo","Chỉ cho người Cơ đốc"], a:1},
+  {q:"Can you be forced to join an organization?", qVi:"Bạn có thể bị ép tham gia tổ chức không?", opts:["Yes","No","Sometimes"], optsVi:["Có","Không","Đôi khi"], a:1},
+  {q:"Must protests be peaceful?", qVi:"Biểu tình phải hòa bình không?", opts:["Yes","No","Not required"], optsVi:["Có","Không","Không bắt buộc"], a:0},
+  {q:"Can you criticize the government?", qVi:"Bạn có thể chỉ trích chính phủ không?", opts:["Yes, within the law","No, never","Only in private"], optsVi:["Có, trong khuôn khổ pháp luật","Không, không bao giờ","Chỉ ở chỗ riêng tư"], a:0},
+  {q:"Are all religions treated equally by law?", qVi:"Tất cả tôn giáo có được luật pháp đối xử bình đẳng không?", opts:["Yes","No","Only major religions"], optsVi:["Có","Không","Chỉ các tôn giáo lớn"], a:0},
+  {q:"What happens if religious practice conflicts with Australian law?", qVi:"Điều gì xảy ra nếu thực hành tôn giáo xung đột với luật Úc?", opts:["Religious practice prevails","Australian law prevails","Depends on religion"], optsVi:["Thực hành tôn giáo ưu tiên","Luật Úc ưu tiên","Tùy thuộc vào tôn giáo"], a:1},
+  {q:"Can you choose not to follow a religion?", qVi:"Bạn có thể chọn không theo tôn giáo không?", opts:["Yes","No","Must choose one"], optsVi:["Có","Không","Phải chọn một"], a:0},
+  {q:"What is Australia's heritage?", qVi:"Di sản của Úc là gì?", opts:["Only British","Judaeo-Christian heritage with diverse religions","Purely Indigenous"], optsVi:["Chỉ Anh","Di sản Judaeo-Cơ đốc với đa dạng tôn giáo","Hoàn toàn bản địa"], a:1},
+  {q:"Can people protest government decisions?", qVi:"Người dân có thể biểu tình chống quyết định chính phủ không?", opts:["Yes, peacefully and legally","No, never","Only with permission"], optsVi:["Có, hòa bình và hợp pháp","Không, không bao giờ","Chỉ với sự cho phép"], a:0},
+  {q:"What age is required to serve on a jury?", qVi:"Độ tuổi yêu cầu để phục vụ bồi thẩm đoàn?", opts:["16","18","21"], optsVi:["16","18","21"], a:1},
+  {q:"Can you vote if not on electoral roll?", qVi:"Bạn có thể bầu cử nếu không có trong danh sách cử tri không?", opts:["Yes","No","Sometimes"], optsVi:["Có","Không","Đôi khi"], a:1},
+  {q:"Is domestic violence legal?", qVi:"Bạo lực gia đình có hợp pháp không?", opts:["Yes","No","Only in marriages"], optsVi:["Có","Không","Chỉ trong hôn nhân"], a:1},
+  {q:"Are forced marriages legal?", qVi:"Hôn nhân cưỡng bức có hợp pháp không?", opts:["Yes","No","Depends on culture"], optsVi:["Có","Không","Tùy thuộc văn hóa"], a:1},
+  {q:"Can either spouse apply for divorce?", qVi:"Cả hai vợ chồng đều có thể xin ly hôn không?", opts:["Yes","Only husband","Only wife"], optsVi:["Có","Chỉ chồng","Chỉ vợ"], a:0},
+  {q:"What is equality of opportunity?", qVi:"Bình đẳng cơ hội là gì?", opts:["Success based on merit and effort","Success based on wealth","Success based on family"], optsVi:["Thành công dựa trên năng lực và nỗ lực","Thành công dựa trên của cải","Thành công dựa trên gia đình"], a:0},
+  {q:"Should job selection be based on?", qVi:"Tuyển dụng công việc nên dựa vào?", opts:["Skills and experience","Gender","Wealth"], optsVi:["Kỹ năng và kinh nghiệm","Giới tính","Của cải"], a:0},
+  {q:"Is violence ever acceptable to change laws?", qVi:"Bạo lực có bao giờ được chấp nhận để thay đổi luật không?", opts:["No","Yes","Sometimes"], optsVi:["Không","Có","Đôi khi"], a:0},
+  {q:"What does mutual respect mean?", qVi:"Tôn trọng lẫn nhau có nghĩa là gì?", opts:["Respect others' views even if different","Only respect those you agree with","Forced agreement"], optsVi:["Tôn trọng quan điểm người khác dù khác biệt","Chỉ tôn trọng người bạn đồng ý","Bắt buộc đồng ý"], a:0},
+
+  // PART 3: Government and the law (60 questions) - VỚI TIẾNG VIỆT
+  {q:"Who is Australia's Head of State?", qVi:"Ai là Nguyên thủ quốc gia của Úc?", opts:["Prime Minister","King of Australia","Governor-General"], optsVi:["Thủ tướng","Vua Úc","Toàn quyền"], a:1},
+  {q:"Who is the current King of Australia?", qVi:"Ai là Vua hiện tại của Úc?", opts:["King George VI","King Charles III","King William IV"], optsVi:["Vua George VI","Vua Charles III","Vua William IV"], a:1},
+  {q:"Who appoints the Governor-General?", qVi:"Ai bổ nhiệm Toàn quyền?", opts:["The people vote","King on Prime Minister's advice","High Court"], optsVi:["Người dân bầu","Vua theo lời khuyên của Thủ tướng","Tòa án Tối cao"], a:1},
+  {q:"What is Australia's system of government called?", qVi:"Hệ thống chính phủ Úc được gọi là gì?", opts:["Republic","Constitutional monarchy","Dictatorship"], optsVi:["Cộng hòa","Quân chủ lập hiến","Chế độ độc tài"], a:1},
+  {q:"When did federation occur?", qVi:"Liên bang được thành lập khi nào?", opts:["1788","1851","1901"], optsVi:["1788","1851","1901"], a:2},
+  {q:"What document sets out basic rules for government?", qVi:"Văn bản nào đặt ra các quy tắc cơ bản cho chính phủ?", opts:["Bill of Rights","Australian Constitution","Federation Act"], optsVi:["Tuyên ngôn Nhân quyền","Hiến pháp Úc","Đạo luật Liên bang"], a:1},
+  {q:"What are the three powers of government?", qVi:"Ba quyền lực của chính phủ là gì?", opts:["Federal, state, local","Legislative, executive, judicial","Upper, lower, high"], optsVi:["Liên bang, bang, địa phương","Lập pháp, hành pháp, tư pháp","Thượng, hạ, cao"], a:1},
+  {q:"What is legislative power?", qVi:"Quyền lập pháp là gì?", opts:["Power to make laws","Power to interpret laws","Power to enforce laws"], optsVi:["Quyền làm luật","Quyền giải thích luật","Quyền thi hành luật"], a:0},
+  {q:"What is executive power?", qVi:"Quyền hành pháp là gì?", opts:["Power to make laws","Power to put laws into practice","Power to interpret laws"], optsVi:["Quyền làm luật","Quyền đưa luật vào thực hành","Quyền giải thích luật"], a:1},
+  {q:"What is judicial power?", qVi:"Quyền tư pháp là gì?", opts:["Power to make laws","Power to enforce laws","Power to interpret laws"], optsVi:["Quyền làm luật","Quyền thi hành luật","Quyền giải thích luật"], a:2},
+  {q:"Who has legislative power?", qVi:"Ai có quyền lập pháp?", opts:["Courts","Parliament","Police"], optsVi:["Tòa án","Nghị viện","Cảnh sát"], a:1},
+  {q:"Who has judicial power?", qVi:"Ai có quyền tư pháp?", opts:["Parliament","Government ministers","Judges and courts"], optsVi:["Nghị viện","Các bộ trưởng","Thẩm phán và tòa án"], a:2},
+  {q:"What does the Australian Parliament consist of?", qVi:"Nghị viện Úc bao gồm những gì?", opts:["Only House of Representatives","House of Representatives and Senate","Only the Senate"], optsVi:["Chỉ Hạ viện","Hạ viện và Thượng viện","Chỉ Thượng viện"], a:1},
+  {q:"What is another name for House of Representatives?", qVi:"Tên khác của Hạ viện là gì?", opts:["Upper House","Lower House","High House"], optsVi:["Thượng viện","Hạ viện","Viện cao"], a:1},
+  {q:"What is another name for the Senate?", qVi:"Tên khác của Thượng viện là gì?", opts:["Lower House","Upper House","People's House"], optsVi:["Hạ viện","Thượng viện","Nhà dân"], a:1},
+  {q:"How many senators does each state have?", qVi:"Mỗi bang có bao nhiêu thượng nghị sĩ?", opts:["6","12","24"], optsVi:["6","12","24"], a:1},
+  {q:"How many senators do territories have?", qVi:"Các vùng lãnh thổ có bao nhiêu thượng nghị sĩ?", opts:["1 each","2 each","12 each"], optsVi:["Mỗi vùng 1","Mỗi vùng 2","Mỗi vùng 12"], a:1},
+  {q:"What is a Bill?", qVi:"Dự luật là gì?", opts:["A payment","Proposal for new or changed law","Court decision"], optsVi:["Một khoản thanh toán","Đề xuất luật mới hoặc sửa đổi","Quyết định của tòa án"], a:1},
+  {q:"Who signs Bills into law?", qVi:"Ai ký dự luật thành luật?", opts:["Prime Minister","Governor-General","High Court"], optsVi:["Thủ tướng","Toàn quyền","Tòa án Tối cao"], a:1},
+  {q:"What is Royal Assent?", qVi:"Royal Assent là gì?", opts:["Queen's birthday","Governor-General signing Bill into law","Referendum result"], optsVi:["Sinh nhật Nữ hoàng","Toàn quyền ký dự luật thành luật","Kết quả trưng cầu dân ý"], a:1},
+  {q:"Who is the leader of the Australian Government?", qVi:"Ai là lãnh đạo Chính phủ Úc?", opts:["Governor-General","Prime Minister","King"], optsVi:["Toàn quyền","Thủ tướng","Vua"], a:1},
+  {q:"Who is the leader of a state government?", qVi:"Ai là lãnh đạo chính quyền bang?", opts:["Premier","Chief Minister","Governor"], optsVi:["Thủ hiến","Thủ trưởng","Thống đốc"], a:0},
+  {q:"Who is the leader of a territory government?", qVi:"Ai là lãnh đạo chính quyền vùng lãnh thổ?", opts:["Premier","Chief Minister","Administrator"], optsVi:["Thủ hiến","Thủ trưởng","Quản lý viên"], a:1},
+  {q:"What is a political party?", qVi:"Đảng chính trị là gì?", opts:["A celebration","Group with similar ideas about government","Court system"], optsVi:["Một buổi lễ","Nhóm có ý tưởng tương tự về chính phủ","Hệ thống tòa án"], a:1},
+  {q:"What are independents?", qVi:"Nghị sĩ độc lập là gì?", opts:["MPs not in any political party","Foreign diplomats","Court officials"], optsVi:["Nghị sĩ không thuộc đảng nào","Ngoại giao viên","Quan chức tòa án"], a:0},
+  {q:"How is government formed after election?", qVi:"Chính phủ được thành lập như thế nào sau bầu cử?", opts:["King chooses","Party with most seats in House of Representatives","Senate decides"], optsVi:["Vua chọn","Đảng có nhiều ghế nhất ở Hạ viện","Thượng viện quyết định"], a:1},
+  {q:"Who becomes Prime Minister?", qVi:"Ai trở thành Thủ tướng?", opts:["Oldest MP","Leader of party with most House seats","Governor-General chooses"], optsVi:["Nghị sĩ lớn tuổi nhất","Lãnh đạo đảng có nhiều ghế Hạ viện nhất","Toàn quyền chọn"], a:1},
+  {q:"What is the Opposition?", qVi:"Phe đối lập là gì?", opts:["Foreign countries","Party with second most seats","Minor parties"], optsVi:["Các nước ngoài","Đảng có nhiều ghế thứ hai","Các đảng nhỏ"], a:1},
+  {q:"What is the Cabinet?", qVi:"Nội các là gì?", opts:["Storage furniture","Ministers with most important portfolios","All MPs"], optsVi:["Tủ đồ","Các bộ trưởng có danh mục quan trọng nhất","Tất cả nghị sĩ"], a:1},
+  {q:"Are judges independent?", qVi:"Thẩm phán có độc lập không?", opts:["Yes","No","Only sometimes"], optsVi:["Có","Không","Chỉ đôi khi"], a:0},
+  {q:"Can government remove judges for disagreeing?", qVi:"Chính phủ có thể loại bỏ thẩm phán vì bất đồng không?", opts:["Yes","No","Sometimes"], optsVi:["Có","Không","Đôi khi"], a:1},
+  {q:"What is the role of a jury?", qVi:"Vai trò của bồi thẩm đoàn là gì?", opts:["Make laws","Decide if person guilty or innocent","Arrest criminals"], optsVi:["Làm luật","Quyết định người có tội hay vô tội","Bắt tội phạm"], a:1},
+  {q:"Are people presumed innocent or guilty?", qVi:"Người ta được coi là vô tội hay có tội?", opts:["Guilty until proven innocent","Innocent until proven guilty","Neither"], optsVi:["Có tội cho đến khi chứng minh vô tội","Vô tội cho đến khi chứng minh có tội","Không có cái nào"], a:1},
+  {q:"Who maintains peace and order?", qVi:"Ai duy trì hòa bình và trật tự?", opts:["Military","Police","Courts"], optsVi:["Quân đội","Cảnh sát","Tòa án"], a:1},
+  {q:"What is the AFP?", qVi:"AFP là gì?", opts:["Australian Federal Police","Australian Fire Protection","Australian Finance Program"], optsVi:["Cảnh sát Liên bang Úc","Bảo vệ Hỏa hoạn Úc","Chương trình Tài chính Úc"], a:0},
+  {q:"Is bribing police a crime?", qVi:"Hối lộ cảnh sát có phải là tội phạm không?", opts:["Yes","No","Only large amounts"], optsVi:["Có","Không","Chỉ số tiền lớn"], a:0},
+  {q:"What does AEC stand for?", qVi:"AEC là viết tắt của gì?", opts:["Australian Electoral Commission","Australian Education Council","Australian Energy Corporation"], optsVi:["Ủy ban Bầu cử Úc","Hội đồng Giáo dục Úc","Công ty Năng lượng Úc"], a:0},
+  {q:"Is voting by secret ballot?", qVi:"Bầu cử có bằng phiếu kín không?", opts:["Yes","No","Only sometimes"], optsVi:["Có","Không","Chỉ đôi khi"], a:0},
+  {q:"What happens if you don't vote without good reason?", qVi:"Điều gì xảy ra nếu bạn không bầu cử mà không có lý do chính đáng?", opts:["Nothing","May pay fine","Go to jail"], optsVi:["Không có gì","Có thể bị phạt tiền","Vào tù"], a:1},
+  {q:"Is the AEC independent?", qVi:"AEC có độc lập không?", opts:["Yes","No","Controlled by government"], optsVi:["Có","Không","Bị chính phủ kiểm soát"], a:0},
+  {q:"What is a double majority in referendum?", qVi:"Đa số kép trong trưng cầu dân ý là gì?", opts:["Two votes per person","Majority in most states AND nationally","Two referendums"], optsVi:["Hai phiếu mỗi người","Đa số ở hầu hết các bang VÀ toàn quốc","Hai cuộc trưng cầu dân ý"], a:1},
+  {q:"What court interprets the Constitution?", qVi:"Tòa án nào giải thích Hiến pháp?", opts:["Local court","High Court","Magistrates court"], optsVi:["Tòa án địa phương","Tòa án Tối cao","Tòa án sơ thẩm"], a:1},
+  {q:"Who runs hospitals?", qVi:"Ai quản lý bệnh viện?", opts:["Federal government","State and territory governments","Local councils"], optsVi:["Chính phủ Liên bang","Chính quyền bang và vùng lãnh thổ","Hội đồng địa phương"], a:1},
+  {q:"Who runs schools?", qVi:"Ai quản lý trường học?", opts:["Federal government","State and territory governments","Local councils"], optsVi:["Chính phủ Liên bang","Chính quyền bang và vùng lãnh thổ","Hội đồng địa phương"], a:1},
+  {q:"Who runs defence?", qVi:"Ai quản lý quốc phòng?", opts:["Federal government","State governments","Local councils"], optsVi:["Chính phủ Liên bang","Chính quyền bang","Hội đồng địa phương"], a:0},
+  {q:"Who runs immigration?", qVi:"Ai quản lý nhập cư?", opts:["Federal government","State governments","Local councils"], optsVi:["Chính phủ Liên bang","Chính quyền bang","Hội đồng địa phương"], a:0},
+  {q:"Who manages local roads?", qVi:"Ai quản lý đường địa phương?", opts:["Federal government","State governments","Local councils"], optsVi:["Chính phủ Liên bang","Chính quyền bang","Hội đồng địa phương"], a:2},
+  {q:"Who manages rubbish collection?", qVi:"Ai quản lý thu gom rác?", opts:["Federal government","State governments","Local councils"], optsVi:["Chính phủ Liên bang","Chính quyền bang","Hội đồng địa phương"], a:2},
+  {q:"Who manages parks and swimming pools?", qVi:"Ai quản lý công viên và hồ bơi?", opts:["Federal government","State governments","Local councils"], optsVi:["Chính phủ Liên bang","Chính quyền bang","Hội đồng địa phương"], a:2},
+  {q:"Who runs foreign affairs?", qVi:"Ai quản lý ngoại giao?", opts:["Federal government","State governments","Local councils"], optsVi:["Chính phủ Liên bang","Chính quyền bang","Hội đồng địa phương"], a:0},
+  {q:"Who controls taxation?", qVi:"Ai kiểm soát thuế?", opts:["Federal government","State governments","Local councils"], optsVi:["Chính phủ Liên bang","Chính quyền bang","Hội đồng địa phương"], a:0},
+  {q:"What does ATO stand for?", qVi:"ATO là viết tắt của gì?", opts:["Australian Tourism Office","Australian Taxation Office","Australian Trade Organization"], optsVi:["Văn phòng Du lịch Úc","Văn phòng Thuế Úc","Tổ chức Thương mại Úc"], a:1},
+  {q:"Is domestic violence legal in Australia?", qVi:"Bạo lực gia đình có hợp pháp ở Úc không?", opts:["Yes","No","Only in some cases"], optsVi:["Có","Không","Chỉ trong một số trường hợp"], a:1},
+  {q:"What is the legal driving blood alcohol limit status?", qVi:"Tình trạng giới hạn nồng độ cồn khi lái xe là gì?", opts:["No limit","Strict limits apply","Only suggestions"], optsVi:["Không giới hạn","Áp dụng giới hạn nghiêm ngặt","Chỉ là gợi ý"], a:1},
+  {q:"Must children be in approved car seats?", qVi:"Trẻ em phải ngồi ghế xe được phê duyệt không?", opts:["Yes","No","Optional"], optsVi:["Có","Không","Tùy chọn"], a:0},
+  {q:"Is using hand-held mobile while driving illegal?", qVi:"Sử dụng điện thoại cầm tay khi lái xe có bất hợp pháp không?", opts:["Yes","No","Only sometimes"], optsVi:["Có","Không","Chỉ đôi khi"], a:0},
+  {q:"What is the age of sexual consent?", qVi:"Độ tuổi đồng ý quan hệ tình dục là gì?", opts:["14","16 or 17 depending on state","21"], optsVi:["14","16 hoặc 17 tùy thuộc bang","21"], a:1},
+  {q:"Is violence towards a spouse illegal?", qVi:"Bạo lực đối với vợ/chồng có bất hợp pháp không?", opts:["Yes","No","Only physical violence"], optsVi:["Có","Không","Chỉ bạo lực thể chất"], a:0},
+  {q:"Can you contact your MP about government policy?", qVi:"Bạn có thể liên hệ nghị sĩ về chính sách chính phủ không?", opts:["Yes","No","Only at elections"], optsVi:["Có","Không","Chỉ trong bầu cử"], a:0},
+  {q:"Who represents the King in each state?", qVi:"Ai đại diện cho Vua ở mỗi bang?", opts:["Premier","Governor","Administrator"], optsVi:["Thủ hiến","Thống đốc","Quản lý viên"], a:1},
+
+  // PART 4: Australian values (60 questions) - VỚI TIẾNG VIỆT  
+  {q:"What are Australian values based on?", qVi:"Giá trị Úc dựa trên gì?", opts:["Religion only","Freedom, respect, fairness, equality","Wealth and status"], optsVi:["Chỉ tôn giáo","Tự do, tôn trọng, công bằng, bình đẳng","Của cải và địa vị"], a:1},
+  {q:"Is everyone equal under Australian law?", qVi:"Mọi người có bình đẳng trước pháp luật Úc không?", opts:["Yes","No","Only citizens"], optsVi:["Có","Không","Chỉ công dân"], a:0},
+  {q:"Can anyone be above the law?", qVi:"Có ai có thể đứng trên pháp luật không?", opts:["Yes, leaders","No one","Only religious leaders"], optsVi:["Có, lãnh đạo","Không ai","Chỉ lãnh đạo tôn giáo"], a:1},
+  {q:"Must everyone obey Australian law?", qVi:"Mọi người phải tuân theo luật Úc không?", opts:["Yes","Only citizens","Only residents"], optsVi:["Có","Chỉ công dân","Chỉ cư dân"], a:0},
+  {q:"Is violent protest acceptable?", qVi:"Biểu tình bạo lực có chấp nhận được không?", opts:["Yes","No","Sometimes"], optsVi:["Có","Không","Đôi khi"], a:1},
+  {q:"How should change occur in Australia?", qVi:"Thay đổi nên diễn ra như thế nào ở Úc?", opts:["Through violence","Discussion and democratic process","Military force"], optsVi:["Qua bạo lực","Thảo luận và quy trình dân chủ","Lực lượng quân sự"], a:1},
+  {q:"Can you criticize government?", qVi:"Bạn có thể chỉ trích chính phủ không?", opts:["Yes, within the law","No","Only in private"], optsVi:["Có, trong khuôn khổ pháp luật","Không","Chỉ ở chỗ riêng tư"], a:0},
+  {q:"Can you promote violence against groups?", qVi:"Bạn có thể kích động bạo lực chống lại các nhóm không?", opts:["Yes","No","Only online"], optsVi:["Có","Không","Chỉ trực tuyến"], a:1},
+  {q:"Must you respect others' freedom of speech?", qVi:"Bạn phải tôn trọng tự do ngôn luận của người khác không?", opts:["Yes","No","Only if you agree"], optsVi:["Có","Không","Chỉ khi bạn đồng ý"], a:0},
+  {q:"Can you be forced to join an organization?", qVi:"Bạn có thể bị ép tham gia tổ chức không?", opts:["Yes","No","Sometimes"], optsVi:["Có","Không","Đôi khi"], a:1},
+  {q:"Are there public holidays on Christian days?", qVi:"Có ngày lễ công cộng vào các ngày Cơ đốc không?", opts:["Yes","No","Only Easter"], optsVi:["Có","Không","Chỉ Lễ Phục sinh"], a:0},
+  {q:"Can women work in any job?", qVi:"Phụ nữ có thể làm bất kỳ công việc nào không?", opts:["Yes","No","Only some jobs"], optsVi:["Có","Không","Chỉ một số công việc"], a:0},
+  {q:"Can women join the Defence Force?", qVi:"Phụ nữ có thể gia nhập Lực lượng Quốc phòng không?", opts:["Yes","No","Only as nurses"], optsVi:["Có","Không","Chỉ làm y tá"], a:0},
+  {q:"Can women stand for parliament?", qVi:"Phụ nữ có thể tranh cử vào nghị viện không?", opts:["Yes","No","Only local council"], optsVi:["Có","Không","Chỉ hội đồng địa phương"], a:0},
   {q:"Is gender discrimination illegal?", qVi:"Phân biệt giới tính có bất hợp pháp không?", opts:["Yes","No","Only in government"], optsVi:["Có","Không","Chỉ trong chính phủ"], a:0},
   {q:"Can a woman divorce her husband?", qVi:"Phụ nữ có thể ly hôn chồng không?", opts:["Yes","No","Only with his permission"], optsVi:["Có","Không","Chỉ với sự cho phép của anh ấy"], a:0},
   {q:"Is forced marriage legal?", qVi:"Hôn nhân cưỡng bức có hợp pháp không?", opts:["Yes","No","Depends on culture"], optsVi:["Có","Không","Tùy thuộc văn hóa"], a:1},
@@ -455,18 +542,17 @@
 
         // ============ BIẾN TOÀN CỤC ============
 let CURRENT_QUESTIONS = [];
-let IS_ALL_MODE = false;
+let IS_ALL_MODE = false;        // true khi là All hoặc Part_One → Part_Four
 let SHOW_VIETNAMESE = false;
 let currentIndex = 0;
 let userAnswers = [];
 let timerInterval;
-let timeLeft = 45 * 60; // 45 phút
+let timeLeft = 45 * 60;
 
-/* =================== CHECK ĐÁP ÁN TỨC THÌ (All mode) =================== */
+/* =================== CHECK ĐÁP ÁN TỨC THÌ (All & Part mode) =================== */
 function checkAnswerInstant(qIndex, selectedOption) {
     const correct = CURRENT_QUESTIONS[qIndex].a;
 
-    // Xóa style cũ của 3 đáp án
     for (let i = 0; i < CURRENT_QUESTIONS[qIndex].opts.length; i++) {
         const lbl = document.getElementById(`q${qIndex}o${i}_lbl`);
         if (lbl) lbl.classList.remove("correct", "wrong");
@@ -496,7 +582,27 @@ function loadQuiz(selection) {
         IS_ALL_MODE = true;
         SHOW_VIETNAMESE = true;
         list = QUESTION_BANK;
-    } else {
+    }
+    // 4 tùy chọn mới – giống hệt All mode
+    else if (selection === "part1") {
+        IS_ALL_MODE = true;
+        SHOW_VIETNAMESE = true;
+        list = QUESTION_BANK.slice(0, 40);           // Part 1: 40 câu
+    } else if (selection === "part2") {
+        IS_ALL_MODE = true;
+        SHOW_VIETNAMESE = true;
+        list = QUESTION_BANK.slice(40, 80);          // Part 2: 40 câu
+    } else if (selection === "part3") {
+        IS_ALL_MODE = true;
+        SHOW_VIETNAMESE = true;
+        list = QUESTION_BANK.slice(80, 140);         // Part 3: 60 câu
+    } else if (selection === "part4") {
+        IS_ALL_MODE = true;
+        SHOW_VIETNAMESE = true;
+        list = QUESTION_BANK.slice(140, 200);        // Part 4: 60 câu
+    }
+    // Practice Quiz 1 → 10 (20 câu mỗi lần)
+    else {
         const n = parseInt(selection, 10);
         const start = (n - 1) * 20;
         list = QUESTION_BANK.slice(start, start + 20);
@@ -505,8 +611,8 @@ function loadQuiz(selection) {
     CURRENT_QUESTIONS = list;
     userAnswers = new Array(list.length).fill(null);
 
-    // Chế độ 20 câu (có header, đồng hồ, Prev/Next)
     if (!IS_ALL_MODE) {
+        // Chế độ 20 câu bình thường (có đồng hồ, Prev/Next)
         document.getElementById("quizHeader").style.display = "flex";
         document.getElementById("progressBar").style.display = "flex";
         document.getElementById("navigation").style.display = "flex";
@@ -518,7 +624,7 @@ function loadQuiz(selection) {
         currentIndex = 0;
         renderSingleQuestion(0);
     } else {
-        // Chế độ All (200 câu)
+        // All mode hoặc Part_One → Part_Four → giống All
         document.getElementById("quizHeader").style.display = "none";
         document.getElementById("progressBar").style.display = "none";
         document.getElementById("navigation").style.display = "none";
@@ -530,15 +636,15 @@ function loadQuiz(selection) {
     document.getElementById("results").style.display = "none";
 }
 
-/* =================== ALL MODE – 200 CÂU (tiếng Việt cùng dòng) =================== */
+/* =================== ALL & PART MODE – HIỂN THỊ GIỐNG NHAU =================== */
 function renderAllQuestions() {
     const container = document.getElementById("questions");
     container.innerHTML = "";
 
     CURRENT_QUESTIONS.forEach((q, i) => {
-        let html = `<div style="margin:30px 0;">`;
+        let html = `<div style="margin:35px 0;">`;
 
-        // Câu hỏi: tiếng Anh + [tiếng Việt] trên cùng 1 dòng
+        // Câu hỏi + [dịch] cùng dòng
         html += `<strong style="font-size:19px;">${i + 1}. ${q.q}`;
         if (SHOW_VIETNAMESE && q.qVi) {
             html += ` <span style="color:#0066cc; font-style:italic;">[${q.qVi}]</span>`;
@@ -549,7 +655,7 @@ function renderAllQuestions() {
         html += `<div style="margin-top:18px;">`;
         q.opts.forEach((opt, j) => {
             let optText = opt;
-            if (SHOW_VIETNAMESE && q.optsVi && q.optsVi[j]) {
+            if (SHOW_VIETNAMESE && q.optsVi?.[j]) {
                 optText += ` <span style="color:#0066cc; font-style:italic;">[${q.optsVi[j]}]</span>`;
             }
             html += `
@@ -563,7 +669,7 @@ function renderAllQuestions() {
     });
 }
 
-/* =================== 20 CÂU MODE =================== */
+/* =================== CÁC HÀM CHO CHẾ ĐỘ 20 CÂU (giữ nguyên) =================== */
 function buildProgressBar() {
     const bar = document.getElementById("progressBar");
     bar.innerHTML = "";
@@ -575,14 +681,12 @@ function buildProgressBar() {
     }
     updateProgress();
 }
-
 function updateProgress() {
     document.querySelectorAll(".progress-item").forEach((el, i) => {
         el.classList.toggle("current", i === currentIndex);
     });
     document.getElementById("currentQuestion").textContent = `${currentIndex + 1}/20`;
 }
-
 function startTimer() {
     clearInterval(timerInterval);
     timeLeft = 45 * 60;
@@ -596,21 +700,17 @@ function startTimer() {
         }
     }, 1000);
 }
-
 function updateTimerDisplay() {
     const m = String(Math.floor(timeLeft / 60)).padStart(2, "0");
     const s = String(timeLeft % 60).padStart(2, "0");
     document.getElementById("timer").textContent = `${m}:${s}`;
 }
-
 function renderSingleQuestion(idx) {
     const container = document.getElementById("questions");
     container.innerHTML = "";
     const q = CURRENT_QUESTIONS[idx];
 
     let html = `<div style="margin:40px 0;">`;
-
-    // Câu hỏi + [dịch] cùng dòng
     html += `<strong style="font-size:20px;">${idx + 1}. ${q.q}`;
     if (SHOW_VIETNAMESE && q.qVi) {
         html += ` <span style="color:#0066cc; font-style:italic; font-size:19px;">[${q.qVi}]</span>`;
@@ -618,10 +718,9 @@ function renderSingleQuestion(idx) {
     html += `</strong>`;
 
     html += `<div style="margin-top:25px;">`;
-
     q.opts.forEach((opt, i) => {
         let optText = opt;
-        if (SHOW_VIETNAMESE && q.optsVi && q.optsVi[i]) {
+        if (SHOW_VIETNAMESE && q.optsVi?.[i]) {
             optText += ` <span style="color:#0066cc; font-style:italic; font-size:18px;">[${q.optsVi[i]}]</span>`;
         }
         html += `
@@ -630,11 +729,9 @@ function renderSingleQuestion(idx) {
                 ${optText}
             </label>`;
     });
-
     html += `</div></div>`;
     container.innerHTML = html;
 
-    // Khôi phục đáp án đã chọn
     if (userAnswers[idx] !== null) {
         const r = container.querySelector(`input[value="${userAnswers[idx]}"]`);
         if (r) r.checked = true;
@@ -644,11 +741,7 @@ function renderSingleQuestion(idx) {
     document.getElementById("nextBtn").textContent = (idx === 19) ? "Submit" : "Next";
     updateProgress();
 }
-
-function saveAnswer(idx, val) {
-    userAnswers[idx] = val;
-}
-
+function saveAnswer(idx, val) { userAnswers[idx] = val; }
 function nextQuestion() {
     if (currentIndex < 19) {
         currentIndex++;
@@ -657,15 +750,12 @@ function nextQuestion() {
         submitQuiz();
     }
 }
-
 function prevQuestion() {
     if (currentIndex > 0) {
         currentIndex--;
         renderSingleQuestion(currentIndex);
     }
 }
-
-/* =================== SUBMIT =================== */
 function submitQuiz() {
     clearInterval(timerInterval);
     let score = 0;
@@ -687,7 +777,6 @@ function submitQuiz() {
         ul.appendChild(li);
     });
 
-    // Ẩn phần làm bài
     document.getElementById("quizHeader").style.display = "none";
     document.getElementById("progressBar").style.display = "none";
     document.getElementById("questions").style.display = "none";
@@ -709,7 +798,7 @@ document.getElementById("resetBtn").addEventListener("click", () => {
 });
 
 /* =================== KHỞI ĐỘNG =================== */
-loadQuiz('all-vi'); // mặc định mở All Anh-Việt
+loadQuiz('all-vi');
     </script>
 </body>
 </html>
