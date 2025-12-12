@@ -5,17 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Từ vựng Phần 4: Australian values</title>
     <style>
-    body {font-family: Arial, sans-serif; background:#f0f8ff; padding:20px; line-height:1.6;}
+    body {font-family: Arial, sans-serif; background:#f0f8ff; padding:20px; line-height:1.6; position:relative;}
     h1 {text-align:center; color:#006400; margin:-20px 0 0 10px;}
     h2 {text-align:left; color:#e51803; margin:0 0 15px; font-size:15px;}
     h3 {text-align:right; color:#006400; margin:0; font-size:10px;}
+    
+    /* Thêm nút Home góc trên trái */
+    .home-btn {
+        position: absolute;
+        top: 5px;
+        left: 15px;
+        background: #006400;
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        text-decoration: none;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        z-index: 1000;
+        transition: all 0.3s;
+    }
+    .home-btn:hover {
+        background: #004d00;
+        transform: scale(1.1);
+    }
+    .home-btn::before {
+        content: "🏠";
+    }
+    
     .controls {background:#fff; padding:15px; border-radius:8px; margin-bottom:20px; box-shadow:0 4px 10px rgba(0,0,0,0.1);}
-    select, button {padding:8px 12px; font-size:16px; margin:0 8px 8px 8px 0; border-radius:6px;}
+    select, button {padding:8px 12px; font-size:16px; margin:0 8px 8px 0; border-radius:6px;}
     .notice {color:#d32f2f; font-weight:bold; margin-top:5px;}
     .btn {background:#006400; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:bold; text-decoration:none; display:inline-block;}
     .btn:hover {background:#004d00;}
-    .btnm {background:#f42305; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:bold; margin-left:auto; text-decoration:none; display:inline-block;}
-    .btnm:hover {background:#004d00;}
+
     
     .filter-bar {
         display: flex;
@@ -41,7 +68,6 @@
         color: white;
     }
     
-    
     table {width:100%; border-collapse:collapse; margin-top:20px; background:white; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
     th {background:#006400; color:white; padding:12px; text-align:center;}
     td {padding:10px; vertical-align:top; border-bottom:1px solid #ddd; text-align:center;}
@@ -54,9 +80,65 @@
     .nav-bar .btn {margin:5px; font-size:15px;}
     table, th, td {border:1px solid #000;}
     td, th {padding:6px;}
+
+    /* Wrapper mới để filter-bar và controls nằm cùng dòng */
+    .filter-controls-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        margin: 10px 0;
+    }
+
+    /* Điều chỉnh controls để nhỏ gọn hơn, không margin-bottom lớn */
+    .controls {
+        background: #fff;
+        padding: 8px 12px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+    }
+
+    .controls strong {
+        white-space: nowrap;
+    }
+
+    .controls select {
+        margin: 0;
+    }
+
+    .notice {
+        display: none; /* Giữ nguyên, chỉ hiển thị khi cần */
+    }
+
+    /* Responsive: nếu màn hình nhỏ, filter-bar và controls xếp chồng */
+    @media (max-width: 768px) {
+        .filter-controls-wrapper {
+            flex-direction: column;
+            gap: 10px;
+        }
+        .filter-bar {
+            justify-content: center;
+        }
+        .controls {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    /* Thêm class active cho nút hiện tại */
+    .nav-bar .btn.active {
+        background: #053005;
+    }
 </style>
 </head>
 <body>
+
+    <!-- Nút Home mới -->
+    <a href="onluyenthiquoctich.html" class="home-btn" title="Về trang chủ"></a>
 
 <h1>Australian Citizenship - Our Common Bond</h1><h3>Created by Thomas</h3>
 <h2>TỪ VỰNG PHẦN 3: GOVERNMENT AND THE LAW IN AUSTRALIA</h2>
@@ -67,20 +149,22 @@
     <a href="V3.html" class="btn">PART_THREE</a>
     <a href="V4.html" class="btn">PART_FOUR</a>
     <a href="Glossary.html" class="btn">Glossary</a>
-	<a href="our-common-bond-testable.pdf" class="btnm">Book</a>
+
 </div>
+<br>
+<!-- Wrapper mới chứa filter-bar và controls -->
+<div class="filter-controls-wrapper">
+    <div class="filter-bar">
+        <div class="filter-btn active" data-mode="all">Show All</div>
+        <div class="filter-btn" data-mode="checked">Checked</div>
+        <div class="filter-btn" data-mode="unchecked">Unchecked</div>
+    </div>
 
-<div class="controls">
-    <strong>Chọn giọng đọc:</strong>
-    <select id="voiceSelect"></select>
-    <div id="notice" class="notice" style="display:none;">Không tìm thấy giọng Australian? Cài đặt ngôn ngữ English (Australia) trong máy!</div>
-</div>
-
-
-<div class="filter-bar">
-    <div class="filter-btn active" data-mode="all">Show All</div>
-    <div class="filter-btn" data-mode="checked">Checked</div>
-    <div class="filter-btn" data-mode="unchecked">Unchecked</div>
+    <div class="controls">
+        <strong>Chọn giọng đọc:</strong>
+        <select id="voiceSelect"></select>
+        <div id="notice" class="notice" style="display:none;">Không tìm thấy giọng Australian? Cài đặt ngôn ngữ English (Australia) trong máy!</div>
+    </div>
 </div>
 
 
@@ -325,6 +409,14 @@ document.addEventListener('DOMContentLoaded', () => {
     loadVoices();
     loadAll();
     renumberVisible();
+
+    // Thêm active cho nút nav-bar tương ứng với trang hiện tại
+    const navLinks = document.querySelectorAll('.nav-bar .btn');
+    navLinks.forEach(link => {
+        if (link.href === window.location.href) {
+            link.classList.add('active');
+        }
+    });
 });
 
 
@@ -408,7 +500,6 @@ document.querySelectorAll('[data-sentence]').forEach(btn => {
 
 </body>
 </html>
-
 
 
 
