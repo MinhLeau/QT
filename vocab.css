@@ -129,6 +129,16 @@ select, button {
     background: #cc0000;
 }
 
+.filter-btn.tips-btn {
+    background: #4CAF50;
+    border-color: #2E7D32;
+    color: white;
+}
+
+.filter-btn.tips-btn:hover {
+    background: #2E7D32;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
