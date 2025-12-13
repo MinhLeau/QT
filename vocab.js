@@ -7,37 +7,33 @@ const notice = document.getElementById('notice');
 const tbody = document.querySelector('#vocabTable tbody');
 const filterButtons = document.querySelectorAll('.filter-btn');
 const resetBtn = document.getElementById('resetBtn');
+const tipsBtn = document.getElementById('tipsBtn');
 const tipsPopup = document.getElementById('tipsPopup');
 
 const STORAGE_PREFIX = 'CITIZENSHIP_VOCAB_' + location.pathname.replace(/[^a-zA-Z0-9]/g, '_');
 
 // Xử lý popup tips
-if (tipsPopup) {
+if (tipsPopup && tipsBtn) {
     const tipsClose = tipsPopup.querySelector('.tips-close');
     
-    // Hiển thị popup khi trang load (chỉ lần đầu)
-    const hasSeenTips = localStorage.getItem(STORAGE_PREFIX + '_seen_tips');
-    if (!hasSeenTips) {
-        setTimeout(() => {
-            tipsPopup.classList.add('show');
-        }, 500);
-    }
+    // Mở popup khi click nút Tips
+    tipsBtn.addEventListener('click', () => {
+        tipsPopup.classList.add('show');
+    });
     
     // Đóng popup khi click vào nút X
     if (tipsClose) {
-        tipsClose.onclick = function() {
+        tipsClose.addEventListener('click', () => {
             tipsPopup.classList.remove('show');
-            localStorage.setItem(STORAGE_PREFIX + '_seen_tips', 'true');
-        };
+        });
     }
     
     // Đóng popup khi click bên ngoài
-    window.onclick = function(event) {
+    window.addEventListener('click', (event) => {
         if (event.target === tipsPopup) {
             tipsPopup.classList.remove('show');
-            localStorage.setItem(STORAGE_PREFIX + '_seen_tips', 'true');
         }
-    };
+    });
 }
 
 // Lưu trạng thái
