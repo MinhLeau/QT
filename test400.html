@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <title>Australian Citizenship Practice Quiz</title>
+    <style>
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f0f8ff;
+            padding: 15px;
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        h1 {
+            text-align: center;
+            color: #006400;
+            margin: 10px 0 8px 0;
+            font-size: 28px;
+        }
+		h2 {text-align:left; color:#e51803; margin:-15 0 15px; font-size:20px;}
+        h3 {
+            text-align: right;
+            color: #006400;
+            margin: 0 0 20px 0;
+            font-size: 11px;
+        }
+
+        /* Nút Home */
+    .home-btn {
+        position: absolute;
+        top: 20px;
+        left: 15px;
+        background: #006400;
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        text-decoration: none;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        z-index: 1000;
+        transition: all 0.3s;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+    .home-btn:hover, .home-btn:active {
+        background: #004d00;
+        transform: scale(1.1);
+    }
+    .home-btn::before {
+        content: "🏠";
+    }
+
+        /* Header khi làm bài 20 câu */
+        #quizHeader {
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            background: #001f3f;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        #currentQuestion {
+            background: white;
+            color: #001f3f;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        #quizTitle {
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        #timer {
+            background: white;
+            color: #d32f2f;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        /* Thanh 20 số câu */
+        #progressBar {
+            display: none;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 25px 0;
+        }
+        .progress-item {
+            width: 40px;
+            height: 40px;
+            background: #e0e0e0;
+            color: #555;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        .progress-item.current {
+            background: #ff6600;
+            color: white;
+            transform: scale(1.2);
+            box-shadow: 0 0 15px rgba(255,102,0,0.6);
+        }
+
+        /* Câu hỏi */
+        .question {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+            font-size: 19px;
+            line-height: 1.7;
+        }
+        .opt {
+            display: block;
+            padding: 18px 20px;
+            margin: 15px 0;
+            background: #f8f9fa;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+            font-size: 18px;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        .opt:hover, .opt:active {
+            background: #e3f2fd;
+            transform: translateX(5px);
+        }
+        .opt input[type="radio"] {
+            transform: scale(1.5);
+            margin-right: 15px;
+            accent-color: #006400;
+            pointer-events: none;
+        }
+        .correct {
+            background: #d4edda !important;
+            border: 4px solid #28a745 !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .wrong {
+            background: #f8d7da !important;
+            border: 4px solid #dc3545 !important;
+            color: #721c24;
+            font-weight: bold;
+        }
+        .vietnamese {
+            color: #0066cc;
+            font-style: italic;
+            font-size: 0.95em;
+            display: block;
+            margin-top: 6px;
+        }
+
+        /* Nút Prev / Next */
+        #navigation {
+            display: none;
+            justify-content: space-between;
+            margin: 40px 0 20px;
+        }
+        #prevBtn, #nextBtn {
+            padding: 16px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            min-width: 120px;
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        #prevBtn {
+            background: #6c757d;
+            color: white;
+        }
+        #nextBtn {
+            background: #007bff;
+            color: white;
+        }
+        #prevBtn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Kết quả */
+        #results {
+            margin: 30px 0;
+            padding: 25px;
+            background: #e7f3ff;
+            border: 3px solid #007bff;
+            border-radius: 16px;
+            display: none;
+            text-align: center;
+        }
+        #score {
+            font-size: 28px;
+            font-weight: bold;
+            color: #006400;
+            margin-bottom: 15px;
+        }
+
+        /* Nút Reset */
+        #resetBtn {
+            padding: 14px 30px;
+            font-size: 18px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 20px;
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* Select dropdown tối ưu cho mobile */
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 40px !important;
+        }
+
+        /* Responsive cho iPhone và iPad */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 22px;
+            }
+            h2 {
+                font-size: 18px;
+            }
+            #quizHeader { 
+                flex-direction: column; 
+                gap: 12px; 
+                text-align: center;
+                padding: 12px 15px;
+            }
+            #currentQuestion, #timer { 
+                font-size: 16px; 
+                padding: 8px 14px; 
+            }
+            #quizTitle {
+                font-size: 18px;
+            }
+            .progress-item { 
+                width: 34px; 
+                height: 34px; 
+                font-size: 13px; 
+            }
+            .opt { 
+                font-size: 16px; 
+                padding: 14px 16px; 
+            }
+            #prevBtn, #nextBtn {
+                padding: 14px 30px;
+                font-size: 18px;
+            }
+            .level-label {
+                font-size: 18px;
+            }
+        }
+
+        /* iPad Portrait và Landscape */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            body {
+                padding: 20px;
+            }
+            .opt {
+                font-size: 17px;
+            }
+        }
+		
+		/* ======== GIẢM ĐỘ CAO CẤP ẨN TRONG CHẾ ĐỘ 200 CÂU ======== */
+#questions .opt {
+    padding: 7px 16px !important;
+    margin: 8px 0 !important;
+    font-size: 17px !important;
+    line-height: 1.4 !important;
+    border-radius: 10px !important;
+}
+
+#questions .opt.correct {
+    background: #d4edda !important;
+    border: 3px solid #28a745 !important;
+    padding: 10px 16px !important;
+}
+#questions .opt.wrong {
+    background: #f8d7da !important;
+    border: 3px solid #dc3545 !important;
+    padding: 10px 16px !important;
+}
+
+@media (max-width: 768px) {
+    #questions .opt {
+        padding: 9px 14px !important;
+        margin: 6px 0 !important;
+        font-size: 16px !important;
+    }
+}
+	
+/* Level buttons */
+.level-container {
+    text-align: left;
+    margin: 20px 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.level-label {
+    font-weight: bold;
+    font-size: 20px;
+    color: #e51803;
+}
+.level-buttons {
+    display: flex;
+    gap: 10px;
+}
+.level-btn {
+    padding: 7px 18px;
+    font-size: 11px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 7px;
+    transition: all 0.3s;
+    min-width: 72px;
+    text-align: center;
+    display: inline-block;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.level-btn.basic {
+    background: #28a745;
+    color: white;
+}
+.level-btn.advance {
+    background: #dc3545;
+    color: white;
+}
+.level-btn:hover, .level-btn:active {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+.level-btn.active {
+    background: #1e7e34 !important;
+}
+.level-btn.advance.active {
+    background: #c82333 !important;
+}
+@media (max-width: 768px) {
+    .level-container {
+        flex-direction: row;
+        align-items: center;
+    }
+    .level-buttons {
+        justify-content: flex-start;
+    }
+}	
+		
+    </style>
+</head>
+<body>
+
+    <a href="onluyenthiquoctich.html" class="home-btn" title="Về trang chủ"></a>
+	<h3>Created by Thomas</h3>
+<h1>Australian Citizenship - Our Common Bond</h1>
+
+    <h2>Australian Citizenship Practice Quiz</h2>
+
+    <!-- Dòng Level mới -->
+    <div class="level-container">
+        <div class="level-label">Level:</div>
+        <div class="level-buttons">
+            <a href="test200.html" class="level-btn basic" id="basicBtn">Basic</a>
+            
+        </div>
+    </div>    
+
+    <div style="text-align:left; margin:20px 0;">
+        <a><b>Chọn bài Test:</b></a>
+        <select id="quizSelect" style="padding:12px; font-size:18px; border-radius:8px; width:90%; max-width:550px;">
+            <option value="all-vi">Practice Quiz All (200 questions Anh-Việt)</option>
+			<option value="all">Practice Quiz All (200 questions)</option>
+            <option value="1">Practice Quiz 1</option>
+            <option value="2">Practice Quiz 2</option>
+            <option value="3">Practice Quiz 3</option>
+            <option value="4">Practice Quiz 4</option>
+            <option value="5">Practice Quiz 5</option>
+            <option value="6">Practice Quiz 6</option>
+            <option value="7">Practice Quiz 7</option>
+            <option value="8">Practice Quiz 8</option>
+            <option value="9">Practice Quiz 9</option>
+            <option value="10">Practice Quiz 10</option>
+  <option value="part1">Practice Quiz Part_One(Australia and its people)</option>
+  <option value="part2">Practice Quiz Part_Two(Democratic beliefs, rights and liberties)</option>
+  <option value="part3">Practice Quiz Part_Three(Government and the law)</option>
+  <option value="part4">Practice Quiz Part_Four(Australian values)</option>
+        </select>
+    </div>
+
+    <!-- Header khi làm bài 20 câu -->
+    <div id="quizHeader">
+        <div id="currentQuestion">1/20</div>
+        <div id="quizTitle">Practice Quiz</div>
+        <div id="timer">Timer 45:00</div>
+    </div>
+
+    <!-- Thanh 20 số câu -->
+    <div id="progressBar"></div>
+
+    <!-- Khu vực câu hỏi -->
+    <div id="questions"></div>
+
+    <!-- Nút điều hướng -->
+    <div id="navigation">
+        <button id="prevBtn">Prev</button>
+        <button id="nextBtn">Next</button>
+    </div>
+
+    <button id="resetBtn">Reset All</button>
+
+    <!-- Kết quả -->
+    <div id="results">
+        <p id="score"></p>
+        <p><strong>Các câu sai:</strong></p>
+        <ol id="wrongList"></ol>
+    </div>
+
+    <script>
+        // ============ DỮ LIỆU CÂU HỎI (giữ nguyên như cũ) ============
+        
+		const QUESTION_BANK = [
+  // PART 1: Australia and its people (111 questions)
+{q: "// PART 1" },
+{q:"Who are Australia's first inhabitants?", qVi:"Ai là cư dân đầu tiên của Úc?", opts:["British settlers","Aboriginal and Torres Strait Islander peoples","Dutch explorers"], optsVi:["Người định cư Anh","Thổ dân Aboriginal và Torres Strait Islander","Người thám hiểm Hà Lan"], a:1},
+{q:"What is the estimated time frame for when Aboriginal peoples arrived in Australia according to archaeological records?", qVi:"Theo hồ sơ khảo cổ, khung thời gian ước tính khi thổ dân Aboriginal đến Úc là gì?", opts:["10,000-20,000 years ago","65,000-40,000 years ago","5,000-10,000 years ago"], optsVi:["10.000-20.000 năm trước","65.000-40.000 năm trước","5.000-10.000 năm trước"], a:1},
+{q:"Where are Torres Strait Islander people historically from?", qVi:"Người Torres Strait Islander theo lịch sử đến từ đâu?", opts:["Mainland Australia and Tasmania","Islands between Queensland and Papua New Guinea","Western Australia deserts"], optsVi:["Đại lục Úc và Tasmania","Các đảo giữa Queensland và Papua New Guinea","Sa mạc Tây Úc"], a:1},
+{q:"What makes Indigenous cultures an important part of Australia's national identity?", qVi:"Điều gì khiến văn hóa thổ dân trở thành phần quan trọng của bản sắc quốc gia Úc?", opts:["They are uniform and simple","They are diverse","They are recent developments"], optsVi:["Chúng đồng nhất và đơn giản","Chúng đa dạng","Chúng là những phát triển gần đây"], a:1},
+{q:"When did European settlement in Australia start?", qVi:"Sự định cư châu Âu ở Úc bắt đầu khi nào?", opts:["26 January 1788","1 January 1901","25 April 1915"], optsVi:["26 Tháng 1 1788","1 Tháng 1 1901","25 Tháng 4 1915"], a:0},
+{q:"What was the 'First Fleet'?", qVi:"'First Fleet' là gì?", opts:["A group of free settlers","11 convict ships from Great Britain","Gold mining ships"], optsVi:["Nhóm người định cư tự do","11 tàu tù nhân từ Anh Quốc","Tàu khai thác vàng"], a:1},
+{q:"Why were convicts transported to Australia?", qVi:"Tại sao tù nhân được vận chuyển đến Úc?", opts:["To escape poverty","British jails were overcrowded","To find gold"], optsVi:["Để thoát nghèo","Nhà tù Anh quá tải","Để tìm vàng"], a:1},
+{q:"Who was the first Governor of New South Wales?", qVi:"Ai là Thống đốc đầu tiên của New South Wales?", opts:["Captain Arthur Phillip","Queen Victoria","Prime Minister"], optsVi:["Thuyền trưởng Arthur Phillip","Nữ hoàng Victoria","Thủ tướng"], a:0},
+{q:"Where did early free settlers to Australia mainly come from?", qVi:"Những người định cư tự do ban đầu đến Úc chủ yếu từ đâu?", opts:["China","Great Britain and Ireland","Europe after WWII"], optsVi:["Trung Quốc","Anh Quốc và Ireland","Châu Âu sau WWII"], a:1},
+{q:"What major influence has British and Irish heritage had on Australia?", qVi:"Di sản Anh và Ireland có ảnh hưởng lớn nào đến Úc?", opts:["History, culture and politics","Language only","Food only"], optsVi:["Lịch sử, văn hóa và chính trị","Chỉ ngôn ngữ","Chỉ thực phẩm"], a:0},
+{q:"When did the 'gold rush' begin in Australia?", qVi:"'Gold rush' ở Úc bắt đầu khi nào?", opts:["1788","1851","1901"], optsVi:["1788","1851","1901"], a:1},
+{q:"In which colonies was gold discovered in 1851?", qVi:"Vàng được phát hiện ở những thuộc địa nào năm 1851?", opts:["New South Wales and Victoria","Queensland and Western Australia","Tasmania and South Australia"], optsVi:["New South Wales và Victoria","Queensland và Western Australia","Tasmania và South Australia"], a:0},
+{q:"Who were the first large group of non-European migrants during the gold rush?", qVi:"Nhóm di cư lớn đầu tiên không phải châu Âu trong thời kỳ gold rush là ai?", opts:["British","Chinese","Irish"], optsVi:["Anh","Trung Quốc","Ireland"], a:1},
+{q:"How did Australia's population change in the 10 years after the 1851 gold rush?", qVi:"Dân số Úc thay đổi như thế nào trong 10 năm sau gold rush 1851?", opts:["It halved","It more than doubled","It stayed the same"], optsVi:["Giảm một nửa","Tăng hơn gấp đôi","Giữ nguyên"], a:1},
+{q:"When were the separate colonies united into the Commonwealth of Australia?", qVi:"Khi nào các thuộc địa riêng lẻ được thống nhất thành Khối Thịnh vượng chung Úc?", opts:["1788","1901","1967"], optsVi:["1788","1901","1967"], a:1},
+{q:"What institutions were established under the Australian Constitution in 1901?", qVi:"Những cơ quan nào được thành lập theo Hiến pháp Úc năm 1901?", opts:["National parliament, government and High Court","Local councils only","State governments only"], optsVi:["Quốc hội quốc gia, chính phủ và Tòa án Tối cao","Chỉ hội đồng địa phương","Chỉ chính quyền tiểu bang"], a:0},
+{q:"What was Australia's population in 1901, excluding Aboriginal and Torres Strait Islander peoples?", qVi:"Dân số Úc năm 1901, không tính người Aboriginal và Torres Strait Islander là bao nhiêu?", opts:["About four million","About one million","About ten million"], optsVi:["Khoảng bốn triệu","Khoảng một triệu","Khoảng mười triệu"], a:0},
+{q:"When were Aboriginal and Torres Strait Islander peoples included in official population estimates?", qVi:"Khi nào người Aboriginal và Torres Strait Islander được tính vào ước tính dân số chính thức?", opts:["After 1901","After a Referendum in 1967","In 1788"], optsVi:["Sau 1901","Sau cuộc trưng cầu dân ý năm 1967","Năm 1788"], a:1},
+{q:"What happened to migration levels in the first half of the 20th century?", qVi:"Mức độ di cư diễn ra như thế nào trong nửa đầu thế kỷ 20?", opts:["They rose and fell","They only rose","They only fell"], optsVi:["Tăng và giảm","Chỉ tăng","Chỉ giảm"], a:0},
+{q:"Who were actively encouraged to migrate to Australia in the first half of the 20th century?", qVi:"Ai được khuyến khích tích cực di cư đến Úc trong nửa đầu thế kỷ 20?", opts:["British migrants","Chinese migrants","African migrants"], optsVi:["Di cư Anh","Di cư Trung Quốc","Di cư châu Phi"], a:0},
+{q:"When did a wave of non-British migration occur?", qVi:"Khi nào xảy ra làn sóng di cư không phải Anh?", opts:["After World War II","During the gold rush","In 1901"], optsVi:["Sau Thế chiến II","Trong thời kỳ gold rush","Năm 1901"], a:0},
+{q:"Why did many Europeans come to Australia after World War II?", qVi:"Tại sao nhiều người châu Âu đến Úc sau Thế chiến II?", opts:["To build a new life","To find gold","To escape British rule"], optsVi:["Để xây dựng cuộc sống mới","Để tìm vàng","Để thoát khỏi sự cai trị Anh"], a:0},
+{q:"What has increased in Australia's population over the last two centuries?", qVi:"Điều gì đã tăng trong dân số Úc trong hai thế kỷ qua?", opts:["Diversity","Uniformity","Isolation"], optsVi:["Đa dạng","Đồng nhất","Cô lập"], a:0},
+{q:"What is Australia's national language?", qVi:"Ngôn ngữ quốc gia của Úc là gì?", opts:["English","Aboriginal languages","French"], optsVi:["Tiếng Anh","Ngôn ngữ thổ dân","Tiếng Pháp"], a:0},
+{q:"Why should migrants learn and use English according to Australian values?", qVi:"Theo giá trị Úc, tại sao di dân nên học và sử dụng tiếng Anh?", opts:["To participate in society","Only for travel","For entertainment"], optsVi:["Để tham gia xã hội","Chỉ để du lịch","Để giải trí"], a:0},
+{q:"How many distinct Aboriginal and Torres Strait Islander languages are there?", qVi:"Có bao nhiêu ngôn ngữ Aboriginal và Torres Strait Islander riêng biệt?", opts:["More than 100","Less than 10","Exactly 50"], optsVi:["Hơn 100","Ít hơn 10","Chính xác 50"], a:0},
+{q:"How many states are there in Australia?", qVi:"Có bao nhiêu tiểu bang ở Úc?", opts:["Six","Eight","Four"], optsVi:["Sáu","Tám","Bốn"], a:0},
+{q:"How many mainland territories are there in Australia?", qVi:"Có bao nhiêu lãnh thổ đại lục ở Úc?", opts:["Two","Three","One"], optsVi:["Hai","Ba","Một"], a:0},
+{q:"What is the capital city of Australia?", qVi:"Thủ đô của Úc là gì?", opts:["Sydney","Canberra","Melbourne"], optsVi:["Sydney","Canberra","Melbourne"], a:1},
+{q:"What is the capital of New South Wales?", qVi:"Thủ phủ của New South Wales là gì?", opts:["Sydney","Brisbane","Perth"], optsVi:["Sydney","Brisbane","Perth"], a:0},
+{q:"What is the capital of Victoria?", qVi:"Thủ phủ của Victoria là gì?", opts:["Melbourne","Adelaide","Hobart"], optsVi:["Melbourne","Adelaide","Hobart"], a:0},
+{q:"What is the capital of Queensland?", qVi:"Thủ phủ của Queensland là gì?", opts:["Brisbane","Darwin","Canberra"], optsVi:["Brisbane","Darwin","Canberra"], a:0},
+{q:"What is the capital of Western Australia?", qVi:"Thủ phủ của Western Australia là gì?", opts:["Perth","Sydney","Melbourne"], optsVi:["Perth","Sydney","Melbourne"], a:0},
+{q:"What is the capital of South Australia?", qVi:"Thủ phủ của South Australia là gì?", opts:["Adelaide","Hobart","Brisbane"], optsVi:["Adelaide","Hobart","Brisbane"], a:0},
+{q:"What is the capital of Tasmania?", qVi:"Thủ phủ của Tasmania là gì?", opts:["Hobart","Perth","Darwin"], optsVi:["Hobart","Perth","Darwin"], a:0},
+{q:"What is the capital of Australian Capital Territory?", qVi:"Thủ phủ của Australian Capital Territory là gì?", opts:["Canberra","Sydney","Melbourne"], optsVi:["Canberra","Sydney","Melbourne"], a:0},
+{q:"What is the capital of Northern Territory?", qVi:"Thủ phủ của Northern Territory là gì?", opts:["Darwin","Adelaide","Brisbane"], optsVi:["Darwin","Adelaide","Brisbane"], a:0},
+{q:"Which state is the nation's largest city in?", qVi:"Tiểu bang nào có thành phố lớn nhất quốc gia?", opts:["New South Wales","Victoria","Queensland"], optsVi:["New South Wales","Victoria","Queensland"], a:0},
+{q:"What are national icons in Sydney?", qVi:"Những biểu tượng quốc gia ở Sydney là gì?", opts:["Harbour Bridge and Opera House","Cricket Ground","Great Barrier Reef"], optsVi:["Cầu Harbour và Nhà hát Opera","Sân cricket","Great Barrier Reef"], a:0},
+{q:"Which state is the smallest mainland state?", qVi:"Tiểu bang đại lục nhỏ nhất là nào?", opts:["Victoria","Tasmania","South Australia"], optsVi:["Victoria","Tasmania","South Australia"], a:0},
+{q:"What created wealth for many buildings in Victoria?", qVi:"Điều gì tạo ra sự giàu có cho nhiều tòa nhà ở Victoria?", opts:["Gold rush of 1850s","Wine regions","Mining projects"], optsVi:["Gold rush những năm 1850","Vùng rượu vang","Dự án khai thác mỏ"], a:0},
+{q:"What are Victoria's icons?", qVi:"Biểu tượng của Victoria là gì?", opts:["Melbourne Cricket Ground, 12 Apostles, Royal Exhibition Building","Great Barrier Reef","Uluru"], optsVi:["Sân cricket Melbourne, 12 Apostles, Tòa nhà Triển lãm Hoàng gia","Great Barrier Reef","Uluru"], a:0},
+{q:"Which state is the second largest?", qVi:"Tiểu bang lớn thứ hai là nào?", opts:["Queensland","Western Australia","New South Wales"], optsVi:["Queensland","Western Australia","New South Wales"], a:0},
+{q:"What runs along Queensland's eastern coast?", qVi:"Cái gì chạy dọc bờ biển phía đông Queensland?", opts:["Great Barrier Reef","Flinders Ranges","Kimberley region"], optsVi:["Great Barrier Reef","Dãy Flinders","Vùng Kimberley"], a:0},
+{q:"What climates does Queensland have?", qVi:"Queensland có những khí hậu nào?", opts:["Tropical rainforests, temperate coastal, dry inland","All desert","All tropical"], optsVi:["Rừng mưa nhiệt đới, ven biển ôn đới, nội địa khô","Toàn sa mạc","Toàn nhiệt đới"], a:0},
+{q:"Which state is the largest?", qVi:"Tiểu bang lớn nhất là nào?", opts:["Western Australia","Queensland","Northern Territory"], optsVi:["Western Australia","Queensland","Northern Territory"], a:0},
+{q:"What is the east of Western Australia mostly?", qVi:"Phía đông Western Australia chủ yếu là gì?", opts:["Desert","Rainforest","Cities"], optsVi:["Sa mạc","Rừng mưa","Thành phố"], a:0},
+{q:"What is the south-west of Western Australia?", qVi:"Phía tây nam Western Australia là gì?", opts:["Rich agricultural and wine-growing area","Desert","Tropical"], optsVi:["Vùng nông nghiệp và rượu vang phong phú","Sa mạc","Nhiệt đới"], a:0},
+{q:"What does Western Australia have many of?", qVi:"Western Australia có nhiều cái gì?", opts:["Large mining projects","Gold rushes","Rainforests"], optsVi:["Dự án khai thác mỏ lớn","Gold rush","Rừng mưa"], a:0},
+{q:"What are Western Australia's icons?", qVi:"Biểu tượng của Western Australia là gì?", opts:["Ningaloo Coast, Margaret River, Kimberley region","Barossa Valley","Cradle Mountain"], optsVi:["Bờ biển Ningaloo, Margaret River, vùng Kimberley","Thung lũng Barossa","Núi Cradle"], a:0},
+{q:"What does South Australia have?", qVi:"South Australia có gì?", opts:["Rugged coastline and famous wine regions","Tropical rainforests","Large deserts only"], optsVi:["Bờ biển gồ ghề và vùng rượu vang nổi tiếng","Rừng mưa nhiệt đới","Chỉ sa mạc lớn"], a:0},
+{q:"What does Adelaide have examples of?", qVi:"Adelaide có ví dụ về gì?", opts:["Fine colonial architecture","Modern skyscrapers","Ancient ruins"], optsVi:["Kiến trúc thuộc địa đẹp","Tòa nhà chọc trời hiện đại","Di tích cổ"], a:0},
+{q:"What are South Australia's icons?", qVi:"Biểu tượng của South Australia là gì?", opts:["Barossa Valley and Flinders Ranges","Great Barrier Reef","Opera House"], optsVi:["Thung lũng Barossa và dãy Flinders","Great Barrier Reef","Nhà hát Opera"], a:0},
+{q:"Which state is the smallest?", qVi:"Tiểu bang nhỏ nhất là nào?", opts:["Tasmania","Victoria","South Australia"], optsVi:["Tasmania","Victoria","South Australia"], a:0},
+{q:"What separates Tasmania from the mainland?", qVi:"Cái gì ngăn cách Tasmania với đại lục?", opts:["Bass Strait","Great Barrier Reef","Torres Strait"], optsVi:["Eo biển Bass","Great Barrier Reef","Eo biển Torres"], a:0},
+{q:"What does much of Tasmania have?", qVi:"Phần lớn Tasmania có gì?", opts:["Unspoilt wilderness landscapes","Large cities","Deserts"], optsVi:["Cảnh quan hoang dã chưa bị phá hủy","Thành phố lớn","Sa mạc"], a:0},
+{q:"What are Tasmanian icons?", qVi:"Biểu tượng của Tasmania là gì?", opts:["Cradle Mountain, Port Arthur, Bay of Fires","Margaret River","Uluru"], optsVi:["Núi Cradle, Port Arthur, Vịnh Fires","Margaret River","Uluru"], a:0},
+{q:"Where is the Australian Capital Territory located?", qVi:"Australian Capital Territory nằm ở đâu?", opts:["Between Sydney and Melbourne","In the north","In the west"], optsVi:["Giữa Sydney và Melbourne","Ở phía bắc","Ở phía tây"], a:0},
+{q:"What national institutions are in Canberra?", qVi:"Những cơ quan quốc gia nào ở Canberra?", opts:["Parliament House and High Court","Local councils","State parliaments"], optsVi:["Tòa nhà Quốc hội và Tòa án Tối cao","Hội đồng địa phương","Quốc hội tiểu bang"], a:0},
+{q:"What environment does the Northern Territory have in the north?", qVi:"Môi trường ở phía bắc Northern Territory là gì?", opts:["Tropical","Desert","Temperate"], optsVi:["Nhiệt đới","Sa mạc","Ôn đới"], a:0},
+{q:"What is in the south of the Northern Territory?", qVi:"Phía nam Northern Territory có gì?", opts:["Dry red desert","Rainforests","Cities"], optsVi:["Sa mạc đỏ khô","Rừng mưa","Thành phố"], a:0},
+{q:"What are Northern Territory icons?", qVi:"Biểu tượng của Northern Territory là gì?", opts:["Uluru, Kata Tjuta, Kings Canyon","Opera House","12 Apostles"], optsVi:["Uluru, Kata Tjuta, Kings Canyon","Nhà hát Opera","12 Apostles"], a:0},
+{q:"What is a Welcome to Country?", qVi:"Welcome to Country là gì?", opts:["A cultural practice by Indigenous custodian welcoming visitors","A government speech","A migrant tradition"], optsVi:["Thực hành văn hóa bởi người giữ gìn thổ dân chào đón du khách","Bài phát biểu chính phủ","Truyền thống di cư"], a:0},
+{q:"What was the traditional purpose of Welcome to Country?", qVi:"Mục đích truyền thống của Welcome to Country là gì?", opts:["To ensure safe journey on land","To sell land","To start wars"], optsVi:["Để đảm bảo hành trình an toàn trên đất","Để bán đất","Để bắt đầu chiến tranh"], a:0},
+{q:"In what forms can Welcome to Country take place?", qVi:"Welcome to Country có thể diễn ra dưới hình thức nào?", opts:["Songs, dances, smoking ceremonies, speeches","Only speeches in English","Only dances"], optsVi:["Bài hát, khiêu vũ, nghi lễ hun khói, bài phát biểu","Chỉ bài phát biểu tiếng Anh","Chỉ khiêu vũ"], a:0},
+{q:"When is Welcome to Country usually performed?", qVi:"Welcome to Country thường được thực hiện khi nào?", opts:["First item to open an event","At the end of events","During breaks"], optsVi:["Mục đầu tiên để mở sự kiện","Vào cuối sự kiện","Trong giờ nghỉ"], a:0},
+{q:"What is an Acknowledgement of Country?", qVi:"Acknowledgement of Country là gì?", opts:["Opportunity to recognise Indigenous land and pay respect","A land purchase","A holiday celebration"], optsVi:["Cơ hội công nhận đất thổ dân và bày tỏ sự tôn trọng","Mua đất","Lễ kỷ niệm ngày lễ"], a:0},
+{q:"Who can deliver an Acknowledgement of Country?", qVi:"Ai có thể thực hiện Acknowledgement of Country?", opts:["Anyone","Only Indigenous people","Only government officials"], optsVi:["Bất kỳ ai","Chỉ người thổ dân","Chỉ quan chức chính phủ"], a:0},
+{q:"When is Acknowledgement of Country usually delivered?", qVi:"Acknowledgement of Country thường được thực hiện khi nào?", opts:["As part of Welcome and Housekeeping at meetings/events","Only at citizenship ceremonies","At the end"], optsVi:["Là phần của Chào mừng và Quản lý tại cuộc họp/sự kiện","Chỉ tại lễ nhập tịch","Vào cuối"], a:0},
+{q:"What do these protocols show?", qVi:"Những nghi thức này thể hiện gì?", opts:["Respect for Aboriginal and Torres Strait Islander peoples","Disrespect","Indifference"], optsVi:["Sự tôn trọng đối với người Aboriginal và Torres Strait Islander","Sự thiếu tôn trọng","Sự thờ ơ"], a:0},
+{q:"When is Australia Day celebrated?", qVi:"Australia Day được kỷ niệm khi nào?", opts:["26 January","25 April","1 January"], optsVi:["26 Tháng 1","25 Tháng 4","1 Tháng 1"], a:0},
+{q:"What is Australia Day the anniversary of?", qVi:"Australia Day là kỷ niệm của gì?", opts:["Arrival of First Fleet","Federation","Gold rush"], optsVi:["Sự đến của First Fleet","Liên bang","Gold rush"], a:0},
+{q:"Is Australia Day a public holiday?", qVi:"Australia Day có phải ngày lễ công cộng không?", opts:["Yes, in every state and territory","No","Only in some states"], optsVi:["Có, ở mọi tiểu bang và lãnh thổ","Không","Chỉ ở một số tiểu bang"], a:0},
+{q:"What do communities do on Australia Day?", qVi:"Cộng đồng làm gì vào Australia Day?", opts:["Reflect on history and contributions","Ignore history","Celebrate wars"], optsVi:["Phản ánh lịch sử và đóng góp","Bỏ qua lịch sử","Kỷ niệm chiến tranh"], a:0},
+{q:"What is Australia Day the biggest of in Australia?", qVi:"Australia Day là lớn nhất cái gì ở Úc?", opts:["Annual public holiday","Private event","School day"], optsVi:["Ngày lễ công cộng hàng năm","Sự kiện riêng tư","Ngày học"], a:0},
+{q:"Who does Australia Day acknowledge contributions from?", qVi:"Australia Day công nhận đóng góp từ ai?", opts:["Every Australian, from Indigenous to migrants","Only British","Only recent migrants"], optsVi:["Mọi người Úc, từ thổ dân đến di cư","Chỉ Anh","Chỉ di cư gần đây"], a:0},
+{q:"What events mark Australia Day?", qVi:"Những sự kiện nào đánh dấu Australia Day?", opts:["Citizenship ceremonies","Only parades","No events"], optsVi:["Lễ nhập tịch","Chỉ diễu hành","Không sự kiện"], a:0},
+{q:"When is Anzac Day commemorated?", qVi:"Anzac Day được kỷ niệm khi nào?", opts:["25 April","26 January","11 November"], optsVi:["25 Tháng 4","26 Tháng 1","11 Tháng 11"], a:0},
+{q:"What does Anzac stand for?", qVi:"Anzac viết tắt của gì?", opts:["Australian and New Zealand Army Corps","Australian National Army Corps","Allied Nations Against Conflict"], optsVi:["Quân đoàn Quân đội Úc và New Zealand","Quân đoàn Quân đội Quốc gia Úc","Các Quốc gia Đồng minh Chống Xung đột"], a:0},
+{q:"What event is Anzac Day named after?", qVi:"Anzac Day được đặt tên theo sự kiện nào?", opts:["Landing at Gallipoli in 1915","First Fleet arrival","Federation"], optsVi:["Đổ bộ tại Gallipoli năm 1915","Sự đến của First Fleet","Liên bang"], a:0},
+{q:"What is Anzac Day a day to remember?", qVi:"Anzac Day là ngày để nhớ gì?", opts:["Sacrifice of Australians in wars, conflicts, peacekeeping","Gold rush heroes","Migrants only"], optsVi:["Sự hy sinh của người Úc trong chiến tranh, xung đột, gìn giữ hòa bình","Anh hùng gold rush","Chỉ di cư"], a:0},
+{q:"What does Anzac Day honour?", qVi:"Anzac Day tôn vinh gì?", opts:["Courage and commitment of servicemen and women","Political leaders","Sports stars"], optsVi:["Sự dũng cảm và cam kết của quân nhân","Lãnh đạo chính trị","Ngôi sao thể thao"], a:0},
+{q:"What colours is the Australian National Flag?", qVi:"Cờ Quốc gia Úc có màu gì?", opts:["Blue, white and red","Black, red and yellow","Green, blue, black and white"], optsVi:["Xanh dương, trắng và đỏ","Đen, đỏ và vàng","Xanh lá, xanh dương, đen và trắng"], a:0},
+{q:"What is in the top left corner of the Australian National Flag?", qVi:"Góc trên bên trái của Cờ Quốc gia Úc có gì?", opts:["Union Jack","Southern Cross","Commonwealth Star"], optsVi:["Union Jack","Southern Cross","Commonwealth Star"], a:0},
+{q:"What does the Union Jack represent on the Australian flag?", qVi:"Union Jack đại diện cho gì trên cờ Úc?", opts:["History of British settlement","Aboriginal peoples","Torres Strait Islanders"], optsVi:["Lịch sử định cư Anh","Người Aboriginal","Người Torres Strait Islander"], a:0},
+{q:"What is under the Union Jack on the Australian flag?", qVi:"Dưới Union Jack trên cờ Úc là gì?", opts:["Commonwealth Star","Southern Cross","Golden wattle"], optsVi:["Commonwealth Star","Southern Cross","Golden wattle"], a:0},
+{q:"How many points does the Commonwealth Star have?", qVi:"Commonwealth Star có bao nhiêu điểm?", opts:["Seven","Five","Six"], optsVi:["Bảy","Năm","Sáu"], a:0},
+{q:"What do the points of the Commonwealth Star represent?", qVi:"Các điểm của Commonwealth Star đại diện cho gì?", opts:["Six states and one for territories","All continents","Wars"], optsVi:["Sáu tiểu bang và một cho lãnh thổ","Tất cả châu lục","Chiến tranh"], a:0},
+{q:"What is on the right of the Australian flag?", qVi:"Bên phải cờ Úc có gì?", opts:["Southern Cross","Union Jack","Emu"], optsVi:["Southern Cross","Union Jack","Emu"], a:0},
+{q:"Where can the Southern Cross be seen?", qVi:"Southern Cross có thể thấy ở đâu?", opts:["In the southern sky","In the northern sky","Only in Australia"], optsVi:["Trên bầu trời phía nam","Trên bầu trời phía bắc","Chỉ ở Úc"], a:0},
+{q:"What colours is the Australian Aboriginal Flag?", qVi:"Cờ Aboriginal Úc có màu gì?", opts:["Black, red and yellow","Blue, white and red","Green, blue, black and white"], optsVi:["Đen, đỏ và vàng","Xanh dương, trắng và đỏ","Xanh lá, xanh dương, đen và trắng"], a:0},
+{q:"What does the black on the Aboriginal Flag represent?", qVi:"Màu đen trên Cờ Aboriginal đại diện cho gì?", opts:["Aboriginal peoples","Earth","Sun"], optsVi:["Người Aboriginal","Trái đất","Mặt trời"], a:0},
+{q:"What does the red on the Aboriginal Flag represent?", qVi:"Màu đỏ trên Cờ Aboriginal đại diện cho gì?", opts:["Earth","People","Sun"], optsVi:["Trái đất","Người dân","Mặt trời"], a:0},
+{q:"What does the yellow on the Aboriginal Flag represent?", qVi:"Màu vàng trên Cờ Aboriginal đại diện cho gì?", opts:["Sun","Earth","People"], optsVi:["Mặt trời","Trái đất","Người dân"], a:0},
+{q:"What colours is the Torres Strait Islander Flag?", qVi:"Cờ Torres Strait Islander có màu gì?", opts:["Green, blue, black and white","Black, red and yellow","Blue, white and red"], optsVi:["Xanh lá, xanh dương, đen và trắng","Đen, đỏ và vàng","Xanh dương, trắng và đỏ"], a:0},
+{q:"What do the green stripes on the Torres Strait Flag represent?", qVi:"Các sọc xanh lá trên Cờ Torres Strait đại diện cho gì?", opts:["Land","Sea","People"], optsVi:["Đất đai","Biển","Người dân"], a:0},
+{q:"What does the blue panel on the Torres Strait Flag represent?", qVi:"Bảng màu xanh dương trên Cờ Torres Strait đại diện cho gì?", opts:["Sea","Land","Peace"], optsVi:["Biển","Đất đai","Hòa bình"], a:0},
+{q:"What do the black lines on the Torres Strait Flag represent?", qVi:"Các đường đen trên Cờ Torres Strait đại diện cho gì?", opts:["Torres Strait Islander people","Land","Sea"], optsVi:["Người Torres Strait Islander","Đất đai","Biển"], a:0},
+{q:"What is in the centre of the Torres Strait Flag?", qVi:"Ở giữa Cờ Torres Strait có gì?", opts:["White dancer's headdress","Yellow circle","Union Jack"], optsVi:["Mũ khiêu vũ trắng","Vòng tròn vàng","Union Jack"], a:0},
+{q:"What do the points of the white star on the Torres Strait Flag represent?", qVi:"Các điểm của ngôi sao trắng trên Cờ Torres Strait đại diện cho gì?", opts:["Island groups in the Torres Strait","States","Territories"], optsVi:["Nhóm đảo ở Torres Strait","Tiểu bang","Lãnh thổ"], a:0},
+{q:"What does the white colour on the Torres Strait Flag symbolise?", qVi:"Màu trắng trên Cờ Torres Strait tượng trưng cho gì?", opts:["Peace","War","Earth"], optsVi:["Hòa bình","Chiến tranh","Trái đất"], a:0},
+{q:"What is the official symbol of the Commonwealth of Australia?", qVi:"Biểu tượng chính thức của Khối Thịnh vượng chung Úc là gì?", opts:["Commonwealth Coat of Arms","Golden wattle","Opal"], optsVi:["Coat of Arms Khối Thịnh vượng chung","Golden wattle","Opal"], a:0},
+{q:"What animals support the shield in the Coat of Arms?", qVi:"Động vật nào hỗ trợ khiên trong Coat of Arms?", opts:["Kangaroo and emu","Lion and unicorn","Eagle and snake"], optsVi:["Kangaroo và emu","Sư tử và kỳ lân","Đại bàng và rắn"], a:0},
+{q:"What is the background of the Coat of Arms?", qVi:"Nền của Coat of Arms là gì?", opts:["Golden wattle","Opal","Green and gold"], optsVi:["Golden wattle","Opal","Xanh và vàng"], a:0},
+{q:"What is Australia's national flower?", qVi:"Hoa quốc gia của Úc là gì?", opts:["Golden wattle","Rose","Tulip"], optsVi:["Golden wattle","Hoa hồng","Tulip"], a:0},
+{q:"Where does the golden wattle mainly grow?", qVi:"Golden wattle chủ yếu mọc ở đâu?", opts:["South-eastern Australia","Northern Australia","Western deserts"], optsVi:["Đông nam Úc","Bắc Úc","Sa mạc tây"], a:0},
+{q:"When does the golden wattle flower?", qVi:"Golden wattle nở hoa khi nào?", opts:["Spring","Summer","Winter"], optsVi:["Mùa xuân","Mùa hè","Mùa đông"], a:0},
+{q:"What are Australia's national colours?", qVi:"Màu quốc gia của Úc là gì?", opts:["Green and gold","Blue and white","Red and black"], optsVi:["Xanh và vàng","Xanh dương và trắng","Đỏ và đen"], a:0},
+{q:"What is Australia's national gemstone?", qVi:"Đá quý quốc gia của Úc là gì?", opts:["Opal","Diamond","Emerald"], optsVi:["Opal","Kim cương","Ngọc lục bảo"], a:0},
+{q:"According to Aboriginal legend, how were the colours of the opal created?", qVi:"Theo truyền thuyết Aboriginal, màu sắc của opal được tạo ra như thế nào?", opts:["Rainbow touched the earth","Sun reflected on water","Stars fell"], optsVi:["Cầu vồng chạm đất","Mặt trời phản chiếu trên nước","Sao rơi"], a:0},
+{q:"What is Australia's national anthem?", qVi:"Quốc ca của Úc là gì?", opts:["Advance Australia Fair","God Save the Queen","Waltzing Matilda"], optsVi:["Advance Australia Fair","God Save the Queen","Waltzing Matilda"], a:0},
+{q: "// END PART 1" }, // 111 Câu
+
+// PART 2: Democratic beliefs, rights and liberties (103 questions)
+{q: "// PART 2" },
+{q:"What do you pledge at the citizenship ceremony regarding Australia's democratic beliefs?", qVi:"Bạn cam kết gì tại lễ nhập tịch liên quan đến niềm tin dân chủ của Úc?", opts:["To share them and respect rights and liberties","To ignore them","To change them"], optsVi:["Chia sẻ chúng và tôn trọng quyền và tự do","Bỏ qua chúng","Thay đổi chúng"], a:0},
+{q:"From whom does the power of the government come in Australia?", qVi:"Quyền lực của chính phủ ở Úc đến từ ai?", opts:["The Australian people","The Queen","Foreign countries"], optsVi:["Người dân Úc","Nữ hoàng","Các quốc gia nước ngoài"], a:0},
+{q:"How do Australian citizens participate in choosing representatives?", qVi:"Công dân Úc tham gia chọn đại diện như thế nào?", opts:["By voting","By lottery","By appointment"], optsVi:["Bằng cách bỏ phiếu","Bằng xổ số","Bằng bổ nhiệm"], a:0},
+{q:"To whom must representatives in parliament answer?", qVi:"Đại diện trong nghị viện phải trả lời cho ai?", opts:["The people, through elections","Themselves","No one"], optsVi:["Người dân, qua bầu cử","Chính họ","Không ai"], a:0},
+{q:"What does the Rule of Law mean in Australia?", qVi:"Rule of Law ở Úc nghĩa là gì?", opts:["All are equal under the law","Some are above the law","Laws change daily"], optsVi:["Tất cả đều bình đẳng trước pháp luật","Một số ở trên pháp luật","Luật thay đổi hàng ngày"], a:0},
+{q:"Who must obey Australia's laws according to the Rule of Law?", qVi:"Ai phải tuân thủ luật Úc theo Rule of Law?", opts:["Everyone, including leaders","Only citizens","Only migrants"], optsVi:["Mọi người, bao gồm lãnh đạo","Chỉ công dân","Chỉ di dân"], a:0},
+{q:"What groups are included in those who must obey the laws?", qVi:"Những nhóm nào được bao gồm trong những người phải tuân thủ luật pháp?", opts:["Government, community, religious leaders, business people, police","Only politicians","Only religious leaders"], optsVi:["Chính phủ, cộng đồng, lãnh đạo tôn giáo, doanh nhân, cảnh sát","Chỉ chính trị gia","Chỉ lãnh đạo tôn giáo"], a:0},
+{q:"Of what are Australians proud in terms of living?", qVi:"Người Úc tự hào về điều gì trong cách sống?", opts:["Living in a peaceful country with stable government","Living in chaos","Living under dictatorship"], optsVi:["Sống trong quốc gia hòa bình với chính phủ ổn định","Sống trong hỗn loạn","Sống dưới độc tài"], a:0},
+{q:"How should change occur in Australia?", qVi:"Sự thay đổi nên xảy ra như thế nào ở Úc?", opts:["Through discussion, peaceful persuasion, democratic process","Through violence","Through ignoring laws"], optsVi:["Qua thảo luận, thuyết phục hòa bình, quy trình dân chủ","Qua bạo lực","Qua bỏ qua luật pháp"], a:0},
+{q:"What do Australians reject as a way to change minds or laws?", qVi:"Người Úc bác bỏ điều gì như cách thay đổi suy nghĩ hoặc luật pháp?", opts:["Violence","Discussion","Voting"], optsVi:["Bạo lực","Thảo luận","Bỏ phiếu"], a:0},
+{q:"On what principle is Australia's democratic system based regarding individuals?", qVi:"Hệ thống dân chủ Úc dựa trên nguyên tắc gì liên quan đến cá nhân?", opts:["Every individual has rights and equality under law","Only wealthy have rights","Background determines rights"], optsVi:["Mọi cá nhân có quyền và bình đẳng trước pháp luật","Chỉ người giàu có quyền","Nền tảng quyết định quyền"], a:0},
+{q:"How are all Australians expected to treat each other?", qVi:"Tất cả người Úc được mong đợi đối xử với nhau như thế nào?", opts:["With dignity and respect","With discrimination","With indifference"], optsVi:["Với phẩm giá và tôn trọng","Với phân biệt đối xử","Với thờ ơ"], a:0},
+{q:"Regardless of what must Australians treat each other with dignity?", qVi:"Bất kể gì người Úc phải đối xử với nhau bằng phẩm giá?", opts:["Race, origin, gender, etc.","Wealth only","Age only"], optsVi:["Chủng tộc, nguồn gốc, giới tính, v.v.","Chỉ giàu có","Chỉ tuổi tác"], a:0},
+{q:"What does freedom of speech allow people to do?", qVi:"Tự do ngôn luận cho phép mọi người làm gì?", opts:["Say and write what they think, discuss ideas","Only agree with government","Nothing"], optsVi:["Nói và viết những gì họ nghĩ, thảo luận ý tưởng","Chỉ đồng ý với chính phủ","Không gì cả"], a:0},
+{q:"What can people do under freedom of speech, as long as they obey laws?", qVi:"Mọi người có thể làm gì dưới tự do ngôn luận, miễn là tuân thủ luật pháp?", opts:["Criticise government, protest peacefully, campaign to change laws","Use violence","Break laws"], optsVi:["Phê phán chính phủ, biểu tình hòa bình, vận động thay đổi luật","Sử dụng bạo lực","Vi phạm luật"], a:0},
+{q:"What does freedom of expression include?", qVi:"Tự do biểu đạt bao gồm gì?", opts:["Express views through art, film, music, literature","Only spoken words","Only writing"], optsVi:["Bày tỏ quan điểm qua nghệ thuật, phim, nhạc, văn học","Chỉ lời nói","Chỉ viết"], a:0},
+{q:"Where can people meet under freedom of expression?", qVi:"Mọi người có thể gặp nhau ở đâu dưới tự do biểu đạt?", opts:["Public or private places for discussion","Only in parliament","Nowhere"], optsVi:["Nơi công cộng hoặc riêng tư để thảo luận","Chỉ trong nghị viện","Không đâu"], a:0},
+{q:"What must be obeyed even while engaging in freedom of speech and expression?", qVi:"Điều gì phải được tuân thủ ngay cả khi thực hiện tự do ngôn luận và biểu đạt?", opts:["Laws of Australia","No rules","Foreign laws"], optsVi:["Luật Úc","Không quy tắc","Luật nước ngoài"], a:0},
+{q:"What must we respect regarding others' freedoms?", qVi:"Chúng ta phải tôn trọng gì liên quan đến tự do của người khác?", opts:["Their freedom of speech and expression","Nothing","Only government freedoms"], optsVi:["Tự do ngôn luận và biểu đạt của họ","Không gì","Chỉ tự do chính phủ"], a:0},
+{q:"What is freedom of association?", qVi:"Tự do liên kết là gì?", opts:["Right to form and join associations","Right to isolate","No rights"], optsVi:["Quyền thành lập và tham gia hiệp hội","Quyền cô lập","Không quyền"], a:0},
+{q:"Can people be forced to join an organization?", qVi:"Mọi người có thể bị buộc tham gia tổ chức không?", opts:["No","Yes","Sometimes"], optsVi:["Không","Có","Đôi khi"], a:0},
+{q:"What can Australians do to protest against government actions?", qVi:"Người Úc có thể làm gì để biểu tình chống lại hành động chính phủ?", opts:["Gather with others peacefully","Use violence","Damage property"], optsVi:["Tụ tập với người khác hòa bình","Sử dụng bạo lực","Phá hoại tài sản"], a:0},
+{q:"What must gatherings for protest be?", qVi:"Các cuộc tụ tập biểu tình phải như thế nào?", opts:["Peaceful, no injury or damage","Violent","Illegal"], optsVi:["Hòa bình, không thương vong hoặc thiệt hại","Bạo lực","Bất hợp pháp"], a:0},
+{q:"What heritage does Australia have regarding religion?", qVi:"Úc có di sản gì liên quan đến tôn giáo?", opts:["Judaeo-Christian","Atheist only","Buddhist"], optsVi:["Do Thái-Kitô giáo","Chỉ vô thần","Phật giáo"], a:0},
+{q:"How do many Australians describe themselves religiously?", qVi:"Nhiều người Úc mô tả bản thân về tôn giáo như thế nào?", opts:["Christians","No religion","All Muslims"], optsVi:["Kitô hữu","Không tôn giáo","Tất cả Hồi giáo"], a:0},
+{q:"What public holidays does Australia have related to Christianity?", qVi:"Úc có những ngày lễ công cộng nào liên quan đến Kitô giáo?", opts:["Good Friday, Easter Sunday, Christmas Day","New Year only","Halloween"], optsVi:["Thứ Sáu Tuần Thánh, Chủ Nhật Phục Sinh, Ngày Giáng Sinh","Chỉ Năm Mới","Halloween"], a:0},
+{q:"How does the government treat citizens regarding religion?", qVi:"Chính phủ đối xử với công dân về tôn giáo như thế nào?", opts:["Equally, whatever their religion","Favors one religion","Ignores religion"], optsVi:["Bình đẳng, bất kể tôn giáo","Ưu đãi một tôn giáo","Bỏ qua tôn giáo"], a:0},
+{q:"Is the Australian government secular?", qVi:"Chính phủ Úc có thế tục không?", opts:["Yes","No","Partially"], optsVi:["Có","Không","Một phần"], a:0},
+{q:"Does Australia have an official national religion?", qVi:"Úc có tôn giáo quốc gia chính thức không?", opts:["No","Yes, Christianity","Yes, Islam"], optsVi:["Không","Có, Kitô giáo","Có, Hồi giáo"], a:0},
+{q:"Are people free to follow any religion in Australia?", qVi:"Mọi người có tự do theo bất kỳ tôn giáo nào ở Úc không?", opts:["Yes","No","Only Christianity"], optsVi:["Có","Không","Chỉ Kitô giáo"], a:0},
+{q:"Can people choose not to follow a religion?", qVi:"Mọi người có thể chọn không theo tôn giáo không?", opts:["Yes","No","Must follow one"], optsVi:["Có","Không","Phải theo một"], a:0},
+{q:"What prevails if there is a conflict between Australian law and religious practice?", qVi:"Điều gì ưu tiên nếu có xung đột giữa luật Úc và thực hành tôn giáo?", opts:["Australian law","Religious practice","Neither"], optsVi:["Luật Úc","Thực hành tôn giáo","Không cái nào"], a:0},
+{q:"What laws ensure no discrimination in Australia?", qVi:"Những luật nào đảm bảo không phân biệt đối xử ở Úc?", opts:["Laws against discrimination based on gender, race, disability, age","No such laws","Only gender laws"], optsVi:["Luật chống phân biệt dựa trên giới tính, chủng tộc, khuyết tật, tuổi tác","Không có luật như vậy","Chỉ luật giới tính"], a:0},
+{q:"Do men and women have equal rights in Australia?", qVi:"Nam và nữ có quyền bình đẳng ở Úc không?", opts:["Yes","No","Only in some areas"], optsVi:["Có","Không","Chỉ ở một số lĩnh vực"], a:0},
+{q:"Is it against the law to discriminate based on gender?", qVi:"Có vi phạm luật nếu phân biệt dựa trên giới tính không?", opts:["Yes","No","Sometimes"], optsVi:["Có","Không","Đôi khi"], a:0},
+{q:"What do Australians value in society regarding opportunity?", qVi:"Người Úc coi trọng gì trong xã hội liên quan đến cơ hội?", opts:["Equal opportunity, 'fair go'","Inequality","Class distinctions"], optsVi:["Cơ hội bình đẳng, 'fair go'","Bất bình đẳng","Phân biệt giai cấp"], a:0},
+{q:"On what should achievements in life be based?", qVi:"Thành tựu trong cuộc sống nên dựa trên gì?", opts:["Talents, work, effort","Wealth, background","Luck"], optsVi:["Tài năng, công việc, nỗ lực","Giàu có, nền tảng","May mắn"], a:0},
+{q:"Are there formal class distinctions in Australian society?", qVi:"Có phân biệt giai cấp chính thức trong xã hội Úc không?", opts:["No","Yes","In some states"], optsVi:["Không","Có","Ở một số tiểu bang"], a:0},
+{q:"What additional things do you have as an Australian citizen?", qVi:"Là công dân Úc, bạn có thêm gì?", opts:["Responsibilities and privileges","Only rights","Only duties"], optsVi:["Trách nhiệm và đặc quyền","Chỉ quyền","Chỉ nghĩa vụ"], a:0},
+{q:"What is one responsibility of Australian citizens?", qVi:"Một trách nhiệm của công dân Úc là gì?", opts:["Obey the laws of Australia","Ignore laws","Make new laws"], optsVi:["Tuân thủ luật Úc","Bỏ qua luật","Làm luật mới"], a:0},
+{q:"In what must citizens vote?", qVi:"Công dân phải bỏ phiếu trong gì?", opts:["Federal and state/territory elections, referendums","Only local elections","No voting"], optsVi:["Bầu cử liên bang và tiểu bang/lãnh thổ, trưng cầu dân ý","Chỉ bầu cử địa phương","Không bỏ phiếu"], a:0},
+{q:"What should citizens do if the need arises?", qVi:"Công dân nên làm gì nếu cần thiết?", opts:["Defend Australia","Leave Australia","Ignore calls"], optsVi:["Bảo vệ Úc","Rời Úc","Bỏ qua lời kêu gọi"], a:0},
+{q:"What service must citizens perform if called?", qVi:"Công dân phải thực hiện dịch vụ gì nếu được gọi?", opts:["Serve on a jury","Military service always","No service"], optsVi:["Phục vụ bồi thẩm đoàn","Dịch vụ quân sự luôn","Không dịch vụ"], a:0},
+{q:"What is one privilege of Australian citizens?", qVi:"Một đặc quyền của công dân Úc là gì?", opts:["Vote in elections and referendums","Cannot vote","Vote only once"], optsVi:["Bỏ phiếu trong bầu cử và trưng cầu","Không thể bỏ phiếu","Bỏ phiếu chỉ một lần"], a:0},
+{q:"For what can citizens apply regarding children born overseas?", qVi:"Công dân có thể nộp đơn gì liên quan đến con cái sinh ở nước ngoài?", opts:["Become citizens by descent","Become migrants","Nothing"], optsVi:["Trở thành công dân theo dòng máu","Trở thành di dân","Không gì"], a:0},
+{q:"In what jobs can citizens apply?", qVi:"Công dân có thể nộp đơn vào công việc gì?", opts:["Australian Public Service or Defence Force","Only private jobs","No jobs"], optsVi:["Dịch vụ Công Úc hoặc Lực lượng Quốc phòng","Chỉ công việc tư nhân","Không công việc"], a:0},
+{q:"What can citizens seek?", qVi:"Công dân có thể tìm kiếm gì?", opts:["Election to parliament","Only local office","Nothing political"], optsVi:["Bầu cử vào nghị viện","Chỉ văn phòng địa phương","Không gì chính trị"], a:0},
+{q:"What can citizens apply for to travel?", qVi:"Công dân có thể nộp đơn gì để du lịch?", opts:["Australian passport","Foreign passport","No passport"], optsVi:["Hộ chiếu Úc","Hộ chiếu nước ngoài","Không hộ chiếu"], a:0},
+{q:"What assistance can citizens ask for overseas?", qVi:"Công dân có thể yêu cầu hỗ trợ gì ở nước ngoài?", opts:["Consular assistance from Australian official","No assistance","Foreign help"], optsVi:["Hỗ trợ lãnh sự từ quan chức Úc","Không hỗ trợ","Hỗ trợ nước ngoài"], a:0},
+{q:"Why is freedom of speech important in Australia?", qVi:"Tại sao tự do ngôn luận quan trọng ở Úc?", opts:["Underpins democratic system","Not important","Limits democracy"], optsVi:["Hỗ trợ hệ thống dân chủ","Không quan trọng","Giới hạn dân chủ"], a:0},
+{q:"What discussions are allowed under freedom of speech?", qVi:"Những thảo luận nào được phép dưới tự do ngôn luận?", opts:["Ideas with others","Only positive ideas","No discussions"], optsVi:["Ý tưởng với người khác","Chỉ ý tưởng tích cực","Không thảo luận"], a:0},
+{q:"Can people protest peacefully against government decisions?", qVi:"Mọi người có thể biểu tình hòa bình chống lại quyết định chính phủ không?", opts:["Yes","No","Only violently"], optsVi:["Có","Không","Chỉ bạo lực"], a:0},
+{q:"What must people do while protesting?", qVi:"Mọi người phải làm gì khi biểu tình?", opts:["Obey laws","Break laws","Ignore others"], optsVi:["Tuân thủ luật","Vi phạm luật","Bỏ qua người khác"], a:0},
+{q:"Through what can people express their views under freedom of expression?", qVi:"Qua gì mọi người có thể bày tỏ quan điểm dưới tự do biểu đạt?", opts:["Art, film, music, literature","Only speech","Only writing"], optsVi:["Nghệ thuật, phim, nhạc, văn học","Chỉ lời nói","Chỉ viết"], a:0},
+{q:"Where can people meet for social or political discussion?", qVi:"Mọi người có thể gặp nhau để thảo luận xã hội hoặc chính trị ở đâu?", opts:["Public or private places","Only public","Only private"], optsVi:["Nơi công cộng hoặc riêng tư","Chỉ công cộng","Chỉ riêng tư"], a:0},
+{q:"What is required when engaging in freedoms?", qVi:"Điều gì được yêu cầu khi thực hiện tự do?", opts:["Respect others' freedoms","Disrespect others","No respect"], optsVi:["Tôn trọng tự do người khác","Thiếu tôn trọng người khác","Không tôn trọng"], a:0},
+{q:"What does freedom of association allow?", qVi:"Tự do liên kết cho phép gì?", opts:["Pursue common goals in associations","Isolate from groups","Force membership"], optsVi:["Theo đuổi mục tiêu chung trong hiệp hội","Cô lập khỏi nhóm","Buộc thành viên"], a:0},
+{q:"Can people decide not to join an organization?", qVi:"Mọi người có thể quyết định không tham gia tổ chức không?", opts:["Yes","No","Must join one"], optsVi:["Có","Không","Phải tham gia một"], a:0},
+{q:"How must protests be conducted?", qVi:"Biểu tình phải được tiến hành như thế nào?", opts:["Peacefully","Violently","With damage"], optsVi:["Hòa bình","Bạo lực","Với thiệt hại"], a:0},
+{q:"What must not happen during gatherings?", qVi:"Điều gì không được xảy ra trong các cuộc tụ tập?", opts:["Injury to person or damage to property","Celebrations","Discussions"], optsVi:["Thương vong cho người hoặc thiệt hại tài sản","Lễ kỷ niệm","Thảo luận"], a:0},
+{q:"What days are public holidays in Australia?", qVi:"Những ngày nào là ngày lễ công cộng ở Úc?", opts:["Good Friday, Easter Sunday, Christmas Day","Only New Year","No holidays"], optsVi:["Thứ Sáu Tuần Thánh, Chủ Nhật Phục Sinh, Ngày Giáng Sinh","Chỉ Năm Mới","Không ngày lễ"], a:0},
+{q:"Is the government separate from religious entities?", qVi:"Chính phủ có tách biệt khỏi các thực thể tôn giáo không?", opts:["Yes, secular","No","Partially"], optsVi:["Có, thế tục","Không","Một phần"], a:0},
+{q:"Can religious practices override Australian laws?", qVi:"Thực hành tôn giáo có thể vượt qua luật Úc không?", opts:["No","Yes","Sometimes"], optsVi:["Không","Có","Đôi khi"], a:0},
+{q:"What ensures a person is not treated differently?", qVi:"Điều gì đảm bảo một người không bị đối xử khác biệt?", opts:["Laws against discrimination","No laws","Customs"], optsVi:["Luật chống phân biệt","Không luật","Phong tục"], a:0},
+{q:"Based on what is discrimination illegal?", qVi:"Phân biệt đối xử bất hợp pháp dựa trên gì?", opts:["Gender, race, disability, age","Only race","Only age"], optsVi:["Giới tính, chủng tộc, khuyết tật, tuổi tác","Chỉ chủng tộc","Chỉ tuổi tác"], a:0},
+{q:"What should determine achievements?", qVi:"Điều gì nên quyết định thành tựu?", opts:["Talents, work, effort","Birthright","Wealth"], optsVi:["Tài năng, công việc, nỗ lực","Quyền thừa kế","Giàu có"], a:0},
+{q:"Why no class distinctions?", qVi:"Tại sao không có phân biệt giai cấp?", opts:["To ensure fair go","To create inequality","For tradition"], optsVi:["Để đảm bảo fair go","Để tạo bất bình đẳng","Vì truyền thống"], a:0},
+{q:"What must citizens do regarding laws?", qVi:"Công dân phải làm gì liên quan đến luật pháp?", opts:["Obey them","Change them","Ignore them"], optsVi:["Tuân thủ chúng","Thay đổi chúng","Bỏ qua chúng"], a:0},
+{q:"In what elections must citizens vote?", qVi:"Công dân phải bỏ phiếu trong bầu cử nào?", opts:["Federal, state/territory","Only federal","None"], optsVi:["Liên bang, tiểu bang/lãnh thổ","Chỉ liên bang","Không"], a:0},
+{q:"What if Australia needs defense?", qVi:"Nếu Úc cần bảo vệ thì sao?", opts:["Citizens defend if needed","No defense","Foreign help only"], optsVi:["Công dân bảo vệ nếu cần","Không bảo vệ","Chỉ giúp nước ngoài"], a:0},
+{q:"What civic duty involves court?", qVi:"Nghĩa vụ công dân nào liên quan đến tòa án?", opts:["Serve on jury","Be a judge","No duty"], optsVi:["Phục vụ bồi thẩm","Làm thẩm phán","Không nghĩa vụ"], a:0},
+{q:"What privilege involves children overseas?", qVi:"Đặc quyền nào liên quan đến con cái ở nước ngoài?", opts:["Citizenship by descent","No privilege","Adoption only"], optsVi:["Quốc tịch theo dòng máu","Không đặc quyền","Chỉ nhận con nuôi"], a:0},
+{q:"What jobs are open to citizens?", qVi:"Công việc nào mở cho công dân?", opts:["Public service, defence force","Only private","No jobs"], optsVi:["Dịch vụ công, lực lượng quốc phòng","Chỉ tư nhân","Không công việc"], a:0},
+{q:"Can citizens run for office?", qVi:"Công dân có thể tranh cử không?", opts:["Yes, seek election to parliament","No","Only local"], optsVi:["Có, tranh cử vào nghị viện","Không","Chỉ địa phương"], a:0},
+{q:"What help overseas for citizens?", qVi:"Hỗ trợ gì ở nước ngoài cho công dân?", opts:["Consular assistance","No help","Only financial"], optsVi:["Hỗ trợ lãnh sự","Không hỗ trợ","Chỉ tài chính"], a:0},
+{q:"How many responsibilities are listed for citizens?", qVi:"Có bao nhiêu trách nhiệm được liệt kê cho công dân?", opts:["4","2","6"], optsVi:["4","2","6"], a:0},
+{q:"How many privileges are listed?", qVi:"Có bao nhiêu đặc quyền được liệt kê?", opts:["6","4","8"], optsVi:["6","4","8"], a:0},
+{q:"Is voting both a responsibility and privilege?", qVi:"Bỏ phiếu có phải vừa trách nhiệm vừa đặc quyền không?", opts:["Yes","No","Only responsibility"], optsVi:["Có","Không","Chỉ trách nhiệm"], a:0},
+{q:"What is the basis for respect in Australia?", qVi:"Cơ sở cho sự tôn trọng ở Úc là gì?", opts:["Regardless of background","Based on wealth","Based on religion"], optsVi:["Bất kể nền tảng","Dựa trên giàu có","Dựa trên tôn giáo"], a:0},
+{q:"What system ensures power from people?", qVi:"Hệ thống nào đảm bảo quyền lực từ người dân?", opts:["Parliamentary democracy","Absolute monarchy","Oligarchy"], optsVi:["Dân chủ nghị viện","Quân chủ tuyệt đối","Oligarchy"], a:0},
+{q:"Who is above the law in Australia?", qVi:"Ai ở trên pháp luật ở Úc?", opts:["No one","The Prime Minister","Religious leaders"], optsVi:["Không ai","Thủ tướng","Lãnh đạo tôn giáo"], a:0},
+{q:"What value is core to freedom of speech?", qVi:"Giá trị cốt lõi của tự do ngôn luận là gì?", opts:["Underpins democracy","Limits expression","Promotes silence"], optsVi:["Hỗ trợ dân chủ","Giới hạn biểu đạt","Thúc đẩy im lặng"], a:0},
+{q:"Can people campaign to change laws?", qVi:"Mọi người có thể vận động thay đổi luật không?", opts:["Yes, peacefully","No","Only government can"], optsVi:["Có, hòa bình","Không","Chỉ chính phủ"], a:0},
+{q:"What forms does freedom of expression take?", qVi:"Tự do biểu đạt có dạng nào?", opts:["Art, film, music, literature","Only art","Only music"], optsVi:["Nghệ thuật, phim, nhạc, văn học","Chỉ nghệ thuật","Chỉ nhạc"], a:0},
+{q:"Is freedom of association limited to certain groups?", qVi:"Tự do liên kết có bị giới hạn ở một số nhóm không?", opts:["No, any legal organization","Yes, only political","Yes, only religious"], optsVi:["Không, bất kỳ tổ chức hợp pháp nào","Có, chỉ chính trị","Có, chỉ tôn giáo"], a:0},
+{q:"Must protests be peaceful?", qVi:"Biểu tình phải hòa bình không?", opts:["Yes","No","Optional"], optsVi:["Có","Không","Tùy chọn"], a:0},
+{q:"What is Australia's religious heritage?", qVi:"Di sản tôn giáo của Úc là gì?", opts:["Judaeo-Christian","Islamic","Hindu"], optsVi:["Do Thái-Kitô giáo","Hồi giáo","Ấn Độ giáo"], a:0},
+{q:"Are there public holidays for Christian events?", qVi:"Có ngày lễ công cộng cho sự kiện Kitô giáo không?", opts:["Yes","No","Only one"], optsVi:["Có","Không","Chỉ một"], a:0},
+{q:"Is there an official religion?", qVi:"Có tôn giáo chính thức không?", opts:["No","Yes","In some states"], optsVi:["Không","Có","Ở một số tiểu bang"], a:0},
+{q:"What if religious practice conflicts with law?", qVi:"Nếu thực hành tôn giáo xung đột với luật thì sao?", opts:["Law prevails","Religion prevails","Compromise"], optsVi:["Luật ưu tiên","Tôn giáo ưu tiên","Thỏa hiệp"], a:0},
+{q:"What protects against discrimination?", qVi:"Điều gì bảo vệ chống phân biệt đối xử?", opts:["Laws","Nothing","Traditions"], optsVi:["Luật pháp","Không gì","Truyền thống"], a:0},
+{q:"Do men and women have the same rights?", qVi:"Nam và nữ có quyền giống nhau không?", opts:["Yes","No","In work only"], optsVi:["Có","Không","Chỉ trong công việc"], a:0},
+{q:"What is 'fair go'?", qVi:"'Fair go' là gì?", opts:["Equal opportunity","Unfair chance","Class privilege"], optsVi:["Cơ hội bình đẳng","Cơ hội không công bằng","Đặc quyền giai cấp"], a:0},
+{q:"On what is success based?", qVi:"Thành công dựa trên gì?", opts:["Talents and effort","Background","Luck"], optsVi:["Tài năng và nỗ lực","Nền tảng","May mắn"], a:0},
+{q:"Are there class distinctions?", qVi:"Có phân biệt giai cấp không?", opts:["No formal","Yes","In cities only"], optsVi:["Không chính thức","Có","Chỉ ở thành phố"], a:0},
+{q:"List one citizen responsibility.", qVi:"Liệt kê một trách nhiệm công dân.", opts:["Obey laws","Break laws","Ignore elections"], optsVi:["Tuân thủ luật","Vi phạm luật","Bỏ qua bầu cử"], a:0},
+{q:"Must citizens vote?", qVi:"Công dân phải bỏ phiếu không?", opts:["Yes","No","Optional"], optsVi:["Có","Không","Tùy chọn"], a:0},
+{q:"What about defending Australia?", qVi:"Về bảo vệ Úc thì sao?", opts:["If needed","Never","Always"], optsVi:["Nếu cần","Không bao giờ","Luôn luôn"], a:0},
+{q:"Jury service?", qVi:"Phục vụ bồi thẩm?", opts:["If called","Always","Never"], optsVi:["Nếu được gọi","Luôn","Không bao giờ"], a:0},
+{q:"Children citizenship?", qVi:"Quốc tịch con cái?", opts:["By descent if overseas","No","Automatic"], optsVi:["Theo dòng máu nếu ở nước ngoài","Không","Tự động"], a:0},
+{q:"Jobs in public service?", qVi:"Công việc dịch vụ công?", opts:["Yes","No","Only temporary"], optsVi:["Có","Không","Chỉ tạm thời"], a:0},
+{q:"Seek parliament?", qVi:"Tranh cử nghị viện?", opts:["Yes","No","Only if rich"], optsVi:["Có","Không","Chỉ nếu giàu"], a:0},
+{q:"Consular help?", qVi:"Hỗ trợ lãnh sự?", opts:["Yes overseas","No","Only in Australia"], optsVi:["Có ở nước ngoài","Không","Chỉ ở Úc"], a:0}, 
+{q: "// END PART 2" }, // 103 Câu
+ 
+// PART 3: Government and the law in Australia (99 questions)
+{q: "// PART 3" },
+{q:"What is Australia's system of government?", qVi:"Hệ thống chính phủ của Úc là gì?", opts:["Parliamentary democracy","Presidential democracy","Monarchy only"], optsVi:["Dân chủ nghị viện","Dân chủ tổng thống","Chỉ quân chủ"], a:0},
+{q:"Who is Australia's head of state?", qVi:"Ai là nguyên thủ quốc gia Úc?", opts:["The King","The Prime Minister","The Governor-General"], optsVi:["Nhà vua","Thủ tướng","Toàn quyền"], a:0},
+{q:"Who represents the King in Australia?", qVi:"Ai đại diện cho Nhà vua ở Úc?", opts:["Governor-General","Prime Minister","President"], optsVi:["Toàn quyền","Thủ tướng","Tổng thống"], a:0},
+{q:"How many levels of government are there in Australia?", qVi:"Có bao nhiêu cấp chính quyền ở Úc?", opts:["Three","Two","Four"], optsVi:["Ba","Hai","Bốn"], a:0},
+{q:"What are the three levels of government in Australia?", qVi:"Ba cấp chính quyền ở Úc là gì?", opts:["Commonwealth, state/territory, local","Federal, national, regional","Central, provincial, municipal"], optsVi:["Liên bang, tiểu bang/lãnh thổ, địa phương","Liên bang, quốc gia, khu vực","Trung ương, tỉnh, thành phố"], a:0},
+{q:"What is the role of the Commonwealth (federal) government?", qVi:"Vai trò của chính phủ Liên bang là gì?", opts:["National matters like defence, foreign affairs, immigration","Local roads and rubbish","Schools and hospitals"], optsVi:["Các vấn đề quốc gia như quốc phòng, ngoại giao, di trú","Đường địa phương và rác","Trường học và bệnh viện"], a:0},
+{q:"What are state and territory governments responsible for?", qVi:"Chính quyền tiểu bang và lãnh thổ chịu trách nhiệm gì?", opts:["Schools, hospitals, police, public transport","Defence and foreign affairs","Local parks"], optsVi:["Trường học, bệnh viện, cảnh sát, giao thông công cộng","Quốc phòng và ngoại giao","Công viên địa phương"], a:0},
+{q:"What do local governments manage?", qVi:"Chính quyền địa phương quản lý gì?", opts:["Local roads, rubbish collection, parks","National defence","Schools"], optsVi:["Đường địa phương, thu gom rác, công viên","Quốc phòng quốc gia","Trường học"], a:0},
+{q:"How do Australian citizens have a say in government?", qVi:"Công dân Úc có tiếng nói trong chính phủ như thế nào?", opts:["By voting for representatives","By direct decisions","By appointing leaders"], optsVi:["Bằng cách bỏ phiếu chọn đại diện","Bằng quyết định trực tiếp","Bằng bổ nhiệm lãnh đạo"], a:0},
+{q:"What type of democracy does Australia have?", qVi:"Úc có loại dân chủ nào?", opts:["Representative democracy","Direct democracy","Absolute democracy"], optsVi:["Dân chủ đại diện","Dân chủ trực tiếp","Dân chủ tuyệt đối"], a:0},
+{q:"How often are elections held for the House of Representatives?", qVi:"Bầu cử Hạ viện diễn ra bao lâu một lần?", opts:["Every three years","Every four years","Every five years"], optsVi:["Mỗi ba năm","Mỗi bốn năm","Mỗi năm năm"], a:0},
+{q:"How often are elections held for the Senate?", qVi:"Bầu cử Thượng viện diễn ra bao lâu một lần?", opts:["Every six years","Every three years","Every four years"], optsVi:["Mỗi sáu năm","Mỗi ba năm","Mỗi bốn năm"], a:0},
+{q:"What is the Australian Parliament made up of?", qVi:"Quốc hội Úc gồm những gì?", opts:["House of Representatives and Senate","Only House of Representatives","King and Parliament"], optsVi:["Hạ viện và Thượng viện","Chỉ Hạ viện","Nhà vua và Quốc hội"], a:0},
+{q:"Who forms the Australian government?", qVi:"Ai thành lập chính phủ Úc?", opts:["The party or coalition with majority in House of Representatives","The Senate","The King"], optsVi:["Đảng hoặc liên minh có đa số ở Hạ viện","Thượng viện","Nhà vua"], a:0},
+{q:"What is the opposition in parliament?", qVi:"Đối lập trong quốc hội là gì?", opts:["Party or coalition with second most seats in House","Minority parties","Government allies"], optsVi:["Đảng hoặc liên minh có số ghế nhiều thứ hai ở Hạ viện","Các đảng thiểu số","Đồng minh chính phủ"], a:0},
+{q:"What is the role of the opposition?", qVi:"Vai trò của đối lập là gì?", opts:["Question government decisions and actions","Make laws","Administer laws"], optsVi:["Chất vấn quyết định và hành động chính phủ","Làm luật","Thực thi luật"], a:0},
+{q:"How are laws made in Australia?", qVi:"Luật ở Úc được làm như thế nào?", opts:["Passed by both houses of parliament and assented by Governor-General","Only by House","By referendum"], optsVi:["Được thông qua bởi cả hai viện quốc hội và phê chuẩn bởi Toàn quyền","Chỉ bởi Hạ viện","Bằng trưng cầu dân ý"], a:0},
+{q:"Who administers Australian laws?", qVi:"Ai thực thi luật Úc?", opts:["Courts and police","Parliament","Government departments"], optsVi:["Tòa án và cảnh sát","Quốc hội","Các bộ chính phủ"], a:0},
+{q:"What does separation of powers mean?", qVi:"Phân quyền nghĩa là gì?", opts:["Legislative, executive, judicial powers separate","All powers in one body","Powers shared completely"], optsVi:["Quyền lập pháp, hành pháp, tư pháp tách biệt","Tất cả quyền trong một cơ quan","Quyền chia sẻ hoàn toàn"], a:0},
+{q:"What is the legislative power?", qVi:"Quyền lập pháp là gì?", opts:["Power to make and change laws","Power to administer laws","Power to interpret laws"], optsVi:["Quyền làm và thay đổi luật","Quyền thực thi luật","Quyền giải thích luật"], a:0},
+{q:"Who holds legislative power in Australia?", qVi:"Ai nắm quyền lập pháp ở Úc?", opts:["Parliament","Government","Courts"], optsVi:["Quốc hội","Chính phủ","Tòa án"], a:0},
+{q:"What is the executive power?", qVi:"Quyền hành pháp là gì?", opts:["Power to administer laws","Make laws","Interpret laws"], optsVi:["Quyền thực thi luật","Làm luật","Giải thích luật"], a:0},
+{q:"Who holds executive power?", qVi:"Ai nắm quyền hành pháp?", opts:["Prime Minister, Cabinet, government departments","Parliament","High Court"], optsVi:["Thủ tướng, Nội các, các bộ chính phủ","Quốc hội","Tòa án Tối cao"], a:0},
+{q:"What is the judicial power?", qVi:"Quyền tư pháp là gì?", opts:["Power to interpret and apply laws","Make laws","Administer laws"], optsVi:["Quyền giải thích và áp dụng luật","Làm luật","Thực thi luật"], a:0},
+{q:"Who holds judicial power?", qVi:"Ai nắm quyền tư pháp?", opts:["Courts including High Court","Parliament","Government"], optsVi:["Tòa án bao gồm Tòa án Tối cao","Quốc hội","Chính phủ"], a:0},
+{q:"Why is separation of powers important?", qVi:"Tại sao phân quyền quan trọng?", opts:["To limit government power and protect citizens","To concentrate power","To speed up decisions"], optsVi:["Để giới hạn quyền lực chính phủ và bảo vệ công dân","Để tập trung quyền lực","Để quyết định nhanh"], a:0},
+{q:"What is responsible government?", qVi:"Chính phủ có trách nhiệm là gì?", opts:["Government accountable to parliament and people","Government without accountability","Government by king"], optsVi:["Chính phủ chịu trách nhiệm trước quốc hội và nhân dân","Chính phủ không chịu trách nhiệm","Chính phủ bởi vua"], a:0},
+{q:"How is the government held accountable?", qVi:"Chính phủ được giữ trách nhiệm như thế nào?", opts:["Through elections and parliament questions","No accountability","By courts only"], optsVi:["Qua bầu cử và chất vấn quốc hội","Không trách nhiệm","Chỉ bởi tòa án"], a:0},
+{q:"What is a referendum?", qVi:"Trưng cầu dân ý là gì?", opts:["Vote to change the Constitution","Regular election","Local vote"], optsVi:["Bỏ phiếu thay đổi Hiến pháp","Bầu cử thường kỳ","Bỏ phiếu địa phương"], a:0},
+{q:"When is a referendum successful?", qVi:"Trưng cầu dân ý thành công khi nào?", opts:["Majority nationally and in majority of states","Simple majority only","All states agree"], optsVi:["Đa số quốc gia và đa số tiểu bang","Chỉ đa số đơn giản","Tất cả tiểu bang đồng ý"], a:0},
+{q:"What is the Australian Constitution?", qVi:"Hiến pháp Úc là gì?", opts:["Set of rules for governing Australia","Ordinary law","International treaty"], optsVi:["Bộ quy tắc quản trị Úc","Luật thông thường","Hiệp ước quốc tế"], a:0},
+{q:"When did the Australian Constitution come into effect?", qVi:"Hiến pháp Úc có hiệu lực khi nào?", opts:["1901","1788","1967"], optsVi:["1901","1788","1967"], a:0},
+{q:"What does the Constitution establish?", qVi:"Hiến pháp thiết lập gì?", opts:["Parliament, executive, judiciary","Only parliament","States only"], optsVi:["Quốc hội, hành pháp, tư pháp","Chỉ quốc hội","Chỉ tiểu bang"], a:0},
+{q:"Who is the leader of the Australian government?", qVi:"Lãnh đạo chính phủ Úc là ai?", opts:["Prime Minister","Governor-General","King"], optsVi:["Thủ tướng","Toàn quyền","Nhà vua"], a:0},
+{q:"How is the Prime Minister chosen?", qVi:"Thủ tướng được chọn như thế nào?", opts:["Leader of majority party in House","Elected directly","Appointed by King"], optsVi:["Lãnh đạo đảng đa số ở Hạ viện","Bầu trực tiếp","Bổ nhiệm bởi Vua"], a:0},
+{q:"What is Cabinet?", qVi:"Nội các là gì?", opts:["Senior ministers advising Prime Minister","All ministers","Opposition leaders"], optsVi:["Các bộ trưởng cao cấp tư vấn Thủ tướng","Tất cả bộ trưởng","Lãnh đạo đối lập"], a:0},
+{q:"What is the role of the High Court?", qVi:"Vai trò của Tòa án Tối cao là gì?", opts:["Interpret the Constitution and laws","Make laws","Administer daily laws"], optsVi:["Giải thích Hiến pháp và luật","Làm luật","Thực thi luật hàng ngày"], a:0},
+{q:"Are Australian courts independent?", qVi:"Tòa án Úc có độc lập không?", opts:["Yes","No","Partially"], optsVi:["Có","Không","Một phần"], a:0},
+{q:"What ensures fair trials in Australia?", qVi:"Điều gì đảm bảo xét xử công bằng ở Úc?", opts:["Independent courts","Government control","Public opinion"], optsVi:["Tòa án độc lập","Kiểm soát chính phủ","Ý kiến công chúng"], a:0},
+{q:"How many mainland territories?", qVi:"Có bao nhiêu lãnh thổ đại lục?", opts:["Two","One","Three"], optsVi:["Hai","Một","Ba"], a:0},
+{q:"Do territories have the same powers as states?", qVi:"Lãnh thổ có quyền giống tiểu bang không?", opts:["Similar but parliament can override","Exactly the same","No powers"], optsVi:["Tương tự nhưng quốc hội có thể phủ quyết","Hoàn toàn giống","Không quyền"], a:0},
+{q:"What is the capital territory?", qVi:"Lãnh thổ thủ đô là gì?", opts:["Australian Capital Territory","Northern Territory","New South Wales"], optsVi:["Australian Capital Territory","Northern Territory","New South Wales"], a:0},
+{q:"Who leads state governments?", qVi:"Ai lãnh đạo chính quyền tiểu bang?", opts:["Premier","Governor","Prime Minister"], optsVi:["Thủ hiến","Thống đốc","Thủ tướng"], a:0},
+{q:"Who represents the King in states?", qVi:"Ai đại diện Nhà vua ở tiểu bang?", opts:["Governor","Premier","Mayor"], optsVi:["Thống đốc","Thủ hiến","Thị trưởng"], a:0},
+{q:"What are local governments also called?", qVi:"Chính quyền địa phương còn gọi là gì?", opts:["Councils, shires","States","Territories"], optsVi:["Hội đồng, shire","Tiểu bang","Lãnh thổ"], a:0},
+{q:"How are local councillors elected?", qVi:"Nghị viên địa phương được bầu như thế nào?", opts:["By local residents","Appointed","Inherited"], optsVi:["Bởi cư dân địa phương","Bổ nhiệm","Thừa kế"], a:0},
+{q:"What services do local councils provide?", qVi:"Hội đồng địa phương cung cấp dịch vụ gì?", opts:["Rubbish collection, parks, local roads","Schools","Defence"], optsVi:["Thu gom rác, công viên, đường địa phương","Trường học","Quốc phòng"], a:0},
+{q:"How can citizens contact their representatives?", qVi:"Công dân có thể liên hệ đại diện như thế nào?", opts:["Write, phone, visit","Only vote","No contact"], optsVi:["Viết, gọi, thăm","Chỉ bỏ phiếu","Không liên hệ"], a:0},
+{q:"What can citizens do to propose changes?", qVi:"Công dân có thể làm gì để đề xuất thay đổi?", opts:["Petitions, peaceful protests","Violence","Nothing"], optsVi:["Kiến nghị, biểu tình hòa bình","Bạo lực","Không gì"], a:0},
+{q:"Is voting compulsory in Australia?", qVi:"Bỏ phiếu có bắt buộc ở Úc không?", opts:["Yes for citizens 18+","No","Only for men"], optsVi:["Có cho công dân từ 18 tuổi","Không","Chỉ nam"], a:0},
+{q:"What is a by-election?", qVi:"Bầu cử bổ sung là gì?", opts:["When a seat becomes vacant","Regular election","Referendum"], optsVi:["Khi ghế trống","Bầu cử thường kỳ","Trưng cầu dân ý"], a:0},
+{q:"What is the role of political parties?", qVi:"Vai trò của đảng chính trị là gì?", opts:["Group people with similar ideas","Make laws directly","Administer courts"], optsVi:["Nhóm người có ý tưởng tương tự","Làm luật trực tiếp","Thực thi tòa án"], a:0},
+{q:"Can citizens join political parties?", qVi:"Công dân có thể tham gia đảng chính trị không?", opts:["Yes","No","Only some"], optsVi:["Có","Không","Chỉ một số"], a:0},
+{q:"What is a coalition?", qVi:"Liên minh là gì?", opts:["Parties working together to form government","Opposition","Single party"], optsVi:["Các đảng hợp tác thành lập chính phủ","Đối lập","Đảng đơn lẻ"], a:0},
+{q:"How many senators per state?", qVi:"Mỗi tiểu bang có bao nhiêu thượng nghị sĩ?", opts:["12","6","Varies"], optsVi:["12","6","Thay đổi"], a:0},
+{q:"How many senators for territories?", qVi:"Lãnh thổ có bao nhiêu thượng nghị sĩ?", opts:["2 each","12","None"], optsVi:["2 mỗi","12","Không"], a:0},
+{q:"What reviews proposed laws in the Senate?", qVi:"Thượng viện xem xét gì?", opts:["Proposed laws from House","Only budget","Nothing"], optsVi:["Dự luật từ Hạ viện","Chỉ ngân sách","Không gì"], a:0},
+{q:"Can the Senate block money bills?", qVi:"Thượng viện có thể chặn dự luật tiền bạc không?", opts:["No, but can suggest changes","Yes completely","No role"], optsVi:["Không, nhưng có thể đề xuất thay đổi","Có hoàn toàn","Không vai trò"], a:0},
+{q:"Who opens parliament after election?", qVi:"Ai mở quốc hội sau bầu cử?", opts:["Governor-General","Prime Minister","King"], optsVi:["Toàn quyền","Thủ tướng","Nhà vua"], a:0},
+{q:"What is question time?", qVi:"Thời gian chất vấn là gì?", opts:["Opposition questions government","Government speeches","Law making"], optsVi:["Đối lập chất vấn chính phủ","Bài phát biểu chính phủ","Làm luật"], a:0},
+{q:"What is a bill?", qVi:"Dự luật là gì?", opts:["Proposed law","Passed law","Court decision"], optsVi:["Luật đề xuất","Luật thông qua","Quyết định tòa"], a:0},
+{q:"How does a bill become law?", qVi:"Dự luật trở thành luật như thế nào?", opts:["Passed both houses and royal assent","Only one house","Government decree"], optsVi:["Thông qua cả hai viện và phê chuẩn hoàng gia","Chỉ một viện","Sắc lệnh chính phủ"], a:0},
+{q:"What is royal assent?", qVi:"Phê chuẩn hoàng gia là gì?", opts:["Governor-General signs bill into law","King personally","Parliament vote"], optsVi:["Toàn quyền ký dự luật thành luật","Nhà vua trực tiếp","Bỏ phiếu quốc hội"], a:0},
+{q:"Who enforces laws?", qVi:"Ai thi hành luật?", opts:["Police and courts","Parliament","Citizens"], optsVi:["Cảnh sát và tòa án","Quốc hội","Công dân"], a:0},
+{q:"What is the rule of law in government context?", qVi:"Quy tắc pháp quyền trong ngữ cảnh chính phủ là gì?", opts:["Everyone obeys laws, including government","Government above law","No laws"], optsVi:["Mọi người tuân thủ luật, bao gồm chính phủ","Chính phủ trên luật","Không luật"], a:0},
+{q:"Can parliament override territory laws?", qVi:"Quốc hội có thể phủ quyết luật lãnh thổ không?", opts:["Yes","No","Only states"], optsVi:["Có","Không","Chỉ tiểu bang"], a:0},
+{q:"What is federalism?", qVi:"Liên bang chế là gì?", opts:["Division of power between commonwealth and states","Centralised power","No states"], optsVi:["Phân chia quyền giữa liên bang và tiểu bang","Quyền tập trung","Không tiểu bang"], a:0},
+{q:"How can the Constitution be changed?", qVi:"Hiến pháp có thể thay đổi như thế nào?", opts:["By referendum","By parliament only","By court"], optsVi:["Bằng trưng cầu dân ý","Chỉ bởi quốc hội","Bởi tòa án"], a:0},
+{q:"What majority is needed for referendum?", qVi:"Cần đa số gì cho trưng cầu dân ý?", opts:["Double majority","Simple majority","Unanimous"], optsVi:["Đa số kép","Đa số đơn giản","Nhất trí"], a:0},
+{q:"How many referendums have succeeded?", qVi:"Có bao nhiêu trưng cầu dân ý thành công?", opts:["Few (8 out of 44)","All","None"], optsVi:["Ít (8 trong 44)","Tất cả","Không"], a:0},
+{q:"What is the role of the Governor-General in law making?", qVi:"Vai trò của Toàn quyền trong làm luật là gì?", opts:["Give royal assent","Propose laws","Vote in parliament"], optsVi:["Phê chuẩn hoàng gia","Đề xuất luật","Bỏ phiếu quốc hội"], a:0},
+{q:"Is Australia a constitutional monarchy?", qVi:"Úc có phải quân chủ lập hiến không?", opts:["Yes","No, republic","No, dictatorship"], optsVi:["Có","Không, cộng hòa","Không, độc tài"], a:0},
+{q:"What limits the power of parliament?", qVi:"Điều gì giới hạn quyền lực quốc hội?", opts:["Constitution and courts","Nothing","Public opinion only"], optsVi:["Hiến pháp và tòa án","Không gì","Chỉ ý kiến công chúng"], a:0},
+{q:"Can citizens stand for parliament?", qVi:"Công dân có thể tranh cử quốc hội không?", opts:["Yes, if eligible","No","Only party members"], optsVi:["Có, nếu đủ điều kiện","Không","Chỉ thành viên đảng"], a:0},
+{q:"What is a secret ballot?", qVi:"Bỏ phiếu kín là gì?", opts:["Votes private","Public votes","No votes"], optsVi:["Bỏ phiếu riêng tư","Bỏ phiếu công khai","Không bỏ phiếu"], a:0},
+{q:"Is voting secret in Australia?", qVi:"Bỏ phiếu ở Úc có kín không?", opts:["Yes","No","Optional"], optsVi:["Có","Không","Tùy chọn"], a:0},
+{q:"What is preferential voting?", qVi:"Bỏ phiếu ưu tiên là gì?", opts:["Number candidates in order","First past post","Random"], optsVi:["Số thứ tự ứng viên","Ai nhiều phiếu nhất","Ngẫu nhiên"], a:0},
+{q:"Which voting system for House?", qVi:"Hệ thống bỏ phiếu cho Hạ viện là gì?", opts:["Preferential","Proportional","First past post"], optsVi:["Ưu tiên","Tỷ lệ","Ai nhiều nhất"], a:0},
+{q:"Which for Senate?", qVi:"Cho Thượng viện?", opts:["Proportional representation","Preferential","Simple majority"], optsVi:["Tỷ lệ đại diện","Ưu tiên","Đa số đơn giản"], a:0},
+{q:"What is the Australian Electoral Commission?", qVi:"Ủy ban Bầu cử Úc là gì?", opts:["Independent body running elections","Government department","Party controlled"], optsVi:["Cơ quan độc lập tổ chức bầu cử","Bộ chính phủ","Đảng kiểm soát"], a:0},
+{q:"Is enrolment to vote compulsory?", qVi:"Đăng ký bỏ phiếu có bắt buộc không?", opts:["Yes for eligible citizens","No","Optional"], optsVi:["Có cho công dân đủ điều kiện","Không","Tùy chọn"], a:0},
+{q:"At what age must you enrol to vote?", qVi:"Từ tuổi nào phải đăng ký bỏ phiếu?", opts:["18","16","21"], optsVi:["18","16","21"], a:0},
+{q:"Can dual citizens vote?", qVi:"Công dân kép có bỏ phiếu không?", opts:["Yes, if Australian","No","Only one"], optsVi:["Có, nếu Úc","Không","Chỉ một"], a:0},
+{q:"What is the purpose of the citizenship test?", qVi:"Mục đích của kỳ thi quốc tịch là gì?", opts:["Assess knowledge of government and law","Test language only","No purpose"], optsVi:["Đánh giá kiến thức chính phủ và pháp luật","Chỉ kiểm tra ngôn ngữ","Không mục đích"], a:0},
+{q:"How do citizens participate in law making?", qVi:"Công dân tham gia làm luật như thế nào?", opts:["Through elected representatives","Directly","No participation"], optsVi:["Qua đại diện được bầu","Trực tiếp","Không tham gia"], a:0},
+{q:"What protects freedom in Australia?", qVi:"Điều gì bảo vệ tự do ở Úc?", opts:["Constitution, laws, democracy","Nothing","Government control"], optsVi:["Hiến pháp, luật, dân chủ","Không gì","Kiểm soát chính phủ"], a:0},
+{q:"Is Australia a federation?", qVi:"Úc có phải liên bang không?", opts:["Yes","No","Partially"], optsVi:["Có","Không","Một phần"], a:0},
+{q:"What year was federation?", qVi:"Liên bang năm nào?", opts:["1901","1788","1900"], optsVi:["1901","1788","1900"], a:0},
+{q:"Who can propose bills?", qVi:"Ai có thể đề xuất dự luật?", opts:["Members of parliament","Citizens directly","Government only"], optsVi:["Nghị sĩ","Công dân trực tiếp","Chỉ chính phủ"], a:0},
+{q:"Who is the Commander-in-Chief of the Australian Defence Force?", qVi:"Ai là Tổng tư lệnh Lực lượng Quốc phòng Úc?", opts:["The Prime Minister","The Governor-General","The Minister for Defence"], optsVi:["Thủ tướng","Toàn quyền","Bộ trưởng Quốc phòng"], a:1},
+{q:"What is the executive council?", qVi:"Hội đồng Hành pháp là gì?", opts:["Advises Governor-General","Makes laws","Judges cases"], optsVi:["Tư vấn Toàn quyền","Làm luật","Xét xử"], a:0},
+{q:"Are ministers part of executive?", qVi:"Bộ trưởng có phần hành pháp không?", opts:["Yes","No","Sometimes"], optsVi:["Có","Không","Đôi khi"], a:0},
+{q:"What is judicial review?", qVi:"Xem xét tư pháp là gì?", opts:["Courts check if laws constitutional","Make new laws","Enforce laws"], optsVi:["Tòa án kiểm tra luật có hợp hiến","Làm luật mới","Thi hành luật"], a:0},
+{q:"Can High Court declare laws invalid?", qVi:"Tòa án Tối cao có thể tuyên luật vô hiệu không?", opts:["Yes, if unconstitutional","No","Only suggest"], optsVi:["Có, nếu vi hiến","Không","Chỉ đề xuất"], a:0},
+{q:"What is common law?", qVi:"Common law là gì?", opts:["Law from court decisions","Statute law","Constitutional"], optsVi:["Luật từ quyết định tòa","Luật thành văn","Hiến pháp"], a:0},
+{q:"Does Australia have common law tradition?", qVi:"Úc có truyền thống common law không?", opts:["Yes, from Britain","No","Civil law"], optsVi:["Có, từ Anh","Không","Civil law"], a:0},
+{q:"What ensures government accountability?", qVi:"Điều gì đảm bảo trách nhiệm chính phủ?", opts:["Elections, parliament, courts","No mechanism","Public only"], optsVi:["Bầu cử, quốc hội, tòa án","Không cơ chế","Chỉ công chúng"], a:0},
+{q:"Can citizens serve on juries?", qVi:"Công dân có thể phục vụ bồi thẩm không?", opts:["Yes, if called","No","Voluntary only"], optsVi:["Có, nếu được gọi","Không","Chỉ tự nguyện"], a:0},
+{q:"Is jury service a responsibility?", qVi:"Phục vụ bồi thẩm có phải trách nhiệm không?", opts:["Yes","No","Privilege"], optsVi:["Có","Không","Đặc quyền"], a:0},
+{ q: "// END PART 3" }, // 99 Câu
+
+// PART 4: Australian values (87 questions)
+{q: "// PART 4" },
+{q:"What are Australian values based on?", qVi:"Giá trị Úc dựa trên gì?", opts:["Freedom, respect, fairness and equality of opportunity","Power, control and inequality","Wealth and status"], optsVi:["Tự do, tôn trọng, công bằng và bình đẳng cơ hội","Quyền lực, kiểm soát và bất bình đẳng","Giàu có và địa vị"], a:0},
+{q:"Why are Australian values important?", qVi:"Tại sao giá trị Úc quan trọng?", opts:["They keep the community secure, prosperous and peaceful","They divide the community","They promote conflict"], optsVi:["Chúng giữ cộng đồng an toàn, thịnh vượng và hòa bình","Chúng chia rẽ cộng đồng","Chúng thúc đẩy xung đột"], a:0},
+{q:"What is Australian citizenship about in terms of values?", qVi:"Quốc tịch Úc là về gì liên quan đến giá trị?", opts:["Living out these values in everyday life","Ignoring values","Only following laws"], optsVi:["Sống theo các giá trị này trong đời sống hàng ngày","Bỏ qua giá trị","Chỉ tuân thủ luật"], a:0},
+{q:"What does Australian society value regarding the English language?", qVi:"Xã hội Úc coi trọng gì về tiếng Anh?", opts:["As the national language and unifying element","As one of many languages only","No importance"], optsVi:["Là ngôn ngữ quốc gia và yếu tố thống nhất","Là một trong nhiều ngôn ngữ","Không quan trọng"], a:0},
+{q:"Should people in Australia make an effort to learn English?", qVi:"Mọi người ở Úc có nên nỗ lực học tiếng Anh không?", opts:["Yes","No","Only if they want"], optsVi:["Có","Không","Chỉ nếu họ muốn"], a:0},
+{q:"Why is it important to learn English in Australia?", qVi:"Tại sao học tiếng Anh ở Úc quan trọng?", opts:["To get education, job and integrate into community","For travel only","No reason"], optsVi:["Để có giáo dục, việc làm và hòa nhập cộng đồng","Chỉ để du lịch","Không lý do"], a:0},
+{q:"What must applicants for citizenship undertake regarding English?", qVi:"Người nộp đơn quốc tịch phải cam kết gì về tiếng Anh?", opts:["Make reasonable efforts to learn if not native","Nothing","Avoid learning"], optsVi:["Nỗ lực hợp lý để học nếu không phải tiếng mẹ đẻ","Không gì","Tránh học"], a:0},
+{q:"What is equality of men and women in Australia?", qVi:"Bình đẳng nam nữ ở Úc là gì?", opts:["Men and women have equal rights and opportunities","Men have more rights","Women have more rights"], optsVi:["Nam và nữ có quyền và cơ hội bình đẳng","Nam có nhiều quyền hơn","Nữ có nhiều quyền hơn"], a:0},
+{q:"Can people in Australia discriminate based on gender?", qVi:"Mọi người ở Úc có thể phân biệt đối xử dựa trên giới tính không?", opts:["No, it is against the law","Yes","Sometimes"], optsVi:["Không, vi phạm luật","Có","Đôi khi"], a:0},
+{q:"What does Australian law say about marriage?", qVi:"Luật Úc nói gì về hôn nhân?", opts:["Two people can marry, including same-sex","Only opposite-sex","No marriage"], optsVi:["Hai người có thể kết hôn, bao gồm đồng giới","Chỉ khác giới","Không hôn nhân"], a:0},
+{q:"What is freedom of religion in Australia?", qVi:"Tự do tôn giáo ở Úc là gì?", opts:["People can follow any religion or none","Only certain religions","Must follow one"], optsVi:["Mọi người có thể theo bất kỳ tôn giáo nào hoặc không","Chỉ một số tôn giáo","Phải theo một"], a:0},
+{q:"Does Australian law give preferential treatment based on religion?", qVi:"Luật Úc có ưu đãi dựa trên tôn giáo không?", opts:["No","Yes","Sometimes"], optsVi:["Không","Có","Đôi khi"], a:0},
+{q:"What is mutual respect in Australia?", qVi:"Tôn trọng lẫn nhau ở Úc là gì?", opts:["Treat others with dignity and respect regardless of background","Treat only similar people","Ignore differences"], optsVi:["Đối xử với người khác bằng phẩm giá và tôn trọng bất kể nền tảng","Chỉ đối xử tốt với người tương tự","Bỏ qua khác biệt"], a:0},
+{q:"What is a 'fair go' in Australia?", qVi:"'Fair go' ở Úc là gì?", opts:["Equality of opportunity","Privilege for some","No opportunity"], optsVi:["Bình đẳng cơ hội","Đặc quyền cho một số","Không cơ hội"], a:0},
+{q:"What is mateship in Australia?", qVi:"Mateship ở Úc là gì?", opts:["Helping each other in times of need","Competing always","Ignoring others"], optsVi:["Giúp đỡ lẫn nhau lúc khó khăn","Luôn cạnh tranh","Bỏ qua người khác"], a:0},
+{q:"What is expected of everyone in Australia regarding contribution?", qVi:"Mọi người ở Úc được mong đợi gì về đóng góp?", opts:["Participate and contribute to community","Isolate","Take only"], optsVi:["Tham gia và đóng góp cho cộng đồng","Cô lập","Chỉ nhận"], a:0},
+{q:"What responsibility do people have regarding support?", qVi:"Mọi người có trách nhiệm gì về hỗ trợ?", opts:["Support themselves and family when able","Depend on others always","No responsibility"], optsVi:["Hỗ trợ bản thân và gia đình khi có thể","Luôn phụ thuộc người khác","Không trách nhiệm"], a:0},
+{q:"What is volunteering in Australia?", qVi:"Tình nguyện ở Úc là gì?", opts:["Giving time without payment","Paid work","Mandatory work"], optsVi:["Cho thời gian mà không lương","Công việc có lương","Công việc bắt buộc"], a:0},
+{q:"Is family violence acceptable in Australia?", qVi:"Bạo lực gia đình có chấp nhận được ở Úc không?", opts:["No, never","Yes","Sometimes"], optsVi:["Không, không bao giờ","Có","Đôi khi"], a:0},
+{q:"Is it illegal to hurt someone in marriage?", qVi:"Có bất hợp pháp nếu làm tổn thương ai đó trong hôn nhân không?", opts:["Yes","No","Depends"], optsVi:["Có","Không","Tùy"], a:0},
+{q:"What are some forms of family violence?", qVi:"Một số hình thức bạo lực gia đình là gì?", opts:["Physical, emotional, financial control","Only physical","None"], optsVi:["Thể chất, cảm xúc, kiểm soát tài chính","Chỉ thể chất","Không"], a:0},
+{q:"Is forcing marriage acceptable?", qVi:"Ép buộc hôn nhân có chấp nhận được không?", opts:["No","Yes","Cultural"], optsVi:["Không","Có","Văn hóa"], a:0},
+{q:"What is cyber abuse?", qVi:"Lạm dụng mạng là gì?", opts:["Online harassment like sharing images without consent","Friendly online talk","No issue"], optsVi:["Quấy rối trực tuyến như chia sẻ hình ảnh không đồng ý","Nói chuyện thân thiện trực tuyến","Không vấn đề"], a:0},
+{q:"Are many forms of cyber abuse illegal?", qVi:"Nhiều hình thức lạm dụng mạng có bất hợp pháp không?", opts:["Yes","No","Only some"], optsVi:["Có","Không","Chỉ một số"], a:0},
+{q:"In the citizenship pledge, what do you pledge loyalty to?", qVi:"Trong lời cam kết quốc tịch, bạn cam kết trung thành với gì?", opts:["Australia and its people","Only government","Foreign country"], optsVi:["Úc và người dân Úc","Chỉ chính phủ","Quốc gia nước ngoài"], a:0},
+{q:"What do you share in the pledge?", qVi:"Bạn chia sẻ gì trong lời cam kết?", opts:["Democratic beliefs","Personal beliefs only","Nothing"], optsVi:["Niềm tin dân chủ","Chỉ niềm tin cá nhân","Không gì"], a:0},
+{q:"What do you respect in the pledge?", qVi:"Bạn tôn trọng gì trong lời cam kết?", opts:["Rights and liberties of Australia","Only laws","Personal rights"], optsVi:["Quyền và tự do của Úc","Chỉ luật","Quyền cá nhân"], a:0},
+{q:"What laws do you uphold and obey?", qVi:"Bạn duy trì và tuân thủ luật nào?", opts:["Laws of Australia","Foreign laws","No laws"], optsVi:["Luật Úc","Luật nước ngoài","Không luật"], a:0},
+{q:"What is parliamentary democracy in Australia based on?", qVi:"Dân chủ nghị viện Úc dựa trên gì?", opts:["Freedom of speech and association","Censorship","Silence"], optsVi:["Tự do ngôn luận và liên kết","Kiểm duyệt","Im lặng"], a:0},
+{q:"What is the rule of law in Australia?", qVi:"Quy tắc pháp quyền ở Úc là gì?", opts:["Everyone equal before the law","Some above law","No law"], optsVi:["Mọi người bình đẳng trước pháp luật","Một số trên pháp luật","Không pháp luật"], a:0},
+{q:"What equality does Australia value?", qVi:"Úc coi trọng bình đẳng nào?", opts:["Equality of opportunity","Inequality","Class system"], optsVi:["Bình đẳng cơ hội","Bất bình đẳng","Hệ thống giai cấp"], a:0},
+{q:"Is discrimination based on background allowed?", qVi:"Phân biệt đối xử dựa trên nền tảng có được phép không?", opts:["No","Yes","Sometimes"], optsVi:["Không","Có","Đôi khi"], a:0},
+{q:"What is compassion for those in need?", qVi:"Lòng trắc ẩn với người cần giúp là gì?", opts:["Australian value of fairness","No value","Selfishness"], optsVi:["Giá trị công bằng Úc","Không giá trị","Ích kỷ"], a:0},
+{q:"How should people contribute to community?", qVi:"Mọi người nên đóng góp cộng đồng như thế nào?", opts:["Through volunteering and support","By taking only","No contribution"], optsVi:["Qua tình nguyện và hỗ trợ","Chỉ nhận","Không đóng góp"], a:0},
+{q:"Is violence to change laws acceptable?", qVi:"Bạo lực để thay đổi luật có chấp nhận được không?", opts:["No","Yes","Sometimes"], optsVi:["Không","Có","Đôi khi"], a:0},
+{q:"What is important for integrating into community?", qVi:"Điều gì quan trọng để hòa nhập cộng đồng?", opts:["Learning English","Speaking native language only","Isolation"], optsVi:["Học tiếng Anh","Chỉ nói tiếng mẹ đẻ","Cô lập"], a:0},
+{q:"Are all people treated equally under law regardless of religion?", qVi:"Mọi người có được đối xử bình đẳng trước pháp luật bất kể tôn giáo không?", opts:["Yes","No","Depends on religion"], optsVi:["Có","Không","Tùy tôn giáo"], a:0},
+{q:"Can same-sex couples marry in Australia?", qVi:"Cặp đồng giới có thể kết hôn ở Úc không?", opts:["Yes","No","Only civil union"], optsVi:["Có","Không","Chỉ liên minh dân sự"], a:0},
+{q:"What is expected in times of need?", qVi:"Điều gì được mong đợi lúc khó khăn?", opts:["Mateship - help each other","Ignore","Compete"], optsVi:["Mateship - giúp đỡ lẫn nhau","Bỏ qua","Cạnh tranh"], a:0},
+{q:"Should people support themselves when able?", qVi:"Mọi người có nên tự hỗ trợ khi có thể không?", opts:["Yes","No","Depend on government"], optsVi:["Có","Không","Phụ thuộc chính phủ"], a:0},
+{q:"What is an example of contributing to community?", qVi:"Ví dụ đóng góp cộng đồng là gì?", opts:["Volunteering","Paid work only","Nothing"], optsVi:["Tình nguyện","Chỉ công việc có lương","Không gì"], a:0},
+{q:"Is hurting children acceptable?", qVi:"Làm tổn thương trẻ em có chấp nhận được không?", opts:["No","Yes","Discipline"], optsVi:["Không","Có","Kỷ luật"], a:0},
+{q:"Is controlling family finances abusively wrong?", qVi:"Kiểm soát tài chính gia đình lạm dụng có sai không?", opts:["Yes","No","Normal"], optsVi:["Có","Không","Bình thường"], a:0},
+{q:"Is sharing intimate images without consent illegal?", qVi:"Chia sẻ hình ảnh thân mật không đồng ý có bất hợp pháp không?", opts:["Yes","No","Free speech"], optsVi:["Có","Không","Tự do ngôn luận"], a:0},
+{q:"What do you pledge to share?", qVi:"Bạn cam kết chia sẻ gì?", opts:["Australia's democratic beliefs","Personal opinions","Nothing"], optsVi:["Niềm tin dân chủ Úc","Ý kiến cá nhân","Không gì"], a:0},
+{q:"What rights do you respect in the pledge?", qVi:"Bạn tôn trọng quyền nào trong lời cam kết?", opts:["Rights and liberties of the people","Only your rights","Government rights"], optsVi:["Quyền và tự do của người dân","Chỉ quyền bạn","Quyền chính phủ"], a:0},
+{q:"What do you uphold in the pledge?", qVi:"Bạn duy trì gì trong lời cam kết?", opts:["The laws of Australia","Old laws","No laws"], optsVi:["Luật Úc","Luật cũ","Không luật"], a:0},
+{q:"Can you use 'under God' in the pledge?", qVi:"Bạn có thể dùng 'under God' trong lời cam kết không?", opts:["Yes, optional","No","Must"], optsVi:["Có, tùy chọn","Không","Phải"], a:0},
+{q:"What is central to Australian community?", qVi:"Điều gì trung tâm của cộng đồng Úc?", opts:["Values of freedom, respect, fairness","Strict control","Division"], optsVi:["Giá trị tự do, tôn trọng, công bằng","Kiểm soát nghiêm","Chia rẽ"], a:0},
+{q:"How to live Australian values?", qVi:"Làm thế nào để sống theo giá trị Úc?", opts:["In everyday life and community","Only at ceremonies","Never"], optsVi:["Trong đời sống hàng ngày và cộng đồng","Chỉ tại lễ","Không bao giờ"], a:0},
+{q:"What unifies Australian society?", qVi:"Điều gì thống nhất xã hội Úc?", opts:["English language and values","Multiple languages only","No unity"], optsVi:["Tiếng Anh và giá trị","Chỉ nhiều ngôn ngữ","Không thống nhất"], a:0},
+{q:"Must you learn English for citizenship?", qVi:"Bạn có phải học tiếng Anh cho quốc tịch không?", opts:["Make reasonable efforts","No","Yes, fluent"], optsVi:["Nỗ lực hợp lý","Không","Có, lưu loát"], a:0},
+{q:"Do men and women have the same opportunities?", qVi:"Nam và nữ có cơ hội giống nhau không?", opts:["Yes","No","In some areas"], optsVi:["Có","Không","Ở một số lĩnh vực"], a:0},
+{q:"Is gender discrimination illegal?", qVi:"Phân biệt giới tính có bất hợp pháp không?", opts:["Yes","No","Cultural"], optsVi:["Có","Không","Văn hóa"], a:0},
+{q:"Can you follow no religion?", qVi:"Bạn có thể không theo tôn giáo nào không?", opts:["Yes","No","Must choose"], optsVi:["Có","Không","Phải chọn"], a:0},
+{q:"Is religious discrimination allowed?", qVi:"Phân biệt tôn giáo có được phép không?", opts:["No","Yes","In law"], optsVi:["Không","Có","Trong luật"], a:0},
+{q:"What does mutual respect include?", qVi:"Tôn trọng lẫn nhau bao gồm gì?", opts:["Dignity regardless of differences","Only similar people","No respect"], optsVi:["Phẩm giá bất kể khác biệt","Chỉ người tương tự","Không tôn trọng"], a:0},
+{q:"What is equality of opportunity?", qVi:"Bình đẳng cơ hội là gì?", opts:["Fair go for all","Privilege for few","No fairness"], optsVi:["Fair go cho tất cả","Đặc quyền cho ít người","Không công bằng"], a:0},
+{q:"Do Australians help in need?", qVi:"Người Úc có giúp lúc cần không?", opts:["Yes, mateship","No","Only family"], optsVi:["Có, mateship","Không","Chỉ gia đình"], a:0},
+{q:"Should you contribute to community?", qVi:"Bạn có nên đóng góp cộng đồng không?", opts:["Yes","No","Optional"], optsVi:["Có","Không","Tùy chọn"], a:0},
+{q:"Is self-support encouraged?", qVi:"Tự hỗ trợ có được khuyến khích không?", opts:["Yes, when able","No","Depend always"], optsVi:["Có, khi có thể","Không","Luôn phụ thuộc"], a:0},
+{q:"What is volunteering valued for?", qVi:"Tình nguyện được coi trọng vì gì?", opts:["Contributing without pay","Earning money","Mandatory"], optsVi:["Đóng góp không lương","Kiếm tiền","Bắt buộc"], a:0},
+{q:"Is any violence acceptable?", qVi:"Bạo lực nào có chấp nhận được không?", opts:["No","Yes","Some"], optsVi:["Không","Có","Một số"], a:0},
+{q:"Is online stalking illegal?", qVi:"Theo dõi trực tuyến có bất hợp pháp không?", opts:["Yes","No","Free"], optsVi:["Có","Không","Tự do"], a:0},
+{q:"Who do you pledge loyalty to?", qVi:"Bạn cam kết trung thành với ai?", opts:["Australia and its people","King only","Government"], optsVi:["Úc và người dân","Chỉ Vua","Chính phủ"], a:0},
+{q:"What beliefs do you share?", qVi:"Bạn chia sẻ niềm tin nào?", opts:["Democratic beliefs","Religious only","None"], optsVi:["Niềm tin dân chủ","Chỉ tôn giáo","Không"], a:0},
+{q:"What liberties do you respect?", qVi:"Bạn tôn trọng tự do nào?", opts:["Of Australia","Personal only","None"], optsVi:["Của Úc","Chỉ cá nhân","Không"], a:0},
+{q:"What do you obey?", qVi:"Bạn tuân thủ gì?", opts:["Laws of Australia","Customs only","Nothing"], optsVi:["Luật Úc","Chỉ phong tục","Không gì"], a:0},
+{q:"Are values central to community?", qVi:"Giá trị có trung tâm của cộng đồng không?", opts:["Yes","No","Peripheral"], optsVi:["Có","Không","Ngoại vi"], a:0},
+{q:"Does English unify society?", qVi:"Tiếng Anh có thống nhất xã hội không?", opts:["Yes","No","Divides"], optsVi:["Có","Không","Chia rẽ"], a:0},
+{q:"Effort to learn English?", qVi:"Nỗ lực học tiếng Anh?", opts:["Reasonable if needed","No effort","Full fluency"], optsVi:["Hợp lý nếu cần","Không nỗ lực","Lưu loát hoàn toàn"], a:0},
+{q:"Equal rights for genders?", qVi:"Quyền bình đẳng giới?", opts:["Yes","No","Partial"], optsVi:["Có","Không","Một phần"], a:0},
+{q:"Same-sex marriage legal?", qVi:"Hôn nhân đồng giới hợp pháp?", opts:["Yes","No","No"], optsVi:["Có","Không","Không"], a:0},
+{q:"Freedom to choose religion?", qVi:"Tự do chọn tôn giáo?", opts:["Yes, or none","No","Mandatory"], optsVi:["Có, hoặc không","Không","Bắt buộc"], a:0},
+{q:"No preferential treatment religion?", qVi:"Không ưu đãi tôn giáo?", opts:["Yes","No","Yes for majority"], optsVi:["Có","Không","Có cho đa số"], a:0},
+{q:"Treat others with dignity?", qVi:"Đối xử người khác phẩm giá?", opts:["Yes, always","No","Only friends"], optsVi:["Có, luôn","Không","Chỉ bạn bè"], a:0},
+{q:"Fair go means?", qVi:"Fair go nghĩa là?", opts:["Opportunity for all","Unequal","Favoritism"], optsVi:["Cơ hội cho tất cả","Bất bình đẳng","Thiên vị"], a:0},
+{q:"Mateship involves?", qVi:"Mateship liên quan?", opts:["Helping in need","Self only","Competition"], optsVi:["Giúp lúc cần","Chỉ bản thân","Cạnh tranh"], a:0},
+{q:"Participate in society?", qVi:"Tham gia xã hội?", opts:["Yes","No","Optional"], optsVi:["Có","Không","Tùy"], a:0},
+{q:"Support family when able?", qVi:"Hỗ trợ gia đình khi có thể?", opts:["Yes","No","Government does"], optsVi:["Có","Không","Chính phủ làm"], a:0},
+{q:"Volunteering is?", qVi:"Tình nguyện là?", opts:["Unpaid contribution","Paid","Forced"], optsVi:["Đóng góp không lương","Có lương","Ép buộc"], a:0},
+{q:"Family violence never justified?", qVi:"Bạo lực gia đình không bao giờ biện minh?", opts:["Yes","No","Sometimes"], optsVi:["Có","Không","Đôi khi"], a:0},
+{q:"Forced marriage illegal?", qVi:"Hôn nhân ép buộc bất hợp pháp?", opts:["Yes","No","Allowed"], optsVi:["Có","Không","Được phép"], a:0},
+{q:"Cyber abuse often illegal?", qVi:"Lạm dụng mạng thường bất hợp pháp?", opts:["Yes","No","Free expression"], optsVi:["Có","Không","Tự do biểu đạt"], a:0},
+{q:"Pledge to Australia?", qVi:"Cam kết với Úc?", opts:["Yes","No","Partial"], optsVi:["Có","Không","Một phần"], a:0},
+{q:"Share beliefs and respect rights?", qVi:"Chia sẻ niềm tin và tôn trọng quyền?", opts:["Yes","No","Ignore"], optsVi:["Có","Không","Bỏ qua"], a:0},
+{q:"Uphold and obey laws?", qVi:"Duy trì và tuân thủ luật?", opts:["Yes","No","Selectively"], optsVi:["Có","Không","Có chọn lọc"], a:0},
+{q: "// END PART 4" } // 87 Câu
+
+];
+
+        // ============ BIẾN TOÀN CỤC ============
+let CURRENT_QUESTIONS = [];
+let IS_ALL_MODE = false;        // true khi là All hoặc Part_One → Part_Four
+let SHOW_VIETNAMESE = false;
+let currentIndex = 0;
+let userAnswers = [];
+let timerInterval;
+let timeLeft = 45 * 60;
+
+/* =================== LỌC CÂU HỎI THỰC TẾ (loại bỏ marker) =================== */
+function getRealQuestions(questions) {
+    return questions.filter(q => q.hasOwnProperty('opts') && Array.isArray(q.opts));
+}
+
+/* =================== CHECK ĐÁP ÁN TỨC THÌ (All & Part mode) =================== */
+function checkAnswerInstant(qIndex, selectedOption) {
+    const correct = CURRENT_QUESTIONS[qIndex].a;
+
+    for (let i = 0; i < CURRENT_QUESTIONS[qIndex].opts.length; i++) {
+        const lbl = document.getElementById(`q${qIndex}o${i}_lbl`);
+        if (lbl) lbl.classList.remove("correct", "wrong");
+    }
+
+    const selectedLbl = document.getElementById(`q${qIndex}o${selectedOption}_lbl`);
+    const correctLbl   = document.getElementById(`q${qIndex}o${correct}_lbl`);
+
+    if (selectedOption === correct) {
+        selectedLbl.classList.add("correct");
+    } else {
+        selectedLbl.classList.add("wrong");
+        correctLbl.classList.add("correct");
+    }
+}
+
+/* =================== LOAD QUIZ =================== */
+function loadQuiz(selection) {
+    let list = [];
+    SHOW_VIETNAMESE = false;
+    IS_ALL_MODE = false;
+
+    if (selection === "all") {
+        IS_ALL_MODE = true;
+        list = QUESTION_BANK;
+    } else if (selection === "all-vi") {
+        IS_ALL_MODE = true;
+        SHOW_VIETNAMESE = true;
+        list = QUESTION_BANK;
+    }
+    // Các Part riêng biệt – chỉ lấy câu hỏi thực sự trong phần đó
+    else if (selection === "part1") {
+        IS_ALL_MODE = true;
+        SHOW_VIETNAMESE = true;
+        // Lấy từ sau "// PART 1" đến trước "// END PART 1"
+        const start = QUESTION_BANK.findIndex(q => q.q === "// PART 1") + 1;
+        const end = QUESTION_BANK.findIndex(q => q.q === "// END PART 1");
+        list = QUESTION_BANK.slice(start, end);
+    } else if (selection === "part2") {
+        IS_ALL_MODE = true;
+        SHOW_VIETNAMESE = true;
+        const start = QUESTION_BANK.findIndex(q => q.q === "// PART 2") + 1;
+        const end = QUESTION_BANK.findIndex(q => q.q === "// END PART 2");
+        list = QUESTION_BANK.slice(start, end);
+    } else if (selection === "part3") {
+        IS_ALL_MODE = true;
+        SHOW_VIETNAMESE = true;
+        const start = QUESTION_BANK.findIndex(q => q.q === "// PART 3") + 1;
+        const end = QUESTION_BANK.findIndex(q => q.q === "// END PART 3");
+        list = QUESTION_BANK.slice(start, end);
+    } else if (selection === "part4") {
+        IS_ALL_MODE = true;
+        SHOW_VIETNAMESE = true;
+        const start = QUESTION_BANK.findIndex(q => q.q === "// PART 4") + 1;
+        const end = QUESTION_BANK.findIndex(q => q.q === "// END PART 4");
+        list = QUESTION_BANK.slice(start, end);
+    }
+    // Practice Quiz 1 → 10 (20 câu mỗi lần)
+    else {
+        const n = parseInt(selection, 10);
+        const start = (n - 1) * 20;
+        list = QUESTION_BANK.slice(start, start + 20);
+    }
+
+    // Lọc bỏ các marker (chỉ giữ câu hỏi có opts)
+    CURRENT_QUESTIONS = getRealQuestions(list);
+    userAnswers = new Array(CURRENT_QUESTIONS.length).fill(null);
+
+    if (!IS_ALL_MODE) {
+        // Chế độ 20 câu bình thường
+        document.getElementById("quizHeader").style.display = "flex";
+        document.getElementById("progressBar").style.display = "flex";
+        document.getElementById("navigation").style.display = "flex";
+        document.getElementById("resetBtn").style.display = "none";
+
+        document.getElementById("quizTitle").textContent = `Practice Quiz ${selection}`;
+        buildProgressBar();
+        startTimer();
+        currentIndex = 0;
+        renderSingleQuestion(0);
+    } else {
+        // All mode hoặc Part mode
+        document.getElementById("quizHeader").style.display = "none";
+        document.getElementById("progressBar").style.display = "none";
+        document.getElementById("navigation").style.display = "none";
+        document.getElementById("resetBtn").style.display = "block";
+        document.getElementById("resetBtn").textContent = "Reset All";
+        renderAllQuestions();
+    }
+
+    document.getElementById("results").style.display = "none";
+}
+
+/* =================== ALL & PART MODE – HIỂN THỊ =================== */
+function renderAllQuestions() {
+    const container = document.getElementById("questions");
+    container.innerHTML = "";
+
+    CURRENT_QUESTIONS.forEach((q, i) => {
+        let html = `<div style="margin:35px 0;">`;
+
+        html += `<strong style="font-size:19px;">${i + 1}. ${q.q}`;
+        if (SHOW_VIETNAMESE && q.qVi) {
+            html += ` <span style="color:#0066cc; font-style:italic;">[${q.qVi}]</span>`;
+        }
+        html += `</strong>`;
+
+        html += `<div style="margin-top:18px;">`;
+        q.opts.forEach((opt, j) => {
+            let optText = opt;
+            if (SHOW_VIETNAMESE && q.optsVi?.[j]) {
+                optText += ` <span style="color:#0066cc; font-style:italic;">[${q.optsVi[j]}]</span>`;
+            }
+            html += `
+                <label class="opt" id="q${i}o${j}_lbl">
+                    <input type="radio" name="q${i}" value="${j}" onchange="checkAnswerInstant(${i},${j})">
+                    ${optText}
+                </label>`;
+        });
+        html += `</div></div>`;
+        container.innerHTML += html;
+    });
+}
+
+/* =================== CÁC HÀM CHO CHẾ ĐỘ 20 CÂU (giữ nguyên) =================== */
+function buildProgressBar() {
+    const bar = document.getElementById("progressBar");
+    bar.innerHTML = "";
+    for (let i = 1; i <= 20; i++) {
+        const el = document.createElement("div");
+        el.className = "progress-item";
+        el.textContent = i;
+        bar.appendChild(el);
+    }
+    updateProgress();
+}
+function updateProgress() {
+    document.querySelectorAll(".progress-item").forEach((el, i) => {
+        el.classList.toggle("current", i === currentIndex);
+    });
+    document.getElementById("currentQuestion").textContent = `${currentIndex + 1}/20`;
+}
+function startTimer() {
+    clearInterval(timerInterval);
+    timeLeft = 45 * 60;
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            submitQuiz();
+        }
+    }, 1000);
+}
+function updateTimerDisplay() {
+    const m = String(Math.floor(timeLeft / 60)).padStart(2, "0");
+    const s = String(timeLeft % 60).padStart(2, "0");
+    document.getElementById("timer").textContent = `${m}:${s}`;
+}
+function renderSingleQuestion(idx) {
+    const container = document.getElementById("questions");
+    container.innerHTML = "";
+    const q = CURRENT_QUESTIONS[idx];
+
+    let html = `<div style="margin:40px 0;">`;
+    html += `<strong style="font-size:20px;">${idx + 1}. ${q.q}`;
+    if (SHOW_VIETNAMESE && q.qVi) {
+        html += ` <span style="color:#0066cc; font-style:italic; font-size:19px;">[${q.qVi}]</span>`;
+    }
+    html += `</strong>`;
+
+    html += `<div style="margin-top:25px;">`;
+    q.opts.forEach((opt, i) => {
+        let optText = opt;
+        if (SHOW_VIETNAMESE && q.optsVi?.[i]) {
+            optText += ` <span style="color:#0066cc; font-style:italic; font-size:18px;">[${q.optsVi[i]}]</span>`;
+        }
+        html += `
+            <label class="opt" id="q${idx}o${i}_lbl">
+                <input type="radio" name="q${idx}" value="${i}" onchange="saveAnswer(${idx},${i})">
+                ${optText}
+            </label>`;
+    });
+    html += `</div></div>`;
+    container.innerHTML = html;
+
+    if (userAnswers[idx] !== null) {
+        const r = container.querySelector(`input[value="${userAnswers[idx]}"]`);
+        if (r) r.checked = true;
+    }
+
+    document.getElementById("prevBtn").disabled = idx === 0;
+    document.getElementById("nextBtn").textContent = (idx === 19) ? "Submit" : "Next";
+    updateProgress();
+}
+function saveAnswer(idx, val) { userAnswers[idx] = val; }
+function nextQuestion() {
+    if (currentIndex < 19) {
+        currentIndex++;
+        renderSingleQuestion(currentIndex);
+    } else {
+        submitQuiz();
+    }
+}
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        renderSingleQuestion(currentIndex);
+    }
+}
+function submitQuiz() {
+    clearInterval(timerInterval);
+    let score = 0;
+    const wrong = [];
+
+    CURRENT_QUESTIONS.forEach((q, i) => {
+        if (userAnswers[i] === q.a) score++;
+        else wrong.push(i);
+    });
+
+    document.getElementById("results").style.display = "block";
+    document.getElementById("score").textContent = `Điểm: ${score} / ${CURRENT_QUESTIONS.length}`;
+
+    const ul = document.getElementById("wrongList");
+    ul.innerHTML = "";
+    wrong.forEach(i => {
+        const li = document.createElement("li");
+        li.textContent = `${i + 1}. ${CURRENT_QUESTIONS[i].q}`;
+        ul.appendChild(li);
+    });
+
+    document.getElementById("quizHeader").style.display = "none";
+    document.getElementById("progressBar").style.display = "none";
+    document.getElementById("questions").style.display = "none";
+    document.getElementById("navigation").style.display = "none";
+    document.getElementById("resetBtn").style.display = "block";
+}
+
+/* =================== SỰ KIỆN =================== */
+document.getElementById("quizSelect").addEventListener("change", e => loadQuiz(e.target.value));
+document.getElementById("prevBtn").addEventListener("click", prevQuestion);
+document.getElementById("nextBtn").addEventListener("click", nextQuestion);
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+    document.querySelectorAll(".correct,.wrong").forEach(el => el.classList.remove("correct", "wrong"));
+    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+    document.getElementById("results").style.display = "none";
+    const val = document.getElementById("quizSelect").value;
+    loadQuiz(val);
+});
+
+/* =================== KHỞI ĐỘNG =================== */
+loadQuiz('all-vi');
+    </script>
+</body>
+</html>
