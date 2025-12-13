@@ -67,7 +67,14 @@
         background: #006400;
         color: white;
     }
-    
+        .filter-btn.reset-btn {
+        background: #ff6b6b;
+        border-color: #cc0000;
+        color: white;
+    }
+    .filter-btn.reset-btn:hover {
+        background: #cc0000;
+    }
     table {width:100%; border-collapse:collapse; margin-top:20px; background:white; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
     th {background:#006400; color:white; padding:12px; text-align:center;}
     td {padding:10px; vertical-align:top; border-bottom:1px solid #ddd; text-align:center;}
@@ -158,6 +165,7 @@
         <div class="filter-btn active" data-mode="all">Show All</div>
         <div class="filter-btn" data-mode="checked">Checked</div>
         <div class="filter-btn" data-mode="unchecked">Unchecked</div>
+		<div class="filter-btn reset-btn" id="resetBtn">Reset</div>
     </div>
 
     <div class="controls">
@@ -295,6 +303,7 @@ const voiceSelect = document.getElementById('voiceSelect');
 const notice = document.getElementById('notice');
 const tbody = document.querySelector('#vocabTable tbody');
 const filterButtons = document.querySelectorAll('.filter-btn');
+const resetBtn = document.getElementById('resetBtn');
 
 const STORAGE_PREFIX = 'CITIZENSHIP_VOCAB_' + location.pathname.replace(/[^a-zA-Z0-9]/g, '_');
 
@@ -329,18 +338,36 @@ function loadAll() {
 // Đổi nút active + lọc
 function setActiveFilter(mode) {
     filterButtons.forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.mode === mode);
+        if (btn.id !== 'resetBtn') {
+            btn.classList.toggle('active', btn.dataset.mode === mode);
+        }
     });
 }
 
 filterButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        const mode = btn.dataset.mode;
-        setActiveFilter(mode);
-        filterRows(mode);
-        renumberVisible();
-        saveAll();
+    if (btn.id !== 'resetBtn') {
+        btn.addEventListener('click', () => {
+            const mode = btn.dataset.mode;
+            setActiveFilter(mode);
+            filterRows(mode);
+            renumberVisible();
+            saveAll();
+        });
+    }
+});
+
+// Xử lý nút Reset
+resetBtn.addEventListener('click', () => {
+    // Bỏ chọn tất cả checkbox
+    tbody.querySelectorAll('.row-check').forEach(cb => {
+        cb.checked = false;
     });
+    
+    // Chuyển về chế độ Show All
+    setActiveFilter('all');
+    filterRows('all');
+    renumberVisible();
+    saveAll();
 });
 
 tbody.addEventListener('change', (e) => {
@@ -448,6 +475,7 @@ document.querySelectorAll('[data-sentence]').forEach(btn => {
 
 </body>
 </html>
+
 
 
 
