@@ -22,13 +22,26 @@ h2 {
     font-size: 1rem;
 }
 
-h3 {
+h33 {
     text-align: right;
     color: #006400;
     margin: -3px 1 5px 0;
     top: 55px;
     font-size: 0.6rem;
 }
+
+
+        /* Dòng "Created by Thomas" - bên phải trên cùng */
+        .credit {
+            position: absolute;
+            top: 55px;
+            right: 20px;
+            z-index: 10;
+            font-size: 0.6rem;
+            color: #bfff00;
+            text-shadow: 1px 1px 6px rgba(0,0,0,0.8);
+            font-weight: normal;
+        }
 
 /* === NÚT HOME & ABOUT === */
 .home-btn, .home-btnTS {
