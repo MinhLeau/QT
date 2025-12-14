@@ -54,7 +54,7 @@ h3 {
 .home-btn:hover { background: #004d00; transform: scale(1.1); }
 
 .home-btnTS {
-    right: 32px;
+    right: 37px;
     background: url("TS.jpg") center / 100% no-repeat, #006400;
 }
 .home-btnTS:hover { transform: scale(1.1); }
