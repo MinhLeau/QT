@@ -15,7 +15,8 @@ h1 {
 h2 {
     text-align: left;
     color: #e51803;
-    margin: 0 0 15px;
+    margin-top: 10px;      /* cách trên */
+    margin-bottom: -20px;   /* cách dưới */
     font-size: 15px;
 }
 
