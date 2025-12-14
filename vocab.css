@@ -81,6 +81,9 @@ h3 {
 .home-btnTS:hover {
     transform: scale(1.1);
 }
+.home-btnTS::before {
+    content: none;
+}
 
 
 .controls {
