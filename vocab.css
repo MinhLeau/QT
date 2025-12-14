@@ -55,6 +55,34 @@ h3 {
     content: "🏠";
 }
 
+/* Thêm nút About góc trên phải */
+.home-btnTS {
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    background: #006400;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+    transition: all 0.3s;
+}
+
+.home-btnTS:hover {
+    background: #004d00;
+    transform: scale(1.1);
+}
+
+.home-btnTS::before {
+    content: "🏠";
+}
 .controls {
     background: #fff;
     padding: 15px;
