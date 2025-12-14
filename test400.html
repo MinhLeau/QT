@@ -1191,6 +1191,23 @@ let userAnswers = [];
 let timerInterval;
 let timeLeft = 45 * 60;
 
+/* =================== Note Popup Functions =================== */
+function showNotePopup() {
+    document.getElementById('notePopup').classList.add('show');
+}
+
+function closeNotePopup() {
+    document.getElementById('notePopup').classList.remove('show');
+}
+
+// Click outside to close
+window.onclick = function(event) {
+    const popup = document.getElementById('notePopup');
+    if (event.target === popup) {
+        closeNotePopup();
+    }
+}
+		
 /* =================== LỌC CÂU HỎI THỰC TẾ (loại bỏ marker) =================== */
 function getRealQuestions(questions) {
     return questions.filter(q => q.hasOwnProperty('opts') && Array.isArray(q.opts));
@@ -1458,6 +1475,7 @@ loadQuiz('all-vi');
 </body>
 
 </html>
+
 
 
 
