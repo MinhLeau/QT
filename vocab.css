@@ -22,7 +22,7 @@ h2 {
 h3 {
     text-align: right;
     color: #006400;
-    margin-top: 10px;   /* dời xuống 10px */
+    margin-top: 8px;   /* dời xuống 10px */
     margin-right: 0;
     margin-bottom: 0;
     margin-left: 0;
@@ -63,7 +63,7 @@ h3 {
 .home-btnTS {
     position: absolute;
     top: 5px;
-    right: 35px;
+    right: 37px;
 
     width: 50px;
     height: 50px;
