@@ -1,43 +1,38 @@
+/* === BODY & HEADINGS === */
 body {
     font-family: Arial, sans-serif;
     background: #f0f8ff;
     padding: 20px;
     line-height: 1.6;
     position: relative;
+    margin: 0;
 }
 
 h1 {
     text-align: center;
     color: #006400;
-    margin: -25px 0 0 10px;
+    margin: 0 0 5px 0;
+    font-size: 1.8rem;
 }
 
 h2 {
-    margin-left: 5px;
+    text-align: left;
     color: #e51803;
-    margin-top: 10px;      /* cách trên */
-    margin-bottom: -20px;   /* cách dưới */
-    font-size: 15px;
+    margin: 8px 0 6px 5px;
+    font-size: 1rem;
 }
 
 h3 {
     text-align: right;
     color: #006400;
-    margin-top: 9px;   /* dời xuống 10px */
-    margin-right: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-    font-size: 8px;
+    margin: 5px 0 5px 0;
+    font-size: 0.8rem;
 }
 
-
-/* Thêm nút Home góc trên trái */
-.home-btn {
+/* === NÚT HOME & ABOUT === */
+.home-btn, .home-btnTS {
     position: absolute;
     top: 5px;
-    left: 15px;
-    background: #006400;
-    color: white;
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -51,206 +46,21 @@ h3 {
     transition: all 0.3s;
 }
 
-.home-btn:hover {
-    background: #004d00;
-    transform: scale(1.1);
+.home-btn {
+    left: 15px;
+    background: #006400;
 }
+.home-btn::before { content: "🏠"; }
+.home-btn:hover { background: #004d00; transform: scale(1.1); }
 
-.home-btn::before {
-    content: "🏠";
-}
-
-/* Nút About góc trên phải – background là TS.jpg */
 .home-btnTS {
-    position: absolute;
-    top: 5px;
     right: 32px;
-
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-
     background: url("TS.jpg") center / 100% no-repeat, #006400;
-    /*            ↑ ảnh        ↑ scale      ↑ fallback màu */
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    text-decoration: none;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    z-index: 1000;
-    transition: all 0.3s;
 }
+.home-btnTS:hover { transform: scale(1.1); }
+.home-btnTS::before { content: none; }
 
-.home-btnTS:hover {
-    transform: scale(1.1);
-}
-.home-btnTS::before {
-    content: none;
-}
-
-
-.controls {
-    background: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-select, button {
-    padding: 8px 12px;
-    font-size: 16px;
-    margin: 0 8px 8px 0;
-    border-radius: 6px;
-}
-
-.notice {
-    color: #d32f2f;
-    font-weight: bold;
-    margin-top: 5px;
-}
-
-.btn {
-    background: #006400;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.btn:hover {
-    background: #004d00;
-}
-
-.filter-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-    margin: 10px 0;
-    justify-content: flex-start;
-}
-
-.filter-btn {
-    padding: 8px 9px;
-    background: #e8f5e8;
-    border: 2px solid #006400;
-    border-radius: 8px;
-    font-weight: bold;
-    color: #006400;
-    min-width: 64px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 14px;
-}
-
-.filter-btn.active {
-    background: #006400;
-    color: white;
-}
-
-.filter-btn.reset-btn {
-    background: #ff6b6b;
-    border-color: #cc0000;
-    color: white;
-}
-
-.filter-btn.reset-btn:hover {
-    background: #cc0000;
-}
-
-.filter-btn.tips-btn {
-    background: #4CAF50;
-    border-color: #2E7D32;
-    color: white;
-}
-
-.filter-btn.tips-btn:hover {
-    background: #2E7D32;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 5px;
-    background: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-th {
-    background: #006400;
-    color: white;
-    padding: 12px;
-    text-align: center;
-}
-
-td {
-    padding: 10px;
-    vertical-align: top;
-    border-bottom: 1px solid #ddd;
-    text-align: center;
-}
-
-td.example {
-    font-style: italic;
-    color: #333;
-    font-size: 0.95em;
-    text-align: left;
-}
-
-tr:nth-child(even) {
-    background: #f9f9f9;
-}
-
-tr:hover {
-    background: #e6f7e6;
-}
-
-input[type="checkbox"] {
-    transform: scale(1.3);
-    cursor: pointer;
-}
-
-.hidden {
-    display: none;
-}
-
-.nav-bar {
-    margin: 20px 0;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-.nav-bar .btn {
-    margin: 5px;
-    font-size: 15px;
-}
-
-table, th, td {
-    border: 1px solid #000;
-}
-
-td, th {
-    padding: 6px;
-}
-
-/* Wrapper mới để filter-bar và controls nằm cùng dòng */
-.filter-controls-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    margin: 10px 0;
-}
-
-/* Điều chỉnh controls để nhỏ gọn hơn, không margin-bottom lớn */
+/* === CONTROLS & FILTER-BAR === */
 .controls {
     background: #fff;
     padding: 8px 12px;
@@ -270,31 +80,96 @@ td, th {
     margin: 0;
 }
 
-.notice {
-    display: none; /* Giữ nguyên, chỉ hiển thị khi cần */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin: 8px 0;
+    justify-content: flex-start;
 }
 
-/* Responsive: nếu màn hình nhỏ, filter-bar và controls xếp chồng */
-@media (max-width: 768px) {
-    .filter-controls-wrapper {
-        flex-direction: column;
-        gap: 10px;
-    }
-    .filter-bar {
-        justify-content: center;
-    }
-    .controls {
-        width: 100%;
-        justify-content: center;
-    }
+.filter-btn {
+    padding: 6px 8px;
+    background: #e8f5e8;
+    border: 2px solid #006400;
+    border-radius: 8px;
+    font-weight: bold;
+    color: #006400;
+    min-width: 64px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.85rem;
 }
 
-/* Thêm class active cho nút hiện tại */
-.nav-bar .btn.active {
-    background: #053005;
+.filter-btn.active { background: #006400; color: white; }
+.filter-btn.reset-btn { background: #ff6b6b; border-color: #cc0000; color: white; }
+.filter-btn.reset-btn:hover { background: #cc0000; }
+.filter-btn.tips-btn { background: #4CAF50; border-color: #2E7D32; color: white; }
+.filter-btn.tips-btn:hover { background: #2E7D32; }
+
+.filter-controls-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 8px 0;
 }
 
-/* Popup Tips Styles */
+/* === TABLE === */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    font-size: 0.9rem;
+}
+
+th, td {
+    padding: 6px;
+    border: 1px solid #000;
+    text-align: center;
+    vertical-align: top;
+}
+
+td.example {
+    font-style: italic;
+    color: #333;
+    font-size: 0.85rem;
+    text-align: left;
+}
+
+tr:nth-child(even) { background: #f9f9f9; }
+tr:hover { background: #e6f7e6; }
+
+input[type="checkbox"] { transform: scale(1.3); cursor: pointer; }
+.hidden { display: none; }
+
+.nav-bar {
+    margin: 10px 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.nav-bar .btn { margin: 5px; font-size: 0.85rem; }
+.nav-bar .btn.active { background: #053005; }
+
+/* === BUTTONS === */
+.btn {
+    background: #006400;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+}
+.btn:hover { background: #004d00; }
+
+/* === POPUP TIPS === */
 .tips-popup {
     display: none;
     position: fixed;
@@ -307,10 +182,7 @@ td, th {
     background-color: rgba(0, 0, 0, 0.6);
     animation: fadeIn 0.3s;
 }
-
-.tips-popup.show {
-    display: block;
-}
+.tips-popup.show { display: block; }
 
 .tips-content {
     background-color: #fefefe;
@@ -320,7 +192,7 @@ td, th {
     border-radius: 12px;
     width: 90%;
     max-width: 700px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
     animation: slideDown 0.4s;
     position: relative;
 }
@@ -332,7 +204,7 @@ td, th {
     margin: 0;
     border-radius: 10px 10px 0 0;
     text-align: center;
-    font-size: 24px;
+    font-size: 1.5rem;
 }
 
 .tips-body {
@@ -340,37 +212,18 @@ td, th {
     max-height: 60vh;
     overflow-y: auto;
 }
-
 .tips-body h3 {
     color: #006400;
-    margin: 20px 0 10px 0;
-    font-size: 18px;
+    margin: 10px 0 8px 0;
+    font-size: 1rem;
     text-align: left;
     border-bottom: 2px solid #e8f5e8;
-    padding-bottom: 8px;
+    padding-bottom: 6px;
 }
-
-.tips-body ul, .tips-body ol {
-    margin: 10px 0;
-    padding-left: 25px;
-    line-height: 1.8;
-}
-
-.tips-body li {
-    margin: 8px 0;
-    color: #333;
-}
-
-.tips-body strong {
-    color: #006400;
-    font-weight: bold;
-}
-
-.tips-body p {
-    margin: 8px 0;
-    color: #555;
-    line-height: 1.6;
-}
+.tips-body ul, .tips-body ol { margin: 10px 0; padding-left: 25px; line-height: 1.5; }
+.tips-body li { margin: 6px 0; color: #333; }
+.tips-body strong { color: #006400; font-weight: bold; }
+.tips-body p { margin: 6px 0; color: #555; line-height: 1.5; }
 
 .tips-close {
     position: absolute;
@@ -387,53 +240,39 @@ td, th {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255,255,255,0.2);
 }
+.tips-close:hover, .tips-close:focus { background: rgba(255,255,255,0.4); transform: rotate(90deg); }
 
-.tips-close:hover,
-.tips-close:focus {
-    background: rgba(255, 255, 255, 0.4);
-    transform: rotate(90deg);
-}
+/* === ANIMATIONS === */
+@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+@keyframes slideDown { from {transform: translateY(-50px); opacity:0;} to {transform: translateY(0); opacity:1;} }
 
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes slideDown {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-/* Responsive cho popup */
+/* === RESPONSIVE === */
 @media (max-width: 768px) {
-    .tips-content {
-        width: 95%;
-        margin: 10% auto;
+    body { padding: 10px; }
+    h1 { font-size: 1.4rem; margin-top: 0; }
+    h2 { font-size: 0.9rem; margin-top: 6px; margin-bottom: 4px; }
+    h3 { font-size: 0.7rem; margin-top: 4px; }
+
+    .home-btn, .home-btnTS {
+        width: 40px;
+        height: 40px;
+        font-size: 24px;
     }
-    
-    .tips-content h2 {
-        font-size: 20px;
-        padding: 15px;
+    .home-btnTS { right: 15px; }
+
+    .filter-controls-wrapper {
+        flex-direction: column;
+        gap: 6px;
+        margin: 6px 0;
     }
-    
-    .tips-body {
-        padding: 20px 15px;
-    }
-    
-    .tips-body h3 {
-        font-size: 16px;
-    }
+    .controls { width: 100%; justify-content: flex-start; padding: 6px 8px; }
+    table { font-size: 0.8rem; }
+    th, td { padding: 4px; }
+
+    .tips-content { width: 95%; margin: 10% auto; }
+    .tips-content h2 { font-size: 1.2rem; padding: 15px; }
+    .tips-body { padding: 15px 12px; }
+    .tips-body h3 { font-size: 0.9rem; }
 }
