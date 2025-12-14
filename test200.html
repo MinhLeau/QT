@@ -982,15 +982,34 @@ const QUESTION_BANK = [
 
         // ============ BIẾN TOÀN CỤC ============
 
+// ============ BIẾN TOÀN CỤC ============
+
 let CURRENT_QUESTIONS = [];
-let IS_ALL_MODE = false;        // true khi là All hoặc Part_One → Part_Four
+let IS_ALL_MODE = false;
 let SHOW_VIETNAMESE = false;
 let currentIndex = 0;
 let userAnswers = [];
 let timerInterval;
 let timeLeft = 45 * 60;
 
-/* =================== LỌC CÂU HỎI THỰC TẾ (loại bỏ marker) =================== */
+/* =================== Note Popup Functions =================== */
+function showNotePopup() {
+    document.getElementById('notePopup').classList.add('show');
+}
+
+function closeNotePopup() {
+    document.getElementById('notePopup').classList.remove('show');
+}
+
+// Click outside to close
+window.onclick = function(event) {
+    const popup = document.getElementById('notePopup');
+    if (event.target === popup) {
+        closeNotePopup();
+    }
+}
+
+/* =================== Lọc Câu Hỏi Thực Tế (loại bỏ marker) =================== */
 function getRealQuestions(questions) {
     return questions.filter(q => q.hasOwnProperty('opts') && Array.isArray(q.opts));
 }
@@ -1238,7 +1257,7 @@ function submitQuiz() {
     document.getElementById("resetBtn").style.display = "block";
 }
 
-/* =================== SỰ KIỆN =================== */
+/* =================== Sự Kiện =================== */
 document.getElementById("quizSelect").addEventListener("change", e => loadQuiz(e.target.value));
 document.getElementById("prevBtn").addEventListener("click", prevQuestion);
 document.getElementById("nextBtn").addEventListener("click", nextQuestion);
@@ -1257,6 +1276,7 @@ loadQuiz('all-vi');
     </script>
 </body>
 </html>
+
 
 
 
