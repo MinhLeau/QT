@@ -31,32 +31,36 @@
             font-size: 1.8rem;
         }
 
-    /* Thêm nút Home góc trên trái */
-    .home-btn {
-        position: absolute;
-        top: 5px;
-        left: 15px;
-        background: #006400;
-        color: white;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 28px;
-        text-decoration: none;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        z-index: 1000;
-        transition: all 0.3s;
-    }
-    .home-btn:hover {
-        background: #004d00;
-        transform: scale(1.1);
-    }
-    .home-btn::before {
-        content: "🏠";
-    }
+/* === NÚT HOME & ABOUT === */
+.home-btn, .home-btnTS {
+    position: absolute;
+    top: 5px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+    transition: all 0.3s;
+}
+
+.home-btn {
+    left: 15px;
+    background: #006400;
+}
+.home-btn::before { content: "🏠"; }
+.home-btn:hover { background: #004d00; transform: scale(1.1); }
+
+.home-btnTS {
+    right: 37px;
+    background: url("TS.jpg") center / 100% no-repeat, #006400;
+}
+.home-btnTS:hover { transform: scale(1.1); }
+.home-btnTS::before { content: none; }
 
         /* Thanh điều hướng nhỏ giống V4.html */
         .nav-bar {
@@ -121,13 +125,25 @@
             }
             .audio-container { gap: 20px; }
         }
+		        /* Dòng "Created by Thomas" - bên phải trên cùng */
+        .credit {
+            position: absolute;
+            top: 55px;
+            right: 20px;
+            z-index: 10;
+            font-size: 0.6rem;
+            color: #006400;
+            text-shadow: 1px 1px 6px rgba(0,0,0,0.8);
+            font-weight: normal;
+		}
+		
     </style>
 </head>
 <body>
 
     <!-- Nút Home góc trên trái -->
     <a href="onluyenthiquoctich.html" class="home-btn" title="Về trang chủ"></a>
-
+	<h4 class="credit">Created by Thomas</h4>
     <h1>Australian Citizenship - Our Common Bond</h1>
     <h3>Created by Thomas</h3>
 
@@ -142,4 +158,5 @@
     </div>
 
 </body>
+
 </html>
