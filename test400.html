@@ -31,8 +31,16 @@
             margin: 10px 0 8px 0;
             font-size: 28px;
         }
-		h2 {text-align:left; color:#e51803; margin:-15 0 15px; font-size:20px;}
-		h22 {text-align:left; color:#006400; margin:-15 0 15px; font-size:20px;}
+		h2, h22 {
+            display: inline;
+            margin: 0;
+            text-align:left; 
+            color:#e51803; 
+            font-size:20px;
+        }
+        h22 {
+            color:#006400;
+        }
         h13 {
             text-align: right;
             color: #006400;
@@ -40,13 +48,13 @@
             font-size: 11px;
         }
 
-h3 {
-    text-align: right;
-    color: #006400;
-    margin: -3px 1 5px 0;
-    top: 55px;
-    font-size: 0.6rem;
-}
+        h3 {
+            text-align: right;
+            color: #006400;
+            margin: -3px 1 5px 0;
+            top: 55px;
+            font-size: 0.6rem;
+        }
 
 		
 /* === NÚT HOME & ABOUT === */
@@ -413,7 +421,7 @@ h3 {
     }
 }	
 
-		        /* Dòng "Created by Thomas" - bên phải trên cùng */
+        /* Dòng "Created by Thomas" - bên phải trên cùng */
         .credit {
             position: absolute;
             top: 55px;
@@ -424,10 +432,209 @@ h3 {
             text-shadow: 1px 1px 6px rgba(0,0,0,0.8);
             font-weight: normal;
         }
-	h2, h22 {
-    display: inline;
-    margin: 0;
-}
+
+        /* Quiz select container */
+        .quiz-select-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .quiz-select-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Note button */
+        .note-btn {
+            padding: 8px 17px;
+            font-size: 14px;
+            font-weight: bold;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .note-btn:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+        }
+
+        /* Note Popup */
+        .note-popup {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            animation: fadeIn 0.3s;
+        }
+
+        .note-popup.show {
+            display: block;
+        }
+
+        .note-content {
+            background-color: #ffffff;
+            margin: 3% auto;
+            padding: 0;
+            border: 3px solid #2196F3;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.4s;
+            position: relative;
+        }
+
+        .note-header {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            padding: 25px 30px;
+            margin: 0;
+            border-radius: 13px 13px 0 0;
+            text-align: center;
+        }
+
+        .note-header h2 {
+            color: white;
+            font-size: 26px;
+            margin: 0;
+            display: block;
+        }
+
+        .note-body {
+            padding: 30px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .note-body h3 {
+            color: #2196F3;
+            margin: 20px 0 12px 0;
+            font-size: 20px;
+            text-align: left;
+            border-bottom: 3px solid #e3f2fd;
+            padding-bottom: 8px;
+        }
+
+        .note-body ul, .note-body ol {
+            margin: 12px 0;
+            padding-left: 30px;
+            line-height: 1.8;
+        }
+
+        .note-body li {
+            margin: 10px 0;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .note-body strong {
+            color: #1976D2;
+            font-weight: bold;
+        }
+
+        .note-body p {
+            margin: 10px 0;
+            color: #555;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        .note-body .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .note-close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .note-close:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: rotate(90deg);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .quiz-select-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .note-btn {
+                width: 100%;
+                padding: 14px;
+            }
+
+            .note-content {
+                width: 95%;
+                margin: 5% auto;
+            }
+
+            .note-header h2 {
+                font-size: 20px;
+            }
+
+            .note-body {
+                padding: 20px 15px;
+            }
+
+            .note-body h3 {
+                font-size: 18px;
+            }
+
+            .note-body li, .note-body p {
+                font-size: 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1199,6 +1406,7 @@ loadQuiz('all-vi');
 </body>
 
 </html>
+
 
 
 
