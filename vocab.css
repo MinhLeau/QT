@@ -59,7 +59,7 @@ h3 {
 .home-btnTS {
     position: absolute;
     top: 5px;
-    left: 15px;
+    right: 15px;
     background: #006400;
     color: white;
     width: 50px;
