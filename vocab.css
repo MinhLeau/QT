@@ -221,7 +221,7 @@ input[type="checkbox"] {
 }
 
 .nav-bar {
-    margin: 10px 0;
+    margin: 20px 0;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
