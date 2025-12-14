@@ -81,8 +81,16 @@ h3 {
 }
 
 .home-btnTS::before {
-    content: "🏠";
+    content: "";
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-image: url("TS.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
+
 .controls {
     background: #fff;
     padding: 15px;
