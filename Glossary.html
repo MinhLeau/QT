@@ -30,7 +30,39 @@
         <div class="filter-btn active" data-mode="all">Show All</div>
         <div class="filter-btn" data-mode="checked">Checked</div>
         <div class="filter-btn" data-mode="unchecked">Unchecked</div>
+            <div class="filter-btn reset-btn" id="resetBtn">Reset</div>
+        <div class="filter-btn tips-btn" id="tipsBtn">💡 Tips</div>
     </div>
+<!-- Popup Tips -->
+<div id="tipsPopup" class="tips-popup">
+    <div class="tips-content">
+        <div class="tips-close">&times;</div>
+        <h2>💡 Mẹo học từ vựng hiệu quả</h2>
+        <div class="tips-body">
+            <h3>1. Cách sử dụng các nút Show All / Checked / Unchecked</h3>
+            <ul>
+                <li><strong>Checked:</strong> Danh sách các từ bạn đã đánh dấu cần học.</li>
+                <li><strong>Unchecked:</strong> Danh sách các từ bạn không cần học nữa (đã biết).</li>
+                <li><strong>Show All / Checked / Unchecked:</strong> Lọc hiển thị tất cả, chỉ từ đã check hoặc chưa check.</li>
+                <li><strong>Reset:</strong> Bỏ hết dấu check và quay về hiển thị tất cả.</li>
+            </ul>
+            <h3>2. Cách sử dụng các tính năng</h3>
+            <ul>
+                <li><strong>Nghe:</strong> Bấm nút "Nghe" để nghe phát âm từ.</li>
+                <li><strong>Read:</strong> Bấm nút "Read" để nghe cả câu ví dụ đầy đủ.</li>
+                <li><strong>Chọn giọng đọc:</strong> Ưu tiên chọn giọng English (Australia) để nghe chuẩn giọng Úc.</li>
+            </ul>
+            <h3>3. Mẹo học thuộc lâu</h3>
+            <ol>
+                <li>Học theo ngữ cảnh: Đọc kỹ câu ví dụ và bản dịch.</li>
+                <li>Lặp lại nhiều lần: Nghe + đọc to theo câu ví dụ.(Có thể luyện thêm sau khi thi xong)</li>
+                <li>Uncheck các từ khi đã thuộc: Khi bạn có thể nhớ nghĩa + phát âm mà không nhìn.</li>
+                <li>Học mỗi ngày một ít: Quay lại các từ đã uncheck để ôn lại định kỳ.</li>
+            </ol>
+            <p><strong>Chúc bạn học tốt và sớm vượt qua kỳ thi quốc tịch Úc!</strong> 🇦🇺</p>
+        </div>
+    </div>
+</div>
 
     <div class="controls">
         <strong>Chọn giọng đọc:</strong>
@@ -114,6 +146,7 @@
 
 </body>
 </html>
+
 
 
 
