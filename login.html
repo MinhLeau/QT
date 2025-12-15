@@ -310,11 +310,11 @@ const firebaseConfig = {
         const googleProvider = new GoogleAuthProvider();
 
         // Kiểm tra trạng thái đăng nhập
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                window.location.href = 'onluyenthiquoctich.html';
-            }
-        });
+    //    onAuthStateChanged(auth, (user) => {
+    //        if (user) {
+    //            window.location.href = 'onluyenthiquoctich.html';
+    //        }
+   //     });
 
         // Xử lý đăng ký
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
@@ -482,4 +482,5 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     </script>
 </body>
 </html>
+
 
