@@ -213,8 +213,9 @@
 <body>
     <div class="auth-container">
         <div class="auth-header">
-            <h1>Ôn luyện thi Quốc Tịch Úc</h1>
+            <h1>Tài liệu ôn luyện thi Quốc Tịch Úc</h1>
             
+            <p style="font-size: 0.75rem; margin-top: 10px; opacity: 0.8;">⚠️ Chỉ sử dụng "Ghi nhớ" trên thiết bị cá nhân</p>
         </div>
         <div class="auth-body">
             <div class="tab-buttons">
@@ -311,12 +312,24 @@
         const auth = getAuth(app);
         const googleProvider = new GoogleAuthProvider();
 
-        // Tự động điền email nếu đã lưu
+        // Tự động điền email và mật khẩu nếu đã lưu
         window.addEventListener('DOMContentLoaded', () => {
             const savedEmail = localStorage.getItem('savedEmail');
+            const savedPassword = localStorage.getItem('savedPassword');
+            
             if (savedEmail) {
                 document.getElementById('loginEmail').value = savedEmail;
                 document.getElementById('rememberMe').checked = true;
+            }
+            
+            if (savedPassword) {
+                // Giải mã mật khẩu đơn giản (base64)
+                try {
+                    const decodedPassword = atob(savedPassword);
+                    document.getElementById('loginPassword').value = decodedPassword;
+                } catch (e) {
+                    console.error('Error decoding password');
+                }
             }
         });
 
@@ -370,11 +383,14 @@
                     rememberMe ? browserLocalPersistence : browserSessionPersistence
                 );
 
-                // Lưu email nếu check "Ghi nhớ"
+                // Lưu email và mật khẩu nếu check "Ghi nhớ"
                 if (rememberMe) {
                     localStorage.setItem('savedEmail', email);
+                    // Mã hóa mật khẩu đơn giản bằng base64 (không an toàn tuyệt đối)
+                    localStorage.setItem('savedPassword', btoa(password));
                 } else {
                     localStorage.removeItem('savedEmail');
+                    localStorage.removeItem('savedPassword');
                 }
 
                 await signInWithEmailAndPassword(auth, email, password);
@@ -496,4 +512,3 @@
     </script>
 </body>
 </html>
-
