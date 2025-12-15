@@ -138,6 +138,70 @@
 		}
 		
     </style>
+
+<script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+    // ⚠️ QUAN TRỌNG: Thay config này bằng config từ Firebase Console của bạn
+const firebaseConfig = {
+  apiKey: "AIzaSyDvB54m2uxhjuE2moJQ09NcuAEVhro7Zh4",
+  authDomain: "quoctichuc-43f28.firebaseapp.com",
+  projectId: "quoctichuc-43f28",
+  storageBucket: "quoctichuc-43f28.firebasestorage.app",
+  messagingSenderId: "710420527110",
+  appId: "1:710420527110:web:ba4281739f963e76656b87"
+};
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Kiểm tra đăng nhập
+    onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            // Chưa đăng nhập, chuyển về trang login
+            window.location.href = 'login.html';
+        } else {
+            // Đã đăng nhập, hiển thị thông tin user
+            console.log('Logged in as:', user.email);
+        }
+    });
+
+    // Hàm đăng xuất (gọi khi user click nút logout)
+    window.logout = async function() {
+        try {
+            await signOut(auth);
+            window.location.href = 'login.html';
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
+    };
+</script>
+
+<!-- Tùy chọn: Thêm nút đăng xuất vào trang -->
+<style>
+    .logout-btn {
+        position: fixed;
+        top: 10px;
+        lest: 30px;
+        padding: 8px 16px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        z-index: 1000;
+        transition: all 0.3s;
+    }
+    .logout-btn:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+    }
+</style>
+
+<button class="logout-btn" onclick="logout()">Đăng xuất</button>
+	
 </head>
 <body>
 
@@ -161,6 +225,7 @@
 </body>
 
 </html>
+
 
 
 
