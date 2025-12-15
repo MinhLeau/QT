@@ -223,6 +223,7 @@
             </div>
             <div class="error-message" id="errorMessage"></div>
             <div class="success-message" id="successMessage"></div>
+            
             <!-- Form Đăng nhập -->
             <form class="auth-form active" id="loginForm">
                 <div class="form-group">
@@ -242,6 +243,7 @@
                 </div>
                 <button type="submit" class="submit-btn">Đăng nhập</button>
             </form>
+            
             <!-- Form Đăng ký -->
             <form class="auth-form" id="registerForm">
                 <div class="form-group">
@@ -262,9 +264,11 @@
                 </div>
                 <button type="submit" class="submit-btn">Đăng ký</button>
             </form>
+            
             <div class="divider">
                 <span>hoặc</span>
             </div>
+            
             <button class="google-btn" onclick="signInWithGoogle()">
                 <svg width="20" height="20" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -276,45 +280,52 @@
             </button>
         </div>
     </div>
+    
     <!-- Firebase SDK -->
     <script type="module">
-        // Import Firebase modules
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { 
-    getAuth, 
-    createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword, 
-    signInWithPopup, 
-    GoogleAuthProvider, 
-    onAuthStateChanged,
-    sendPasswordResetEmail,
-    setPersistence,
-    browserLocalPersistence,
-    browserSessionPersistence
-} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword, 
+            signInWithPopup, 
+            GoogleAuthProvider, 
+            onAuthStateChanged,
+            sendPasswordResetEmail,
+            setPersistence,
+            browserLocalPersistence,
+            browserSessionPersistence
+        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDvB54m2uxhjuE2moJQ09NcuAEVhro7Zh4",
+            authDomain: "quoctichuc-43f28.firebaseapp.com",
+            projectId: "quoctichuc-43f28",
+            storageBucket: "quoctichuc-43f28.firebasestorage.app",
+            messagingSenderId: "710420527110",
+            appId: "1:710420527110:web:ba4281739f963e76656b87"
+        };
 
-        // ⚠️ QUAN TRỌNG: Thay config này bằng config từ Firebase Console của bạn
-const firebaseConfig = {
-  apiKey: "AIzaSyDvB54m2uxhjuE2moJQ09NcuAEVhro7Zh4",
-  authDomain: "quoctichuc-43f28.firebaseapp.com",
-  projectId: "quoctichuc-43f28",
-  storageBucket: "quoctichuc-43f28.firebasestorage.app",
-  messagingSenderId: "710420527110",
-  appId: "1:710420527110:web:ba4281739f963e76656b87"
-};
-
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const googleProvider = new GoogleAuthProvider();
 
-        // Kiểm tra trạng thái đăng nhập
-    //    onAuthStateChanged(auth, (user) => {
-    //        if (user) {
-    //            window.location.href = 'onluyenthiquoctich.html';
-    //        }
-   //     });
+        // Tự động điền email nếu đã lưu
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedEmail = localStorage.getItem('savedEmail');
+            if (savedEmail) {
+                document.getElementById('loginEmail').value = savedEmail;
+                document.getElementById('rememberMe').checked = true;
+            }
+        });
+
+        // ✅ QUAN TRỌNG: BẬT LẠI kiểm tra trạng thái đăng nhập
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.location.href = 'onluyenthiquoctich.html';
+            }
+        });
 
         // Xử lý đăng ký
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
@@ -331,7 +342,9 @@ const firebaseConfig = {
                 showError('Mật khẩu phải có ít nhất 6 ký tự!');
                 return;
             }
+            
             try {
+                await setPersistence(auth, browserLocalPersistence);
                 await createUserWithEmailAndPassword(auth, email, password);
                 showSuccess('Đăng ký thành công! Đang chuyển hướng...');
                 setTimeout(() => {
@@ -343,35 +356,38 @@ const firebaseConfig = {
         });
 
         // Xử lý đăng nhập
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
 
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
 
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
+            try {
+                // SET persistence theo lựa chọn người dùng
+                await setPersistence(
+                    auth,
+                    rememberMe ? browserLocalPersistence : browserSessionPersistence
+                );
 
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-    const rememberMe = document.getElementById('rememberMe').checked;
+                // Lưu email nếu check "Ghi nhớ"
+                if (rememberMe) {
+                    localStorage.setItem('savedEmail', email);
+                } else {
+                    localStorage.removeItem('savedEmail');
+                }
 
-    try {
-        // ⭐ SET persistence theo lựa chọn người dùng
-        await setPersistence(
-            auth,
-            rememberMe ? browserLocalPersistence : browserSessionPersistence
-        );
+                await signInWithEmailAndPassword(auth, email, password);
 
-        await signInWithEmailAndPassword(auth, email, password);
+                showSuccess('Đăng nhập thành công! Đang chuyển hướng...');
+                setTimeout(() => {
+                    window.location.href = 'onluyenthiquoctich.html';
+                }, 1200);
 
-        showSuccess('Đăng nhập thành công! Đang chuyển hướng...');
-        setTimeout(() => {
-            window.location.href = 'onluyenthiquoctich.html';
-        }, 1200);
-
-    } catch (error) {
-        handleAuthError(error);
-    }
-});
-
-        
+            } catch (error) {
+                handleAuthError(error);
+            }
+        });
 
         // Quên mật khẩu
         window.resetPassword = async function() {
@@ -391,6 +407,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         // Đăng nhập với Google
         window.signInWithGoogle = async function() {
             try {
+                await setPersistence(auth, browserLocalPersistence);
                 await signInWithPopup(auth, googleProvider);
                 showSuccess('Đăng nhập thành công! Đang chuyển hướng...');
                 setTimeout(() => {
@@ -421,9 +438,9 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             }, 8000);
         }
 
-        // Xử lý lỗi Firebase (cập nhật mới nhất)
+        // Xử lý lỗi Firebase
         function handleAuthError(error) {
-            console.log('Firebase Error:', error.code, error.message); // Để debug
+            console.log('Firebase Error:', error.code, error.message);
 
             let message = 'Đã xảy ra lỗi. Vui lòng thử lại!';
 
@@ -448,9 +465,6 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
                 case 'auth/network-request-failed':
                     message = 'Lỗi kết nối mạng. Kiểm tra internet và thử lại!';
                     break;
-                case 'auth/user-not-found': // cho reset password
-                    message = 'Không tìm thấy tài khoản với email này!';
-                    break;
                 default:
                     message = 'Lỗi: ' + error.message;
                     break;
@@ -469,18 +483,16 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             document.querySelectorAll('.auth-form').forEach(form => {
                 form.classList.remove('active');
             });
+            
             if (tab === 'login') {
                 document.getElementById('loginForm').classList.add('active');
             } else {
                 document.getElementById('registerForm').classList.add('active');
             }
 
-            // Xóa thông báo
             document.getElementById('errorMessage').classList.remove('show');
             document.getElementById('successMessage').classList.remove('show');
         };
     </script>
 </body>
 </html>
-
-
