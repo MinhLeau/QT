@@ -280,15 +280,19 @@
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { 
-            getAuth, 
-            createUserWithEmailAndPassword, 
-            signInWithEmailAndPassword, 
-            signInWithPopup, 
-            GoogleAuthProvider, 
-            onAuthStateChanged,
-            sendPasswordResetEmail 
-        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { 
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword, 
+    signInWithPopup, 
+    GoogleAuthProvider, 
+    onAuthStateChanged,
+    sendPasswordResetEmail,
+    setPersistence,
+    browserLocalPersistence,
+    browserSessionPersistence
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
 
         // ⚠️ QUAN TRỌNG: Thay config này bằng config từ Firebase Console của bạn
 const firebaseConfig = {
@@ -339,20 +343,35 @@ const firebaseConfig = {
         });
 
         // Xử lý đăng nhập
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                showSuccess('Đăng nhập thành công! Đang chuyển hướng...');
-                setTimeout(() => {
-                    window.location.href = 'onluyenthiquoctich.html';
-                }, 1500);
-            } catch (error) {
-                handleAuthError(error);
-            }
-        });
+
+
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    const rememberMe = document.getElementById('rememberMe').checked;
+
+    try {
+        // ⭐ SET persistence theo lựa chọn người dùng
+        await setPersistence(
+            auth,
+            rememberMe ? browserLocalPersistence : browserSessionPersistence
+        );
+
+        await signInWithEmailAndPassword(auth, email, password);
+
+        showSuccess('Đăng nhập thành công! Đang chuyển hướng...');
+        setTimeout(() => {
+            window.location.href = 'onluyenthiquoctich.html';
+        }, 1200);
+
+    } catch (error) {
+        handleAuthError(error);
+    }
+});
+
+        
 
         // Quên mật khẩu
         window.resetPassword = async function() {
@@ -463,3 +482,4 @@ const firebaseConfig = {
     </script>
 </body>
 </html>
+
