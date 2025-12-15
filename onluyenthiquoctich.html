@@ -159,43 +159,32 @@
         }
         
         /* Nút đăng xuất */
-        .logout-btn {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            padding: 8px 16px;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            z-index: 1000;
-            transition: all 0.3s;
-        }
-        .logout-btn:hover {
-            background: #c82333;
-            transform: translateY(-2px);
-        }
-        
-        .logout-btn22 {
-            position: fixed;
-            top: 45px;
-            left: 10px;
-            padding: 8px 15px;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            z-index: 1000;
-            transition: all 0.3s;
-        }
-        .logout-btn22:hover {
-            background: #c82333;
-            transform: translateY(-2px);
-        }
+.logout-btn,
+.logout-btn22 {
+    position: fixed;
+    left: 10px;
+    min-width: 90px;           
+    padding: 8px 0;            
+    text-align: center;        
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    z-index: 1000;
+    transition: all 0.3s;
+}
+
+.logout-btn { top: 10px; }
+.logout-btn22 { top: 45px; }
+
+.logout-btn:hover,
+.logout-btn22:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+}
+
     </style>
 
     <!-- Firebase Authentication - CHỈ IMPORT MỘT LẦN -->
@@ -304,6 +293,7 @@ window.addEventListener('scroll', () => {
 
 </body>
 </html>
+
 
 
 
