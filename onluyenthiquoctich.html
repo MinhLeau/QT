@@ -154,6 +154,10 @@
         .home-btnTS:hover { transform: scale(1.1); }
         .home-btnTS::before { content: none; }
 		
+		.book-lang:hover {
+    background: #0066cc !important; /* màu sáng khi hover riêng EN hoặc VN */
+}
+		
     </style>
 </head>
 <body>
@@ -169,33 +173,31 @@
             <a href="V1.html" class="btn">Từ vựng</a>
             <a href="audio.html" class="btn">Audio</a>
             <a href="test200.html" class="btn">Test</a>
-            <a href="our-common-bond-testable.pdf" class="btn">
-                <span>Book</span>
-                <span class="btn-subtitle">(Our Common Bond)</span>
-            </a>
+            
+            <!-- Nút Book đã sửa -->
+<!-- Nút Book đã sửa -->
+<div class="btn" style="position: relative; cursor: default; overflow: hidden;">
+    <!-- Phần trên: Book -->
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 60%; background: #005a9e; border-top-left-radius: 12px; border-top-right-radius: 12px; display: flex; align-items: center; justify-content: center;">
+        <span style="font-size: 1.6rem; font-weight: bold;">Book</span>
+    </div>
+    
+    <!-- Phần dưới trái: EN -->
+    <a href="our-common-bond-testable.pdf" class="book-lang en" style="position: absolute; top: 60%; left: 0; width: 50%; bottom: 0; background: #004080; border-bottom-left-radius: 12px; display: flex; align-items: end; justify-content: center; text-decoration: none; color: white; padding-bottom: 3px;">
+        <span style="font-size: 1.0rem; font-weight: bold;">EN</span>
+    </a>
+    
+    <!-- Phần dưới phải: VN -->
+    <a href="our-common-bond-testable_vn.pdf" class="book-lang vn" style="position: absolute; top: 60%; right: 0; width: 50%; bottom: 0; background: #004080;  border-bottom-right-radius: 12px; display: flex; align-items: end; justify-content: center; text-decoration: none; color: white; padding-bottom: 3px;">
+        <span style="font-size: 1.0rem; font-weight: bold;">VN</span>
+    </a>
+    
+    <!-- Đường ngăn dọc màu trắng giữa EN và VN -->
+    <div style="position: absolute; top: 60%; left: 50%; bottom: 0; width: 2px; background: white; transform: translateX(-50%);"></div>
+</div>
         </div>
 		<h2 class="subtitle">Tài liệu Ôn-Luyện thi quốc tịch Úc</h2>
 		<h2 class="subtitle2">Nên học theo các bước: Từ vựng ==> Audio ==> Test</h2>
     </div>
-        </div>
-		
-
-</div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
