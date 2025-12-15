@@ -279,6 +279,30 @@
         <h2 class="subtitle">Tài liệu Ôn-Luyện thi quốc tịch Úc</h2>
         <h2 class="subtitle2">Nên học theo các bước: Từ vựng ==> Audio ==> Test</h2>
     </div>
+
+    <script>
+let lastScrollTop = 0;
+
+const hideTargets = [
+    document.querySelector('.logout-btn'),
+    document.querySelector('.home-btn'),
+    document.querySelector('.home-btnTS')
+];
+
+window.addEventListener('scroll', () => {
+    const st = window.pageYOffset || document.documentElement.scrollTop;
+    const isScrollingDown = st > lastScrollTop;
+
+    hideTargets.forEach(el => {
+        if (!el) return;
+        el.classList.toggle('hide-on-scroll', isScrollingDown);
+    });
+
+    lastScrollTop = st <= 0 ? 0 : st;
+});
+</script>
+
 </body>
 </html>
+
 
