@@ -888,237 +888,221 @@
 ];
 
         // ============ BIẾN TOÀN CỤC ============
+<script>
 let CURRENT_QUESTIONS = [];
-        let IS_ALL_MODE = false;
-        let currentIndex = 0;
-        let userAnswers = [];
-        let timerInterval;
-        let timeLeft = 45 * 60;
+let IS_ALL_MODE = false;
+let currentIndex = 0;
+let userAnswers = [];
+let timerInterval;
+let timeLeft = 45 * 60;
 
-        function showNotePopup() { document.getElementById('notePopup').classList.add('show'); }
-        function closeNotePopup() { document.getElementById('notePopup').classList.remove('show'); }
-        window.onclick = function(e) { if (e.target === document.getElementById('notePopup')) closeNotePopup(); }
+/* ========= BASIC / ADVANCE HELPERS ========= */
+function pickHalfRandom(list) {
+    const half = Math.ceil(list.length / 2);
+    return list.sort(() => Math.random() - 0.5).slice(0, half);
+}
 
-        function getRealQuestions(questions) {
-            return questions.filter(q => q.hasOwnProperty('opts') && Array.isArray(q.opts));
-        }
+/* ========= NOTE POPUP ========= */
+function showNotePopup() { document.getElementById('notePopup').classList.add('show'); }
+function closeNotePopup() { document.getElementById('notePopup').classList.remove('show'); }
+window.onclick = function(e) {
+    if (e.target === document.getElementById('notePopup')) closeNotePopup();
+};
 
-        function getRandomFromPart(partName, count) {
-            const start = QUESTION_BANK.findIndex(q => q.q === `// ${partName}`) + 1;
-            const end   = QUESTION_BANK.findIndex(q => q.q === `// END ${partName}`);
-            const list  = getRealQuestions(QUESTION_BANK.slice(start, end));
-            return list.sort(() => Math.random() - 0.5).slice(0, count);
-        }
+/* ========= QUESTION UTILS ========= */
+function getRealQuestions(questions) {
+    return questions.filter(q => q.hasOwnProperty('opts') && Array.isArray(q.opts));
+}
 
-        function checkAnswerInstant(qIndex, selectedOption) {
-            const correct = CURRENT_QUESTIONS[qIndex].a;
-            for (let i = 0; i < CURRENT_QUESTIONS[qIndex].opts.length; i++) {
-                const lbl = document.getElementById(`q${qIndex}o${i}_lbl`);
-                if (lbl) lbl.classList.remove("correct", "wrong");
-            }
-            const selectedLbl = document.getElementById(`q${qIndex}o${selectedOption}_lbl`);
-            const correctLbl   = document.getElementById(`q${qIndex}o${correct}_lbl`);
-            if (selectedOption === correct) {
-                selectedLbl.classList.add("correct");
-            } else {
-                selectedLbl.classList.add("wrong");
-                correctLbl.classList.add("correct");
-            }
-        }
+/* ========= LOAD QUIZ ========= */
+function loadQuiz(selection) {
+    let list = [];
+    IS_ALL_MODE = false;
 
-        function loadQuiz(selection) {
-            let list = [];
-            IS_ALL_MODE = false;
+    const isBasic = document.getElementById("basic").checked;
+    const isAdvance = document.getElementById("advance").checked;
 
-            if (selection === "all") { IS_ALL_MODE = true; list = QUESTION_BANK; }
-            else if (["part1","part2","part3","part4"].includes(selection)) {
-                IS_ALL_MODE = true;
-                const map = {part1:["PART 1","END PART 1"], part2:["PART 2","END PART 2"], part3:["PART 3","END PART 3"], part4:["PART 4","END PART 4"]};
-                const [s,e] = map[selection];
-                const start = QUESTION_BANK.findIndex(q => q.q === `// ${s}`) + 1;
-                const end   = QUESTION_BANK.findIndex(q => q.q === `// ${e}`);
-                list = QUESTION_BANK.slice(start, end);
-            }
-            else {
-                const n = parseInt(selection, 10);
-                const start = (n - 1) * 20;
-                list = QUESTION_BANK.slice(start, start + 20);
-            }
+    if (selection === "all") {
+        IS_ALL_MODE = true;
+        list = getRealQuestions(QUESTION_BANK);
+        if (isBasic) list = pickHalfRandom(list);
+    }
+    else if (["part1","part2","part3","part4"].includes(selection)) {
+        IS_ALL_MODE = true;
+        const map = {
+            part1:["PART 1","END PART 1"],
+            part2:["PART 2","END PART 2"],
+            part3:["PART 3","END PART 3"],
+            part4:["PART 4","END PART 4"]
+        };
+        const [s,e] = map[selection];
+        const start = QUESTION_BANK.findIndex(q => q.q === `// ${s}`) + 1;
+        const end   = QUESTION_BANK.findIndex(q => q.q === `// ${e}`);
+        list = getRealQuestions(QUESTION_BANK.slice(start, end));
+        if (isBasic) list = pickHalfRandom(list);
+    }
+    else {
+        const n = parseInt(selection, 10);
+        const start = (n - 1) * 20;
+        list = QUESTION_BANK.slice(start, start + 20);
+    }
 
-            CURRENT_QUESTIONS = getRealQuestions(list);
-            userAnswers = new Array(CURRENT_QUESTIONS.length).fill(null);
+    CURRENT_QUESTIONS = list;
+    userAnswers = new Array(CURRENT_QUESTIONS.length).fill(null);
 
-            const isPractice110 = ["1","2","3","4","5","6","7","8","9","10"].includes(selection);
+    const isPractice110 = ["1","2","3","4","5","6","7","8","9","10"].includes(selection);
 
-            if (isPractice110) {
-                document.getElementById("vietnam").checked = false;
-                document.getElementById("vietnam").disabled = true;
-            } else {
-                document.getElementById("vietnam").disabled = false;
-            }
+    if (isPractice110) {
+        document.getElementById("vietnam").checked = false;
+        document.getElementById("vietnam").disabled = true;
+    } else {
+        document.getElementById("vietnam").disabled = false;
+    }
 
-            const finalShowVi = isPractice110 ? false : document.getElementById("vietnam").checked;
+    const showVi = isPractice110 ? false : document.getElementById("vietnam").checked;
 
-            const countEl = document.getElementById("questionCount");
-            countEl.textContent = isPractice110 ? "" : `(${CURRENT_QUESTIONS.length} questions)`;
+    const countEl = document.getElementById("questionCount");
+    countEl.textContent = IS_ALL_MODE ? `(${CURRENT_QUESTIONS.length} questions)` : "";
 
-            if (!IS_ALL_MODE) {
-                document.getElementById("quizHeader").style.display = "flex";
-                document.getElementById("progressBar").style.display = "flex";
-                document.getElementById("navigation").style.display = "flex";
-                document.getElementById("resetBtn").style.display = "none";
-                document.getElementById("quizTitle").textContent = `Practice Quiz ${selection}`;
-                buildProgressBar();
-                startTimer();
-                currentIndex = 0;
-                renderSingleQuestion(0, finalShowVi);
-            } else {
-                document.getElementById("quizHeader").style.display = "none";
-                document.getElementById("progressBar").style.display = "none";
-                document.getElementById("navigation").style.display = "none";
-                document.getElementById("resetBtn").style.display = "block";
-                renderAllQuestions(finalShowVi);
-            }
+    if (!IS_ALL_MODE) {
+        document.getElementById("quizHeader").style.display = "flex";
+        document.getElementById("progressBar").style.display = "flex";
+        document.getElementById("navigation").style.display = "flex";
+        document.getElementById("resetBtn").style.display = "none";
+        document.getElementById("quizTitle").textContent = `Practice Quiz ${selection}`;
+        buildProgressBar();
+        startTimer();
+        currentIndex = 0;
+        renderSingleQuestion(0, showVi);
+    } else {
+        document.getElementById("quizHeader").style.display = "none";
+        document.getElementById("progressBar").style.display = "none";
+        document.getElementById("navigation").style.display = "none";
+        document.getElementById("resetBtn").style.display = "block";
+        renderAllQuestions(showVi);
+    }
 
-            document.getElementById("results").style.display = "none";
-        }
+    document.getElementById("results").style.display = "none";
+}
 
-        function renderAllQuestions(showVi) {
-            const container = document.getElementById("questions");
-            container.innerHTML = "";
-            CURRENT_QUESTIONS.forEach((q, i) => {
-                let html = `<div style="margin:35px 0;"><strong style="font-size:19px;">${i+1}. ${q.q}`;
-                if (showVi && q.qVi) html += ` <span style="color:#0066cc;font-style:italic;">[${q.qVi}]</span>`;
-                html += `</strong><div style="margin-top:18px;">`;
-                q.opts.forEach((opt, j) => {
-                    let optText = opt;
-                    if (showVi && q.optsVi && q.optsVi[j]) optText += ` <span style="color:#0066cc;font-style:italic;">[${q.optsVi[j]}]</span>`;
-                    html += `<label class="opt" id="q${i}o${j}_lbl"><input type="radio" name="q${i}" value="${j}" onchange="checkAnswerInstant(${i},${j})">${optText}</label>`;
-                });
-                html += `</div></div>`;
-                container.innerHTML += html;
-            });
-        }
-
-        function renderSingleQuestion(idx, showVi) {
-            const container = document.getElementById("questions");
-            container.innerHTML = "";
-            const q = CURRENT_QUESTIONS[idx];
-            let html = `<div style="margin:40px 0;"><strong style="font-size:20px;">${idx+1}. ${q.q}`;
-            if (showVi && q.qVi) html += ` <span style="color:#0066cc;font-style:italic;font-size:19px;">[${q.qVi}]</span>`;
-            html += `</strong><div style="margin-top:25px;">`;
-            q.opts.forEach((opt, i) => {
-                let optText = opt;
-                if (showVi && q.optsVi && q.optsVi[i]) optText += ` <span style="color:#0066cc;font-style:italic;font-size:18px;">[${q.optsVi[i]}]</span>`;
-                html += `<label class="opt" id="q${idx}o${i}_lbl"><input type="radio" name="q${idx}" value="${i}" onchange="saveAnswer(${idx},${i})">${optText}</label>`;
-            });
-            html += `</div></div>`;
-            container.innerHTML = html;
-
-            if (userAnswers[idx] !== null) {
-                const r = container.querySelector(`input[value="${userAnswers[idx]}"]`);
-                if (r) r.checked = true;
-            }
-
-            document.getElementById("prevBtn").disabled = idx === 0;
-            document.getElementById("nextBtn").textContent = (idx === 19) ? "Submit" : "Next";
-            updateProgress();
-        }
-
-        function buildProgressBar() {
-            const bar = document.getElementById("progressBar");
-            bar.innerHTML = "";
-            for (let i = 1; i <= 20; i++) {
-                const el = document.createElement("div");
-                el.className = "progress-item";
-                el.textContent = i;
-                bar.appendChild(el);
-            }
-            updateProgress();
-        }
-        function updateProgress() {
-            document.querySelectorAll(".progress-item").forEach((el, i) => {
-                el.classList.toggle("current", i === currentIndex);
-            });
-            document.getElementById("currentQuestion").textContent = `${currentIndex + 1}/20`;
-        }
-        function startTimer() {
-            clearInterval(timerInterval);
-            timeLeft = 45 * 60;
-            updateTimerDisplay();
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                updateTimerDisplay();
-                if (timeLeft <= 0) { clearInterval(timerInterval); submitQuiz(); }
-            }, 1000);
-        }
-        function updateTimerDisplay() {
-            const m = String(Math.floor(timeLeft / 60)).padStart(2, "0");
-            const s = String(timeLeft % 60).padStart(2, "0");
-            document.getElementById("timer").textContent = `${m}:${s}`;
-        }
-        function saveAnswer(idx, val) { userAnswers[idx] = val; }
-
-        function nextQuestion() {
-            if (currentIndex < 19) {
-                currentIndex++;
-                renderSingleQuestion(currentIndex, document.getElementById("vietnam").checked);
-            } else submitQuiz();
-        }
-        function prevQuestion() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                renderSingleQuestion(currentIndex, document.getElementById("vietnam").checked);
-            }
-        }
-
-        function submitQuiz() {
-            clearInterval(timerInterval);
-            let score = 0;
-            const wrong = [];
-            CURRENT_QUESTIONS.forEach((q, i) => {
-                if (userAnswers[i] === q.a) score++; else wrong.push(i);
-            });
-            document.getElementById("results").style.display = "block";
-            document.getElementById("score").textContent = `Điểm: ${score} / ${CURRENT_QUESTIONS.length}`;
-            const ul = document.getElementById("wrongList"); ul.innerHTML = "";
-            wrong.forEach(i => { const li = document.createElement("li"); li.textContent = `${i+1}. ${CURRENT_QUESTIONS[i].q}`; ul.appendChild(li); });
-            document.getElementById("quizHeader").style.display = "none";
-            document.getElementById("progressBar").style.display = "none";
-            document.getElementById("questions").style.display = "none";
-            document.getElementById("navigation").style.display = "none";
-            document.getElementById("resetBtn").style.display = "block";
-        }
-
-        document.getElementById("quizSelect").addEventListener("change", e => loadQuiz(e.target.value));
-
-        document.getElementById("vietnam").addEventListener("change", () => {
-            const cur = document.getElementById("quizSelect").value;
-            if (!["1","2","3","4","5","6","7","8","9","10"].includes(cur)) {
-                loadQuiz(cur);
-            }
+/* ========= RENDER ========= */
+function renderAllQuestions(showVi) {
+    const container = document.getElementById("questions");
+    container.innerHTML = "";
+    CURRENT_QUESTIONS.forEach((q, i) => {
+        let html = `<div style="margin:35px 0;"><strong>${i+1}. ${q.q}`;
+        if (showVi && q.qVi) html += ` <i style="color:#0066cc;">[${q.qVi}]</i>`;
+        html += `</strong><div style="margin-top:18px;">`;
+        q.opts.forEach((opt, j) => {
+            let txt = opt;
+            if (showVi && q.optsVi && q.optsVi[j]) txt += ` <i style="color:#0066cc;">[${q.optsVi[j]}]</i>`;
+            html += `<label class="opt" id="q${i}o${j}_lbl">
+                <input type="radio" name="q${i}" onchange="checkAnswerInstant(${i},${j})">${txt}
+            </label>`;
         });
+        html += `</div></div>`;
+        container.innerHTML += html;
+    });
+}
 
-        document.getElementById("basic").addEventListener("change", () => { /* placeholder */ });
-        document.getElementById("advance").addEventListener("change", () => { /* placeholder cho Advance */ });
+function renderSingleQuestion(idx, showVi) {
+    const q = CURRENT_QUESTIONS[idx];
+    const container = document.getElementById("questions");
+    container.innerHTML = "";
 
-        document.getElementById("prevBtn").addEventListener("click", prevQuestion);
-        document.getElementById("nextBtn").addEventListener("click", nextQuestion);
+    let html = `<strong>${idx+1}. ${q.q}`;
+    if (showVi && q.qVi) html += ` <i style="color:#0066cc;">[${q.qVi}]</i>`;
+    html += `</strong><div style="margin-top:20px;">`;
 
-        document.getElementById("resetBtn").addEventListener("click", () => {
-            document.querySelectorAll(".correct,.wrong").forEach(el => el.classList.remove("correct","wrong"));
-            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
-            document.getElementById("results").style.display = "none";
-            loadQuiz(document.getElementById("quizSelect").value);
-        });
+    q.opts.forEach((opt, i) => {
+        let txt = opt;
+        if (showVi && q.optsVi && q.optsVi[i]) txt += ` <i style="color:#0066cc;">[${q.optsVi[i]}]</i>`;
+        html += `<label class="opt" id="q${idx}o${i}_lbl">
+            <input type="radio" name="q${idx}" onchange="saveAnswer(${idx},${i})">${txt}
+        </label>`;
+    });
+    html += `</div>`;
+    container.innerHTML = html;
 
-        // Khởi động
-        document.getElementById("quizSelect").value = "part1";
-        loadQuiz("part1");
-    </script>
+    if (userAnswers[idx] !== null) {
+        container.querySelectorAll("input")[userAnswers[idx]].checked = true;
+    }
+
+    document.getElementById("prevBtn").disabled = idx === 0;
+    document.getElementById("nextBtn").textContent = (idx === 19) ? "Submit" : "Next";
+    updateProgress();
+}
+
+/* ========= PROGRESS / TIMER ========= */
+function buildProgressBar() {
+    const bar = document.getElementById("progressBar");
+    bar.innerHTML = "";
+    for (let i = 1; i <= 20; i++) {
+        const d = document.createElement("div");
+        d.className = "progress-item";
+        d.textContent = i;
+        bar.appendChild(d);
+    }
+    updateProgress();
+}
+function updateProgress() {
+    document.querySelectorAll(".progress-item").forEach((el,i)=>{
+        el.classList.toggle("current", i === currentIndex);
+    });
+    document.getElementById("currentQuestion").textContent = `${currentIndex+1}/20`;
+}
+function startTimer() {
+    clearInterval(timerInterval);
+    timeLeft = 45 * 60;
+    timerInterval = setInterval(()=>{
+        timeLeft--;
+        const m = String(Math.floor(timeLeft/60)).padStart(2,"0");
+        const s = String(timeLeft%60).padStart(2,"0");
+        document.getElementById("timer").textContent = `${m}:${s}`;
+        if (timeLeft <= 0) submitQuiz();
+    },1000);
+}
+
+/* ========= ANSWER ========= */
+function saveAnswer(i,v){ userAnswers[i]=v; }
+function checkAnswerInstant(i,v){
+    const c = CURRENT_QUESTIONS[i].a;
+    document.getElementById(`q${i}o${v}_lbl`).classList.add(v===c?"correct":"wrong");
+    if(v!==c) document.getElementById(`q${i}o${c}_lbl`).classList.add("correct");
+}
+
+/* ========= NAV ========= */
+function nextQuestion(){ currentIndex<19 ? (currentIndex++,renderSingleQuestion(currentIndex,vietnam.checked)) : submitQuiz(); }
+function prevQuestion(){ if(currentIndex>0){ currentIndex--; renderSingleQuestion(currentIndex,vietnam.checked); }}
+
+/* ========= SUBMIT ========= */
+function submitQuiz(){
+    clearInterval(timerInterval);
+    let score=0, wrong=[];
+    CURRENT_QUESTIONS.forEach((q,i)=>{ if(userAnswers[i]===q.a) score++; else wrong.push(i); });
+    document.getElementById("results").style.display="block";
+    document.getElementById("score").textContent=`Điểm: ${score}/${CURRENT_QUESTIONS.length}`;
+}
+
+/* ========= EVENTS ========= */
+quizSelect.addEventListener("change",e=>loadQuiz(e.target.value));
+basic.addEventListener("change",()=>{ if(basic.checked){ advance.checked=false; loadQuiz(quizSelect.value);} });
+advance.addEventListener("change",()=>{ if(advance.checked){ basic.checked=false; loadQuiz(quizSelect.value);} });
+prevBtn.onclick=prevQuestion;
+nextBtn.onclick=nextQuestion;
+resetBtn.onclick=()=>loadQuiz(quizSelect.value);
+
+/* ========= INIT ========= */
+basic.checked = true;
+advance.checked = false;
+quizSelect.value = "part1";
+loadQuiz("part1");
+</script>
+
 </body>
 
 </html>
+
 
 
 
