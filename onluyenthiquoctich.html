@@ -197,6 +197,19 @@ const firebaseConfig = {
             console.error('Logout error:', error);
         }
     };
+
+	import { getAuth, onAuthStateChanged } from
+'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+const auth = getAuth();
+
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        // Chưa login → quay về login
+        window.location.href = 'login.html';
+    }
+});
+	
 </script>
 
 <!-- Tùy chọn: Thêm nút đăng xuất vào trang -->
@@ -280,6 +293,7 @@ const firebaseConfig = {
     </div>
 </body>
 </html>
+
 
 
 
