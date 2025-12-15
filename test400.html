@@ -223,7 +223,7 @@
         }
         .note-btn:hover { background: #1976D2; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(33,150,243,0.4); }
 
-        #vietnam, #basic {
+        #vietnam, #basic, #advance {
             transform: scale(1.2);
             margin: 0 5px 0 15px;
         }
@@ -358,7 +358,6 @@
         <div style="display:flex; align-items:center; gap:10px; flex-grow:1;">
             <b>Chọn bài Test:</b>
             <select id="quizSelect" style="padding:12px; font-size:18px; border-radius:8px; flex:1; max-width:550px;">
-                <option value="random-en">Practice Quiz (200 questions)</option>
                 <option value="part1">Practice Quiz Part_1 (Australia and its people)</option>
                 <option value="part2">Practice Quiz Part_2 (Democratic beliefs, rights and liberties)</option>
                 <option value="part3">Practice Quiz Part_3 (Government and the law)</option>
@@ -373,13 +372,14 @@
                 <option value="8">Practice Quiz 8</option>
                 <option value="9">Practice Quiz 9</option>
                 <option value="10">Practice Quiz 10</option>
-                <option value="all">Practice Quiz All (400 questions)</option>
+                <option value="all">Practice Quiz All</option>
             </select>
         </div>
         <button class="note-btn" onclick="showNotePopup()">📝 Note</button>
         <span id="questionCount" style="font-weight:bold; color:#006400; margin-left:20px;"></span>
         <label style="white-space:nowrap;"><input type="checkbox" id="vietnam"> Vietnam</label>
         <label style="white-space:nowrap;"><input type="checkbox" id="basic"> Basic</label>
+        <label style="white-space:nowrap;"><input type="checkbox" id="advance"> Advance</label>
     </div>
 
     <!-- Note Popup -->
@@ -888,7 +888,6 @@
 ];
 
         // ============ BIẾN TOÀN CỤC ============
-// ============ BIẾN TOÀN CỤC ============
 let CURRENT_QUESTIONS = [];
         let IS_ALL_MODE = false;
         let currentIndex = 0;
@@ -940,10 +939,6 @@ let CURRENT_QUESTIONS = [];
                 const end   = QUESTION_BANK.findIndex(q => q.q === `// ${e}`);
                 list = QUESTION_BANK.slice(start, end);
             }
-            else if (selection === "random-en") {
-                IS_ALL_MODE = true;
-                list = [...getRandomFromPart("PART 1",50), ...getRandomFromPart("PART 2",50), ...getRandomFromPart("PART 3",50), ...getRandomFromPart("PART 4",50)];
-            }
             else {
                 const n = parseInt(selection, 10);
                 const start = (n - 1) * 20;
@@ -962,7 +957,6 @@ let CURRENT_QUESTIONS = [];
                 document.getElementById("vietnam").disabled = false;
             }
 
-            // Mặc định chỉ hiển thị tiếng Anh. Chỉ hiển thị tiếng Việt khi checkbox Vietnam được check
             const finalShowVi = isPractice110 ? false : document.getElementById("vietnam").checked;
 
             const countEl = document.getElementById("questionCount");
@@ -1106,6 +1100,7 @@ let CURRENT_QUESTIONS = [];
         });
 
         document.getElementById("basic").addEventListener("change", () => { /* placeholder */ });
+        document.getElementById("advance").addEventListener("change", () => { /* placeholder cho Advance */ });
 
         document.getElementById("prevBtn").addEventListener("click", prevQuestion);
         document.getElementById("nextBtn").addEventListener("click", nextQuestion);
@@ -1124,6 +1119,7 @@ let CURRENT_QUESTIONS = [];
 </body>
 
 </html>
+
 
 
 
