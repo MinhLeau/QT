@@ -345,8 +345,17 @@
             transition: all 0.3s;
         }
         .logout-btn:hover { background: #c82333; transform: translateY(-2px); }
+
+.hide-on-scroll {
+    opacity: 0;
+    transform: translateY(-15px);
+    pointer-events: none;
+}
+
+		
     </style>
-    <button class="logout-btn" onclick="logout()">Logout</button>
+    <button class="logout-btn hide-on-scroll-target" onclick="logout()">Logout</button>
+
 </head>
 <body>
 
@@ -482,6 +491,29 @@
         <ol id="wrongList"></ol>
     </div>
 
+	<script>
+let lastScrollTop = 0;
+
+const hideTargets = [
+    document.querySelector('.logout-btn'),
+    document.querySelector('.home-btn'),
+    document.querySelector('.home-btnTS')
+];
+
+window.addEventListener('scroll', () => {
+    const st = window.pageYOffset || document.documentElement.scrollTop;
+    const isScrollingDown = st > lastScrollTop;
+
+    hideTargets.forEach(el => {
+        if (!el) return;
+        el.classList.toggle('hide-on-scroll', isScrollingDown);
+    });
+
+    lastScrollTop = st <= 0 ? 0 : st;
+});
+</script>
+
+	
     <script>
         // ============ DỮ LIỆU CÂU HỎI (giữ nguyên như cũ) ============
         
@@ -1149,6 +1181,7 @@ loadQuiz("part1");
 </body>
 
 </html>
+
 
 
 
