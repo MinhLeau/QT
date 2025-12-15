@@ -358,12 +358,11 @@
         <div style="display:flex; align-items:center; gap:10px; flex-grow:1;">
             <b>Chọn bài Test:</b>
             <select id="quizSelect" style="padding:12px; font-size:18px; border-radius:8px; flex:1; max-width:550px;">
-                <option value="random-vi">Practice Quiz (200 questions)_EN-VN</option>
                 <option value="random-en">Practice Quiz (200 questions)</option>
-                <option value="part1">Practice Quiz Part_1 (Australia and its people)_EN-VN</option>
-                <option value="part2">Practice Quiz Part_2 (Democratic beliefs, rights and liberties)_EN-VN</option>
-                <option value="part3">Practice Quiz Part_3 (Government and the law)_EN-VN</option>
-                <option value="part4">Practice Quiz Part_4 (Australian values)_EN-VN</option>
+                <option value="part1">Practice Quiz Part_1 (Australia and its people)</option>
+                <option value="part2">Practice Quiz Part_2 (Democratic beliefs, rights and liberties)</option>
+                <option value="part3">Practice Quiz Part_3 (Government and the law)</option>
+                <option value="part4">Practice Quiz Part_4 (Australian values)</option>
                 <option value="1">Practice Quiz 1</option>
                 <option value="2">Practice Quiz 2</option>
                 <option value="3">Practice Quiz 3</option>
@@ -374,7 +373,6 @@
                 <option value="8">Practice Quiz 8</option>
                 <option value="9">Practice Quiz 9</option>
                 <option value="10">Practice Quiz 10</option>
-                <option value="all-vi">Practice Quiz All (400 questions Anh-Việt)</option>
                 <option value="all">Practice Quiz All (400 questions)</option>
             </select>
         </div>
@@ -931,22 +929,21 @@ let CURRENT_QUESTIONS = [];
 
         function loadQuiz(selection) {
             let list = [];
-            let forceVietnameseByOption = false; // Chỉ true với các option có hậu tố -vi
             IS_ALL_MODE = false;
 
             if (selection === "all") { IS_ALL_MODE = true; list = QUESTION_BANK; }
-            else if (selection === "all-vi") { IS_ALL_MODE = true; forceVietnameseByOption = true; list = QUESTION_BANK; }
             else if (["part1","part2","part3","part4"].includes(selection)) {
                 IS_ALL_MODE = true;
-                forceVietnameseByOption = true;
                 const map = {part1:["PART 1","END PART 1"], part2:["PART 2","END PART 2"], part3:["PART 3","END PART 3"], part4:["PART 4","END PART 4"]};
                 const [s,e] = map[selection];
                 const start = QUESTION_BANK.findIndex(q => q.q === `// ${s}`) + 1;
                 const end   = QUESTION_BANK.findIndex(q => q.q === `// ${e}`);
                 list = QUESTION_BANK.slice(start, end);
             }
-            else if (selection === "random-vi") { IS_ALL_MODE = true; forceVietnameseByOption = true; list = [...getRandomFromPart("PART 1",50), ...getRandomFromPart("PART 2",50), ...getRandomFromPart("PART 3",50), ...getRandomFromPart("PART 4",50)]; }
-            else if (selection === "random-en") { IS_ALL_MODE = true; list = [...getRandomFromPart("PART 1",50), ...getRandomFromPart("PART 2",50), ...getRandomFromPart("PART 3",50), ...getRandomFromPart("PART 4",50)]; }
+            else if (selection === "random-en") {
+                IS_ALL_MODE = true;
+                list = [...getRandomFromPart("PART 1",50), ...getRandomFromPart("PART 2",50), ...getRandomFromPart("PART 3",50), ...getRandomFromPart("PART 4",50)];
+            }
             else {
                 const n = parseInt(selection, 10);
                 const start = (n - 1) * 20;
@@ -958,7 +955,6 @@ let CURRENT_QUESTIONS = [];
 
             const isPractice110 = ["1","2","3","4","5","6","7","8","9","10"].includes(selection);
 
-            // Practice Quiz 1-10: luôn chỉ tiếng Anh, checkbox Vietnam bị disable
             if (isPractice110) {
                 document.getElementById("vietnam").checked = false;
                 document.getElementById("vietnam").disabled = true;
@@ -966,11 +962,9 @@ let CURRENT_QUESTIONS = [];
                 document.getElementById("vietnam").disabled = false;
             }
 
-            // Quyết định hiển thị tiếng Việt: chỉ khi checkbox được check HOẶC option có hậu tố -vi
-            const vietnamChecked = document.getElementById("vietnam").checked;
-            const finalShowVi = isPractice110 ? false : (vietnamChecked || forceVietnameseByOption);
+            // Mặc định chỉ hiển thị tiếng Anh. Chỉ hiển thị tiếng Việt khi checkbox Vietnam được check
+            const finalShowVi = isPractice110 ? false : document.getElementById("vietnam").checked;
 
-            // Số lượng câu hỏi
             const countEl = document.getElementById("questionCount");
             countEl.textContent = isPractice110 ? "" : `(${CURRENT_QUESTIONS.length} questions)`;
 
@@ -1074,15 +1068,13 @@ let CURRENT_QUESTIONS = [];
         function nextQuestion() {
             if (currentIndex < 19) {
                 currentIndex++;
-                const showVi = document.getElementById("vietnam").checked || ["random-vi","all-vi","part1","part2","part3","part4"].includes(document.getElementById("quizSelect").value);
-                renderSingleQuestion(currentIndex, showVi);
+                renderSingleQuestion(currentIndex, document.getElementById("vietnam").checked);
             } else submitQuiz();
         }
         function prevQuestion() {
             if (currentIndex > 0) {
                 currentIndex--;
-                const showVi = document.getElementById("vietnam").checked || ["random-vi","all-vi","part1","part2","part3","part4"].includes(document.getElementById("quizSelect").value);
-                renderSingleQuestion(currentIndex, showVi);
+                renderSingleQuestion(currentIndex, document.getElementById("vietnam").checked);
             }
         }
 
@@ -1132,6 +1124,7 @@ let CURRENT_QUESTIONS = [];
 </body>
 
 </html>
+
 
 
 
