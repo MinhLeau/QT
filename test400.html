@@ -1382,6 +1382,14 @@ function loadQuiz(selection) {
     CURRENT_QUESTIONS = getRealQuestions(list);
     userAnswers = new Array(CURRENT_QUESTIONS.length).fill(null);
 
+    // Hiển thị số lượng câu hỏi (trừ Practice Quiz 1-10)
+    const countEl = document.getElementById("questionCount");
+    if (["1","2","3","4","5","6","7","8","9","10"].includes(selection)) {
+        countEl.textContent = "";
+    } else {
+        countEl.textContent = `(${CURRENT_QUESTIONS.length} questions)`;
+    }
+
     if (!IS_ALL_MODE) {
         // Chế độ 20 câu bình thường
         document.getElementById("quizHeader").style.display = "flex";
@@ -1569,11 +1577,11 @@ document.getElementById("resetBtn").addEventListener("click", () => {
 /* =================== KHỞI ĐỘNG =================== */
 document.getElementById("quizSelect").value = "part1";
 loadQuiz("part1");
-
     </script>
 </body>
 
 </html>
+
 
 
 
