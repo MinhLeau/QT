@@ -31,64 +31,46 @@
             margin: 10px 0 8px 0;
             font-size: 28px;
         }
-		h2, h22 {
+        h2 {
             display: inline;
             margin: 0;
             text-align:left; 
             color:#e51803; 
             font-size:20px;
         }
-        h22 {
-            color:#006400;
-        }
-        h13 {
-            text-align: right;
-            color: #006400;
-            margin: 0 0 20px 0;
-            font-size: 11px;
-        }
-
-        h3 {
-            text-align: right;
-            color: #006400;
-            margin: -3px 1 5px 0;
+        .credit {
+            position: absolute;
             top: 55px;
+            right: 20px;
+            z-index: 10;
             font-size: 0.6rem;
+            color: #006400;
+            text-shadow: 1px 1px 6px rgba(0,0,0,0.8);
+            font-weight: normal;
         }
+        /* Nút Home & TS */
+        .home-btn, .home-btnTS {
+            position: absolute;
+            top: 5px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        .home-btn { left: 15px; background: #006400; }
+        .home-btn::before { content: "🏠"; }
+        .home-btn:hover { background: #004d00; transform: scale(1.1); }
+        .home-btnTS { right: 37px; background: url("TS.jpg") center / 100% no-repeat, #006400; }
+        .home-btnTS:hover { transform: scale(1.1); }
 
-		
-/* === NÚT HOME & ABOUT === */
-.home-btn, .home-btnTS {
-    position: absolute;
-    top: 5px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    text-decoration: none;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    z-index: 1000;
-    transition: all 0.3s;
-}
-
-.home-btn {
-    left: 15px;
-    background: #006400;
-}
-.home-btn::before { content: "🏠"; }
-.home-btn:hover { background: #004d00; transform: scale(1.1); }
-
-.home-btnTS {
-    right: 37px;
-    background: url("TS.jpg") center / 100% no-repeat, #006400;
-}
-.home-btnTS:hover { transform: scale(1.1); }
-.home-btnTS::before { content: none; }
-
-        /* Header khi làm bài 20 câu */
+        /* Header 20 câu */
         #quizHeader {
             display: none;
             justify-content: space-between;
@@ -101,7 +83,7 @@
             font-weight: bold;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
-        #currentQuestion {
+        #currentQuestion, #timer {
             background: white;
             color: #001f3f;
             padding: 10px 18px;
@@ -109,21 +91,10 @@
             font-size: 20px;
             font-weight: bold;
         }
-        #quizTitle {
-            font-size: 22px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        #timer {
-            background: white;
-            color: #d32f2f;
-            padding: 10px 18px;
-            border-radius: 30px;
-            font-size: 22px;
-            font-weight: bold;
-        }
+        #timer { color: #d32f2f; }
+        #quizTitle { font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Thanh 20 số câu */
+        /* Progress bar */
         #progressBar {
             display: none;
             justify-content: center;
@@ -151,16 +122,7 @@
             box-shadow: 0 0 15px rgba(255,102,0,0.6);
         }
 
-        /* Câu hỏi */
-        .question {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            margin: 20px 0;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-            font-size: 19px;
-            line-height: 1.7;
-        }
+        /* Câu hỏi & lựa chọn */
         .opt {
             display: block;
             padding: 18px 20px;
@@ -175,37 +137,28 @@
             user-select: none;
             touch-action: manipulation;
         }
-        .opt:hover, .opt:active {
-            background: #e3f2fd;
-            transform: translateX(5px);
-        }
+        .opt:hover, .opt:active { background: #e3f2fd; transform: translateX(5px); }
         .opt input[type="radio"] {
             transform: scale(1.5);
             margin-right: 15px;
             accent-color: #006400;
             pointer-events: none;
         }
-        .correct {
-            background: #d4edda !important;
-            border: 4px solid #28a745 !important;
-            color: #155724;
-            font-weight: bold;
-        }
-        .wrong {
-            background: #f8d7da !important;
-            border: 4px solid #dc3545 !important;
-            color: #721c24;
-            font-weight: bold;
-        }
-        .vietnamese {
-            color: #0066cc;
-            font-style: italic;
-            font-size: 0.95em;
-            display: block;
-            margin-top: 6px;
-        }
+        .correct { background: #d4edda !important; border: 4px solid #28a745 !important; color: #155724; font-weight: bold; }
+        .wrong   { background: #f8d7da !important; border: 4px solid #dc3545 !important; color: #721c24; font-weight: bold; }
 
-        /* Nút Prev / Next */
+        /* Chế độ All/200/Part - giảm padding */
+        #questions .opt {
+            padding: 7px 16px !important;
+            margin: 8px 0 !important;
+            font-size: 17px !important;
+            line-height: 1.4 !important;
+            border-radius: 10px !important;
+        }
+        #questions .opt.correct { padding: 10px 16px !important; }
+        #questions .opt.wrong   { padding: 10px 16px !important; }
+
+        /* Navigation */
         #navigation {
             display: none;
             justify-content: space-between;
@@ -219,24 +172,12 @@
             border-radius: 14px;
             cursor: pointer;
             min-width: 120px;
-            touch-action: manipulation;
-            -webkit-user-select: none;
-            user-select: none;
         }
-        #prevBtn {
-            background: #6c757d;
-            color: white;
-        }
-        #nextBtn {
-            background: #007bff;
-            color: white;
-        }
-        #prevBtn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
+        #prevBtn { background: #6c757d; color: white; }
+        #nextBtn { background: #007bff; color: white; }
+        #prevBtn:disabled { background: #ccc; cursor: not-allowed; }
 
-        /* Kết quả */
+        /* Kết quả & Reset */
         #results {
             margin: 30px 0;
             padding: 25px;
@@ -246,14 +187,7 @@
             display: none;
             text-align: center;
         }
-        #score {
-            font-size: 28px;
-            font-weight: bold;
-            color: #006400;
-            margin-bottom: 15px;
-        }
-
-        /* Nút Reset */
+        #score { font-size: 28px; font-weight: bold; color: #006400; margin-bottom: 15px; }
         #resetBtn {
             padding: 14px 30px;
             font-size: 18px;
@@ -263,12 +197,9 @@
             border-radius: 12px;
             cursor: pointer;
             margin-top: 20px;
-            touch-action: manipulation;
-            -webkit-user-select: none;
-            user-select: none;
         }
 
-        /* Select dropdown tối ưu cho mobile */
+        /* Select & container */
         select {
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -279,176 +210,13 @@
             background-size: 20px;
             padding-right: 40px !important;
         }
-
-        /* Responsive cho iPhone và iPad */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            h1 {
-                font-size: 22px;
-            }
-            h2 {
-                font-size: 18px;
-            }
-            #quizHeader { 
-                flex-direction: column; 
-                gap: 12px; 
-                text-align: center;
-                padding: 12px 15px;
-            }
-            #currentQuestion, #timer { 
-                font-size: 16px; 
-                padding: 8px 14px; 
-            }
-            #quizTitle {
-                font-size: 18px;
-            }
-            .progress-item { 
-                width: 34px; 
-                height: 34px; 
-                font-size: 13px; 
-            }
-            .opt { 
-                font-size: 16px; 
-                padding: 14px 16px; 
-            }
-            #prevBtn, #nextBtn {
-                padding: 14px 30px;
-                font-size: 18px;
-            }
-            .level-label {
-                font-size: 18px;
-            }
-        }
-
-        /* iPad Portrait và Landscape */
-        @media (min-width: 768px) and (max-width: 1024px) {
-            body {
-                padding: 20px;
-            }
-            .opt {
-                font-size: 17px;
-            }
-        }
-		
-		/* ======== GIẢM ĐỘ CAO CẤP ẨN TRONG CHẾ ĐỘ 200 CÂU ======== */
-#questions .opt {
-    padding: 7px 16px !important;
-    margin: 8px 0 !important;
-    font-size: 17px !important;
-    line-height: 1.4 !important;
-    border-radius: 10px !important;
-}
-
-#questions .opt.correct {
-    background: #d4edda !important;
-    border: 3px solid #28a745 !important;
-    padding: 10px 16px !important;
-}
-#questions .opt.wrong {
-    background: #f8d7da !important;
-    border: 3px solid #dc3545 !important;
-    padding: 10px 16px !important;
-}
-
-@media (max-width: 768px) {
-    #questions .opt {
-        padding: 9px 14px !important;
-        margin: 6px 0 !important;
-        font-size: 16px !important;
-    }
-}
-	
-/* Level buttons */
-.level-container {
-    text-align: left;
-    margin: 20px 0;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
-}
-.level-label {
-    font-weight: bold;
-    font-size: 20px;
-    color: #e51803;
-}
-.level-buttons {
-    display: flex;
-    gap: 10px;
-}
-.level-btn {
-    padding: 7px 18px;
-    font-size: 11px;
-    font-weight: bold;
-    text-decoration: none;
-    border-radius: 7px;
-    transition: all 0.3s;
-    min-width: 72px;
-    text-align: center;
-    display: inline-block;
-    touch-action: manipulation;
-    -webkit-user-select: none;
-    user-select: none;
-}
-.level-btn.basic {
-    background: #28a745;
-	color: white;
-	font-size: 12px !important;
-}
-.level-btn.advance {
-    background: #dc3545;
-    color: white;
-}
-.level-btn:hover, .level-btn:active {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-}
-.level-btn.active {
-    background: #1e7e34 !important;
-}
-.level-btn.advance.active {
-    background: #c82333 !important;
-}
-@media (max-width: 768px) {
-    .level-container {
-        flex-direction: row;
-        align-items: center;
-    }
-    .level-buttons {
-        justify-content: flex-start;
-    }
-}	
-
-        /* Dòng "Created by Thomas" - bên phải trên cùng */
-        .credit {
-            position: absolute;
-            top: 55px;
-            right: 20px;
-            z-index: 10;
-            font-size: 0.6rem;
-            color: #006400;
-            text-shadow: 1px 1px 6px rgba(0,0,0,0.8);
-            font-weight: normal;
-        }
-
-        /* Quiz select container */
         .quiz-select-container {
             display: flex;
             align-items: center;
-            gap: 5px;
+            flex-wrap: wrap;
+            gap: 10px;
             margin: 20px 0;
         }
-
-        .quiz-select-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Note button */
         .note-btn {
             padding: 8px 17px;
             font-size: 13px;
@@ -460,15 +228,13 @@
             cursor: pointer;
             transition: all 0.3s;
             white-space: nowrap;
-            touch-action: manipulation;
-            -webkit-user-select: none;
-            user-select: none;
         }
+        .note-btn:hover { background: #1976D2; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(33,150,243,0.4); }
 
-        .note-btn:hover {
-            background: #1976D2;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+        /* Checkbox style */
+        #vietnam, #basic {
+            transform: scale(1.2);
+            margin: 0 5px 0 15px;
         }
 
         /* Note Popup */
@@ -476,19 +242,13 @@
             display: none;
             position: fixed;
             z-index: 3000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
             overflow: auto;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0,0,0,0.7);
             animation: fadeIn 0.3s;
         }
-
-        .note-popup.show {
-            display: block;
-        }
-
+        .note-popup.show { display: block; }
         .note-content {
             background-color: #ffffff;
             margin: 3% auto;
@@ -497,228 +257,124 @@
             border-radius: 16px;
             width: 90%;
             max-width: 800px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
             animation: slideDown 0.4s;
             position: relative;
         }
-
         .note-header {
             background: linear-gradient(135deg, #2196F3, #1976D2);
             color: white;
             padding: 25px 30px;
-            margin: 0;
             border-radius: 13px 13px 0 0;
             text-align: center;
         }
-
-        .note-header h2 {
-            color: white;
-            font-size: 26px;
-            margin: 0;
-            display: block;
-        }
-
+        .note-header h2 { font-size: 26px; margin: 0; }
         .note-body {
             padding: 30px;
             max-height: 70vh;
             overflow-y: auto;
         }
-
-        .note-body h3 {
-            color: #2196F3;
-            margin: 20px 0 12px 0;
-            font-size: 20px;
-            text-align: left;
-            border-bottom: 3px solid #e3f2fd;
-            padding-bottom: 8px;
-        }
-
-        .note-body ul, .note-body ol {
-            margin: 12px 0;
-            padding-left: 30px;
-            line-height: 1.8;
-        }
-
-        .note-body li {
-            margin: 10px 0;
-            color: #333;
-            font-size: 16px;
-        }
-
-        .note-body strong {
-            color: #1976D2;
-            font-weight: bold;
-        }
-
-        .note-body p {
-            margin: 10px 0;
-            color: #555;
-            line-height: 1.8;
-            font-size: 16px;
-        }
-
-        .note-body .highlight {
-            background: #fff3cd;
-            padding: 15px;
-            border-left: 4px solid #ffc107;
-            border-radius: 6px;
-            margin: 15px 0;
-        }
-
         .note-close {
             position: absolute;
-            right: 20px;
-            top: 20px;
+            right: 20px; top: 20px;
             color: white;
             font-size: 36px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255,255,255,0.2);
         }
+        .note-close:hover { background: rgba(255,255,255,0.4); transform: rotate(90deg); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        .note-close:hover {
-            background: rgba(255, 255, 255, 0.4);
-            transform: rotate(90deg);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideDown {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            .quiz-select-container {
-                flex-direction: row;
-                align-items: center;
-                flex-wrap: wrap;
-            }
-
-            .note-btn {
-                padding: 8px 15px;
-                font-size: 12px;
-            }
-
-            .note-content {
-                width: 95%;
-                margin: 5% auto;
-            }
-
-            .note-header h2 {
-                font-size: 20px;
-            }
-
-            .note-body {
-                padding: 20px 15px;
-            }
-
-            .note-body h3 {
-                font-size: 18px;
-            }
-
-            .note-body li, .note-body p {
-                font-size: 15px;
-            }
+            body { padding: 10px; }
+            h1 { font-size: 22px; }
+            #quizHeader { flex-direction: column; gap: 12px; text-align: center; padding: 12px 15px; }
+            #currentQuestion, #timer { font-size: 16px; padding: 8px 14px; }
+            #quizTitle { font-size: 18px; }
+            .progress-item { width: 34px; height: 34px; font-size: 13px; }
+            .opt { font-size: 16px; padding: 14px 16px; }
+            #prevBtn, #nextBtn { padding: 14px 30px; font-size: 18px; }
+            #questions .opt { padding: 9px 14px !important; font-size: 16px !important; }
+            .note-header h2 { font-size: 20px; }
+            .note-body { padding: 20px 15px; }
         }
     </style>
-<script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
-   
-const firebaseConfig = {
-  apiKey: "AIzaSyDvB54m2uxhjuE2moJQ09NcuAEVhro7Zh4",
-  authDomain: "quoctichuc-43f28.firebaseapp.com",
-  projectId: "quoctichuc-43f28",
-  storageBucket: "quoctichuc-43f28.firebasestorage.app",
-  messagingSenderId: "710420527110",
-  appId: "1:710420527110:web:ba4281739f963e76656b87"
-};
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+        const firebaseConfig = {
+          apiKey: "AIzaSyDvB54m2uxhjuE2moJQ09NcuAEVhro7Zh4",
+          authDomain: "quoctichuc-43f28.firebaseapp.com",
+          projectId: "quoctichuc-43f28",
+          storageBucket: "quoctichuc-43f28.firebasestorage.app",
+          messagingSenderId: "710420527110",
+          appId: "1:710420527110:web:ba4281739f963e76656b87"
+        };
 
-    // Kiểm tra đăng nhập
-    onAuthStateChanged(auth, (user) => {
-        if (!user) {
-            // Chưa đăng nhập, chuyển về trang login
-            window.location.href = 'login.html';
-        } else {
-            // Đã đăng nhập, hiển thị thông tin user
-            console.log('Logged in as:', user.email);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                console.log('Logged in as:', user.email);
+            }
+        });
+
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        };
+    </script>
+
+    <style>
+        .logout-btn {
+            position: fixed;
+            top: 13px;
+            left: 85px;
+            padding: 8px 16px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 1000;
+            transition: all 0.3s;
         }
-    });
-
-    // Hàm đăng xuất (gọi khi user click nút logout)
-    window.logout = async function() {
-        try {
-            await signOut(auth);
-            window.location.href = 'login.html';
-        } catch (error) {
-            console.error('Logout error:', error);
-        }
-    };
-</script>
-
-
-<style>
-    .logout-btn {
-        position: fixed;
-        top: 13px;
-        left: 85px;
-        padding: 8px 16px;
-        background: #dc3545;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: bold;
-        z-index: 1000;
-        transition: all 0.3s;
-    }
-    .logout-btn:hover {
-        background: #c82333;
-        transform: translateY(-2px);
-    }
-</style>
-
-<button class="logout-btn" onclick="logout()">Logout</button>
-	
+        .logout-btn:hover { background: #c82333; transform: translateY(-2px); }
+    </style>
+    <button class="logout-btn" onclick="logout()">Logout</button>
 </head>
 <body>
 
     <a href="onluyenthiquoctich.html" class="home-btn" title="Về trang chủ"></a>
-	<a href="#" class="home-btnTS" title="Thomas"></a>
-	<h4 class="credit">Created by Thomas</h4>
-<h1>Australian Citizenship - Our Common Bond</h1>
-
+    <a href="#" class="home-btnTS" title="Thomas"></a>
+    <h4 class="credit">Created by Thomas</h4>
+    <h1>Australian Citizenship - Our Common Bond</h1>
     <h2>Australian Citizenship Practice Quiz</h2>
 
-   
-
     <div class="quiz-select-container">
-        <div class="quiz-select-wrapper">
-            <a><b>Chọn bài Test:</b></a>
-            <select id="quizSelect" style="padding:12px; font-size:18px; border-radius:8px; width:100%; max-width:550px;">
-				<option value="random-vi">Practice Quiz (200 questions)_EN-VN</option>
-				<option value="random-en">Practice Quiz (200 questions)</option>
+        <div style="display:flex; align-items:center; gap:10px;">
+            <b>Chọn bài Test:</b>
+            <select id="quizSelect" style="padding:12px; font-size:18px; border-radius:8px; flex:1; max-width:550px;">
+                <option value="random-vi">Practice Quiz (200 questions)_EN-VN</option>
+                <option value="random-en">Practice Quiz (200 questions)</option>
                 <option value="part1">Practice Quiz Part_1 (Australia and its people)_EN-VN</option>
                 <option value="part2">Practice Quiz Part_2 (Democratic beliefs, rights and liberties)_EN-VN</option>
                 <option value="part3">Practice Quiz Part_3 (Government and the law)_EN-VN</option>
@@ -733,14 +389,14 @@ const firebaseConfig = {
                 <option value="8">Practice Quiz 8</option>
                 <option value="9">Practice Quiz 9</option>
                 <option value="10">Practice Quiz 10</option>
-				<option value="all-vi">Practice Quiz All (400 questions Anh-Việt)</option>
+                <option value="all-vi">Practice Quiz All (400 questions Anh-Việt)</option>
                 <option value="all">Practice Quiz All (400 questions)</option>
             </select>
         </div>
         <button class="note-btn" onclick="showNotePopup()">📝 Note</button>
-        <span id="questionCount" style="font-weight: bold; color: #006400; margin-left: 20px;"></span>
-        <input type="checkbox" id="vietnam" style="margin-left: 10px;"> <label for="vietnam">Vietnam</label>
-        <input type="checkbox" id="basic" style="margin-left: 10px;"> <label for="basic">Basic</label>
+        <span id="questionCount" style="font-weight:bold; color:#006400; margin-left:20px;"></span>
+        <label style="white-space:nowrap;"><input type="checkbox" id="vietnam"> Vietnam</label>
+        <label style="white-space:nowrap;"><input type="checkbox" id="basic"> Basic</label>
     </div>
 
     <!-- Note Popup -->
@@ -804,19 +460,15 @@ const firebaseConfig = {
         </div>
     </div>
     <!-- Header khi làm bài 20 câu -->
-    <div id="quizHeader">
+<div id="quizHeader">
         <div id="currentQuestion">1/20</div>
         <div id="quizTitle">Practice Quiz</div>
         <div id="timer">Timer 45:00</div>
     </div>
 
-    <!-- Thanh 20 số câu -->
     <div id="progressBar"></div>
-
-    <!-- Khu vực câu hỏi -->
     <div id="questions"></div>
 
-    <!-- Nút điều hướng -->
     <div id="navigation">
         <button id="prevBtn">Prev</button>
         <button id="nextBtn">Next</button>
@@ -824,7 +476,6 @@ const firebaseConfig = {
 
     <button id="resetBtn">Reset All</button>
 
-    <!-- Kết quả -->
     <div id="results">
         <p id="score"></p>
         <p><strong>Các câu sai:</strong></p>
@@ -1473,6 +1124,7 @@ const firebaseConfig = {
 </body>
 
 </html>
+
 
 
 
