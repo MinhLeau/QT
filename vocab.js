@@ -202,23 +202,4 @@ document.querySelectorAll('[data-sentence]').forEach(btn => {
 });
 
 
-let lastScrollTop = 0;
-
-const hideTargets = [
-    document.querySelector('.logout-btn'),
-    document.querySelector('.home-btn'),
-    document.querySelector('.home-btnTS')
-];
-
-window.addEventListener('scroll', () => {
-    const st = window.pageYOffset || document.documentElement.scrollTop;
-    const isScrollingDown = st > lastScrollTop;
-
-    hideTargets.forEach(el => {
-        if (!el) return;
-        el.classList.toggle('hide-on-scroll', isScrollingDown);
-    });
-
-    lastScrollTop = st <= 0 ? 0 : st;
-});
 
