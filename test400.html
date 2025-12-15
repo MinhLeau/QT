@@ -209,19 +209,21 @@
             gap: 10px;
             margin: 20px 0;
         }
-        .note-btn {
-            padding: 8px 17px;
-            font-size: 13px;
-            font-weight: bold;
-            background: #2196F3;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-        .note-btn:hover { background: #1976D2; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(33,150,243,0.4); }
+.note-btn {
+    background: none;
+    border: none;
+    color: #006400;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.note-btn:hover {
+    text-decoration: underline;
+}
 
         #vietnam, #basic, #advance {
             transform: scale(1.2);
@@ -352,35 +354,49 @@
     <a href="#" class="home-btnTS" title="Thomas"></a>
     <h4 class="credit">Created by Thomas</h4>
     <h1>Australian Citizenship - Our Common Bond</h1>
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
     <h2>Australian Citizenship Practice Quiz</h2>
+    <button class="note-btn" onclick="showNotePopup()">📝 Note</button>
+</div>
 
-    <div class="quiz-select-container">
-        <div style="display:flex; align-items:center; gap:10px; flex-grow:1;">
-            <b>Chọn bài Test:</b>
-            <select id="quizSelect" style="padding:12px; font-size:18px; border-radius:8px; flex:1; max-width:550px;">
-                <option value="part1">Practice Quiz Part_1 (Australia and its people)</option>
-                <option value="part2">Practice Quiz Part_2 (Democratic beliefs, rights and liberties)</option>
-                <option value="part3">Practice Quiz Part_3 (Government and the law)</option>
-                <option value="part4">Practice Quiz Part_4 (Australian values)</option>
-                <option value="1">Practice Quiz 1</option>
-                <option value="2">Practice Quiz 2</option>
-                <option value="3">Practice Quiz 3</option>
-                <option value="4">Practice Quiz 4</option>
-                <option value="5">Practice Quiz 5</option>
-                <option value="6">Practice Quiz 6</option>
-                <option value="7">Practice Quiz 7</option>
-                <option value="8">Practice Quiz 8</option>
-                <option value="9">Practice Quiz 9</option>
-                <option value="10">Practice Quiz 10</option>
-                <option value="all">Practice Quiz All</option>
-            </select>
-        </div>
-        <button class="note-btn" onclick="showNotePopup()">📝 Note</button>
-        <span id="questionCount" style="font-weight:bold; color:#006400; margin-left:20px;"></span>
-        <label style="white-space:nowrap;"><input type="checkbox" id="vietnam"> Vietnam</label>
-        <label style="white-space:nowrap;"><input type="checkbox" id="basic"> Basic</label>
-        <label style="white-space:nowrap;"><input type="checkbox" id="advance"> Advance</label>
+
+<div class="quiz-select-container">
+
+    <!-- BÊN TRÁI: CHỌN QUIZ -->
+    <div style="display:flex; align-items:center; gap:10px; flex:1;">
+        <b>Chọn bài Test:</b>
+        <select id="quizSelect"
+            style="padding:12px; font-size:18px; border-radius:8px; flex:1; max-width:520px;">
+            <option value="part1">Practice Quiz Part_1 (Australia and its people)</option>
+            <option value="part2">Practice Quiz Part_2 (Democratic beliefs, rights and liberties)</option>
+            <option value="part3">Practice Quiz Part_3 (Government and the law)</option>
+            <option value="part4">Practice Quiz Part_4 (Australian values)</option>
+            <option value="1">Practice Quiz 1</option>
+            <option value="2">Practice Quiz 2</option>
+            <option value="3">Practice Quiz 3</option>
+            <option value="4">Practice Quiz 4</option>
+            <option value="5">Practice Quiz 5</option>
+            <option value="6">Practice Quiz 6</option>
+            <option value="7">Practice Quiz 7</option>
+            <option value="8">Practice Quiz 8</option>
+            <option value="9">Practice Quiz 9</option>
+            <option value="10">Practice Quiz 10</option>
+            <option value="all">Practice Quiz All</option>
+        </select>
     </div>
+
+    <!-- BÊN PHẢI: SỐ CÂU + CHECKBOX -->
+    <div style="display:flex; align-items:center; gap:14px; white-space:nowrap;">
+        <span id="questionCount"
+              style="font-weight:bold; color:#006400;"></span>
+
+        <label><input type="checkbox" id="vietnam"> Vietnam</label>
+        <label><input type="checkbox" id="basic" checked> Basic</label>
+        <label><input type="checkbox" id="advance"> Advance</label>
+    </div>
+
+</div>
+
 
     <!-- Note Popup -->
     <div id="notePopup" class="note-popup">
@@ -1102,6 +1118,7 @@ loadQuiz("part1");
 </body>
 
 </html>
+
 
 
 
