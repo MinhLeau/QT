@@ -10,7 +10,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -20,7 +19,6 @@
             justify-content: center;
             padding: 20px;
         }
-
         .auth-container {
             background: white;
             border-radius: 20px;
@@ -29,34 +27,28 @@
             width: 100%;
             overflow: hidden;
         }
-
         .auth-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 40px 30px;
             text-align: center;
         }
-
         .auth-header h1 {
             font-size: 1.8rem;
             margin-bottom: 10px;
         }
-
         .auth-header p {
             opacity: 0.9;
             font-size: 0.95rem;
         }
-
         .auth-body {
             padding: 40px 30px;
         }
-
         .tab-buttons {
             display: flex;
             gap: 10px;
             margin-bottom: 30px;
         }
-
         .tab-btn {
             flex: 1;
             padding: 12px;
@@ -69,26 +61,21 @@
             transition: all 0.3s;
             color: #666;
         }
-
         .tab-btn.active {
             background: #667eea;
             border-color: #667eea;
             color: white;
         }
-
         .auth-form {
             display: none;
         }
-
         .auth-form.active {
             display: block;
             animation: fadeIn 0.3s;
         }
-
         .form-group {
             margin-bottom: 20px;
         }
-
         .form-group label {
             display: block;
             margin-bottom: 8px;
@@ -96,7 +83,6 @@
             font-weight: 600;
             font-size: 0.95rem;
         }
-
         .form-group input {
             width: 100%;
             padding: 14px;
@@ -105,12 +91,10 @@
             font-size: 1rem;
             transition: all 0.3s;
         }
-
         .form-group input:focus {
             outline: none;
             border-color: #667eea;
         }
-
         .submit-btn {
             width: 100%;
             padding: 14px;
@@ -124,23 +108,28 @@
             transition: all 0.3s;
             margin-top: 10px;
         }
-
         .submit-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
-
-        .submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+        .forgot-password {
+            text-align: right;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
-
+        .forgot-password a {
+            color: #667eea;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
         .divider {
             text-align: center;
             margin: 25px 0;
             position: relative;
         }
-
         .divider::before {
             content: '';
             position: absolute;
@@ -150,7 +139,6 @@
             height: 1px;
             background: #e0e0e0;
         }
-
         .divider span {
             background: white;
             padding: 0 15px;
@@ -158,7 +146,6 @@
             color: #999;
             font-size: 0.9rem;
         }
-
         .google-btn {
             width: 100%;
             padding: 14px;
@@ -175,12 +162,10 @@
             justify-content: center;
             gap: 10px;
         }
-
         .google-btn:hover {
             border-color: #667eea;
             background: #f8f9ff;
         }
-
         .error-message {
             background: #fee;
             color: #c33;
@@ -190,12 +175,10 @@
             font-size: 0.9rem;
             display: none;
         }
-
         .error-message.show {
             display: block;
             animation: shake 0.5s;
         }
-
         .success-message {
             background: #efe;
             color: #3c3;
@@ -205,27 +188,22 @@
             font-size: 0.9rem;
             display: none;
         }
-
         .success-message.show {
             display: block;
         }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-10px); }
             75% { transform: translateX(10px); }
         }
-
         @media (max-width: 768px) {
             .auth-header h1 {
                 font-size: 1.5rem;
             }
-            
             .auth-body {
                 padding: 30px 20px;
             }
@@ -238,16 +216,13 @@
             <h1>🇦🇺 Quốc Tịch Úc</h1>
             <p>Tài liệu ôn luyện thi</p>
         </div>
-
         <div class="auth-body">
             <div class="tab-buttons">
                 <button class="tab-btn active" onclick="switchTab('login')">Đăng nhập</button>
                 <button class="tab-btn" onclick="switchTab('register')">Đăng ký</button>
             </div>
-
             <div class="error-message" id="errorMessage"></div>
             <div class="success-message" id="successMessage"></div>
-
             <!-- Form Đăng nhập -->
             <form class="auth-form active" id="loginForm">
                 <div class="form-group">
@@ -262,9 +237,11 @@
                     <input type="checkbox" id="rememberMe" style="width: auto; transform: scale(1.2); cursor: pointer;">
                     <label for="rememberMe" style="margin: 0; cursor: pointer; font-weight: normal;">Ghi nhớ đăng nhập</label>
                 </div>
+                <div class="forgot-password">
+                    <a href="#" onclick="resetPassword(); return false;">Quên mật khẩu?</a>
+                </div>
                 <button type="submit" class="submit-btn">Đăng nhập</button>
             </form>
-
             <!-- Form Đăng ký -->
             <form class="auth-form" id="registerForm">
                 <div class="form-group">
@@ -285,11 +262,9 @@
                 </div>
                 <button type="submit" class="submit-btn">Đăng ký</button>
             </form>
-
             <div class="divider">
                 <span>hoặc</span>
             </div>
-
             <button class="google-btn" onclick="signInWithGoogle()">
                 <svg width="20" height="20" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -301,22 +276,29 @@
             </button>
         </div>
     </div>
-
     <!-- Firebase SDK -->
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword, 
+            signInWithPopup, 
+            GoogleAuthProvider, 
+            onAuthStateChanged,
+            sendPasswordResetEmail 
+        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
         // ⚠️ QUAN TRỌNG: Thay config này bằng config từ Firebase Console của bạn
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
+const firebaseConfig = {
+  apiKey: "AIzaSyDvB54m2uxhjuE2moJQ09NcuAEVhro7Zh4",
+  authDomain: "quoctichuc-43f28.firebaseapp.com",
+  projectId: "quoctichuc-43f28",
+  storageBucket: "quoctichuc-43f28.firebasestorage.app",
+  messagingSenderId: "710420527110",
+  appId: "1:710420527110:web:ba4281739f963e76656b87"
+};
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
@@ -326,7 +308,6 @@
         // Kiểm tra trạng thái đăng nhập
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Đã đăng nhập, chuyển đến trang chính
                 window.location.href = 'onluyenthiquoctich.html';
             }
         });
@@ -334,24 +315,20 @@
         // Xử lý đăng ký
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
             const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
-            const name = document.getElementById('registerName').value;
 
             if (password !== passwordConfirm) {
                 showError('Mật khẩu xác nhận không khớp!');
                 return;
             }
-
             if (password.length < 6) {
                 showError('Mật khẩu phải có ít nhất 6 ký tự!');
                 return;
             }
-
             try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                await createUserWithEmailAndPassword(auth, email, password);
                 showSuccess('Đăng ký thành công! Đang chuyển hướng...');
                 setTimeout(() => {
                     window.location.href = 'onluyenthiquoctich.html';
@@ -364,12 +341,10 @@
         // Xử lý đăng nhập
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
-
             try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                await signInWithEmailAndPassword(auth, email, password);
                 showSuccess('Đăng nhập thành công! Đang chuyển hướng...');
                 setTimeout(() => {
                     window.location.href = 'onluyenthiquoctich.html';
@@ -379,10 +354,25 @@
             }
         });
 
+        // Quên mật khẩu
+        window.resetPassword = async function() {
+            const email = document.getElementById('loginEmail').value.trim();
+            if (!email) {
+                showError('Vui lòng nhập email của bạn trước khi đặt lại mật khẩu!');
+                return;
+            }
+            try {
+                await sendPasswordResetEmail(auth, email);
+                showSuccess('Đã gửi link đặt lại mật khẩu đến email của bạn. Vui lòng kiểm tra hộp thư (và thư rác/spam)!');
+            } catch (error) {
+                handleAuthError(error);
+            }
+        };
+
         // Đăng nhập với Google
         window.signInWithGoogle = async function() {
             try {
-                const result = await signInWithPopup(auth, googleProvider);
+                await signInWithPopup(auth, googleProvider);
                 showSuccess('Đăng nhập thành công! Đang chuyển hướng...');
                 setTimeout(() => {
                     window.location.href = 'onluyenthiquoctich.html';
@@ -399,7 +389,7 @@
             errorDiv.classList.add('show');
             setTimeout(() => {
                 errorDiv.classList.remove('show');
-            }, 5000);
+            }, 8000);
         }
 
         // Hiển thị thành công
@@ -407,12 +397,17 @@
             const successDiv = document.getElementById('successMessage');
             successDiv.textContent = message;
             successDiv.classList.add('show');
+            setTimeout(() => {
+                successDiv.classList.remove('show');
+            }, 8000);
         }
 
-        // Xử lý lỗi Firebase
+        // Xử lý lỗi Firebase (cập nhật mới nhất)
         function handleAuthError(error) {
+            console.log('Firebase Error:', error.code, error.message); // Để debug
+
             let message = 'Đã xảy ra lỗi. Vui lòng thử lại!';
-            
+
             switch (error.code) {
                 case 'auth/email-already-in-use':
                     message = 'Email này đã được đăng ký!';
@@ -421,42 +416,47 @@
                     message = 'Email không hợp lệ!';
                     break;
                 case 'auth/weak-password':
-                    message = 'Mật khẩu quá yếu!';
+                    message = 'Mật khẩu quá yếu! (ít nhất 6 ký tự)';
                     break;
                 case 'auth/user-not-found':
-                    message = 'Tài khoản không tồn tại!';
-                    break;
                 case 'auth/wrong-password':
-                    message = 'Mật khẩu không đúng!';
+                case 'auth/invalid-credential':
+                    message = 'Email hoặc mật khẩu không đúng!';
                     break;
                 case 'auth/too-many-requests':
-                    message = 'Quá nhiều lần thử. Vui lòng thử lại sau!';
+                    message = 'Quá nhiều lần thử sai. Tài khoản tạm khóa, thử lại sau vài phút!';
+                    break;
+                case 'auth/network-request-failed':
+                    message = 'Lỗi kết nối mạng. Kiểm tra internet và thử lại!';
+                    break;
+                case 'auth/user-not-found': // cho reset password
+                    message = 'Không tìm thấy tài khoản với email này!';
+                    break;
+                default:
+                    message = 'Lỗi: ' + error.message;
                     break;
             }
-            
+
             showError(message);
         }
 
         // Chuyển tab
         window.switchTab = function(tab) {
-            // Update buttons
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
 
-            // Update forms
             document.querySelectorAll('.auth-form').forEach(form => {
                 form.classList.remove('active');
             });
-
             if (tab === 'login') {
                 document.getElementById('loginForm').classList.add('active');
             } else {
                 document.getElementById('registerForm').classList.add('active');
             }
 
-            // Clear messages
+            // Xóa thông báo
             document.getElementById('errorMessage').classList.remove('show');
             document.getElementById('successMessage').classList.remove('show');
         };
