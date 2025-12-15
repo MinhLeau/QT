@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý tài khoản</title>
+    <style>
+        /* Copy style tương tự từ trang login của bạn để đẹp */
+        body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); width: 450px; }
+        .form-group { margin-bottom: 20px; }
+        input { width: 100%; padding: 14px; border: 2px solid #e0e0e0; border-radius: 10px; }
+        button { width: 100%; padding: 14px; background: #667eea; color: white; border: none; border-radius: 10px; cursor: pointer; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quản lý tài khoản</h1>
+        <div id="userInfo"></div>
+        
+        <h2>Thay đổi thông tin</h2>
+        <div class="form-group">
+            <label>Họ tên mới</label>
+            <input type="text" id="newName">
+        </div>
+        <button onclick="changeName()">Cập nhật họ tên</button>
+
+        <h2 style="margin-top: 30px;">Thay đổi email</h2>
+        <div class="form-group">
+            <label>Email mới</label>
+            <input type="email" id="newEmail">
+        </div>
+        <div class="form-group">
+            <label>Mật khẩu hiện tại (để xác thực)</label>
+            <input type="password" id="currentPasswordForEmail">
+        </div>
+        <button onclick="changeEmail()">Cập nhật email</button>
+
+        <h2 style="margin-top: 30px;">Thay đổi mật khẩu</h2>
+        <div class="form-group">
+            <label>Mật khẩu mới</label>
+            <input type="password" id="newPassword">
+        </div>
+        <div class="form-group">
+            <label>Mật khẩu hiện tại (để xác thực)</label>
+            <input type="password" id="currentPassword">
+        </div>
+        <button onclick="changePassword()">Cập nhật mật khẩu</button>
+
+        <h2 style="margin-top: 40px; color: red;">Xóa tài khoản</h2>
+        <p>Xóa tài khoản sẽ mất vĩnh viễn!</p>
+        <div class="form-group">
+            <label>Mật khẩu hiện tại (để xác thực)</label>
+            <input type="password" id="deletePassword">
+        </div>
+        <button style="background: red;" onclick="deleteAccount()">Xóa tài khoản</button>
+
+        <div id="message"></div>
+        <br>
+        <button onclick="logout()">Đăng xuất</button>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { 
+            getAuth, 
+            onAuthStateChanged,
+            updateProfile,
+            updateEmail,
+            updatePassword,
+            EmailAuthProvider,
+            reauthenticateWithCredential,
+            deleteUser,
+            signOut
+        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDvB54m2uxhjuE2moJQ09NcuAEVhro7Zh4",
+  authDomain: "quoctichuc-43f28.firebaseapp.com",
+  projectId: "quoctichuc-43f28",
+  storageBucket: "quoctichuc-43f28.firebasestorage.app",
+  messagingSenderId: "710420527110",
+  appId: "1:710420527110:web:ba4281739f963e76656b87"
+};
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Kiểm tra người dùng đã login chưa
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'index.html'; // Quay về trang login
+            } else {
+                document.getElementById('userInfo').innerHTML = `
+                    <p>Xin chào: <strong>${user.displayName || 'Chưa có tên'}</strong></p>
+                    <p>Email: <strong>${user.email}</strong></p>
+                `;
+            }
+        });
+
+        // Re-authenticate chung
+        async function reauthenticate(password) {
+            const credential = EmailAuthProvider.credential(auth.currentUser.email, password);
+            await reauthenticateWithCredential(auth.currentUser, credential);
+        }
+
+        // Thay đổi họ tên
+        window.changeName = async () => {
+            const newName = document.getElementById('newName').value.trim();
+            if (!newName) return showMessage('Vui lòng nhập tên', 'error');
+            try {
+                await updateProfile(auth.currentUser, { displayName: newName });
+                showMessage('Cập nhật tên thành công!', 'success');
+                location.reload();
+            } catch (error) {
+                showMessage('Lỗi: ' + error.message, 'error');
+            }
+        };
+
+        // Thay đổi email
+        window.changeEmail = async () => {
+            const newEmail = document.getElementById('newEmail').value;
+            const password = document.getElementById('currentPasswordForEmail').value;
+            if (!newEmail || !password) return showMessage('Vui lòng nhập đầy đủ', 'error');
+            try {
+                await reauthenticate(password);
+                await updateEmail(auth.currentUser, newEmail);
+                showMessage('Cập nhật email thành công!', 'success');
+                location.reload();
+            } catch (error) {
+                if (error.code === 'auth/requires-recent-login') {
+                    showMessage('Cần đăng nhập lại gần đây. Hãy thử đăng xuất và đăng nhập lại.', 'error');
+                } else {
+                    showMessage('Lỗi: ' + error.message, 'error');
+                }
+            }
+        };
+
+        // Thay đổi mật khẩu
+        window.changePassword = async () => {
+            const newPass = document.getElementById('newPassword').value;
+            const password = document.getElementById('currentPassword').value;
+            if (!newPass || !password) return showMessage('Vui lòng nhập đầy đủ', 'error');
+            if (newPass.length < 6) return showMessage('Mật khẩu mới phải ít nhất 6 ký tự', 'error');
+            try {
+                await reauthenticate(password);
+                await updatePassword(auth.currentUser, newPass);
+                showMessage('Cập nhật mật khẩu thành công!', 'success');
+            } catch (error) {
+                showMessage('Lỗi: ' + error.message, 'error');
+            }
+        };
+
+        // Xóa tài khoản
+        window.deleteAccount = async () => {
+            if (!confirm('Bạn chắc chắn muốn xóa tài khoản? Hành động này không thể hoàn tác!')) return;
+            const password = document.getElementById('deletePassword').value;
+            if (!password) return showMessage('Vui lòng nhập mật khẩu', 'error');
+            try {
+                await reauthenticate(password);
+                await deleteUser(auth.currentUser);
+                showMessage('Tài khoản đã được xóa. Đang chuyển hướng...', 'success');
+                setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+            } catch (error) {
+                showMessage('Lỗi: ' + error.message, 'error');
+            }
+        };
+
+        // Đăng xuất
+        window.logout = () => {
+            signOut(auth).then(() => {
+                window.location.href = 'index.html';
+            });
+        };
+
+        function showMessage(msg, type) {
+            const div = document.getElementById('message');
+            div.textContent = msg;
+            div.className = type;
+        }
+    </script>
+</body>
+</html>
