@@ -1287,6 +1287,17 @@ function getRealQuestions(questions) {
     return questions.filter(q => q.hasOwnProperty('opts') && Array.isArray(q.opts));
 }
 
+function getRandomFromPart(partName, count) {
+    const start = QUESTION_BANK.findIndex(q => q.q === `// ${partName}`) + 1;
+    const end   = QUESTION_BANK.findIndex(q => q.q === `// END ${partName}`);
+    const list  = getRealQuestions(QUESTION_BANK.slice(start, end));
+
+    return list.sort(() => Math.random() - 0.5).slice(0, count);
+}
+
+
+		
+
 /* =================== CHECK ĐÁP ÁN TỨC THÌ (All & Part mode) =================== */
 function checkAnswerInstant(qIndex, selectedOption) {
     const correct = CURRENT_QUESTIONS[qIndex].a;
@@ -1348,6 +1359,21 @@ function loadQuiz(selection) {
         const end = QUESTION_BANK.findIndex(q => q.q === "// END PART 4");
         list = QUESTION_BANK.slice(start, end);
     }
+
+    // ================= PRACTICE QUIZ 200 =================
+    else if (selection === "random-vi" || selection === "random-en") {
+        IS_ALL_MODE = true;
+        SHOW_VIETNAMESE = (selection === "random-vi");
+
+        list = [
+            ...getRandomFromPart("PART 1", 50),
+            ...getRandomFromPart("PART 2", 50),
+            ...getRandomFromPart("PART 3", 50),
+            ...getRandomFromPart("PART 4", 50)
+        ];
+    }
+
+		
     // Practice Quiz 1 → 10 (20 câu mỗi lần)
     else {
         const n = parseInt(selection, 10);
@@ -1549,6 +1575,7 @@ loadQuiz('all-vi');
 </body>
 
 </html>
+
 
 
 
