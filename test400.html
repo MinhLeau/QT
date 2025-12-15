@@ -48,7 +48,6 @@
             text-shadow: 1px 1px 6px rgba(0,0,0,0.8);
             font-weight: normal;
         }
-        /* Nút Home & TS */
         .home-btn, .home-btnTS {
             position: absolute;
             top: 5px;
@@ -70,7 +69,6 @@
         .home-btnTS { right: 37px; background: url("TS.jpg") center / 100% no-repeat, #006400; }
         .home-btnTS:hover { transform: scale(1.1); }
 
-        /* Header 20 câu */
         #quizHeader {
             display: none;
             justify-content: space-between;
@@ -85,16 +83,15 @@
         }
         #currentQuestion, #timer {
             background: white;
-            color: #001f3f;
             padding: 10px 18px;
             border-radius: 30px;
             font-size: 20px;
             font-weight: bold;
         }
+        #currentQuestion { color: #001f3f; }
         #timer { color: #d32f2f; }
         #quizTitle { font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Progress bar */
         #progressBar {
             display: none;
             justify-content: center;
@@ -122,7 +119,6 @@
             box-shadow: 0 0 15px rgba(255,102,0,0.6);
         }
 
-        /* Câu hỏi & lựa chọn */
         .opt {
             display: block;
             padding: 18px 20px;
@@ -147,7 +143,6 @@
         .correct { background: #d4edda !important; border: 4px solid #28a745 !important; color: #155724; font-weight: bold; }
         .wrong   { background: #f8d7da !important; border: 4px solid #dc3545 !important; color: #721c24; font-weight: bold; }
 
-        /* Chế độ All/200/Part - giảm padding */
         #questions .opt {
             padding: 7px 16px !important;
             margin: 8px 0 !important;
@@ -158,7 +153,6 @@
         #questions .opt.correct { padding: 10px 16px !important; }
         #questions .opt.wrong   { padding: 10px 16px !important; }
 
-        /* Navigation */
         #navigation {
             display: none;
             justify-content: space-between;
@@ -177,7 +171,6 @@
         #nextBtn { background: #007bff; color: white; }
         #prevBtn:disabled { background: #ccc; cursor: not-allowed; }
 
-        /* Kết quả & Reset */
         #results {
             margin: 30px 0;
             padding: 25px;
@@ -199,7 +192,6 @@
             margin-top: 20px;
         }
 
-        /* Select & container */
         select {
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -231,13 +223,11 @@
         }
         .note-btn:hover { background: #1976D2; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(33,150,243,0.4); }
 
-        /* Checkbox style */
         #vietnam, #basic {
             transform: scale(1.2);
             margin: 0 5px 0 15px;
         }
 
-        /* Note Popup */
         .note-popup {
             display: none;
             position: fixed;
@@ -269,11 +259,7 @@
             text-align: center;
         }
         .note-header h2 { font-size: 26px; margin: 0; }
-        .note-body {
-            padding: 30px;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
+        .note-body { padding: 30px; max-height: 70vh; overflow-y: auto; }
         .note-close {
             position: absolute;
             right: 20px; top: 20px;
@@ -292,7 +278,6 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* Responsive */
         @media (max-width: 768px) {
             body { padding: 10px; }
             h1 { font-size: 22px; }
@@ -370,7 +355,7 @@
     <h2>Australian Citizenship Practice Quiz</h2>
 
     <div class="quiz-select-container">
-        <div style="display:flex; align-items:center; gap:10px;">
+        <div style="display:flex; align-items:center; gap:10px; flex-grow:1;">
             <b>Chọn bài Test:</b>
             <select id="quizSelect" style="padding:12px; font-size:18px; border-radius:8px; flex:1; max-width:550px;">
                 <option value="random-vi">Practice Quiz (200 questions)_EN-VN</option>
@@ -906,7 +891,7 @@
 
         // ============ BIẾN TOÀN CỤC ============
 // ============ BIẾN TOÀN CỤC ============
-        let CURRENT_QUESTIONS = [];
+let CURRENT_QUESTIONS = [];
         let IS_ALL_MODE = false;
         let currentIndex = 0;
         let userAnswers = [];
@@ -946,23 +931,22 @@
 
         function loadQuiz(selection) {
             let list = [];
-            let showViByDefault = false;
+            let forceVietnameseByOption = false; // Chỉ true với các option có hậu tố -vi
             IS_ALL_MODE = false;
 
             if (selection === "all") { IS_ALL_MODE = true; list = QUESTION_BANK; }
-            else if (selection === "all-vi") { IS_ALL_MODE = true; showViByDefault = true; list = QUESTION_BANK; }
+            else if (selection === "all-vi") { IS_ALL_MODE = true; forceVietnameseByOption = true; list = QUESTION_BANK; }
             else if (["part1","part2","part3","part4"].includes(selection)) {
-                IS_ALL_MODE = true; showViByDefault = true;
+                IS_ALL_MODE = true;
+                forceVietnameseByOption = true;
                 const map = {part1:["PART 1","END PART 1"], part2:["PART 2","END PART 2"], part3:["PART 3","END PART 3"], part4:["PART 4","END PART 4"]};
                 const [s,e] = map[selection];
                 const start = QUESTION_BANK.findIndex(q => q.q === `// ${s}`) + 1;
                 const end   = QUESTION_BANK.findIndex(q => q.q === `// ${e}`);
                 list = QUESTION_BANK.slice(start, end);
             }
-            else if (selection === "random-vi" || selection === "random-en") {
-                IS_ALL_MODE = true; showViByDefault = (selection === "random-vi");
-                list = [...getRandomFromPart("PART 1",50), ...getRandomFromPart("PART 2",50), ...getRandomFromPart("PART 3",50), ...getRandomFromPart("PART 4",50)];
-            }
+            else if (selection === "random-vi") { IS_ALL_MODE = true; forceVietnameseByOption = true; list = [...getRandomFromPart("PART 1",50), ...getRandomFromPart("PART 2",50), ...getRandomFromPart("PART 3",50), ...getRandomFromPart("PART 4",50)]; }
+            else if (selection === "random-en") { IS_ALL_MODE = true; list = [...getRandomFromPart("PART 1",50), ...getRandomFromPart("PART 2",50), ...getRandomFromPart("PART 3",50), ...getRandomFromPart("PART 4",50)]; }
             else {
                 const n = parseInt(selection, 10);
                 const start = (n - 1) * 20;
@@ -974,6 +958,7 @@
 
             const isPractice110 = ["1","2","3","4","5","6","7","8","9","10"].includes(selection);
 
+            // Practice Quiz 1-10: luôn chỉ tiếng Anh, checkbox Vietnam bị disable
             if (isPractice110) {
                 document.getElementById("vietnam").checked = false;
                 document.getElementById("vietnam").disabled = true;
@@ -981,9 +966,11 @@
                 document.getElementById("vietnam").disabled = false;
             }
 
+            // Quyết định hiển thị tiếng Việt: chỉ khi checkbox được check HOẶC option có hậu tố -vi
             const vietnamChecked = document.getElementById("vietnam").checked;
-            const finalShowVi = isPractice110 ? false : (vietnamChecked || showViByDefault);
+            const finalShowVi = isPractice110 ? false : (vietnamChecked || forceVietnameseByOption);
 
+            // Số lượng câu hỏi
             const countEl = document.getElementById("questionCount");
             countEl.textContent = isPractice110 ? "" : `(${CURRENT_QUESTIONS.length} questions)`;
 
@@ -1083,8 +1070,22 @@
             document.getElementById("timer").textContent = `${m}:${s}`;
         }
         function saveAnswer(idx, val) { userAnswers[idx] = val; }
-        function nextQuestion() { if (currentIndex < 19) { currentIndex++; renderSingleQuestion(currentIndex, document.getElementById("vietnam").checked || false); } else submitQuiz(); }
-        function prevQuestion() { if (currentIndex > 0) { currentIndex--; renderSingleQuestion(currentIndex, document.getElementById("vietnam").checked || false); } }
+
+        function nextQuestion() {
+            if (currentIndex < 19) {
+                currentIndex++;
+                const showVi = document.getElementById("vietnam").checked || ["random-vi","all-vi","part1","part2","part3","part4"].includes(document.getElementById("quizSelect").value);
+                renderSingleQuestion(currentIndex, showVi);
+            } else submitQuiz();
+        }
+        function prevQuestion() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                const showVi = document.getElementById("vietnam").checked || ["random-vi","all-vi","part1","part2","part3","part4"].includes(document.getElementById("quizSelect").value);
+                renderSingleQuestion(currentIndex, showVi);
+            }
+        }
+
         function submitQuiz() {
             clearInterval(timerInterval);
             let score = 0;
@@ -1104,13 +1105,19 @@
         }
 
         document.getElementById("quizSelect").addEventListener("change", e => loadQuiz(e.target.value));
+
         document.getElementById("vietnam").addEventListener("change", () => {
             const cur = document.getElementById("quizSelect").value;
-            if (!["1","2","3","4","5","6","7","8","9","10"].includes(cur)) loadQuiz(cur);
+            if (!["1","2","3","4","5","6","7","8","9","10"].includes(cur)) {
+                loadQuiz(cur);
+            }
         });
-        document.getElementById("basic").addEventListener("change", () => { /* placeholder cho logic Basic */ });
+
+        document.getElementById("basic").addEventListener("change", () => { /* placeholder */ });
+
         document.getElementById("prevBtn").addEventListener("click", prevQuestion);
         document.getElementById("nextBtn").addEventListener("click", nextQuestion);
+
         document.getElementById("resetBtn").addEventListener("click", () => {
             document.querySelectorAll(".correct,.wrong").forEach(el => el.classList.remove("correct","wrong"));
             document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
@@ -1118,12 +1125,14 @@
             loadQuiz(document.getElementById("quizSelect").value);
         });
 
+        // Khởi động
         document.getElementById("quizSelect").value = "part1";
         loadQuiz("part1");
     </script>
 </body>
 
 </html>
+
 
 
 
