@@ -1050,6 +1050,17 @@ function renderSingleQuestion(idx, showVi) {
     updateProgress();
 }
 
+function rerenderVietnam() {
+    const showVi = document.getElementById("vietnam").checked;
+
+    if (IS_ALL_MODE) {
+        renderAllQuestions(showVi);
+    } else {
+        renderSingleQuestion(currentIndex, showVi);
+    }
+}
+
+		
 /* ========= PROGRESS / TIMER ========= */
 function buildProgressBar() {
     const bar = document.getElementById("progressBar");
@@ -1089,8 +1100,16 @@ function checkAnswerInstant(i,v){
 }
 
 /* ========= NAV ========= */
-function nextQuestion(){ currentIndex<19 ? (currentIndex++,renderSingleQuestion(currentIndex,vietnam.checked)) : submitQuiz(); }
-function prevQuestion(){ if(currentIndex>0){ currentIndex--; renderSingleQuestion(currentIndex,vietnam.checked); }}
+function nextQuestion(){
+    const showVi = vietnam.checked;
+    currentIndex<19 ? (currentIndex++,renderSingleQuestion(currentIndex,showVi)) : submitQuiz();
+}
+function prevQuestion(){
+    if(currentIndex>0){
+        currentIndex--;
+        renderSingleQuestion(currentIndex, vietnam.checked);
+    }
+}
 
 /* ========= SUBMIT ========= */
 function submitQuiz(){
@@ -1109,6 +1128,17 @@ prevBtn.onclick=prevQuestion;
 nextBtn.onclick=nextQuestion;
 resetBtn.onclick=()=>loadQuiz(quizSelect.value);
 
+vietnam.addEventListener("change", () => {
+    const sel = quizSelect.value;
+
+    // Practice 1–10 không hỗ trợ Vietnam
+    if (["1","2","3","4","5","6","7","8","9","10"].includes(sel)) return;
+
+    rerenderVietnam();
+});
+
+		
+
 /* ========= INIT ========= */
 basic.checked = true;
 advance.checked = false;
@@ -1119,6 +1149,7 @@ loadQuiz("part1");
 </body>
 
 </html>
+
 
 
 
