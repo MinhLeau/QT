@@ -360,13 +360,14 @@
 </div>
 
 
-<div class="quiz-select-container">
+<div class="quiz-select-container"
+     style="display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
 
-    <!-- BÊN TRÁI: CHỌN QUIZ -->
-    <div style="display:flex; align-items:center; gap:10px; flex:1;">
+    <!-- CHỌN QUIZ -->
+    <div style="display:flex; align-items:center; gap:10px;">
         <b>Chọn bài Test:</b>
         <select id="quizSelect"
-            style="padding:12px; font-size:18px; border-radius:8px; flex:1; max-width:520px;">
+            style="padding:12px; font-size:18px; border-radius:8px; width:520px; max-width:100%;">
             <option value="part1">Practice Quiz Part_1 (Australia and its people)</option>
             <option value="part2">Practice Quiz Part_2 (Democratic beliefs, rights and liberties)</option>
             <option value="part3">Practice Quiz Part_3 (Government and the law)</option>
@@ -385,10 +386,9 @@
         </select>
     </div>
 
-    <!-- BÊN PHẢI: SỐ CÂU + CHECKBOX -->
+    <!-- SỐ CÂU + CHECKBOX -->
     <div style="display:flex; align-items:center; gap:14px; white-space:nowrap;">
-        <span id="questionCount"
-              style="font-weight:bold; color:#006400;"></span>
+        <span id="questionCount" style="font-weight:bold; color:#006400;"></span>
 
         <label><input type="checkbox" id="vietnam"> Vietnam</label>
         <label><input type="checkbox" id="basic" checked> Basic</label>
@@ -396,6 +396,7 @@
     </div>
 
 </div>
+
 
 
     <!-- Note Popup -->
@@ -1118,6 +1119,7 @@ loadQuiz("part1");
 </body>
 
 </html>
+
 
 
 
