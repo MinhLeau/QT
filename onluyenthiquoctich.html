@@ -219,9 +219,24 @@ const firebaseConfig = {
         background: #c82333;
         transform: translateY(-2px);
     }
+	    .logout-btn22 {
+        position: fixed;
+        top: 70px;
+        right: 20px;
+        padding: 8px 16px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        z-index: 1000;
+        transition: all 0.3s;
+    }
 </style>
 
-<button class="logout-btn" onclick="logout()">Đăng xuất</button>
+<button class="logout-btn" onclick="logout()">Logout</button>
+<button class="logout-btn22" onclick="location.href='profile.html'">Manage</button>
 	
 </head>
 <body>
@@ -265,5 +280,6 @@ const firebaseConfig = {
     </div>
 </body>
 </html>
+
 
 
