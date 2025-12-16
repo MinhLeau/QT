@@ -992,9 +992,11 @@ function loadQuiz(selection) {
         if (isBasic) list = pickHalfRandom(list);
     }
     else {
+        // ✅ Sửa ở đây
         const n = parseInt(selection, 10);
+        const allReal = getRealQuestions(QUESTION_BANK); // Lọc trước
         const start = (n - 1) * 20;
-        list = QUESTION_BANK.slice(start, start + 20);
+        list = allReal.slice(start, start + 20);
     }
 
     CURRENT_QUESTIONS = list;
@@ -1182,6 +1184,7 @@ loadQuiz("part1");
 </body>
 
 </html>
+
 
 
 
