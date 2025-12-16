@@ -879,7 +879,7 @@
 
 ];
 
-        // ============ DOM REFS (KHÔNG DÙNG BIẾN GLOBAL THEO ID) ============
+// ============ DOM REFS (KHÔNG DÙNG BIẾN GLOBAL THEO ID) ============
 const quizSelectEl     = document.getElementById("quizSelect");
 const vietnamEl        = document.getElementById("vietnam");
 const basicEl          = document.getElementById("basic");
@@ -900,7 +900,7 @@ const currentQuestionEl= document.getElementById("currentQuestion");
 const quizTitleEl      = document.getElementById("quizTitle");
 const timerEl          = document.getElementById("timer");
 
-// ============ BIẾN TOÀN CỤC ============
+// ============ GLOBAL STATE ============
 let CURRENT_QUESTIONS = [];
 let IS_ALL_MODE = false;
 let currentIndex = 0;
@@ -908,33 +908,67 @@ let userAnswers = [];
 let timerInterval;
 let timeLeft = 45 * 60;
 
-/* ========= BASIC / ADVANCE HELPERS ========= */
+/* ========= HELPERS ========= */
 function pickHalfRandom(list) {
     const half = Math.ceil(list.length / 2);
     return [...list].sort(() => Math.random() - 0.5).slice(0, half);
 }
 
-/* ========= NOTE POPUP ========= */
-function showNotePopup() { document.getElementById('notePopup').classList.add('show'); }
-function closeNotePopup() { document.getElementById('notePopup').classList.remove('show'); }
-window.onclick = function(e) {
-    if (e.target === document.getElementById('notePopup')) closeNotePopup();
-};
-
-/* ========= QUESTION UTILS ========= */
-function getRealQuestions(questions) {
-    // ✅ support 3 or 4 options, and a can be 0..3
-    return questions.filter(q => q && Array.isArray(q.opts) && typeof q.a === "number");
+function getRealQuestions(list) {
+    return list.filter(q => q && Array.isArray(q.opts) && typeof q.a === "number");
 }
 
-function isPractice10(selection){
-    return ["1","2","3","4","5","6","7","8","9","10"].includes(selection);
+function isPractice10(sel) {
+    return ["1","2","3","4","5","6","7","8","9","10"].includes(sel);
 }
 
-/* ========= UPDATE COUNTS ========= */
+/* ========= BASIC MODE: GIẢM 4 → 3 ĐÁP ÁN ========= */
+function reduceToThreeOptions(question) {
+    if (!question.opts || question.opts.length <= 3) return question;
+
+    const correctIndex = question.a;
+    const wrongIndexes = question.opts
+        .map((_, i) => i)
+        .filter(i => i !== correctIndex);
+
+    // bỏ ngẫu nhiên 1 đáp án sai
+    const removedWrong = wrongIndexes[Math.floor(Math.random() * wrongIndexes.length)];
+
+    const newOpts = [];
+    const newOptsVi = [];
+    let newCorrectIndex = null;
+
+    question.opts.forEach((opt, i) => {
+        if (i === removedWrong) return;
+
+        if (i === correctIndex) {
+            newCorrectIndex = newOpts.length;
+        }
+        newOpts.push(opt);
+        if (question.optsVi) newOptsVi.push(question.optsVi[i]);
+    });
+
+    return {
+        ...question,
+        opts: newOpts,
+        optsVi: newOptsVi,
+        a: newCorrectIndex
+    };
+}
+
+/* ========= APPLY BASIC / ADVANCE ========= */
+function applyLevelMode(questions) {
+    if (basicEl.checked && !advanceEl.checked) {
+        return questions.map(q => reduceToThreeOptions(q));
+    }
+    return questions;
+}
+
+/* ========= UPDATE QUESTION COUNT ========= */
 function updateQuestionCount() {
-    const n = CURRENT_QUESTIONS.length;
-    questionCountEl.textContent = n ? `(${n} questions)` : "";
+    questionCountEl.textContent = CURRENT_QUESTIONS.length
+        ? `(${CURRENT_QUESTIONS.length} questions)`
+        : "";
 }
 
 /* ========= LOAD QUIZ ========= */
@@ -942,13 +976,10 @@ function loadQuiz(selection) {
     let list = [];
     IS_ALL_MODE = false;
 
-    const isBasic = basicEl.checked;
-    const isAdvance = advanceEl.checked;
-
     if (selection === "all") {
         IS_ALL_MODE = true;
         list = getRealQuestions(QUESTION_BANK);
-        if (isBasic && !isAdvance) list = pickHalfRandom(list);
+        if (basicEl.checked && !advanceEl.checked) list = pickHalfRandom(list);
     }
     else if (["part1","part2","part3","part4"].includes(selection)) {
         IS_ALL_MODE = true;
@@ -962,19 +993,21 @@ function loadQuiz(selection) {
         const start = QUESTION_BANK.findIndex(q => q.q === `// ${s}`) + 1;
         const end   = QUESTION_BANK.findIndex(q => q.q === `// ${e}`);
         list = getRealQuestions(QUESTION_BANK.slice(start, end));
-        if (isBasic && !isAdvance) list = pickHalfRandom(list);
+        if (basicEl.checked && !advanceEl.checked) list = pickHalfRandom(list);
     }
     else {
         const n = parseInt(selection, 10);
-        const allReal = getRealQuestions(QUESTION_BANK);
-        const start = (n - 1) * 20;
-        list = allReal.slice(start, start + 20);
+        const all = getRealQuestions(QUESTION_BANK);
+        list = all.slice((n - 1) * 20, n * 20);
     }
 
-    CURRENT_QUESTIONS = list;
-    userAnswers = new Array(CURRENT_QUESTIONS.length).fill(null);
+    // ✅ áp dụng Basic / Advance ở đây
+    CURRENT_QUESTIONS = applyLevelMode(list);
 
-    // ✅ Vietnam checkbox enable/disable
+    userAnswers = new Array(CURRENT_QUESTIONS.length).fill(null);
+    currentIndex = 0;
+
+    // Vietnam checkbox
     if (isPractice10(selection)) {
         vietnamEl.checked = false;
         vietnamEl.disabled = true;
@@ -982,9 +1015,9 @@ function loadQuiz(selection) {
         vietnamEl.disabled = false;
     }
 
-    const showVi = (!isPractice10(selection)) && vietnamEl.checked;
-
     updateQuestionCount();
+
+    const showVi = !isPractice10(selection) && vietnamEl.checked;
 
     if (!IS_ALL_MODE) {
         quizHeaderEl.style.display = "flex";
@@ -994,10 +1027,7 @@ function loadQuiz(selection) {
 
         quizTitleEl.textContent = `Practice Quiz ${selection}`;
         buildProgressBar();
-
         startTimer();
-
-        currentIndex = 0;
         renderSingleQuestion(0, showVi);
     } else {
         quizHeaderEl.style.display = "none";
@@ -1007,7 +1037,6 @@ function loadQuiz(selection) {
 
         clearInterval(timerInterval);
         timerEl.textContent = "Timer 45:00";
-
         renderAllQuestions(showVi);
     }
 
@@ -1015,26 +1044,6 @@ function loadQuiz(selection) {
 }
 
 /* ========= RENDER ========= */
-function renderAllQuestions(showVi) {
-    questionsEl.innerHTML = "";
-    CURRENT_QUESTIONS.forEach((q, i) => {
-        let html = `<div style="margin:35px 0;"><strong>${i+1}. ${q.q}`;
-        if (showVi && q.qVi) html += ` <i style="color:#0066cc;">[${q.qVi}]</i>`;
-        html += `</strong><div style="margin-top:18px;">`;
-
-        q.opts.forEach((opt, j) => {
-            let txt = opt;
-            if (showVi && q.optsVi && q.optsVi[j]) txt += ` <i style="color:#0066cc;">[${q.optsVi[j]}]</i>`;
-            html += `<label class="opt" id="q${i}o${j}_lbl">
-                <input type="radio" name="q${i}" onchange="checkAnswerInstant(${i},${j})">${txt}
-            </label>`;
-        });
-
-        html += `</div></div>`;
-        questionsEl.innerHTML += html;
-    });
-}
-
 function renderSingleQuestion(idx, showVi) {
     const q = CURRENT_QUESTIONS[idx];
     questionsEl.innerHTML = "";
@@ -1045,8 +1054,11 @@ function renderSingleQuestion(idx, showVi) {
 
     q.opts.forEach((opt, i) => {
         let txt = opt;
-        if (showVi && q.optsVi && q.optsVi[i]) txt += ` <i style="color:#0066cc;">[${q.optsVi[i]}]</i>`;
-        html += `<label class="opt" id="q${idx}o${i}_lbl">
+        if (showVi && q.optsVi && q.optsVi[i]) {
+            txt += ` <i style="color:#0066cc;">[${q.optsVi[i]}]</i>`;
+        }
+        html += `
+        <label class="opt" id="q${idx}o${i}_lbl">
             <input type="radio" name="q${idx}" onchange="saveAnswer(${idx},${i})">${txt}
         </label>`;
     });
@@ -1054,9 +1066,8 @@ function renderSingleQuestion(idx, showVi) {
     html += `</div>`;
     questionsEl.innerHTML = html;
 
-    // restore selection
     if (userAnswers[idx] !== null) {
-        const inputs = questionsEl.querySelectorAll("input[type=radio]");
+        const inputs = questionsEl.querySelectorAll("input");
         if (inputs[userAnswers[idx]]) inputs[userAnswers[idx]].checked = true;
     }
 
@@ -1065,62 +1076,42 @@ function renderSingleQuestion(idx, showVi) {
     updateProgress();
 }
 
-function rerenderVietnam() {
-    const sel = quizSelectEl.value;
-    const showVi = (!isPractice10(sel)) && vietnamEl.checked;
+function renderAllQuestions(showVi) {
+    questionsEl.innerHTML = "";
+    CURRENT_QUESTIONS.forEach((q, i) => {
+        let html = `<div style="margin:35px 0;"><strong>${i+1}. ${q.q}`;
+        if (showVi && q.qVi) html += ` <i style="color:#0066cc;">[${q.qVi}]</i>`;
+        html += `</strong><div style="margin-top:18px;">`;
 
-    if (IS_ALL_MODE) renderAllQuestions(showVi);
-    else renderSingleQuestion(currentIndex, showVi);
-}
+        q.opts.forEach((opt, j) => {
+            let txt = opt;
+            if (showVi && q.optsVi && q.optsVi[j]) {
+                txt += ` <i style="color:#0066cc;">[${q.optsVi[j]}]</i>`;
+            }
+            html += `
+            <label class="opt" id="q${i}o${j}_lbl">
+                <input type="radio" name="q${i}" onchange="checkAnswerInstant(${i},${j})">${txt}
+            </label>`;
+        });
 
-/* ========= PROGRESS / TIMER ========= */
-function buildProgressBar() {
-    progressBarEl.innerHTML = "";
-    for (let i = 1; i <= 20; i++) {
-        const d = document.createElement("div");
-        d.className = "progress-item";
-        d.textContent = i;
-        progressBarEl.appendChild(d);
-    }
-    updateProgress();
-}
-
-function updateProgress() {
-    document.querySelectorAll(".progress-item").forEach((el,i)=>{
-        el.classList.toggle("current", i === currentIndex);
+        html += `</div></div>`;
+        questionsEl.innerHTML += html;
     });
-    currentQuestionEl.textContent = `${currentIndex+1}/20`;
-}
-
-function startTimer() {
-    clearInterval(timerInterval);
-    timeLeft = 45 * 60;
-    timerEl.textContent = "Timer 45:00";
-
-    timerInterval = setInterval(()=>{
-        timeLeft--;
-        const m = String(Math.floor(timeLeft/60)).padStart(2,"0");
-        const s = String(timeLeft%60).padStart(2,"0");
-        timerEl.textContent = `Timer ${m}:${s}`;
-        if (timeLeft <= 0) submitQuiz();
-    },1000);
 }
 
 /* ========= ANSWER ========= */
 function saveAnswer(i,v){ userAnswers[i]=v; }
 
-// ✅ hỗ trợ đúng/wrong cho 3 hoặc 4 đáp án (a:0..3)
 function checkAnswerInstant(i,v){
     const c = CURRENT_QUESTIONS[i].a;
-
-    const pickedLbl = document.getElementById(`q${i}o${v}_lbl`);
-    if (pickedLbl) pickedLbl.classList.add(v===c ? "correct" : "wrong");
-
+    const picked = document.getElementById(`q${i}o${v}_lbl`);
+    if (picked) picked.classList.add(v===c?"correct":"wrong");
     if (v!==c) {
-        const correctLbl = document.getElementById(`q${i}o${c}_lbl`);
-        if (correctLbl) correctLbl.classList.add("correct");
+        const correct = document.getElementById(`q${i}o${c}_lbl`);
+        if (correct) correct.classList.add("correct");
     }
 }
+
 
 /* ========= NAV ========= */
 function nextQuestion(){
@@ -1201,6 +1192,7 @@ loadQuiz("part1");
     </script>
 </body>
 </html>
+
 
 
 
