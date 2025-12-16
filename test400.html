@@ -959,6 +959,36 @@ function updateQuestionCount() {
   questionCountEl.textContent = CURRENT_QUESTIONS.length ? `(${CURRENT_QUESTIONS.length} questions)` : "";
 }
 
+function shuffleOptions(question) {
+  const indices = question.opts.map((_, i) => i);
+
+  // Fisher–Yates shuffle index
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+
+  const newOpts = [];
+  const newOptsVi = [];
+  let newCorrectIndex = null;
+
+  indices.forEach((oldIndex, newIndex) => {
+    newOpts.push(question.opts[oldIndex]);
+    if (question.optsVi) newOptsVi.push(question.optsVi[oldIndex]);
+    if (oldIndex === question.a) newCorrectIndex = newIndex;
+  });
+
+  return {
+    ...question,
+    opts: newOpts,
+    optsVi: newOptsVi.length ? newOptsVi : question.optsVi,
+    a: newCorrectIndex
+  };
+}
+
+		
+		
+
 // ============ RENDER ============
 function renderAllQuestions(showVi) {
   questionsEl.innerHTML = "";
@@ -1161,7 +1191,8 @@ if (isPractice10(selection)) {
 
 	
   // apply Basic/Advance option-count rules
-  CURRENT_QUESTIONS = applyLevelMode(list);
+  CURRENT_QUESTIONS = applyLevelMode(list).map(shuffleOptions);
+
 
   userAnswers = new Array(CURRENT_QUESTIONS.length).fill(null);
   currentIndex = 0;
@@ -1255,6 +1286,7 @@ loadQuiz("part1");
     </script>
 </body>
 </html>
+
 
 
 
