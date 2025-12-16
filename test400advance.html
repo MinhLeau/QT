@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <title>Australian Citizenship Practice Quiz</title>
+    <style>
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f0f8ff;
+            padding: 15px;
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        h1 {
+            text-align: center;
+            color: #006400;
+            margin: 10px 0 8px 0;
+            font-size: 28px;
+        }
+        h2 {
+            display: inline;
+            margin: 0;
+            text-align:left; 
+            color:#e51803; 
+            font-size:20px;
+        }
+        .credit {
+            position: absolute;
+            top: 55px;
+            right: 20px;
+            z-index: 10;
+            font-size: 0.6rem;
+            color: #006400;
+            text-shadow: 1px 1px 6px rgba(0,0,0,0.8);
+            font-weight: normal;
+        }
+        .home-btn, .home-btnTS {
+            position: absolute;
+            top: 5px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        .home-btn { left: 15px; background: #006400; }
+        .home-btn::before { content: "🏠"; }
+        .home-btn:hover { background: #004d00; transform: scale(1.1); }
+        .home-btnTS { right: 37px; background: url("TS.jpg") center / 100% no-repeat, #006400; }
+        .home-btnTS:hover { transform: scale(1.1); }
+
+        #quizHeader {
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            background: #001f3f;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        #currentQuestion, #timer {
+            background: white;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        #currentQuestion { color: #001f3f; }
+        #timer { color: #d32f2f; }
+        #quizTitle { font-size: 22px; text-transform: uppercase; letter-spacing: 1px; }
+
+        #progressBar {
+            display: none;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 25px 0;
+        }
+        .progress-item {
+            width: 40px;
+            height: 40px;
+            background: #e0e0e0;
+            color: #555;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        .progress-item.current {
+            background: #ff6600;
+            color: white;
+            transform: scale(1.2);
+            box-shadow: 0 0 15px rgba(255,102,0,0.6);
+        }
+
+        .opt {
+            display: block;
+            padding: 18px 20px;
+            margin: 15px 0;
+            background: #f8f9fa;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+            font-size: 18px;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        .opt:hover, .opt:active { background: #e3f2fd; transform: translateX(5px); }
+        .opt input[type="radio"] {
+            transform: scale(1.5);
+            margin-right: 15px;
+            accent-color: #006400;
+            pointer-events: none;
+        }
+        .correct { background: #d4edda !important; border: 4px solid #28a745 !important; color: #155724; font-weight: bold; }
+        .wrong   { background: #f8d7da !important; border: 4px solid #dc3545 !important; color: #721c24; font-weight: bold; }
+
+        #questions .opt {
+            padding: 7px 16px !important;
+            margin: 8px 0 !important;
+            font-size: 17px !important;
+            line-height: 1.4 !important;
+            border-radius: 10px !important;
+        }
+        #questions .opt.correct { padding: 10px 16px !important; }
+        #questions .opt.wrong   { padding: 10px 16px !important; }
+
+        #navigation {
+            display: none;
+            justify-content: space-between;
+            margin: 40px 0 20px;
+        }
+        #prevBtn, #nextBtn {
+            padding: 16px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            min-width: 120px;
+        }
+        #prevBtn { background: #6c757d; color: white; }
+        #nextBtn { background: #007bff; color: white; }
+        #prevBtn:disabled { background: #ccc; cursor: not-allowed; }
+
+        #results {
+            margin: 30px 0;
+            padding: 25px;
+            background: #e7f3ff;
+            border: 3px solid #007bff;
+            border-radius: 16px;
+            display: none;
+            text-align: center;
+        }
+        #score { font-size: 28px; font-weight: bold; color: #006400; margin-bottom: 15px; }
+        #resetBtn {
+            padding: 14px 30px;
+            font-size: 18px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 40px !important;
+        }
+        .quiz-select-container {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+.note-btn {
+    background: none;
+    border: none;
+    color: #006400;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.note-btn:hover {
+    text-decoration: underline;
+}
+
+        #vietnam, #basic, #advance {
+            transform: scale(1.2);
+            margin: 0 5px 0 15px;
+        }
+
+        .note-popup {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.7);
+            animation: fadeIn 0.3s;
+        }
+        .note-popup.show { display: block; }
+        .note-content {
+            background-color: #ffffff;
+            margin: 3% auto;
+            padding: 0;
+            border: 3px solid #2196F3;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: slideDown 0.4s;
+            position: relative;
+        }
+        .note-header {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 13px 13px 0 0;
+            text-align: center;
+        }
+        .note-header h2 { font-size: 26px; margin: 0; }
+        .note-body { padding: 30px; max-height: 70vh; overflow-y: auto; }
+        .note-close {
+            position: absolute;
+            right: 20px; top: 20px;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 40px; height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+        }
+        .note-close:hover { background: rgba(255,255,255,0.4); transform: rotate(90deg); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            h1 { font-size: 22px; }
+            #quizHeader { flex-direction: column; gap: 12px; text-align: center; padding: 12px 15px; }
+            #currentQuestion, #timer { font-size: 16px; padding: 8px 14px; }
+            #quizTitle { font-size: 18px; }
+            .progress-item { width: 34px; height: 34px; font-size: 13px; }
+            .opt { font-size: 16px; padding: 14px 16px; }
+            #prevBtn, #nextBtn { padding: 14px 30px; font-size: 18px; }
+            #questions .opt { padding: 9px 14px !important; font-size: 16px !important; }
+            .note-header h2 { font-size: 20px; }
+            .note-body { padding: 20px 15px; }
+        }
+    </style>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDvB54m2uxhjuE2moJQ09NcuAEVhro7Zh4",
+          authDomain: "quoctichuc-43f28.firebaseapp.com",
+          projectId: "quoctichuc-43f28",
+          storageBucket: "quoctichuc-43f28.firebasestorage.app",
+          messagingSenderId: "710420527110",
+          appId: "1:710420527110:web:ba4281739f963e76656b87"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                console.log('Logged in as:', user.email);
+            }
+        });
+
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        };
+    </script>
+
+    <style>
+        .logout-btn {
+            position: fixed;
+            top: 13px;
+            left: 85px;
+            padding: 8px 16px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        .logout-btn:hover { background: #c82333; transform: translateY(-2px); }
+
+.hide-on-scroll {
+    opacity: 0;
+    transform: translateY(-15px);
+    pointer-events: none;
+}
+
+		
+    </style>
+    <button class="logout-btn hide-on-scroll-target" onclick="logout()">Logout</button>
+
+</head>
+<body>
+
+    <a href="onluyenthiquoctich.html" class="home-btn" title="Về trang chủ"></a>
+    <a href="#" class="home-btnTS" title="Thomas"></a>
+    <h4 class="credit">Created by Thomas</h4>
+    <h1>Australian Citizenship - Our Common Bond</h1>
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+    <h2>Australian Citizenship Practice Quiz</h2>
+    <button class="note-btn" onclick="showNotePopup()">📝 Note</button>
+</div>
+
+
+<div class="quiz-select-container"
+     style="display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
+
+    <!-- CHỌN QUIZ -->
+    <div style="display:flex; align-items:center; gap:10px;">
+        <b>Chọn bài Test:</b>
+        <select id="quizSelect"
+            style="padding:12px; font-size:18px; border-radius:8px; width:520px; max-width:100%;">
+            <option value="part1">Practice Quiz Part_1 (Australia and its people)</option>
+            <option value="part2">Practice Quiz Part_2 (Democratic beliefs, rights and liberties)</option>
+            <option value="part3">Practice Quiz Part_3 (Government and the law)</option>
+            <option value="part4">Practice Quiz Part_4 (Australian values)</option>
+            <option value="1">Practice Quiz 1</option>
+            <option value="2">Practice Quiz 2</option>
+            <option value="3">Practice Quiz 3</option>
+            <option value="4">Practice Quiz 4</option>
+            <option value="5">Practice Quiz 5</option>
+            <option value="6">Practice Quiz 6</option>
+            <option value="7">Practice Quiz 7</option>
+            <option value="8">Practice Quiz 8</option>
+            <option value="9">Practice Quiz 9</option>
+            <option value="10">Practice Quiz 10</option>
+            <option value="all">Practice Quiz All</option>
+        </select>
+    </div>
+
+    <!-- SỐ CÂU + CHECKBOX -->
+    <div style="display:flex; align-items:center; gap:14px; white-space:nowrap;">
+        <span id="questionCount" style="font-weight:bold; color:#006400;"></span>
+
+        <label><input type="checkbox" id="vietnam"> Vietnam</label>
+        <label><input type="checkbox" id="basic" checked> Basic</label>
+        <label><input type="checkbox" id="advance"> Advance</label>
+    </div>
+
+</div>
+
+
+
+    <!-- Note Popup -->
+    <div id="notePopup" class="note-popup">
+        <div class="note-content">
+            <span class="note-close" onclick="closeNotePopup()">&times;</span>
+            <div class="note-header">
+                <h2>📋 Thông Tin Về Bài Thi Quốc Tịch Úc</h2>
+            </div>
+            <div class="note-body">
+				<h3>🎯 Cách học hiệu quả</h3>
+                <ul>
+                    <strong>Để có kết quả cao khi làm bài thi, bạn cần học theo các bước:</strong>
+                    <li><strong>1. Từ vựng: </strong>Học hiểu nghĩa càng nhiều từ vựng càng tốt.</li>
+                    <li><strong>2. Audio: </strong>Nghe trước nhiều lần các file Audio(tiếng việt) để có kiến thức về bài thi</li>
+                    <li><strong>3. Test: </strong>Tập trả lời với 200 hoặc 400 câu hỏi có song ngữ, sau đó mới làm các bài test khác</li>
+					<li>Tập trung đặc biệt vào phần <strong>Australian values</strong></li>
+                    <li>Hiểu rõ nội dung thay vì chỉ học thuộc lòng</li>
+                    <li>Làm quen với hình thức thi với 20 câu hỏi</li>
+					<li>Dành thời gian đọc sách: "Our Common Bond"</li>					
+                </ul>
+                <h3>🎯 Cấu Trúc Bài Thi</h3>
+                <ul>
+                    <li><strong>Tổng số câu hỏi:</strong> 20 câu trắc nghiệm</li>
+                    <li><strong>Thời gian làm bài:</strong> 45 phút</li>
+                    <li><strong>Hình thức:</strong> Trắc nghiệm trên máy tính (computer-based test)</li>
+                    <li><strong>Điểm đạt:</strong> Phải trả lời đúng tối thiểu <strong>15/20 câu (75%)</strong></li>
+                </ul>
+
+                <h3>📚 Nội Dung Kiến Thức (Từ Sách "Our Common Bond")</h3>
+                <p>Bài thi dựa trên cuốn sách chính thức <strong>"Australian Citizenship: Our Common Bond"</strong> với 4 phần chính:</p>
+                <ol>
+                    <li><strong>Part 1:</strong> Australia and its people (Úc và người dân)</li>
+                    <li><strong>Part 2:</strong> Democratic beliefs, rights and liberties (Niềm tin dân chủ, quyền và tự do)</li>
+                    <li><strong>Part 3:</strong> Government and the law (Chính phủ và luật pháp)</li>
+                    <li><strong>Part 4:</strong> Australian values (Giá trị Úc)</li>
+                </ol>
+
+                <div class="highlight">
+                    <strong>⚠️ LƯU Ý QUAN TRỌNG:</strong>
+                    <p>Trong 20 câu hỏi, sẽ có <strong>5 câu về Australian values (Giá trị Úc)</strong> và bạn <strong>PHẢI trả lời đúng cả 5 câu này</strong>. Nếu sai bất kỳ câu nào về Australian values, bạn sẽ tự động trượt bài thi, bất kể số câu đúng ở các phần khác.</p>
+                </div>
+
+                <h3>✅ Yêu Cầu Đạt Bài Thi</h3>
+                <ul>
+                    <li>Trả lời đúng tối thiểu <strong>15/20 câu</strong> (75%)</li>
+                    <li>Trả lời đúng <strong>CẢ 5 câu về Australian values</strong></li>
+                    <li>Hoàn thành trong vòng 45 phút</li>
+                </ul>
+
+
+
+                <p style="text-align: center; margin-top: 20px; font-style: italic; color: #666;">
+                    Chúc bạn ôn tập tốt và đạt kết quả cao trong kỳ thi!
+                </p>
+				
+				<p style="text-align: right; margin-top: 0px; font-style: italic; color: #f10434;">
+                    Thomas
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- Header khi làm bài 20 câu -->
+<div id="quizHeader">
+        <div id="currentQuestion">1/20</div>
+        <div id="quizTitle">Practice Quiz</div>
+        <div id="timer">Timer 45:00</div>
+    </div>
+
+    <div id="progressBar"></div>
+    <div id="questions"></div>
+
+    <div id="navigation">
+        <button id="prevBtn">Prev</button>
+        <button id="nextBtn">Next</button>
+    </div>
+
+    <button id="resetBtn">Reset All</button>
+
+    <div id="results">
+        <p id="score"></p>
+        <p><strong>Các câu sai:</strong></p>
+        <ol id="wrongList"></ol>
+    </div>
+
+	<script>
+let lastScrollTop = 0;
+
+const hideTargets = [
+    document.querySelector('.logout-btn'),
+    document.querySelector('.home-btn'),
+    document.querySelector('.home-btnTS')
+];
+
+window.addEventListener('scroll', () => {
+    const st = window.pageYOffset || document.documentElement.scrollTop;
+    const isScrollingDown = st > lastScrollTop;
+
+    hideTargets.forEach(el => {
+        if (!el) return;
+        el.classList.toggle('hide-on-scroll', isScrollingDown);
+    });
+
+    lastScrollTop = st <= 0 ? 0 : st;
+});
+</script>
+
+	
+    <script>
+        // ============ DỮ LIỆU CÂU HỎI (giữ nguyên như cũ) ============
+        
+		const QUESTION_BANK = [
+  // PART 1: Australia and its people (111 questions)
+{q: "// PART 1" },
+{q:"Is everyone in Australia required to obey the law?", qVi:"Mọi người ở Úc có bắt buộc phải tuân thủ pháp luật không?", opts:["Yes","Only citizens","Only residents","No"], optsVi:["Có","Chỉ công dân","Chỉ thường trú nhân","Không"], a:0},
+{q:"Is domestic violence illegal in Australia?", qVi:"Bạo lực gia đình có bất hợp pháp ở Úc không?", opts:["Yes","Sometimes","Only overseas","No"], optsVi:["Có","Đôi khi","Chỉ ở nước ngoài","Không"], a:0},
+{q:"Are men and women treated equally under Australian law?", qVi:"Nam và nữ có được đối xử bình đẳng theo luật Úc không?", opts:["Yes","Only men","Only women","Sometimes"], optsVi:["Có","Chỉ nam","Chỉ nữ","Đôi khi"], a:0},
+{q:"Can people in Australia choose their religion freely?", qVi:"Người dân Úc có thể tự do chọn tôn giáo không?", opts:["Yes","Only approved religions","Only citizens","No"], optsVi:["Có","Chỉ tôn giáo được phép","Chỉ công dân","Không"], a:0},
+{q:"Is forced marriage against the law in Australia?", qVi:"Hôn nhân cưỡng ép có vi phạm pháp luật ở Úc không?", opts:["Yes","Sometimes","Only overseas","No"], optsVi:["Có","Đôi khi","Chỉ ở nước ngoài","Không"], a:0},
+{q:"Is online stalking illegal in Australia?", qVi:"Theo dõi trực tuyến có bất hợp pháp ở Úc không?", opts:["Yes","No","Allowed","Free"], optsVi:["Có","Không","Được phép","Tự do"], a:0},
+{q:"Must people respect court decisions in Australia?", qVi:"Người dân có phải tôn trọng các quyết định của tòa án ở Úc không?", opts:["Yes","Only citizens","Only lawyers","No"], optsVi:["Có","Chỉ công dân","Chỉ luật sư","Không"], a:0},
+{q:"Is freedom of speech protected in Australia?", qVi:"Tự do ngôn luận có được bảo vệ ở Úc không?", opts:["Yes","Without limits","Only for media","No"], optsVi:["Có","Không giới hạn","Chỉ cho báo chí","Không"], a:0},
+{q:"Is discrimination based on gender illegal in Australia?", qVi:"Phân biệt đối xử dựa trên giới tính có trái pháp luật ở Úc không?", opts:["Yes","Sometimes","Only at work","No"], optsVi:["Có","Đôi khi","Chỉ tại nơi làm việc","Không"], a:0},
+{q:"Are people equal before the law in Australia?", qVi:"Mọi người có bình đẳng trước pháp luật ở Úc không?", opts:["Yes","Only citizens","Only adults","No"], optsVi:["Có","Chỉ công dân","Chỉ người lớn","Không"], a:0},
+{q:"Is violence acceptable in Australian society?", qVi:"Bạo lực có được chấp nhận trong xã hội Úc không?", opts:["No","Sometimes","Only in protests","Yes"], optsVi:["Không","Đôi khi","Chỉ khi biểu tình","Có"], a:0},
+{q:"Do people in Australia have the right to be safe?", qVi:"Người dân ở Úc có quyền được an toàn không?", opts:["Yes","Only citizens","Only children","No"], optsVi:["Có","Chỉ công dân","Chỉ trẻ em","Không"], a:0},
+{q:"Is racial discrimination against the law in Australia?", qVi:"Phân biệt chủng tộc có vi phạm pháp luật ở Úc không?", opts:["Yes","Sometimes","Only in public","No"], optsVi:["Có","Đôi khi","Chỉ nơi công cộng","Không"], a:0},
+{q:"Are people free to express opinions in Australia?", qVi:"Người dân có tự do bày tỏ ý kiến ở Úc không?", opts:["Yes","Only online","Only citizens","No"], optsVi:["Có","Chỉ trực tuyến","Chỉ công dân","Không"], a:0},
+{q:"Is everyone entitled to a fair trial in Australia?", qVi:"Mọi người có quyền được xét xử công bằng ở Úc không?", opts:["Yes","Only citizens","Only adults","No"], optsVi:["Có","Chỉ công dân","Chỉ người lớn","Không"], a:0},
+{q:"Is bullying against the law in some situations in Australia?", qVi:"Bắt nạt có thể vi phạm pháp luật ở Úc trong một số trường hợp không?", opts:["Yes","Never","Always legal","Encouraged"], optsVi:["Có","Không bao giờ","Luôn hợp pháp","Được khuyến khích"], a:0},
+{q:"Is it illegal to harm another person in Australia?", qVi:"Gây hại cho người khác có bất hợp pháp ở Úc không?", opts:["Yes","Sometimes","Only at work","No"], optsVi:["Có","Đôi khi","Chỉ tại nơi làm việc","Không"], a:0},
+{q:"Is freedom of religion respected in Australia?", qVi:"Tự do tôn giáo có được tôn trọng ở Úc không?", opts:["Yes","Only some religions","Only citizens","No"], optsVi:["Có","Chỉ một số tôn giáo","Chỉ công dân","Không"], a:0},
+{q:"Are laws made to protect people in Australia?", qVi:"Luật pháp ở Úc có được ban hành để bảo vệ người dân không?", opts:["Yes","Only government","Only businesses","No"], optsVi:["Có","Chỉ chính phủ","Chỉ doanh nghiệp","Không"], a:0},
+{q:"Is threatening another person a crime in Australia?", qVi:"Đe dọa người khác có phải là tội phạm ở Úc không?", opts:["Yes","Sometimes","Only online","No"], optsVi:["Có","Đôi khi","Chỉ trực tuyến","Không"], a:0},
+{q:"Do Australian laws protect human rights?", qVi:"Luật Úc có bảo vệ quyền con người không?", opts:["Yes","Only sometimes","Only citizens","No"], optsVi:["Có","Chỉ đôi khi","Chỉ công dân","Không"], a:0},
+{q:"Is respecting others important in Australian society?", qVi:"Tôn trọng người khác có quan trọng trong xã hội Úc không?", opts:["Yes","Optional","Only at work","No"], optsVi:["Có","Không bắt buộc","Chỉ nơi làm việc","Không"], a:0},
+{q:"Is child abuse illegal in Australia?", qVi:"Ngược đãi trẻ em có bất hợp pháp ở Úc không?", opts:["Yes","Sometimes","Only overseas","No"], optsVi:["Có","Đôi khi","Chỉ ở nước ngoài","Không"], a:0},
+{q:"Is harassment against the law in Australia?", qVi:"Quấy rối có vi phạm pháp luật ở Úc không?", opts:["Yes","Sometimes","Only at school","No"], optsVi:["Có","Đôi khi","Chỉ ở trường","Không"], a:0},
+{q:"Are people expected to follow Australian values?", qVi:"Người dân có được mong đợi tuân theo các giá trị Úc không?", opts:["Yes","Only migrants","Only citizens","No"], optsVi:["Có","Chỉ người di cư","Chỉ công dân","Không"], a:0},
+{q:"Who makes the laws in Australia?", qVi:"Ai là người ban hành luật ở Úc?", opts:["The police","The Parliament","The courts","The King"], optsVi:["Cảnh sát","Quốc hội","Tòa án","Nhà vua"], a:1},
+{q:"What system of government does Australia have?", qVi:"Úc có hệ thống chính phủ nào?", opts:["Dictatorship","Democracy","Military rule","Absolute monarchy"], optsVi:["Độc tài","Dân chủ","Quân sự","Quân chủ tuyệt đối"], a:1},
+{q:"Who votes to elect members of Parliament?", qVi:"Ai bỏ phiếu để bầu các thành viên Quốc hội?", opts:["The Prime Minister","The people","The courts","The police"], optsVi:["Thủ tướng","Người dân","Tòa án","Cảnh sát"], a:1},
+{q:"What is a key responsibility of Australian citizens?", qVi:"Trách nhiệm quan trọng của công dân Úc là gì?", opts:["Avoid voting","Vote in elections","Ignore laws","Control government"], optsVi:["Tránh bỏ phiếu","Bỏ phiếu","Phớt lờ luật","Kiểm soát chính phủ"], a:1},
+{q:"Who must obey Australian laws?", qVi:"Ai phải tuân theo luật pháp Úc?", opts:["Only citizens","Everyone","Only residents","Only migrants"], optsVi:["Chỉ công dân","Tất cả mọi người","Chỉ thường trú","Chỉ người di cư"], a:1},
+{q:"What does democracy allow people to do?", qVi:"Dân chủ cho phép người dân làm gì?", opts:["Rule by force","Choose their leaders","Ignore laws","Avoid responsibility"], optsVi:["Cai trị bằng vũ lực","Chọn lãnh đạo","Phớt lờ luật","Tránh trách nhiệm"], a:1},
+{q:"Who forms the Australian Government?", qVi:"Ai thành lập Chính phủ Úc?", opts:["The courts","The party with majority support","The police","The Governor-General alone"], optsVi:["Tòa án","Đảng có đa số ủng hộ","Cảnh sát","Toàn quyền một mình"], a:1},
+{q:"What protects freedom in Australia?", qVi:"Điều gì bảo vệ tự do ở Úc?", opts:["Tradition","The law","Personal power","Religion"], optsVi:["Truyền thống","Pháp luật","Quyền lực cá nhân","Tôn giáo"], a:1},
+{q:"Who can propose a change to a law?", qVi:"Ai có thể đề xuất thay đổi luật?", opts:["Only judges","Members of Parliament","Only citizens","The police"], optsVi:["Chỉ thẩm phán","Thành viên Quốc hội","Chỉ công dân","Cảnh sát"], a:1},
+{q:"What do elections allow people to do?", qVi:"Bầu cử cho phép người dân làm gì?", opts:["Break laws","Choose representatives","Avoid taxes","Control courts"], optsVi:["Vi phạm luật","Chọn người đại diện","Tránh thuế","Kiểm soát tòa án"], a:1},
+{q:"Who represents the people in Parliament?", qVi:"Ai đại diện cho người dân trong Quốc hội?", opts:["Judges","Elected members","Police officers","Public servants"], optsVi:["Thẩm phán","Các thành viên được bầu","Cảnh sát","Công chức"], a:1},
+{q:"What is the role of Parliament?", qVi:"Vai trò của Quốc hội là gì?", opts:["Enforce laws","Make and change laws","Judge cases","Run courts"], optsVi:["Thực thi luật","Ban hành và sửa đổi luật","Xét xử","Điều hành tòa án"], a:1},
+{q:"What gives citizens a voice in government?", qVi:"Điều gì cho công dân tiếng nói trong chính phủ?", opts:["Wealth","Voting","Force","Status"], optsVi:["Giàu có","Bỏ phiếu","Vũ lực","Địa vị"], a:1},
+{q:"Who is responsible for enforcing the law?", qVi:"Ai chịu trách nhiệm thực thi pháp luật?", opts:["Parliament","The police","The courts","Citizens"], optsVi:["Quốc hội","Cảnh sát","Tòa án","Người dân"], a:1},
+{q:"What does the rule of law mean?", qVi:"Nguyên tắc pháp quyền có nghĩa là gì?", opts:["Leaders above law","Everyone follows the law","Only courts decide","Only citizens obey"], optsVi:["Lãnh đạo đứng trên luật","Mọi người đều tuân theo luật","Chỉ tòa án quyết định","Chỉ công dân tuân theo"], a:1},
+{q:"Who decides if someone has broken the law?", qVi:"Ai quyết định liệu ai đó có vi phạm pháp luật không?", opts:["The police","The courts","The Parliament","The government"], optsVi:["Cảnh sát","Tòa án","Quốc hội","Chính phủ"], a:1},
+{q:"What allows peaceful change in Australia?", qVi:"Điều gì cho phép thay đổi hòa bình ở Úc?", opts:["Violence","Democracy","Force","Fear"], optsVi:["Bạo lực","Dân chủ","Vũ lực","Sợ hãi"], a:1},
+{q:"Who can stand for election in Australia?", qVi:"Ai có thể ra tranh cử ở Úc?", opts:["Only wealthy people","Eligible citizens","Only politicians","Only government workers"], optsVi:["Chỉ người giàu","Công dân đủ điều kiện","Chỉ chính trị gia","Chỉ công chức"], a:1},
+{q:"What is the purpose of having laws?", qVi:"Mục đích của việc có luật pháp là gì?", opts:["Control opinions","Protect people and society","Limit freedom","Create fear"], optsVi:["Kiểm soát ý kiến","Bảo vệ con người và xã hội","Hạn chế tự do","Tạo sợ hãi"], a:1},
+{q:"Who has the right to vote in Australia?", qVi:"Ai có quyền bỏ phiếu ở Úc?", opts:["All residents","Eligible citizens","Only politicians","Only migrants"], optsVi:["Tất cả thường trú","Công dân đủ điều kiện","Chỉ chính trị gia","Chỉ người di cư"], a:1},
+{q:"What is an important feature of Australian democracy?", qVi:"Đặc điểm quan trọng của nền dân chủ Úc là gì?", opts:["Rule by force","Free and fair elections","Single ruler","No opposition"], optsVi:["Cai trị bằng vũ lực","Bầu cử tự do và công bằng","Một người lãnh đạo","Không đối lập"], a:1},
+{q:"Who is responsible for making sure laws are fair?", qVi:"Ai chịu trách nhiệm đảm bảo luật được áp dụng công bằng?", opts:["The police","The courts","The media","Citizens"], optsVi:["Cảnh sát","Tòa án","Truyền thông","Người dân"], a:1},
+{q:"What allows citizens to influence government decisions?", qVi:"Điều gì cho phép công dân ảnh hưởng đến quyết định của chính phủ?", opts:["Violence","Voting and participation","Fear","Money only"], optsVi:["Bạo lực","Bỏ phiếu và tham gia","Sợ hãi","Chỉ tiền"], a:1},
+{q:"Who forms the opposition in Parliament?", qVi:"Ai thành lập phe đối lập trong Quốc hội?", opts:["The courts","The largest non-government party","The police","The Governor-General"], optsVi:["Tòa án","Đảng không cầm quyền lớn nhất","Cảnh sát","Toàn quyền"], a:1},
+{q:"What ensures accountability of government in Australia?", qVi:"Điều gì đảm bảo trách nhiệm giải trình của chính phủ ở Úc?", opts:["Force","Democratic system","Fear","Tradition"], optsVi:["Vũ lực","Hệ thống dân chủ","Sợ hãi","Truyền thống"], a:1}
+{q:"How can people change laws in Australia?", qVi:"Người dân có thể thay đổi luật ở Úc bằng cách nào?", opts:["By force","By ignoring laws","By voting and democratic processes","By personal decision"], optsVi:["Bằng vũ lực","Bằng cách phớt lờ luật","Bằng bỏ phiếu và quy trình dân chủ","Bằng quyết định cá nhân"], a:2},
+{q:"What should you do if you disagree with a law?", qVi:"Bạn nên làm gì nếu không đồng ý với một đạo luật?", opts:["Break the law","Ignore the law","Follow the law and seek change lawfully","Decide for yourself"], optsVi:["Vi phạm luật","Bỏ qua luật","Tuân thủ luật và tìm cách thay đổi hợp pháp","Tự quyết định"], a:2},
+{q:"How are legal disputes resolved in Australia?", qVi:"Tranh chấp pháp lý được giải quyết như thế nào ở Úc?", opts:["By violence","By family elders","By courts and the legal system","By social media"], optsVi:["Bằng bạo lực","Bằng trưởng gia đình","Bằng tòa án và hệ thống pháp luật","Bằng mạng xã hội"], a:2},
+{q:"What protects people’s rights in Australia?", qVi:"Điều gì bảo vệ quyền của người dân ở Úc?", opts:["Culture","Religion","The law","Tradition"], optsVi:["Văn hóa","Tôn giáo","Pháp luật","Truyền thống"], a:2},
+{q:"What is expected of people living in Australia?", qVi:"Người sống ở Úc được mong đợi điều gì?", opts:["Control others","Ignore differences","Respect others and the law","Avoid responsibility"], optsVi:["Kiểm soát người khác","Phớt lờ khác biệt","Tôn trọng người khác và pháp luật","Tránh trách nhiệm"], a:2},
+{q:"What helps maintain a peaceful society in Australia?", qVi:"Điều gì giúp duy trì xã hội hòa bình ở Úc?", opts:["Fear","Force","Respect for the law","Personal power"], optsVi:["Sợ hãi","Vũ lực","Tôn trọng pháp luật","Quyền lực cá nhân"], a:2},
+{q:"How should conflicts be handled in Australia?", qVi:"Xung đột nên được xử lý như thế nào ở Úc?", opts:["By fighting","By ignoring them","Through legal and peaceful means","By revenge"], optsVi:["Bằng đánh nhau","Bằng cách bỏ qua","Thông qua các biện pháp hợp pháp và hòa bình","Bằng trả thù"], a:2},
+{q:"How does democracy protect freedom?", qVi:"Dân chủ bảo vệ tự do như thế nào?", opts:["By limiting choice","By controlling people","By allowing participation and choice","By enforcing silence"], optsVi:["Bằng hạn chế lựa chọn","Bằng kiểm soát con người","Bằng cho phép tham gia và lựa chọn","Bằng áp đặt im lặng"], a:2},
+{q:"How can people influence government decisions?", qVi:"Người dân có thể ảnh hưởng đến quyết định của chính phủ bằng cách nào?", opts:["By violence","By ignoring government","By voting and participation","By fear"], optsVi:["Bằng bạo lực","Bằng cách phớt lờ chính phủ","Bằng bỏ phiếu và tham gia","Bằng sợ hãi"], a:2},
+{q:"How are leaders chosen in Australia?", qVi:"Lãnh đạo ở Úc được lựa chọn như thế nào?", opts:["By force","By inheritance","By elections","By courts"], optsVi:["Bằng vũ lực","Bằng thừa kế","Bằng bầu cử","Bằng tòa án"], a:2},
+{q:"How does the rule of law benefit society?", qVi:"Nguyên tắc pháp quyền mang lại lợi ích gì cho xã hội?", opts:["Creates fear","Allows abuse","Ensures fairness and order","Gives power to leaders"], optsVi:["Tạo sợ hãi","Cho phép lạm dụng","Đảm bảo công bằng và trật tự","Trao quyền cho lãnh đạo"], a:2},
+{q:"How can people express disagreement peacefully?", qVi:"Người dân có thể bày tỏ sự bất đồng một cách hòa bình bằng cách nào?", opts:["By violence","By threats","By lawful protest and discussion","By revenge"], optsVi:["Bằng bạo lực","Bằng đe dọa","Bằng biểu tình hợp pháp và thảo luận","Bằng trả thù"], a:2},
+{q:"How are community decisions supported in Australia?", qVi:"Các quyết định cộng đồng được hỗ trợ như thế nào ở Úc?", opts:["By force","By tradition only","By laws and democratic processes","By personal power"], optsVi:["Bằng vũ lực","Chỉ bằng truyền thống","Bằng luật pháp và quy trình dân chủ","Bằng quyền lực cá nhân"], a:2},
+{q:"How does Australian law treat all people?", qVi:"Luật Úc đối xử với mọi người như thế nào?", opts:["Differently by status","By wealth","Equally","By nationality"], optsVi:["Khác nhau theo địa vị","Theo sự giàu có","Bình đẳng","Theo quốc tịch"], a:2},
+{q:"How can problems in society be solved?", qVi:"Các vấn đề trong xã hội có thể được giải quyết như thế nào?", opts:["By force","By ignoring them","By lawful discussion and action","By fear"], optsVi:["Bằng vũ lực","Bằng cách bỏ qua","Bằng thảo luận và hành động hợp pháp","Bằng sợ hãi"], a:2},
+{q:"How does voting support democracy?", qVi:"Bỏ phiếu hỗ trợ dân chủ như thế nào?", opts:["By creating conflict","By limiting choice","By allowing people to choose representatives","By avoiding responsibility"], optsVi:["Tạo xung đột","Hạn chế lựa chọn","Cho phép người dân chọn người đại diện","Tránh trách nhiệm"], a:2},
+{q:"How can laws be applied fairly?", qVi:"Luật pháp có thể được áp dụng công bằng bằng cách nào?", opts:["By personal opinion","By force","By courts and legal processes","By wealth"], optsVi:["Theo ý kiến cá nhân","Bằng vũ lực","Bằng tòa án và quy trình pháp lý","Theo sự giàu có"], a:2},
+{q:"How can people help maintain order in society?", qVi:"Người dân có thể giúp duy trì trật tự xã hội bằng cách nào?", opts:["By fear","By violence","By respecting laws","By ignoring rules"], optsVi:["Bằng sợ hãi","Bằng bạo lực","Bằng tôn trọng luật pháp","Bằng cách phớt lờ quy định"], a:2},
+{q:"How does participation strengthen democracy?", qVi:"Sự tham gia củng cố dân chủ như thế nào?", opts:["By reducing voices","By increasing control","By involving citizens in decisions","By limiting freedom"], optsVi:["Giảm tiếng nói","Tăng kiểm soát","Thu hút công dân tham gia quyết định","Hạn chế tự do"], a:2},
+{q:"How are human rights protected in Australia?", qVi:"Quyền con người được bảo vệ như thế nào ở Úc?", opts:["By tradition","By religion","By laws","By community leaders"], optsVi:["Bằng truyền thống","Bằng tôn giáo","Bằng pháp luật","Bằng lãnh đạo cộng đồng"], a:2},
+{q:"How should people treat others in Australia?", qVi:"Người dân nên đối xử với người khác như thế nào ở Úc?", opts:["With control","With indifference","With respect and fairness","With fear"], optsVi:["Bằng kiểm soát","Bằng thờ ơ","Bằng tôn trọng và công bằng","Bằng sợ hãi"], a:2},
+{q:"How does the legal system help society?", qVi:"Hệ thống pháp luật giúp ích cho xã hội như thế nào?", opts:["Creates conflict","Supports violence","Resolves disputes fairly","Limits freedom"], optsVi:["Tạo xung đột","Hỗ trợ bạo lực","Giải quyết tranh chấp công bằng","Hạn chế tự do"], a:2},
+{q:"How can change happen peacefully in Australia?", qVi:"Sự thay đổi có thể diễn ra hòa bình ở Úc bằng cách nào?", opts:["By force","By threats","By democratic processes","By fear"], optsVi:["Bằng vũ lực","Bằng đe dọa","Bằng quy trình dân chủ","Bằng sợ hãi"], a:2},
+{q:"How does respecting diversity benefit Australia?", qVi:"Tôn trọng sự đa dạng mang lại lợi ích gì cho Úc?", opts:["Creates division","Weakens society","Strengthens society","Limits culture"], optsVi:["Tạo chia rẽ","Làm suy yếu xã hội","Củng cố xã hội","Hạn chế văn hóa"], a:2},
+{q:"How can people resolve disagreements?", qVi:"Người dân có thể giải quyết bất đồng như thế nào?", opts:["By fighting","By ignoring","By lawful discussion","By threats"], optsVi:["Bằng đánh nhau","Bằng cách bỏ qua","Bằng thảo luận hợp pháp","Bằng đe dọa"], a:2},
+{q:"What happens if someone breaks the law in Australia?", qVi:"Điều gì xảy ra nếu ai đó vi phạm pháp luật ở Úc?", opts:["Nothing","Community decides","Personal punishment","They may face legal consequences"], optsVi:["Không có gì","Cộng đồng quyết định","Tự xử","Có thể bị xử lý theo pháp luật"], a:3},
+{q:"Who interprets and applies the law in Australia?", qVi:"Ai diễn giải và áp dụng luật pháp ở Úc?", opts:["The police","The Parliament","Citizens","The courts"], optsVi:["Cảnh sát","Quốc hội","Người dân","Tòa án"], a:3},
+{q:"What is not acceptable in Australian society?", qVi:"Điều gì không được chấp nhận trong xã hội Úc?", opts:["Different opinions","Peaceful protest","Voting","Violence"], optsVi:["Ý kiến khác","Biểu tình ôn hòa","Bỏ phiếu","Bạo lực"], a:3},
+{q:"What supports a peaceful society in Australia?", qVi:"Điều gì hỗ trợ một xã hội hòa bình ở Úc?", opts:["Fear","Force","Personal power","Respect for the law"], optsVi:["Sợ hãi","Vũ lực","Quyền lực cá nhân","Tôn trọng pháp luật"], a:3},
+{q:"Who is equal before the law in Australia?", qVi:"Ai bình đẳng trước pháp luật ở Úc?", opts:["Only citizens","Only adults","Only residents","Everyone"], optsVi:["Chỉ công dân","Chỉ người lớn","Chỉ thường trú","Tất cả mọi người"], a:3},
+{q:"Who decides penalties for breaking the law?", qVi:"Ai quyết định hình phạt khi vi phạm pháp luật?", opts:["The police","The government","The community","The courts"], optsVi:["Cảnh sát","Chính phủ","Cộng đồng","Tòa án"], a:3},
+{q:"What may happen if laws are ignored?", qVi:"Điều gì có thể xảy ra nếu luật pháp bị phớt lờ?", opts:["Nothing","More freedom","Less rules","Disorder and conflict"], optsVi:["Không có gì","Tự do hơn","Ít quy định hơn","Mất trật tự và xung đột"], a:3},
+{q:"Who ensures justice is applied fairly?", qVi:"Ai đảm bảo công lý được áp dụng công bằng?", opts:["The police","Parliament","Citizens","The courts"], optsVi:["Cảnh sát","Quốc hội","Người dân","Tòa án"], a:3},
+{q:"What happens if someone does not respect others' rights?", qVi:"Điều gì xảy ra nếu ai đó không tôn trọng quyền của người khác?", opts:["They are rewarded","Nothing","It is encouraged","They may face legal action"], optsVi:["Được thưởng","Không có gì","Được khuyến khích","Có thể bị xử lý pháp lý"], a:3},
+{q:"Who resolves serious disputes in Australia?", qVi:"Ai giải quyết các tranh chấp nghiêm trọng ở Úc?", opts:["Families","Community elders","The police","The courts"], optsVi:["Gia đình","Trưởng cộng đồng","Cảnh sát","Tòa án"], a:3},
+{q:"What is the result of violence in society?", qVi:"Bạo lực trong xã hội dẫn đến điều gì?", opts:["Peace","Freedom","Order","Harm and instability"], optsVi:["Hòa bình","Tự do","Trật tự","Tổn hại và bất ổn"], a:3},
+{q:"Who can be punished for breaking the law?", qVi:"Ai có thể bị trừng phạt khi vi phạm pháp luật?", opts:["Only citizens","Only migrants","Only adults","Anyone who breaks the law"], optsVi:["Chỉ công dân","Chỉ người di cư","Chỉ người lớn","Bất kỳ ai vi phạm luật"], a:3},
+{q:"What happens if people use violence to solve problems?", qVi:"Điều gì xảy ra nếu mọi người dùng bạo lực để giải quyết vấn đề?", opts:["Problems disappear","Society improves","People are rewarded","They may face punishment"], optsVi:["Vấn đề biến mất","Xã hội cải thiện","Được thưởng","Có thể bị trừng phạt"], a:3},
+{q:"Who has authority to make final legal decisions?", qVi:"Ai có thẩm quyền đưa ra quyết định pháp lý cuối cùng?", opts:["The government","The police","The Parliament","The courts"], optsVi:["Chính phủ","Cảnh sát","Quốc hội","Tòa án"], a:3},
+{q:"What may result from discrimination?", qVi:"Phân biệt đối xử có thể dẫn đến điều gì?", opts:["Harmony","Unity","Respect","Legal consequences"], optsVi:["Hòa hợp","Đoàn kết","Tôn trọng","Hậu quả pháp lý"], a:3},
+{q:"Who protects people when laws are broken?", qVi:"Ai bảo vệ người dân khi luật pháp bị vi phạm?", opts:["The community","Families","The media","The legal system"], optsVi:["Cộng đồng","Gia đình","Truyền thông","Hệ thống pháp luật"], a:3},
+{q:"What happens if someone threatens another person?", qVi:"Điều gì xảy ra nếu ai đó đe dọa người khác?", opts:["Nothing","It is acceptable","It is encouraged","They may face criminal charges"], optsVi:["Không có gì","Được chấp nhận","Được khuyến khích","Có thể bị truy tố hình sự"], a:3},
+{q:"What occurs when laws are applied fairly?", qVi:"Điều gì xảy ra khi luật được áp dụng công bằng?", opts:["Fear increases","Conflict grows","Power is abused","Trust in society increases"], optsVi:["Gia tăng sợ hãi","Xung đột gia tăng","Lạm dụng quyền lực","Niềm tin xã hội tăng lên"], a:3},
+{q:"Who can take legal action if their rights are violated?", qVi:"Ai có thể thực hiện hành động pháp lý nếu quyền bị xâm phạm?", opts:["Only citizens","Only officials","Only police","Anyone affected"], optsVi:["Chỉ công dân","Chỉ quan chức","Chỉ cảnh sát","Bất kỳ ai bị ảnh hưởng"], a:3},
+{q:"What happens if court decisions are ignored?", qVi:"Điều gì xảy ra nếu các quyết định của tòa án bị phớt lờ?", opts:["Nothing","Respect increases","Freedom grows","Law and order break down"], optsVi:["Không có gì","Tăng sự tôn trọng","Tự do tăng","Luật pháp và trật tự suy yếu"], a:3},
+{q:"What is the consequence of breaking human rights laws?", qVi:"Hậu quả của việc vi phạm luật nhân quyền là gì?", opts:["Reward","Approval","No effect","Legal penalties"], optsVi:["Được thưởng","Được chấp thuận","Không ảnh hưởng","Hình phạt pháp lý"], a:3},
+{q:"Who ensures laws are enforced in daily life?", qVi:"Ai đảm bảo luật được thực thi trong đời sống hàng ngày?", opts:["Parliament","Courts","Citizens","Police"], optsVi:["Quốc hội","Tòa án","Người dân","Cảnh sát"], a:3},
+{q:"What can result from ignoring democratic processes?", qVi:"Điều gì có thể xảy ra nếu phớt lờ quy trình dân chủ?", opts:["Stability","Fairness","Peace","Instability and conflict"], optsVi:["Ổn định","Công bằng","Hòa bình","Bất ổn và xung đột"], a:3},
+{q:"What happens when people respect the rule of law?", qVi:"Điều gì xảy ra khi mọi người tôn trọng pháp quyền?", opts:["Fear grows","Control increases","Rights disappear","Society functions fairly"], optsVi:["Sợ hãi gia tăng","Kiểm soát tăng","Quyền biến mất","Xã hội vận hành công bằng"], a:3},
+{q:"Who may be held accountable for illegal actions?", qVi:"Ai có thể bị chịu trách nhiệm cho các hành vi trái pháp luật?", opts:["Only leaders","Only citizens","Only migrants","Anyone responsible"], optsVi:["Chỉ lãnh đạo","Chỉ công dân","Chỉ người di cư","Bất kỳ ai chịu trách nhiệm"], a:3},
+
+{q: "// END PART 1" }, // 111 Câu
+
+// PART 2: Democratic beliefs, rights and liberties (103 questions)
+{q: "// PART 2" },
+{q:"What does freedom of speech allow people to do in Australia?", qVi:"Tự do ngôn luận cho phép người dân làm gì ở Úc?", opts:["Express their opinions peacefully","Use violence","Threaten others","Ignore the law"], optsVi:["Bày tỏ ý kiến một cách ôn hòa","Sử dụng bạo lực","Đe dọa người khác","Phớt lờ pháp luật"], a:0},
+{q:"What is freedom of religion in Australia?", qVi:"Tự do tôn giáo ở Úc là gì?", opts:["The right to follow any religion or none","The right to force beliefs","The right to change laws","The right to ignore others"], optsVi:["Quyền theo hoặc không theo tôn giáo nào","Quyền ép buộc niềm tin","Quyền thay đổi luật","Quyền phớt lờ người khác"], a:0},
+{q:"What does freedom of association mean?", qVi:"Tự do hội họp có nghĩa là gì?", opts:["The right to join or not join groups","The right to control others","The right to break laws","The right to silence people"], optsVi:["Quyền tham gia hoặc không tham gia các nhóm","Quyền kiểm soát người khác","Quyền vi phạm luật","Quyền bịt miệng người khác"], a:0},
+{q:"What must people do when expressing their views?", qVi:"Khi bày tỏ quan điểm, người dân phải làm gì?", opts:["Respect the law","Use threats","Encourage violence","Ignore others"], optsVi:["Tôn trọng pháp luật","Dùng đe dọa","Khuyến khích bạo lực","Phớt lờ người khác"], a:0},
+{q:"What does freedom of the press support?", qVi:"Tự do báo chí hỗ trợ điều gì?", opts:["An informed society","Government control","Violence","Discrimination"], optsVi:["Một xã hội được thông tin đầy đủ","Sự kiểm soát của chính phủ","Bạo lực","Phân biệt đối xử"], a:0},
+{q:"What is a responsibility that comes with freedom?", qVi:"Trách nhiệm đi kèm với tự do là gì?", opts:["Respecting others' rights","Doing anything you want","Breaking the law","Ignoring rules"], optsVi:["Tôn trọng quyền của người khác","Làm bất cứ điều gì mình muốn","Vi phạm pháp luật","Phớt lờ quy tắc"], a:0},
+{q:"What does equality of opportunity mean?", qVi:"Bình đẳng về cơ hội có nghĩa là gì?", opts:["Everyone has the same chance to succeed","Everyone gets the same result","Only some people benefit","Rules do not apply"], optsVi:["Mọi người đều có cơ hội thành công như nhau","Ai cũng có kết quả giống nhau","Chỉ một số người được lợi","Quy tắc không áp dụng"], a:0},
+{q:"What does mutual respect help create?", qVi:"Sự tôn trọng lẫn nhau giúp tạo ra điều gì?", opts:["A peaceful society","More conflict","Fear","Division"], optsVi:["Một xã hội hòa bình","Nhiều xung đột hơn","Sợ hãi","Chia rẽ"], a:0},
+{q:"What is tolerance in Australian society?", qVi:"Sự khoan dung trong xã hội Úc là gì?", opts:["Accepting differences","Forcing agreement","Ignoring the law","Rejecting others"], optsVi:["Chấp nhận sự khác biệt","Ép buộc đồng ý","Phớt lờ pháp luật","Loại bỏ người khác"], a:0},
+{q:"What does freedom allow people to do?", qVi:"Tự do cho phép người dân làm gì?", opts:["Make choices within the law","Break laws freely","Control others","Avoid responsibility"], optsVi:["Đưa ra lựa chọn trong khuôn khổ pháp luật","Tự do vi phạm luật","Kiểm soát người khác","Tránh trách nhiệm"], a:0},
+{q:"What does respect for diversity mean?", qVi:"Tôn trọng sự đa dạng có nghĩa là gì?", opts:["Valuing different cultures and beliefs","Rejecting other cultures","Forcing traditions","Ignoring differences"], optsVi:["Đề cao các nền văn hóa và niềm tin khác nhau","Loại bỏ văn hóa khác","Ép buộc truyền thống","Phớt lờ khác biệt"], a:0},
+{q:"What responsibility do citizens have?", qVi:"Công dân có trách nhiệm gì?", opts:["Follow Australian laws","Ignore rules","Enforce personal laws","Decide punishments"], optsVi:["Tuân theo luật pháp Úc","Phớt lờ quy định","Áp đặt luật cá nhân","Tự quyết hình phạt"], a:0},
+{q:"What supports social harmony in Australia?", qVi:"Điều gì hỗ trợ sự hài hòa xã hội ở Úc?", opts:["Understanding and tolerance","Violence","Discrimination","Fear"], optsVi:["Sự thấu hiểu và khoan dung","Bạo lực","Phân biệt đối xử","Sợ hãi"], a:0},
+{q:"What does freedom not allow?", qVi:"Tự do không cho phép điều gì?", opts:["Harming others","Peaceful expression","Legal protest","Respectful debate"], optsVi:["Gây hại cho người khác","Bày tỏ ôn hòa","Biểu tình hợp pháp","Tranh luận tôn trọng"], a:0},
+{q:"What is a shared value in Australia?", qVi:"Giá trị chung ở Úc là gì?", opts:["Respect for human dignity","Using force","Ignoring rights","Personal power"], optsVi:["Tôn trọng nhân phẩm con người","Sử dụng vũ lực","Phớt lờ quyền","Quyền lực cá nhân"], a:0},
+{q:"What does participation in society involve?", qVi:"Tham gia vào xã hội bao gồm điều gì?", opts:["Contributing to the community","Avoiding responsibility","Breaking rules","Silence"], optsVi:["Đóng góp cho cộng đồng","Tránh trách nhiệm","Vi phạm quy tắc","Im lặng"], a:0},
+{q:"What helps people live together peacefully?", qVi:"Điều gì giúp mọi người chung sống hòa bình?", opts:["Respect and understanding","Threats","Violence","Control"], optsVi:["Tôn trọng và thấu hiểu","Đe dọa","Bạo lực","Kiểm soát"], a:0},
+{q:"What does freedom of choice require?", qVi:"Tự do lựa chọn đòi hỏi điều gì?", opts:["Personal responsibility","No consequences","Breaking laws","Ignoring others"], optsVi:["Trách nhiệm cá nhân","Không hậu quả","Vi phạm luật","Phớt lờ người khác"], a:0},
+{q:"What does Australian society value?", qVi:"Xã hội Úc coi trọng điều gì?", opts:["Fairness and respect","Fear and control","Violence","Exclusion"], optsVi:["Công bằng và tôn trọng","Sợ hãi và kiểm soát","Bạo lực","Loại trừ"], a:0},
+{q:"What does equal respect mean?", qVi:"Tôn trọng bình đẳng có nghĩa là gì?", opts:["Treating everyone fairly","Favoring some groups","Ignoring differences","Forcing beliefs"], optsVi:["Đối xử công bằng với mọi người","Ưu ái một số nhóm","Phớt lờ khác biệt","Ép buộc niềm tin"], a:0},
+{q:"What supports democracy in Australia?", qVi:"Điều gì hỗ trợ nền dân chủ ở Úc?", opts:["Active participation","Silence","Fear","Violence"], optsVi:["Sự tham gia tích cực","Im lặng","Sợ hãi","Bạo lực"], a:0},
+{q:"What does respecting others involve?", qVi:"Tôn trọng người khác bao gồm điều gì?", opts:["Listening and fairness","Threats","Discrimination","Control"], optsVi:["Lắng nghe và công bằng","Đe dọa","Phân biệt đối xử","Kiểm soát"], a:0},
+{q:"What helps protect individual freedoms?", qVi:"Điều gì giúp bảo vệ các quyền tự do cá nhân?", opts:["The rule of law","Personal power","Violence","Ignoring rules"], optsVi:["Pháp quyền","Quyền lực cá nhân","Bạo lực","Phớt lờ quy tắc"], a:0},
+{q:"What is expected when exercising freedoms?", qVi:"Khi thực hiện các quyền tự do, điều gì được mong đợi?", opts:["Respecting the law and others","Breaking rules","Using threats","Ignoring responsibilities"], optsVi:["Tôn trọng pháp luật và người khác","Vi phạm quy tắc","Dùng đe dọa","Phớt lờ trách nhiệm"], a:0},
+{q:"What must people do when exercising freedom of speech in Australia?", qVi:"Khi thực hiện quyền tự do ngôn luận ở Úc, người dân phải làm gì?", opts:["Say anything they want","Follow the law","Use violence","Ignore others"], optsVi:["Nói bất cứ điều gì","Tuân theo pháp luật","Dùng bạo lực","Phớt lờ người khác"], a:1},
+{q:"What limits personal freedoms in Australia?", qVi:"Điều gì giới hạn các quyền tự do cá nhân ở Úc?", opts:["Personal beliefs","Australian law","Community opinion","Media"], optsVi:["Niềm tin cá nhân","Luật pháp Úc","Ý kiến cộng đồng","Truyền thông"], a:1},
+{q:"What must freedom of religion respect?", qVi:"Tự do tôn giáo phải tôn trọng điều gì?", opts:["Only one religion","Australian law","Personal opinion","Government wishes"], optsVi:["Chỉ một tôn giáo","Luật pháp Úc","Ý kiến cá nhân","Ý muốn chính phủ"], a:1},
+{q:"What responsibility comes with freedom of association?", qVi:"Trách nhiệm đi kèm với quyền tự do hội họp là gì?", opts:["Rejecting others","Obeying the law","Controlling groups","Avoiding society"], optsVi:["Loại bỏ người khác","Tuân theo pháp luật","Kiểm soát các nhóm","Tránh né xã hội"], a:1},
+{q:"What does the law protect people from?", qVi:"Luật pháp bảo vệ người dân khỏi điều gì?", opts:["Different opinions","Discrimination and harm","Freedom","Participation"], optsVi:["Ý kiến khác","Phân biệt đối xử và gây hại","Tự do","Sự tham gia"], a:1},
+{q:"What must people respect when expressing opinions?", qVi:"Khi bày tỏ ý kiến, người dân phải tôn trọng điều gì?", opts:["Only themselves","The rights of others","Media views","Government power"], optsVi:["Chỉ bản thân","Quyền của người khác","Quan điểm truyền thông","Quyền lực chính phủ"], a:1},
+{q:"What does equality before the law mean?", qVi:"Bình đẳng trước pháp luật có nghĩa là gì?", opts:["Only citizens are equal","Everyone is treated equally","Some people have priority","Laws are optional"], optsVi:["Chỉ công dân bình đẳng","Mọi người được đối xử như nhau","Một số người được ưu tiên","Luật là tùy chọn"], a:1},
+{q:"What helps maintain a harmonious society?", qVi:"Điều gì giúp duy trì một xã hội hài hòa?", opts:["Fear","Mutual respect","Force","Silence"], optsVi:["Sợ hãi","Sự tôn trọng lẫn nhau","Vũ lực","Im lặng"], a:1},
+{q:"What does freedom not include?", qVi:"Tự do không bao gồm điều gì?", opts:["Peaceful debate","Harming others","Legal protest","Voting"], optsVi:["Tranh luận ôn hòa","Gây hại cho người khác","Biểu tình hợp pháp","Bỏ phiếu"], a:1},
+{q:"What must people accept in a diverse society?", qVi:"Trong một xã hội đa dạng, người dân phải chấp nhận điều gì?", opts:["Only one culture","Differences between people","Uniform beliefs","Silence"], optsVi:["Chỉ một nền văn hóa","Sự khác biệt giữa con người","Niềm tin đồng nhất","Im lặng"], a:1},
+{q:"What is expected of people living in Australia?", qVi:"Điều gì được mong đợi ở những người sống tại Úc?", opts:["Ignoring laws","Respecting Australian values","Controlling others","Avoiding participation"], optsVi:["Phớt lờ luật","Tôn trọng các giá trị Úc","Kiểm soát người khác","Tránh tham gia"], a:1},
+{q:"What protects freedoms in Australia?", qVi:"Điều gì bảo vệ các quyền tự do ở Úc?", opts:["Personal power","The rule of law","Fear","Violence"], optsVi:["Quyền lực cá nhân","Pháp quyền","Sợ hãi","Bạo lực"], a:1},
+{q:"What responsibility do freedoms require?", qVi:"Các quyền tự do đòi hỏi trách nhiệm gì?", opts:["No responsibility","Respect for laws and others","Breaking rules","Control"], optsVi:["Không trách nhiệm","Tôn trọng luật pháp và người khác","Vi phạm quy tắc","Kiểm soát"], a:1},
+{q:"What should people do if they disagree with others?", qVi:"Người dân nên làm gì nếu không đồng ý với người khác?", opts:["Use threats","Respect different views","Use force","Silence them"], optsVi:["Dùng đe dọa","Tôn trọng quan điểm khác","Dùng vũ lực","Bịt miệng họ"], a:1},
+{q:"What does participation in democracy involve?", qVi:"Tham gia dân chủ bao gồm điều gì?", opts:["Ignoring society","Following laws and engaging","Using violence","Avoiding voting"], optsVi:["Phớt lờ xã hội","Tuân theo luật và tham gia","Dùng bạo lực","Tránh bỏ phiếu"], a:1},
+{q:"What helps people enjoy equal opportunities?", qVi:"Điều gì giúp mọi người có cơ hội bình đẳng?", opts:["Personal wealth","Fair laws","Discrimination","Force"], optsVi:["Giàu có cá nhân","Luật pháp công bằng","Phân biệt đối xử","Vũ lực"], a:1},
+{q:"What does respect for human dignity mean?", qVi:"Tôn trọng nhân phẩm con người có nghĩa là gì?", opts:["Controlling others","Treating people with fairness","Ignoring rights","Using power"], optsVi:["Kiểm soát người khác","Đối xử công bằng với mọi người","Phớt lờ quyền","Dùng quyền lực"], a:1},
+{q:"What must freedom of expression not do?", qVi:"Tự do biểu đạt không được làm gì?", opts:["Share ideas","Promote hatred or violence","Support debate","Encourage participation"], optsVi:["Chia sẻ ý tưởng","Cổ vũ thù hận hoặc bạo lực","Ủng hộ tranh luận","Khuyến khích tham gia"], a:1},
+{q:"What allows people of different backgrounds to live together?", qVi:"Điều gì cho phép những người có nền tảng khác nhau sống chung?", opts:["Fear","Tolerance and respect","Force","Uniform beliefs"], optsVi:["Sợ hãi","Khoan dung và tôn trọng","Vũ lực","Niềm tin đồng nhất"], a:1},
+{q:"What should freedoms be balanced with?", qVi:"Các quyền tự do nên được cân bằng với điều gì?", opts:["Power","Responsibilities","Violence","Silence"], optsVi:["Quyền lực","Trách nhiệm","Bạo lực","Im lặng"], a:1},
+{q:"What is unacceptable when exercising freedom?", qVi:"Điều gì không được chấp nhận khi thực hiện quyền tự do?", opts:["Peaceful discussion","Threatening others","Legal protest","Respectful debate"], optsVi:["Thảo luận ôn hòa","Đe dọa người khác","Biểu tình hợp pháp","Tranh luận tôn trọng"], a:1},
+{q:"What value supports social cohesion?", qVi:"Giá trị nào hỗ trợ sự gắn kết xã hội?", opts:["Discrimination","Mutual respect","Fear","Control"], optsVi:["Phân biệt đối xử","Sự tôn trọng lẫn nhau","Sợ hãi","Kiểm soát"], a:1},
+{q:"What must people accept in a democratic society?", qVi:"Trong xã hội dân chủ, người dân phải chấp nhận điều gì?", opts:["Only their own views","Different opinions","Silence","Force"], optsVi:["Chỉ quan điểm của mình","Những ý kiến khác nhau","Im lặng","Vũ lực"], a:1},
+{q:"What supports peaceful coexistence?", qVi:"Điều gì hỗ trợ sự chung sống hòa bình?", opts:["Threats","Understanding differences","Violence","Control"], optsVi:["Đe dọa","Thấu hiểu sự khác biệt","Bạo lực","Kiểm soát"], a:1},
+{q:"What must people do to protect freedoms?", qVi:"Người dân phải làm gì để bảo vệ các quyền tự do?", opts:["Ignore laws","Respect laws and others","Use force","Avoid society"], optsVi:["Phớt lờ luật","Tôn trọng luật pháp và người khác","Dùng vũ lực","Tránh xã hội"], a:1},
+{q:"How should freedoms be exercised in Australia?", qVi:"Các quyền tự do nên được thực hiện như thế nào ở Úc?", opts:["Without limits","By personal choice only","Within the law","By force"], optsVi:["Không giới hạn","Theo lựa chọn cá nhân","Trong khuôn khổ pháp luật","Bằng vũ lực"], a:2},
+{q:"How should people express disagreement in Australia?", qVi:"Người dân nên bày tỏ sự bất đồng như thế nào ở Úc?", opts:["Through violence","By threats","Peacefully and lawfully","By ignoring others"], optsVi:["Bằng bạo lực","Bằng đe dọa","Một cách hòa bình và hợp pháp","Bằng cách phớt lờ người khác"], a:2},
+{q:"How can people protect their rights?", qVi:"Người dân có thể bảo vệ quyền của mình bằng cách nào?", opts:["By force","By ignoring the law","By using legal processes","By personal power"], optsVi:["Bằng vũ lực","Bằng cách phớt lờ luật","Bằng các quy trình pháp lý","Bằng quyền lực cá nhân"], a:2},
+{q:"How can diversity benefit Australian society?", qVi:"Sự đa dạng mang lại lợi ích gì cho xã hội Úc?", opts:["By causing division","By creating conflict","By strengthening society","By limiting freedom"], optsVi:["Gây chia rẽ","Tạo xung đột","Củng cố xã hội","Hạn chế tự do"], a:2},
+{q:"How should people treat others in a diverse society?", qVi:"Trong một xã hội đa dạng, người dân nên đối xử với người khác như thế nào?", opts:["With fear","With control","With respect and fairness","With discrimination"], optsVi:["Bằng sợ hãi","Bằng kiểm soát","Bằng tôn trọng và công bằng","Bằng phân biệt đối xử"], a:2},
+{q:"How can conflicts be resolved in Australia?", qVi:"Xung đột có thể được giải quyết như thế nào ở Úc?", opts:["By fighting","By ignoring them","By peaceful discussion and law","By threats"], optsVi:["Bằng đánh nhau","Bằng cách bỏ qua","Bằng thảo luận hòa bình và pháp luật","Bằng đe dọa"], a:2},
+{q:"How does equality of opportunity work in Australia?", qVi:"Bình đẳng cơ hội hoạt động như thế nào ở Úc?", opts:["Everyone gets the same outcome","Only some succeed","Everyone has a fair chance","Rules do not apply"], optsVi:["Ai cũng có kết quả giống nhau","Chỉ một số người thành công","Mọi người đều có cơ hội công bằng","Quy tắc không áp dụng"], a:2},
+{q:"How can people contribute to their community?", qVi:"Người dân có thể đóng góp cho cộng đồng như thế nào?", opts:["By avoiding others","By breaking rules","By participating responsibly","By using force"], optsVi:["Bằng cách tránh người khác","Bằng cách vi phạm quy tắc","Bằng sự tham gia có trách nhiệm","Bằng vũ lực"], a:2},
+{q:"How should freedoms be balanced?", qVi:"Các quyền tự do nên được cân bằng như thế nào?", opts:["With power","With personal choice","With responsibility","With control"], optsVi:["Với quyền lực","Với lựa chọn cá nhân","Với trách nhiệm","Với kiểm soát"], a:2},
+{q:"How can people support democracy?", qVi:"Người dân có thể hỗ trợ nền dân chủ bằng cách nào?", opts:["By silence","By force","By active participation","By ignoring laws"], optsVi:["Bằng im lặng","Bằng vũ lực","Bằng sự tham gia tích cực","Bằng cách phớt lờ luật"], a:2},
+{q:"How should people respond to different beliefs?", qVi:"Người dân nên phản ứng như thế nào trước những niềm tin khác nhau?", opts:["By rejecting them","By controlling others","By showing tolerance","By forcing agreement"], optsVi:["Bằng cách loại bỏ","Bằng cách kiểm soát","Bằng cách thể hiện sự khoan dung","Bằng cách ép buộc đồng ý"], a:2},
+{q:"How are freedoms protected in Australia?", qVi:"Các quyền tự do được bảo vệ như thế nào ở Úc?", opts:["By personal power","By tradition","By the rule of law","By fear"], optsVi:["Bằng quyền lực cá nhân","Bằng truyền thống","Bằng pháp quyền","Bằng sợ hãi"], a:2},
+{q:"How should people behave when joining groups?", qVi:"Người dân nên cư xử như thế nào khi tham gia các nhóm?", opts:["Ignore laws","Control others","Follow the law","Use threats"], optsVi:["Phớt lờ luật","Kiểm soát người khác","Tuân theo pháp luật","Dùng đe dọa"], a:2},
+{q:"How can freedom of speech be used responsibly?", qVi:"Tự do ngôn luận có thể được sử dụng có trách nhiệm như thế nào?", opts:["By spreading hatred","By threatening others","By respectful discussion","By ignoring others"], optsVi:["Bằng cách lan truyền thù hận","Bằng cách đe dọa người khác","Bằng thảo luận tôn trọng","Bằng cách phớt lờ người khác"], a:2},
+{q:"How does respect for others help society?", qVi:"Tôn trọng người khác giúp ích cho xã hội như thế nào?", opts:["Creates fear","Causes division","Promotes harmony","Limits freedom"], optsVi:["Tạo sợ hãi","Gây chia rẽ","Thúc đẩy sự hài hòa","Hạn chế tự do"], a:2},
+{q:"How can people deal with differences peacefully?", qVi:"Người dân có thể giải quyết sự khác biệt một cách hòa bình như thế nào?", opts:["By violence","By silence","By dialogue and understanding","By force"], optsVi:["Bằng bạo lực","Bằng im lặng","Bằng đối thoại và thấu hiểu","Bằng vũ lực"], a:2},
+{q:"How should people use their rights?", qVi:"Người dân nên sử dụng các quyền của mình như thế nào?", opts:["Without limits","To control others","Responsibly","To ignore duties"], optsVi:["Không giới hạn","Để kiểm soát người khác","Một cách có trách nhiệm","Để phớt lờ nghĩa vụ"], a:2},
+{q:"How can laws help protect freedoms?", qVi:"Luật pháp có thể giúp bảo vệ các quyền tự do như thế nào?", opts:["By limiting people","By controlling opinions","By setting fair boundaries","By causing fear"], optsVi:["Bằng cách hạn chế con người","Bằng cách kiểm soát ý kiến","Bằng cách đặt ra các ranh giới công bằng","Bằng cách gây sợ hãi"], a:2},
+{q:"How should people act in public discussions?", qVi:"Người dân nên hành xử như thế nào trong các cuộc thảo luận công cộng?", opts:["With aggression","With silence","With respect and fairness","With control"], optsVi:["Với sự hung hăng","Với im lặng","Với sự tôn trọng và công bằng","Với kiểm soát"], a:2},
+{q:"How can society benefit from mutual respect?", qVi:"Xã hội có thể hưởng lợi gì từ sự tôn trọng lẫn nhau?", opts:["More conflict","Less freedom","Greater harmony","More fear"], optsVi:["Nhiều xung đột hơn","Ít tự do hơn","Sự hài hòa lớn hơn","Nhiều sợ hãi hơn"], a:2},
+{q:"How should people handle freedom of association?", qVi:"Người dân nên xử lý quyền tự do hội họp như thế nào?", opts:["By excluding others","By ignoring laws","By following legal rules","By using force"], optsVi:["Bằng cách loại trừ người khác","Bằng cách phớt lờ luật","Bằng cách tuân theo các quy định pháp luật","Bằng vũ lực"], a:2},
+{q:"How does tolerance support democracy?", qVi:"Sự khoan dung hỗ trợ nền dân chủ như thế nào?", opts:["By silencing people","By forcing agreement","By allowing different views","By limiting debate"], optsVi:["Bằng cách bịt miệng người khác","Bằng cách ép buộc đồng ý","Bằng cách cho phép các quan điểm khác nhau","Bằng cách hạn chế tranh luận"], a:2},
+{q:"How should people respond to unfair treatment?", qVi:"Người dân nên phản ứng thế nào trước sự đối xử không công bằng?", opts:["By violence","By revenge","By lawful action","By silence"], optsVi:["Bằng bạo lực","Bằng trả thù","Bằng hành động hợp pháp","Bằng im lặng"], a:2},
+{q:"How can people help maintain freedom for all?", qVi:"Người dân có thể giúp duy trì tự do cho mọi người bằng cách nào?", opts:["By ignoring others","By using power","By respecting laws and rights","By controlling society"], optsVi:["Bằng cách phớt lờ người khác","Bằng quyền lực","Bằng cách tôn trọng luật pháp và quyền","Bằng cách kiểm soát xã hội"], a:2},
+{q:"How does lawful behaviour support freedom?", qVi:"Hành vi hợp pháp hỗ trợ tự do như thế nào?", opts:["By limiting choice","By creating fear","By protecting everyone's rights","By controlling opinions"], optsVi:["Bằng cách hạn chế lựa chọn","Bằng cách tạo sợ hãi","Bằng cách bảo vệ quyền của mọi người","Bằng cách kiểm soát ý kiến"], a:2},
+{q:"What happens if freedoms are used to harm others?", qVi:"Điều gì xảy ra nếu các quyền tự do được sử dụng để gây hại cho người khác?", opts:["They are protected","They are encouraged","They have no effect","They may be restricted by law"], optsVi:["Được bảo vệ","Được khuyến khích","Không có tác động","Có thể bị hạn chế bởi pháp luật"], a:3},
+{q:"What can happen if people do not respect others' rights?", qVi:"Điều gì có thể xảy ra nếu người dân không tôn trọng quyền của người khác?", opts:["Society improves","Freedom increases","Nothing happens","Legal consequences may apply"], optsVi:["Xã hội cải thiện","Tự do tăng","Không có gì xảy ra","Có thể có hậu quả pháp lý"], a:3},
+{q:"What may result from discrimination in Australia?", qVi:"Phân biệt đối xử ở Úc có thể dẫn đến điều gì?", opts:["Greater unity","More freedom","Respect","Legal penalties"], optsVi:["Đoàn kết hơn","Tự do hơn","Tôn trọng","Hình phạt pháp lý"], a:3},
+{q:"What happens if freedom of speech is abused?", qVi:"Điều gì xảy ra nếu tự do ngôn luận bị lạm dụng?", opts:["It is always protected","It has no limits","It strengthens democracy","It may be limited by law"], optsVi:["Luôn được bảo vệ","Không có giới hạn","Củng cố dân chủ","Có thể bị hạn chế bởi pháp luật"], a:3},
+{q:"What can occur if laws protecting freedoms are ignored?", qVi:"Điều gì có thể xảy ra nếu các luật bảo vệ tự do bị phớt lờ?", opts:["More harmony","Greater trust","More freedom","Disorder and conflict"], optsVi:["Hài hòa hơn","Niềm tin tăng","Tự do hơn","Mất trật tự và xung đột"], a:3},
+{q:"What may happen if people use violence to express views?", qVi:"Điều gì có thể xảy ra nếu người dân dùng bạo lực để bày tỏ quan điểm?", opts:["They are rewarded","Society improves","Freedom increases","They may face punishment"], optsVi:["Được thưởng","Xã hội cải thiện","Tự do tăng","Có thể bị trừng phạt"], a:3},
+{q:"What is the consequence of ignoring equality before the law?", qVi:"Hậu quả của việc phớt lờ bình đẳng trước pháp luật là gì?", opts:["Fairness increases","Rights improve","Nothing changes","Trust in society decreases"], optsVi:["Công bằng tăng","Quyền được cải thiện","Không thay đổi","Niềm tin xã hội giảm"], a:3},
+{q:"What happens if democratic freedoms are not respected?", qVi:"Điều gì xảy ra nếu các quyền tự do dân chủ không được tôn trọng?", opts:["Democracy strengthens","Peace increases","Rights expand","Democracy is weakened"], optsVi:["Dân chủ mạnh hơn","Hòa bình tăng","Quyền mở rộng","Dân chủ bị suy yếu"], a:3},
+{q:"What may result if freedom of association breaks the law?", qVi:"Điều gì có thể xảy ra nếu tự do hội họp vi phạm pháp luật?", opts:["It is protected","It is encouraged","Nothing happens","Legal action may be taken"], optsVi:["Được bảo vệ","Được khuyến khích","Không có gì","Có thể bị xử lý pháp lý"], a:3},
+{q:"What happens if people do not accept responsibility for freedoms?", qVi:"Điều gì xảy ra nếu người dân không chấp nhận trách nhiệm đi kèm tự do?", opts:["Society improves","Harmony increases","Freedom grows","Rights and freedoms may be limited"], optsVi:["Xã hội cải thiện","Hài hòa tăng","Tự do tăng","Quyền và tự do có thể bị hạn chế"], a:3},
+{q:"What can result from a lack of tolerance?", qVi:"Thiếu sự khoan dung có thể dẫn đến điều gì?", opts:["Unity","Respect","Understanding","Division and conflict"], optsVi:["Đoàn kết","Tôn trọng","Thấu hiểu","Chia rẽ và xung đột"], a:3},
+{q:"What may occur if people ignore the rule of law?", qVi:"Điều gì có thể xảy ra nếu người dân phớt lờ pháp quyền?", opts:["Order increases","Freedom grows","Trust improves","Law and order break down"], optsVi:["Trật tự tăng","Tự do tăng","Niềm tin cải thiện","Luật pháp và trật tự suy yếu"], a:3},
+{q:"What happens if rights are not respected equally?", qVi:"Điều gì xảy ra nếu các quyền không được tôn trọng bình đẳng?", opts:["Fairness improves","Harmony increases","Society strengthens","Social conflict may arise"], optsVi:["Công bằng cải thiện","Hài hòa tăng","Xã hội mạnh hơn","Có thể phát sinh xung đột xã hội"], a:3},
+{q:"What can be the result of unfair treatment?", qVi:"Sự đối xử không công bằng có thể dẫn đến điều gì?", opts:["Greater trust","More respect","Peace","Legal complaints or action"], optsVi:["Niềm tin lớn hơn","Tôn trọng hơn","Hòa bình","Khiếu nại hoặc hành động pháp lý"], a:3},
+{q:"What may happen if people misuse their freedoms?", qVi:"Điều gì có thể xảy ra nếu người dân lạm dụng các quyền tự do?", opts:["They gain more rights","They are praised","Nothing changes","Restrictions may be imposed"], optsVi:["Có thêm quyền","Được khen ngợi","Không thay đổi","Có thể bị áp đặt hạn chế"], a:3},
+{q:"What occurs when freedom is balanced with responsibility?", qVi:"Điều gì xảy ra khi tự do được cân bằng với trách nhiệm?", opts:["Fear increases","Control grows","Rights disappear","A fair and safe society is supported"], optsVi:["Sợ hãi tăng","Kiểm soát tăng","Quyền biến mất","Một xã hội công bằng và an toàn được duy trì"], a:3},
+{q:"What may result from disrespecting cultural differences?", qVi:"Việc không tôn trọng khác biệt văn hóa có thể dẫn đến điều gì?", opts:["Unity","Harmony","Understanding","Exclusion and conflict"], optsVi:["Đoàn kết","Hài hòa","Thấu hiểu","Loại trừ và xung đột"], a:3},
+{q:"What happens if people spread hatred using freedoms?", qVi:"Điều gì xảy ra nếu người dân lan truyền thù hận bằng quyền tự do?", opts:["It is encouraged","It strengthens society","It is protected","They may face legal consequences"], optsVi:["Được khuyến khích","Củng cố xã hội","Được bảo vệ","Có thể bị hậu quả pháp lý"], a:3},
+{q:"What can occur if freedoms undermine safety?", qVi:"Điều gì có thể xảy ra nếu các quyền tự do làm suy yếu sự an toàn?", opts:["More freedom","Greater trust","Harmony","Limits may be applied"], optsVi:["Tự do hơn","Niềm tin lớn hơn","Hài hòa","Có thể bị áp đặt giới hạn"], a:3},
+{q:"What may happen when laws supporting freedoms are broken?", qVi:"Điều gì có thể xảy ra khi các luật bảo vệ tự do bị vi phạm?", opts:["No effect","More freedom","Approval","Penalties may apply"], optsVi:["Không ảnh hưởng","Tự do hơn","Được chấp thuận","Có thể áp dụng hình phạt"], a:3},
+{q:"What results from ignoring others' dignity?", qVi:"Điều gì xảy ra khi phớt lờ nhân phẩm của người khác?", opts:["Mutual respect","Social harmony","Unity","Loss of trust and conflict"], optsVi:["Tôn trọng lẫn nhau","Hài hòa xã hội","Đoàn kết","Mất niềm tin và xung đột"], a:3},
+{q:"What happens if democratic participation is discouraged?", qVi:"Điều gì xảy ra nếu sự tham gia dân chủ bị ngăn cản?", opts:["Democracy improves","Engagement increases","Freedom grows","Democracy is weakened"], optsVi:["Dân chủ cải thiện","Sự tham gia tăng","Tự do tăng","Dân chủ bị suy yếu"], a:3},
+{q:"What may result from ignoring shared responsibilities?", qVi:"Việc phớt lờ trách nhiệm chung có thể dẫn đến điều gì?", opts:["Greater fairness","More trust","Stronger society","Social problems increase"], optsVi:["Công bằng hơn","Niềm tin tăng","Xã hội mạnh hơn","Các vấn đề xã hội gia tăng"], a:3},
+{q:"What can occur if respect for the law is lost?", qVi:"Điều gì có thể xảy ra nếu sự tôn trọng pháp luật bị mất?", opts:["Stability improves","Rights increase","Peace grows","Order and safety decline"], optsVi:["Ổn định cải thiện","Quyền tăng","Hòa bình tăng","Trật tự và an toàn suy giảm"], a:3},
+{q:"What happens when freedoms are not protected by law?", qVi:"Điều gì xảy ra khi các quyền tự do không được pháp luật bảo vệ?", opts:["They grow stronger","They are unlimited","They remain unchanged","They can be abused"], optsVi:["Mạnh hơn","Không giới hạn","Không thay đổi","Có thể bị lạm dụng"], a:3},
+
+{q: "// END PART 2" }, // 103 Câu
+ 
+// PART 3: Government and the law in Australia (99 questions)
+{q: "// PART 3" },
+{q:"What type of government does Australia have?", qVi:"Úc có hình thức chính phủ nào?", opts:["A parliamentary democracy","A dictatorship","A military government","An absolute monarchy"], optsVi:["Nền dân chủ nghị viện","Chế độ độc tài","Chính phủ quân sự","Quân chủ tuyệt đối"], a:0},
+{q:"Is Australia a constitutional monarchy?", qVi:"Úc có phải là quốc gia quân chủ lập hiến không?", opts:["Yes","No","Only partly","Only historically"], optsVi:["Có","Không","Chỉ một phần","Chỉ trong lịch sử"], a:0},
+{q:"Who is Australia’s Head of State?", qVi:"Ai là Nguyên thủ quốc gia của Úc?", opts:["The King of Australia","The Prime Minister","The Governor-General","The Chief Justice"], optsVi:["Quốc vương Úc","Thủ tướng","Toàn quyền","Chánh án"], a:0},
+{q:"Who represents the King in Australia?", qVi:"Ai đại diện cho Quốc vương tại Úc?", opts:["The Governor-General","The Prime Minister","The Parliament","The High Court"], optsVi:["Toàn quyền","Thủ tướng","Quốc hội","Tòa án Tối cao"], a:0},
+{q:"What is the role of the Governor-General?", qVi:"Vai trò của Toàn quyền là gì?", opts:["To represent the King and act on advice","To make laws","To lead the opposition","To control courts"], optsVi:["Đại diện Quốc vương và hành động theo khuyến nghị","Ban hành luật","Lãnh đạo đối lập","Kiểm soát tòa án"], a:0},
+{q:"What is the role of the Prime Minister?", qVi:"Vai trò của Thủ tướng là gì?", opts:["To lead the Australian Government","To represent the King","To interpret the law","To command the courts"], optsVi:["Lãnh đạo Chính phủ Úc","Đại diện Quốc vương","Diễn giải luật","Chỉ huy tòa án"], a:0},
+{q:"Who forms the Australian Government?", qVi:"Ai thành lập Chính phủ Úc?", opts:["The party with majority support in Parliament","The courts","The King","The police"], optsVi:["Đảng có đa số ủng hộ trong Quốc hội","Tòa án","Quốc vương","Cảnh sát"], a:0},
+{q:"What is Parliament responsible for?", qVi:"Quốc hội chịu trách nhiệm về điều gì?", opts:["Making and changing laws","Enforcing laws","Judging legal cases","Running elections"], optsVi:["Ban hành và sửa đổi luật","Thực thi luật","Xét xử","Tổ chức bầu cử"], a:0},
+{q:"What are the two houses of the Australian Parliament?", qVi:"Hai viện của Quốc hội Úc là gì?", opts:["House of Representatives and Senate","House of Lords and Commons","Assembly and Council","Parliament and Cabinet"], optsVi:["Hạ viện và Thượng viện","Viện Quý tộc và Hạ viện","Hội đồng và Nghị viện","Quốc hội và Nội các"], a:0},
+{q:"Which house represents the people of Australia?", qVi:"Viện nào đại diện cho người dân Úc?", opts:["House of Representatives","Senate","High Court","Cabinet"], optsVi:["Hạ viện","Thượng viện","Tòa án Tối cao","Nội các"], a:0},
+{q:"What does the Senate represent?", qVi:"Thượng viện đại diện cho điều gì?", opts:["States and territories","The Prime Minister","The courts","Local councils"], optsVi:["Các tiểu bang và lãnh thổ","Thủ tướng","Tòa án","Hội đồng địa phương"], a:0},
+{q:"What is the role of the courts?", qVi:"Vai trò của tòa án là gì?", opts:["To interpret and apply the law","To make laws","To run elections","To form government"], optsVi:["Diễn giải và áp dụng luật","Ban hành luật","Tổ chức bầu cử","Thành lập chính phủ"], a:0},
+{q:"What is the highest court in Australia?", qVi:"Tòa án cao nhất ở Úc là tòa nào?", opts:["The High Court of Australia","The Supreme Court","The Federal Court","The Magistrates Court"], optsVi:["Tòa án Tối cao Úc","Tòa án Tối cao bang","Tòa án Liên bang","Tòa sơ thẩm"], a:0},
+{q:"What does the High Court do?", qVi:"Tòa án Tối cao làm gì?", opts:["Interprets the Constitution and federal law","Makes laws","Leads government","Enforces police powers"], optsVi:["Diễn giải Hiến pháp và luật liên bang","Ban hành luật","Lãnh đạo chính phủ","Thực thi quyền cảnh sát"], a:0},
+{q:"What is the Constitution?", qVi:"Hiến pháp là gì?", opts:["The basic law that sets out how Australia is governed","A political party","A court decision","A government policy"], optsVi:["Luật cơ bản quy định cách Úc được điều hành","Một đảng chính trị","Quyết định tòa án","Chính sách chính phủ"], a:0},
+{q:"When did the Australian Constitution come into effect?", qVi:"Hiến pháp Úc có hiệu lực khi nào?", opts:["1901","1788","1945","1967"], optsVi:["Năm 1901","Năm 1788","Năm 1945","Năm 1967"], a:0},
+{q:"What does the Constitution establish?", qVi:"Hiến pháp thiết lập điều gì?", opts:["The roles of Parliament, government and courts","Local council rules","School laws","Immigration policy"], optsVi:["Vai trò của Quốc hội, chính phủ và tòa án","Quy định hội đồng địa phương","Luật giáo dục","Chính sách nhập cư"], a:0},
+{q:"How many levels of government are there in Australia?", qVi:"Úc có bao nhiêu cấp chính quyền?", opts:["Three","Two","Four","One"], optsVi:["Ba","Hai","Bốn","Một"], a:0},
+{q:"What are the three levels of government?", qVi:"Ba cấp chính quyền ở Úc là gì?", opts:["Federal, state/territory and local","Federal, royal and judicial","State, military and local","Parliament, courts and police"], optsVi:["Liên bang, tiểu bang/lãnh thổ và địa phương","Liên bang, hoàng gia và tư pháp","Tiểu bang, quân đội và địa phương","Quốc hội, tòa án và cảnh sát"], a:0},
+{q:"What is the role of local government?", qVi:"Vai trò của chính quyền địa phương là gì?", opts:["To manage local services and communities","To make national laws","To control immigration","To run the courts"], optsVi:["Quản lý dịch vụ và cộng đồng địa phương","Ban hành luật quốc gia","Kiểm soát nhập cư","Điều hành tòa án"], a:0},
+{q:"Who enforces the law in Australia?", qVi:"Ai thực thi pháp luật ở Úc?", opts:["The police","The Parliament","The Prime Minister","The Governor-General"], optsVi:["Cảnh sát","Quốc hội","Thủ tướng","Toàn quyền"], a:0},
+{q:"What does the rule of law mean?", qVi:"Nguyên tắc pháp quyền có nghĩa là gì?", opts:["Everyone must follow the law","Only leaders follow the law","Laws can be ignored","Courts make all decisions"], optsVi:["Mọi người đều phải tuân theo luật","Chỉ lãnh đạo tuân theo luật","Luật có thể bị phớt lờ","Tòa án quyết định mọi thứ"], a:0},
+{q:"Are government officials subject to the law?", qVi:"Quan chức chính phủ có phải tuân theo pháp luật không?", opts:["Yes, they are subject to the law","No, they are above the law","Only sometimes","Only during elections"], optsVi:["Có, họ phải tuân theo pháp luật","Không, họ đứng trên pháp luật","Chỉ đôi khi","Chỉ trong bầu cử"], a:0},
+{q:"What ensures laws are applied fairly?", qVi:"Điều gì đảm bảo luật được áp dụng công bằng?", opts:["An independent judiciary","The media","Political parties","The police alone"], optsVi:["Nền tư pháp độc lập","Truyền thông","Các đảng chính trị","Chỉ riêng cảnh sát"], a:0},
+{q:"What protects democracy in Australia?", qVi:"Điều gì bảo vệ nền dân chủ ở Úc?", opts:["The Constitution and the rule of law","Military power","Personal wealth","Foreign governments"], optsVi:["Hiến pháp và pháp quyền","Quyền lực quân sự","Sự giàu có cá nhân","Chính phủ nước ngoài"], a:0},
+{q:"Who leads the Australian Government?", qVi:"Ai lãnh đạo Chính phủ Úc?", opts:["The Governor-General","The Prime Minister","The King","The High Court"], optsVi:["Toàn quyền","Thủ tướng","Quốc vương","Tòa án Tối cao"], a:1},
+{q:"Who chooses the Prime Minister?", qVi:"Ai lựa chọn Thủ tướng?", opts:["The King","Members of Parliament","The Governor-General","The people directly"], optsVi:["Quốc vương","Các thành viên Quốc hội","Toàn quyền","Người dân trực tiếp"], a:1},
+{q:"Which body makes federal laws in Australia?", qVi:"Cơ quan nào ban hành luật liên bang ở Úc?", opts:["The courts","The Parliament","The police","Local councils"], optsVi:["Tòa án","Quốc hội","Cảnh sát","Chính quyền địa phương"], a:1},
+{q:"Who represents states and territories in Parliament?", qVi:"Ai đại diện cho các tiểu bang và lãnh thổ trong Quốc hội?", opts:["House of Representatives","The Senate","The Cabinet","The High Court"], optsVi:["Hạ viện","Thượng viện","Nội các","Tòa án Tối cao"], a:1},
+{q:"Which house of Parliament reviews and votes on laws?", qVi:"Viện nào của Quốc hội xem xét và bỏ phiếu về luật?", opts:["Local councils","The Senate","The police","The courts"], optsVi:["Hội đồng địa phương","Thượng viện","Cảnh sát","Tòa án"], a:1},
+{q:"Who administers government departments?", qVi:"Ai điều hành các bộ của chính phủ?", opts:["The courts","The public service","The police","Local councils"], optsVi:["Tòa án","Dịch vụ công","Cảnh sát","Chính quyền địa phương"], a:1},
+{q:"Who advises the Governor-General?", qVi:"Ai tư vấn cho Toàn quyền?", opts:["The High Court","The Prime Minister","The police","The opposition"], optsVi:["Tòa án Tối cao","Thủ tướng","Cảnh sát","Phe đối lập"], a:1},
+{q:"Which document sets out how Australia is governed?", qVi:"Văn bản nào quy định cách Úc được điều hành?", opts:["The Citizenship Act","The Constitution","The Budget","The Criminal Code"], optsVi:["Luật Quốc tịch","Hiến pháp","Ngân sách","Bộ luật Hình sự"], a:1},
+{q:"Who has the power to interpret the Constitution?", qVi:"Ai có quyền diễn giải Hiến pháp?", opts:["The Parliament","The High Court","The Prime Minister","The Governor-General"], optsVi:["Quốc hội","Tòa án Tối cao","Thủ tướng","Toàn quyền"], a:1},
+{q:"Which level of government manages defence?", qVi:"Cấp chính quyền nào quản lý quốc phòng?", opts:["State government","Federal government","Local government","Territory government"], optsVi:["Chính quyền tiểu bang","Chính quyền liên bang","Chính quyền địa phương","Chính quyền lãnh thổ"], a:1},
+{q:"Which level of government is responsible for foreign policy?", qVi:"Cấp chính quyền nào chịu trách nhiệm chính sách đối ngoại?", opts:["Local government","Federal government","State government","Territory government"], optsVi:["Chính quyền địa phương","Chính quyền liên bang","Chính quyền tiểu bang","Chính quyền lãnh thổ"], a:1},
+{q:"Who is responsible for proposing new laws?", qVi:"Ai chịu trách nhiệm đề xuất luật mới?", opts:["The courts","Members of Parliament","The police","Local councils"], optsVi:["Tòa án","Các thành viên Quốc hội","Cảnh sát","Chính quyền địa phương"], a:1},
+{q:"Who checks that government actions follow the law?", qVi:"Ai kiểm tra các hành động của chính phủ có tuân theo pháp luật không?", opts:["The media","The courts","The police","Political parties"], optsVi:["Truyền thông","Tòa án","Cảnh sát","Các đảng chính trị"], a:1},
+{q:"Which institution ensures separation of powers?", qVi:"Cơ quan nào đảm bảo sự phân chia quyền lực?", opts:["The Parliament","The Constitution","The Cabinet","Local councils"], optsVi:["Quốc hội","Hiến pháp","Nội các","Chính quyền địa phương"], a:1},
+{q:"Who forms the Cabinet?", qVi:"Ai thành lập Nội các?", opts:["The Governor-General","Senior ministers","The High Court","The Senate"], optsVi:["Toàn quyền","Các bộ trưởng cấp cao","Tòa án Tối cao","Thượng viện"], a:1},
+{q:"Which group proposes and administers laws?", qVi:"Nhóm nào đề xuất và điều hành luật?", opts:["The courts","The government","The police","Local councils"], optsVi:["Tòa án","Chính phủ","Cảnh sát","Chính quyền địa phương"], a:1},
+{q:"Who represents Australia internationally?", qVi:"Ai đại diện Úc trên trường quốc tế?", opts:["The High Court","The Federal Government","Local councils","State governments"], optsVi:["Tòa án Tối cao","Chính phủ Liên bang","Chính quyền địa phương","Chính quyền tiểu bang"], a:1},
+{q:"Which level of government collects income tax?", qVi:"Cấp chính quyền nào thu thuế thu nhập?", opts:["Local government","Federal government","State government","Territory government"], optsVi:["Chính quyền địa phương","Chính quyền liên bang","Chính quyền tiểu bang","Chính quyền lãnh thổ"], a:1},
+{q:"Who is responsible for enforcing federal laws?", qVi:"Ai chịu trách nhiệm thực thi luật liên bang?", opts:["The Parliament","The executive government","The courts","Local councils"], optsVi:["Quốc hội","Chính phủ hành pháp","Tòa án","Chính quyền địa phương"], a:1},
+{q:"Which body approves the appointment of judges?", qVi:"Cơ quan nào phê chuẩn việc bổ nhiệm thẩm phán?", opts:["The Parliament","The executive government","The Senate","Local councils"], optsVi:["Quốc hội","Chính phủ hành pháp","Thượng viện","Chính quyền địa phương"], a:1},
+{q:"Who ensures laws are debated publicly?", qVi:"Ai đảm bảo luật được tranh luận công khai?", opts:["The police","The Parliament","The courts","The Governor-General"], optsVi:["Cảnh sát","Quốc hội","Tòa án","Toàn quyền"], a:1},
+{q:"Which institution represents voters directly?", qVi:"Cơ quan nào đại diện trực tiếp cho cử tri?", opts:["The Senate","The House of Representatives","The Cabinet","The High Court"], optsVi:["Thượng viện","Hạ viện","Nội các","Tòa án Tối cao"], a:1},
+{q:"Who can question government decisions?", qVi:"Ai có thể chất vấn các quyết định của chính phủ?", opts:["Only courts","Members of Parliament","Only citizens","Only media"], optsVi:["Chỉ tòa án","Các thành viên Quốc hội","Chỉ người dân","Chỉ truyền thông"], a:1},
+{q:"Which body makes sure elections are lawful?", qVi:"Cơ quan nào đảm bảo bầu cử hợp pháp?", opts:["The Parliament","The Australian Electoral Commission","The High Court","Local councils"], optsVi:["Quốc hội","Ủy ban Bầu cử Úc","Tòa án Tối cao","Chính quyền địa phương"], a:1},
+{q:"How is the Australian Government formed?", qVi:"Chính phủ Úc được thành lập như thế nào?", opts:["By the courts","By the King","By the party with majority support in Parliament","By the police"], optsVi:["Bởi tòa án","Bởi Quốc vương","Bởi đảng có đa số ủng hộ trong Quốc hội","Bởi cảnh sát"], a:2},
+{q:"How are federal laws made in Australia?", qVi:"Luật liên bang ở Úc được ban hành như thế nào?", opts:["By the courts","By local councils","By Parliament passing bills","By the police"], optsVi:["Bởi tòa án","Bởi chính quyền địa phương","Bởi Quốc hội thông qua dự luật","Bởi cảnh sát"], a:2},
+{q:"How does the Constitution protect democracy?", qVi:"Hiến pháp bảo vệ nền dân chủ như thế nào?", opts:["By limiting voting","By controlling citizens","By defining powers and limits","By appointing leaders"], optsVi:["Bằng cách hạn chế bỏ phiếu","Bằng cách kiểm soát công dân","Bằng cách quy định quyền hạn và giới hạn","Bằng cách bổ nhiệm lãnh đạo"], a:2},
+{q:"How are judges expected to act?", qVi:"Các thẩm phán được mong đợi hành xử như thế nào?", opts:["According to politics","According to popularity","Independently and impartially","According to government wishes"], optsVi:["Theo chính trị","Theo sự ưa thích","Độc lập và công bằng","Theo ý muốn chính phủ"], a:2},
+{q:"How is power shared in Australia?", qVi:"Quyền lực ở Úc được phân chia như thế nào?", opts:["Held by one leader","Controlled by the military","Between Parliament, executive and courts","Given to local councils"], optsVi:["Do một lãnh đạo nắm giữ","Do quân đội kiểm soát","Giữa Quốc hội, hành pháp và tòa án","Trao cho chính quyền địa phương"], a:2},
+{q:"How does the separation of powers work?", qVi:"Sự phân quyền hoạt động như thế nào?", opts:["One body controls all power","The courts make laws","Different bodies have different roles","The Prime Minister decides everything"], optsVi:["Một cơ quan kiểm soát mọi quyền","Tòa án ban hành luật","Các cơ quan khác nhau có vai trò khác nhau","Thủ tướng quyết định mọi thứ"], a:2},
+{q:"How are ministers chosen in Australia?", qVi:"Các bộ trưởng được lựa chọn như thế nào ở Úc?", opts:["By the courts","By the King","From elected members of Parliament","By local councils"], optsVi:["Bởi tòa án","Bởi Quốc vương","Từ các thành viên Quốc hội được bầu","Bởi chính quyền địa phương"], a:2},
+{q:"How can the Constitution be changed?", qVi:"Hiến pháp có thể được thay đổi như thế nào?", opts:["By Parliament alone","By the courts","By referendum approved by voters","By the Prime Minister"], optsVi:["Chỉ bởi Quốc hội","Bởi tòa án","Bằng trưng cầu dân ý được cử tri chấp thuận","Bởi Thủ tướng"], a:2},
+{q:"How are state powers protected?", qVi:"Quyền của các tiểu bang được bảo vệ như thế nào?", opts:["By tradition","By the military","By the Constitution","By local councils"], optsVi:["Bằng truyền thống","Bằng quân đội","Bằng Hiến pháp","Bằng chính quyền địa phương"], a:2},
+{q:"How does the Senate influence law-making?", qVi:"Thượng viện ảnh hưởng đến việc làm luật như thế nào?", opts:["By enforcing laws","By leading government","By reviewing and voting on bills","By interpreting the Constitution"], optsVi:["Bằng cách thực thi luật","Bằng cách lãnh đạo chính phủ","Bằng cách xem xét và bỏ phiếu dự luật","Bằng cách diễn giải Hiến pháp"], a:2},
+{q:"How are elections conducted fairly?", qVi:"Bầu cử được tiến hành công bằng như thế nào?", opts:["By political parties","By the courts","By independent electoral authorities","By the police"], optsVi:["Bởi các đảng chính trị","Bởi tòa án","Bởi cơ quan bầu cử độc lập","Bởi cảnh sát"], a:2},
+{q:"How does the High Court limit government power?", qVi:"Tòa án Tối cao giới hạn quyền lực chính phủ như thế nào?", opts:["By making laws","By enforcing police actions","By interpreting the Constitution","By running elections"], optsVi:["Bằng cách ban hành luật","Bằng cách thực thi hành động cảnh sát","Bằng cách diễn giải Hiến pháp","Bằng cách tổ chức bầu cử"], a:2},
+{q:"How are government decisions reviewed?", qVi:"Các quyết định của chính phủ được xem xét như thế nào?", opts:["By the media","By Parliament alone","By courts and Parliament","By local councils"], optsVi:["Bởi truyền thông","Chỉ bởi Quốc hội","Bởi tòa án và Quốc hội","Bởi chính quyền địa phương"], a:2},
+{q:"How does Parliament represent the people?", qVi:"Quốc hội đại diện cho người dân như thế nào?", opts:["By appointing judges","By enforcing laws","By elected representatives","By controlling courts"], optsVi:["Bằng cách bổ nhiệm thẩm phán","Bằng cách thực thi luật","Bằng các đại diện được bầu","Bằng cách kiểm soát tòa án"], a:2},
+{q:"How does federalism work in Australia?", qVi:"Chủ nghĩa liên bang hoạt động như thế nào ở Úc?", opts:["States control everything","The federal government controls everything","Powers are shared between levels of government","Local councils rule the country"], optsVi:["Các tiểu bang kiểm soát mọi thứ","Chính phủ liên bang kiểm soát mọi thứ","Quyền lực được chia sẻ giữa các cấp chính quyền","Chính quyền địa phương điều hành quốc gia"], a:2},
+{q:"How are laws applied equally?", qVi:"Luật pháp được áp dụng bình đẳng như thế nào?", opts:["By political choice","By personal opinion","By independent courts","By media pressure"], optsVi:["Theo lựa chọn chính trị","Theo ý kiến cá nhân","Bởi các tòa án độc lập","Bởi áp lực truyền thông"], a:2},
+{q:"How does Parliament hold government accountable?", qVi:"Quốc hội buộc chính phủ chịu trách nhiệm như thế nào?", opts:["By enforcing penalties","By running elections","By questioning and debating decisions","By interpreting laws"], optsVi:["Bằng cách thực thi hình phạt","Bằng cách tổ chức bầu cử","Bằng cách chất vấn và tranh luận quyết định","Bằng cách diễn giải luật"], a:2},
+{q:"How does the rule of law protect citizens?", qVi:"Pháp quyền bảo vệ công dân như thế nào?", opts:["By limiting freedoms","By allowing leaders to decide","By ensuring laws apply to everyone","By controlling opinions"], optsVi:["Bằng cách hạn chế tự do","Bằng cách cho phép lãnh đạo quyết định","Bằng cách đảm bảo luật áp dụng cho mọi người","Bằng cách kiểm soát ý kiến"], a:2},
+{q:"How do courts resolve disputes?", qVi:"Tòa án giải quyết tranh chấp như thế nào?", opts:["By public opinion","By political pressure","By applying the law","By government order"], optsVi:["Bằng dư luận","Bằng áp lực chính trị","Bằng cách áp dụng pháp luật","Bằng lệnh chính phủ"], a:2},
+{q:"How are local councils created?", qVi:"Hội đồng địa phương được thành lập như thế nào?", opts:["By the Constitution","By federal law","By state or territory law","By Parliament only"], optsVi:["Bởi Hiến pháp","Bởi luật liên bang","Bởi luật tiểu bang hoặc lãnh thổ","Chỉ bởi Quốc hội"], a:2},
+{q:"How is government power limited?", qVi:"Quyền lực chính phủ bị giới hạn như thế nào?", opts:["By the military","By tradition","By the Constitution and law","By public opinion"], optsVi:["Bằng quân đội","Bằng truyền thống","Bằng Hiến pháp và pháp luật","Bằng dư luận"], a:2},
+{q:"How does the legal system support democracy?", qVi:"Hệ thống pháp luật hỗ trợ nền dân chủ như thế nào?", opts:["By limiting debate","By enforcing silence","By resolving disputes fairly","By controlling elections"], optsVi:["Bằng cách hạn chế tranh luận","Bằng cách áp đặt im lặng","Bằng cách giải quyết tranh chấp công bằng","Bằng cách kiểm soát bầu cử"], a:2},
+{q:"How does the Constitution affect government decisions?", qVi:"Hiến pháp ảnh hưởng đến các quyết định của chính phủ như thế nào?", opts:["It has no effect","It is optional","It sets legal boundaries","It replaces Parliament"], optsVi:["Không ảnh hưởng","Là tùy chọn","Đặt ra các giới hạn pháp lý","Thay thế Quốc hội"], a:2},
+{q:"How does the electoral system support democracy?", qVi:"Hệ thống bầu cử hỗ trợ dân chủ như thế nào?", opts:["By limiting voting","By appointing leaders","By allowing people to choose representatives","By controlling outcomes"], optsVi:["Bằng cách hạn chế bỏ phiếu","Bằng cách bổ nhiệm lãnh đạo","Bằng cách cho phép người dân chọn đại diện","Bằng cách kiểm soát kết quả"], a:2},
+{q:"What happens if government power is not limited?", qVi:"Điều gì xảy ra nếu quyền lực chính phủ không bị giới hạn?", opts:["Democracy improves","Rights increase","Trust grows","Democracy may be threatened"], optsVi:["Dân chủ cải thiện","Quyền tăng","Niềm tin tăng","Dân chủ có thể bị đe dọa"], a:3},
+{q:"What may occur if the rule of law is ignored?", qVi:"Điều gì có thể xảy ra nếu pháp quyền bị phớt lờ?", opts:["Fairness improves","Order increases","Rights expand","Law and order may break down"], optsVi:["Công bằng cải thiện","Trật tự tăng","Quyền mở rộng","Luật pháp và trật tự có thể suy yếu"], a:3},
+{q:"What can happen if courts are not independent?", qVi:"Điều gì có thể xảy ra nếu tòa án không độc lập?", opts:["Justice improves","Trust grows","Laws become clearer","Justice may be unfair"], optsVi:["Công lý cải thiện","Niềm tin tăng","Luật rõ ràng hơn","Công lý có thể không công bằng"], a:3},
+{q:"What may result if separation of powers is weakened?", qVi:"Điều gì có thể xảy ra nếu sự phân quyền bị suy yếu?", opts:["More accountability","Better democracy","Greater fairness","Too much power in one body"], optsVi:["Trách nhiệm cao hơn","Dân chủ tốt hơn","Công bằng hơn","Quyền lực tập trung vào một cơ quan"], a:3},
+{q:"What could happen if elections are not free and fair?", qVi:"Điều gì có thể xảy ra nếu bầu cử không tự do và công bằng?", opts:["Stronger democracy","Higher trust","More participation","Democracy may be undermined"], optsVi:["Dân chủ mạnh hơn","Niềm tin cao hơn","Tham gia nhiều hơn","Dân chủ có thể bị suy yếu"], a:3},
+{q:"What may occur if laws are applied unequally?", qVi:"Điều gì có thể xảy ra nếu luật được áp dụng không bình đẳng?", opts:["Harmony increases","Trust improves","Rights grow","Public confidence may decline"], optsVi:["Hài hòa tăng","Niềm tin cải thiện","Quyền tăng","Niềm tin công chúng có thể giảm"], a:3},
+{q:"What happens if government decisions are not reviewed?", qVi:"Điều gì xảy ra nếu các quyết định của chính phủ không được giám sát?", opts:["Better transparency","Greater trust","Improved accountability","Abuse of power may occur"], optsVi:["Minh bạch hơn","Niềm tin lớn hơn","Trách nhiệm cải thiện","Có thể xảy ra lạm dụng quyền lực"], a:3},
+{q:"What may result if Parliament does not debate laws?", qVi:"Điều gì có thể xảy ra nếu Quốc hội không tranh luận luật?", opts:["Laws improve","Democracy strengthens","Public trust grows","Poor or unfair laws may be passed"], optsVi:["Luật tốt hơn","Dân chủ mạnh hơn","Niềm tin công chúng tăng","Có thể thông qua luật kém hoặc không công bằng"], a:3},
+{q:"What can happen if the Constitution is ignored?", qVi:"Điều gì có thể xảy ra nếu Hiến pháp bị phớt lờ?", opts:["Government becomes stronger","Rights expand","Order improves","The legal system may be weakened"], optsVi:["Chính phủ mạnh hơn","Quyền mở rộng","Trật tự cải thiện","Hệ thống pháp luật có thể suy yếu"], a:3},
+{q:"What may occur if ministers are not accountable?", qVi:"Điều gì có thể xảy ra nếu các bộ trưởng không chịu trách nhiệm?", opts:["Better governance","More trust","Greater transparency","Public confidence may fall"], optsVi:["Quản trị tốt hơn","Niềm tin tăng","Minh bạch hơn","Niềm tin công chúng có thể giảm"], a:3},
+{q:"What happens if courts do not apply laws fairly?", qVi:"Điều gì xảy ra nếu tòa án không áp dụng luật công bằng?", opts:["Justice improves","Trust increases","Democracy strengthens","Confidence in justice may decline"], optsVi:["Công lý cải thiện","Niềm tin tăng","Dân chủ mạnh hơn","Niềm tin vào công lý có thể giảm"], a:3},
+{q:"What may result if government acts outside the law?", qVi:"Điều gì có thể xảy ra nếu chính phủ hành động ngoài pháp luật?", opts:["Greater authority","Public support","Stability","Loss of trust and legitimacy"], optsVi:["Quyền lực lớn hơn","Sự ủng hộ công chúng","Ổn định","Mất niềm tin và tính chính danh"], a:3},
+{q:"What can occur if checks and balances fail?", qVi:"Điều gì có thể xảy ra nếu cơ chế kiểm soát và cân bằng thất bại?", opts:["More fairness","Better decisions","Stronger democracy","Excessive use of power"], optsVi:["Công bằng hơn","Quyết định tốt hơn","Dân chủ mạnh hơn","Lạm dụng quyền lực"], a:3},
+{q:"What may happen if the executive controls the courts?", qVi:"Điều gì có thể xảy ra nếu hành pháp kiểm soát tòa án?", opts:["Fair trials increase","Justice improves","Rights expand","Judicial independence is lost"], optsVi:["Xét xử công bằng tăng","Công lý cải thiện","Quyền mở rộng","Mất tính độc lập tư pháp"], a:3},
+{q:"What is a risk if Parliament loses independence?", qVi:"Rủi ro gì xảy ra nếu Quốc hội mất tính độc lập?", opts:["Better efficiency","Greater trust","More transparency","Reduced democratic oversight"], optsVi:["Hiệu quả hơn","Niềm tin tăng","Minh bạch hơn","Giảm giám sát dân chủ"], a:3},
+{q:"What may result from corruption in government?", qVi:"Tham nhũng trong chính phủ có thể dẫn đến điều gì?", opts:["Stronger institutions","Public confidence","Fairness","Loss of trust in government"], optsVi:["Thể chế mạnh hơn","Niềm tin công chúng","Công bằng","Mất niềm tin vào chính phủ"], a:3},
+{q:"What happens if citizens lose faith in the legal system?", qVi:"Điều gì xảy ra nếu người dân mất niềm tin vào hệ thống pháp luật?", opts:["More stability","Greater participation","Improved justice","Social tension may increase"], optsVi:["Ổn định hơn","Tham gia nhiều hơn","Công lý cải thiện","Căng thẳng xã hội có thể tăng"], a:3},
+{q:"What may occur if laws are made without public input?", qVi:"Điều gì có thể xảy ra nếu luật được ban hành không có ý kiến công chúng?", opts:["Higher trust","Better democracy","More fairness","Public dissatisfaction may grow"], optsVi:["Niềm tin cao hơn","Dân chủ tốt hơn","Công bằng hơn","Sự bất mãn của công chúng có thể tăng"], a:3},
+{q:"What can happen if voting rights are restricted unfairly?", qVi:"Điều gì có thể xảy ra nếu quyền bầu cử bị hạn chế không công bằng?", opts:["Democracy strengthens","Participation increases","Trust grows","Democracy may be damaged"], optsVi:["Dân chủ mạnh hơn","Tham gia tăng","Niềm tin tăng","Dân chủ có thể bị tổn hại"], a:3},
+{q:"What may result if the law is not enforced consistently?", qVi:"Điều gì có thể xảy ra nếu luật không được thực thi nhất quán?", opts:["Fairness improves","Confidence grows","Rights expand","Perceived injustice may increase"], optsVi:["Công bằng cải thiện","Niềm tin tăng","Quyền mở rộng","Cảm giác bất công có thể tăng"], a:3},
+{q:"What happens if the Constitution is changed without voter approval?", qVi:"Điều gì xảy ra nếu Hiến pháp bị thay đổi mà không có sự chấp thuận của cử tri?", opts:["Democracy improves","Stability increases","Rights expand","Legitimacy may be questioned"], optsVi:["Dân chủ cải thiện","Ổn định tăng","Quyền mở rộng","Tính chính danh có thể bị nghi ngờ"], a:3},
+{q:"What may occur if courts favour political interests?", qVi:"Điều gì có thể xảy ra nếu tòa án thiên vị lợi ích chính trị?", opts:["Justice improves","Trust grows","Democracy strengthens","Public confidence in courts declines"], optsVi:["Công lý cải thiện","Niềm tin tăng","Dân chủ mạnh hơn","Niềm tin vào tòa án suy giảm"], a:3},
+{q:"What can result from weak democratic institutions?", qVi:"Các thể chế dân chủ yếu kém có thể dẫn đến điều gì?", opts:["Greater participation","Better governance","Stronger rights","Instability and loss of trust"], optsVi:["Tham gia nhiều hơn","Quản trị tốt hơn","Quyền mạnh hơn","Bất ổn và mất niềm tin"], a:3},
+{q:"What happens if citizens do not understand the system of government?", qVi:"Điều gì xảy ra nếu người dân không hiểu hệ thống chính phủ?", opts:["Better engagement","Higher trust","More accountability","Lower participation and trust"], optsVi:["Tham gia tốt hơn","Niềm tin cao hơn","Trách nhiệm cao hơn","Giảm tham gia và niềm tin"], a:3},
+{q:"What may result if democratic principles are not protected?", qVi:"Điều gì có thể xảy ra nếu các nguyên tắc dân chủ không được bảo vệ?", opts:["Stronger society","Greater fairness","More freedom","Erosion of democracy"], optsVi:["Xã hội mạnh hơn","Công bằng hơn","Tự do hơn","Sự xói mòn dân chủ"], a:3},
+
+
+
+{ q: "// END PART 3" }, // 99 Câu
+
+// PART 4: Australian values (87 questions)
+{q: "// PART 4" },
+{q:"What is a responsibility of Australian citizens?", qVi:"Một trách nhiệm của công dân Úc là gì?", opts:["Obeying Australian laws","Ignoring the law","Only voting sometimes","Following personal rules"], optsVi:["Tuân theo pháp luật Úc","Phớt lờ pháp luật","Chỉ bỏ phiếu đôi khi","Theo quy tắc cá nhân"], a:0},
+{q:"Why should Australians respect the law?", qVi:"Vì sao người Úc cần tôn trọng pháp luật?", opts:["To maintain order and safety","Only to avoid fines","To please government","Because it is optional"], optsVi:["Để duy trì trật tự và an toàn","Chỉ để tránh phạt","Để làm hài lòng chính phủ","Vì đó là tùy chọn"], a:0},
+{q:"What responsibility do citizens have in a democracy?", qVi:"Trong nền dân chủ, công dân có trách nhiệm gì?", opts:["Participating in civic life","Avoiding society","Ignoring elections","Leaving decisions to others"], optsVi:["Tham gia đời sống công dân","Tránh né xã hội","Phớt lờ bầu cử","Giao quyết định cho người khác"], a:0},
+{q:"What is compulsory voting in Australia?", qVi:"Bỏ phiếu bắt buộc ở Úc là gì?", opts:["Citizens must vote in elections","Only leaders vote","Voting is optional","Only migrants vote"], optsVi:["Công dân phải bỏ phiếu trong bầu cử","Chỉ lãnh đạo bỏ phiếu","Bỏ phiếu là tùy chọn","Chỉ người di cư bỏ phiếu"], a:0},
+{q:"Why is voting important?", qVi:"Vì sao việc bỏ phiếu quan trọng?", opts:["It allows citizens to choose representatives","It avoids paying tax","It replaces the law","It is only symbolic"], optsVi:["Giúp công dân chọn người đại diện","Để tránh đóng thuế","Thay thế pháp luật","Chỉ mang tính biểu tượng"], a:0},
+{q:"What should citizens do if they disagree with a law?", qVi:"Công dân nên làm gì nếu không đồng ý với một luật?", opts:["Use lawful and peaceful means to change it","Ignore the law","Use violence","Refuse all duties"], optsVi:["Sử dụng biện pháp hợp pháp và ôn hòa để thay đổi","Phớt lờ luật","Dùng bạo lực","Từ chối mọi nghĩa vụ"], a:0},
+{q:"What is an important responsibility during emergencies?", qVi:"Trong tình huống khẩn cấp, trách nhiệm quan trọng là gì?", opts:["Helping and following emergency instructions","Ignoring authorities","Only helping family","Doing nothing"], optsVi:["Giúp đỡ và tuân theo hướng dẫn khẩn cấp","Phớt lờ chính quyền","Chỉ giúp gia đình","Không làm gì"], a:0},
+{q:"Why should Australians respect others' rights?", qVi:"Vì sao người Úc cần tôn trọng quyền của người khác?", opts:["To live peacefully in society","To control others","Because it is optional","To avoid voting"], optsVi:["Để sống hòa bình trong xã hội","Để kiểm soát người khác","Vì đó là tùy chọn","Để tránh bỏ phiếu"], a:0},
+{q:"What responsibility do citizens have towards the community?", qVi:"Công dân có trách nhiệm gì với cộng đồng?", opts:["Contributing positively to society","Avoiding involvement","Only focusing on self","Ignoring local issues"], optsVi:["Đóng góp tích cực cho xã hội","Tránh tham gia","Chỉ tập trung bản thân","Phớt lờ vấn đề địa phương"], a:0},
+{q:"What is expected of citizens regarding diversity?", qVi:"Công dân được kỳ vọng điều gì về sự đa dạng?", opts:["Respecting cultural and religious differences","Rejecting differences","Forcing uniform beliefs","Ignoring diversity"], optsVi:["Tôn trọng khác biệt văn hóa và tôn giáo","Bác bỏ sự khác biệt","Ép buộc niềm tin đồng nhất","Phớt lờ sự đa dạng"], a:0},
+{q:"Why is paying tax a responsibility?", qVi:"Vì sao đóng thuế là một trách nhiệm?", opts:["It funds services and infrastructure","It is optional","It benefits only government","It replaces voting"], optsVi:["Giúp tài trợ dịch vụ và hạ tầng","Là tùy chọn","Chỉ có lợi cho chính phủ","Thay thế việc bỏ phiếu"], a:0},
+{q:"What should citizens do to support democracy?", qVi:"Công dân nên làm gì để hỗ trợ dân chủ?", opts:["Stay informed and participate","Avoid public issues","Leave decisions to leaders","Ignore elections"], optsVi:["Cập nhật thông tin và tham gia","Tránh vấn đề công cộng","Giao quyết định cho lãnh đạo","Phớt lờ bầu cử"], a:0},
+{q:"What responsibility relates to jury service?", qVi:"Trách nhiệm nào liên quan đến việc làm bồi thẩm?", opts:["Serving on a jury if called","Refusing all jury duties","Only volunteering","Ignoring summons"], optsVi:["Phục vụ làm bồi thẩm nếu được triệu tập","Từ chối mọi nghĩa vụ","Chỉ tình nguyện","Phớt lờ giấy triệu tập"], a:0},
+{q:"Why should Australians help during disasters?", qVi:"Vì sao người Úc nên giúp đỡ trong thiên tai?", opts:["To support community safety and recovery","Only for payment","Only if forced","It is not required"], optsVi:["Để hỗ trợ an toàn và phục hồi cộng đồng","Chỉ khi được trả tiền","Chỉ khi bị ép","Không bắt buộc"], a:0},
+{q:"What is a civic responsibility?", qVi:"Trách nhiệm công dân là gì?", opts:["Participating in community and civic life","Avoiding public duties","Only following family rules","Ignoring laws"], optsVi:["Tham gia cộng đồng và đời sống công dân","Tránh nghĩa vụ công","Chỉ theo quy tắc gia đình","Phớt lờ pháp luật"], a:0},
+{q:"What should citizens do if selected for jury duty?", qVi:"Công dân nên làm gì nếu được chọn làm bồi thẩm?", opts:["Attend and participate honestly","Ignore the notice","Refuse automatically","Ask others to attend"], optsVi:["Tham dự và tham gia trung thực","Phớt lờ thông báo","Tự động từ chối","Nhờ người khác đi thay"], a:0},
+{q:"What responsibility supports social harmony?", qVi:"Trách nhiệm nào hỗ trợ sự hài hòa xã hội?", opts:["Respecting others and resolving differences peacefully","Using force","Avoiding communication","Ignoring problems"], optsVi:["Tôn trọng người khác và giải quyết khác biệt ôn hòa","Dùng vũ lực","Tránh giao tiếp","Phớt lờ vấn đề"], a:0},
+{q:"Why should Australians follow workplace laws?", qVi:"Vì sao người Úc cần tuân thủ luật nơi làm việc?", opts:["To ensure fairness and safety","Only to avoid fines","Because employers demand it","It is optional"], optsVi:["Để đảm bảo công bằng và an toàn","Chỉ để tránh phạt","Vì chủ yêu cầu","Là tùy chọn"], a:0},
+{q:"What responsibility relates to children’s wellbeing?", qVi:"Trách nhiệm nào liên quan đến phúc lợi trẻ em?", opts:["Protecting children from harm","Ignoring child safety","Leaving it to schools only","Only family responsibility"], optsVi:["Bảo vệ trẻ em khỏi nguy hại","Phớt lờ an toàn trẻ em","Chỉ để trường học lo","Chỉ trách nhiệm gia đình"], a:0},
+{q:"What should citizens do to resolve disputes?", qVi:"Công dân nên làm gì để giải quyết tranh chấp?", opts:["Use legal and peaceful methods","Use violence","Ignore the issue","Take personal revenge"], optsVi:["Sử dụng biện pháp hợp pháp và ôn hòa","Dùng bạo lực","Phớt lờ vấn đề","Trả thù cá nhân"], a:0},
+{q:"Why is respect for the law essential?", qVi:"Vì sao tôn trọng pháp luật là thiết yếu?", opts:["It helps protect rights and freedoms","It limits freedom","It benefits only leaders","It replaces democracy"], optsVi:["Giúp bảo vệ quyền và tự do","Hạn chế tự do","Chỉ có lợi cho lãnh đạo","Thay thế dân chủ"], a:0},
+{q:"What responsibility do citizens have toward elections?", qVi:"Công dân có trách nhiệm gì với bầu cử?", opts:["Enrolling and voting","Avoiding elections","Only watching results","Letting others vote"], optsVi:["Đăng ký và bỏ phiếu","Tránh bầu cử","Chỉ xem kết quả","Để người khác bỏ phiếu"], a:0},
+{q:"What should Australians do to strengthen their community?", qVi:"Người Úc nên làm gì để củng cố cộng đồng?", opts:["Participate and support others","Avoid involvement","Only focus on work","Ignore local issues"], optsVi:["Tham gia và hỗ trợ người khác","Tránh tham gia","Chỉ tập trung công việc","Phớt lờ vấn đề địa phương"], a:0},
+{q:"What responsibility supports a fair society?", qVi:"Trách nhiệm nào hỗ trợ một xã hội công bằng?", opts:["Treating everyone equally","Favoring some people","Ignoring discrimination","Accepting unfairness"], optsVi:["Đối xử bình đẳng với mọi người","Thiên vị một số người","Phớt lờ phân biệt đối xử","Chấp nhận bất công"], a:0},
+{q:"Why is active citizenship encouraged?", qVi:"Vì sao việc làm công dân tích cực được khuyến khích?", opts:["It strengthens democracy and community","It reduces freedom","It replaces government","It is unnecessary"], optsVi:["Củng cố dân chủ và cộng đồng","Giảm tự do","Thay thế chính phủ","Không cần thiết"], a:0},
+{q:"What must citizens do when they receive a jury summons?", qVi:"Công dân phải làm gì khi nhận giấy triệu tập bồi thẩm?", opts:["Ignore it","Attend unless excused","Refuse automatically","Send someone else"], optsVi:["Phớt lờ","Tham dự trừ khi được miễn","Tự động từ chối","Nhờ người khác đi thay"], a:1},
+{q:"Why is enrolling to vote important?", qVi:"Vì sao việc đăng ký bỏ phiếu lại quan trọng?", opts:["It is optional","It allows participation in democracy","It replaces paying tax","It avoids jury duty"], optsVi:["Là tùy chọn","Giúp tham gia vào nền dân chủ","Thay thế việc đóng thuế","Tránh làm bồi thẩm"], a:1},
+{q:"What should citizens do to help their community?", qVi:"Công dân nên làm gì để giúp cộng đồng?", opts:["Avoid involvement","Contribute positively","Only help family","Ignore local needs"], optsVi:["Tránh tham gia","Đóng góp tích cực","Chỉ giúp gia đình","Phớt lờ nhu cầu địa phương"], a:1},
+{q:"Why should Australians follow road rules?", qVi:"Vì sao người Úc cần tuân thủ luật giao thông?", opts:["Only to avoid fines","To keep everyone safe","Because it is optional","To please police"], optsVi:["Chỉ để tránh phạt","Để giữ an toàn cho mọi người","Vì đó là tùy chọn","Để làm hài lòng cảnh sát"], a:1},
+{q:"What is expected of citizens during elections?", qVi:"Công dân được kỳ vọng điều gì trong bầu cử?", opts:["Ignore voting","Vote and participate","Let others decide","Only observe"], optsVi:["Phớt lờ bỏ phiếu","Bỏ phiếu và tham gia","Để người khác quyết định","Chỉ quan sát"], a:1},
+{q:"Why should citizens respect emergency workers?", qVi:"Vì sao công dân cần tôn trọng nhân viên khẩn cấp?", opts:["They replace government","They ensure safety","They make laws","They control voting"], optsVi:["Họ thay thế chính phủ","Họ đảm bảo an toàn","Họ ban hành luật","Họ kiểm soát bầu cử"], a:1},
+{q:"What is a responsibility related to public spaces?", qVi:"Trách nhiệm nào liên quan đến không gian công cộng?", opts:["Damaging property","Caring for shared spaces","Ignoring litter","Avoiding parks"], optsVi:["Phá hoại tài sản","Giữ gìn không gian chung","Phớt lờ rác","Tránh công viên"], a:1},
+{q:"Why should citizens respect different cultures?", qVi:"Vì sao công dân cần tôn trọng các nền văn hóa khác nhau?", opts:["To control society","To support social harmony","Because it is optional","To avoid voting"], optsVi:["Để kiểm soát xã hội","Để hỗ trợ sự hài hòa xã hội","Vì đó là tùy chọn","Để tránh bỏ phiếu"], a:1},
+{q:"What should citizens do if they see unsafe behaviour?", qVi:"Công dân nên làm gì nếu thấy hành vi không an toàn?", opts:["Ignore it","Report or act responsibly","Encourage it","Record only"], optsVi:["Phớt lờ","Báo cáo hoặc hành động có trách nhiệm","Khuyến khích","Chỉ ghi hình"], a:1},
+{q:"Why is helping others encouraged?", qVi:"Vì sao việc giúp đỡ người khác được khuyến khích?", opts:["It replaces law","It strengthens community","It is required daily","It avoids tax"], optsVi:["Thay thế pháp luật","Củng cố cộng đồng","Bắt buộc hàng ngày","Tránh thuế"], a:1},
+{q:"What responsibility supports fairness at work?", qVi:"Trách nhiệm nào hỗ trợ sự công bằng tại nơi làm việc?", opts:["Ignoring rules","Following workplace laws","Only following orders","Avoiding complaints"], optsVi:["Phớt lờ quy định","Tuân thủ luật lao động","Chỉ làm theo lệnh","Tránh khiếu nại"], a:1},
+{q:"What should citizens do to stay informed?", qVi:"Công dân nên làm gì để luôn cập nhật thông tin?", opts:["Avoid news","Learn about public issues","Ignore government","Rely on rumours"], optsVi:["Tránh tin tức","Tìm hiểu các vấn đề công cộng","Phớt lờ chính phủ","Dựa vào tin đồn"], a:1},
+{q:"Why should people follow health and safety rules?", qVi:"Vì sao mọi người cần tuân thủ quy định an toàn và sức khỏe?", opts:["Only to avoid penalties","To protect everyone","Because they are optional","To replace laws"], optsVi:["Chỉ để tránh phạt","Để bảo vệ mọi người","Vì đó là tùy chọn","Thay thế luật"], a:1},
+{q:"What is expected of citizens regarding the environment?", qVi:"Công dân được kỳ vọng gì về môi trường?", opts:["Ignoring pollution","Protecting and caring for it","Only government responsibility","Avoiding involvement"], optsVi:["Phớt lờ ô nhiễm","Bảo vệ và chăm sóc","Chỉ trách nhiệm chính phủ","Tránh tham gia"], a:1},
+{q:"Why is volunteering valued?", qVi:"Vì sao hoạt động tình nguyện được coi trọng?", opts:["It replaces paid work","It benefits the community","It avoids taxes","It is compulsory"], optsVi:["Thay thế công việc trả lương","Mang lại lợi ích cho cộng đồng","Tránh thuế","Bắt buộc"], a:1},
+{q:"What should citizens do to resolve community issues?", qVi:"Công dân nên làm gì để giải quyết vấn đề cộng đồng?", opts:["Use violence","Work together peacefully","Ignore them","Leave the area"], optsVi:["Dùng bạo lực","Hợp tác ôn hòa","Phớt lờ","Rời đi"], a:1},
+{q:"Why should Australians respect the democratic process?", qVi:"Vì sao người Úc cần tôn trọng tiến trình dân chủ?", opts:["It limits freedom","It supports fair decision-making","It replaces law","It benefits only leaders"], optsVi:["Nó hạn chế tự do","Nó hỗ trợ việc ra quyết định công bằng","Nó thay thế pháp luật","Chỉ có lợi cho lãnh đạo"], a:1},
+{q:"What responsibility relates to public safety?", qVi:"Trách nhiệm nào liên quan đến an toàn công cộng?", opts:["Ignoring danger","Following safety laws","Encouraging risk","Avoiding authorities"], optsVi:["Phớt lờ nguy hiểm","Tuân thủ luật an toàn","Khuyến khích rủi ro","Tránh chính quyền"], a:1},
+{q:"What should citizens do if laws change?", qVi:"Công dân nên làm gì nếu luật thay đổi?", opts:["Ignore them","Learn and follow them","Refuse compliance","Wait for others"], optsVi:["Phớt lờ","Tìm hiểu và tuân thủ","Từ chối tuân theo","Chờ người khác"], a:1},
+{q:"Why is community participation encouraged?", qVi:"Vì sao việc tham gia cộng đồng được khuyến khích?", opts:["It weakens society","It builds strong communities","It replaces voting","It is unnecessary"], optsVi:["Làm xã hội yếu đi","Xây dựng cộng đồng vững mạnh","Thay thế việc bỏ phiếu","Không cần thiết"], a:1},
+{q:"What should citizens do to support inclusion?", qVi:"Công dân nên làm gì để hỗ trợ sự hòa nhập?", opts:["Exclude others","Treat people fairly","Ignore differences","Control opinions"], optsVi:["Loại trừ người khác","Đối xử công bằng","Phớt lờ khác biệt","Kiểm soát ý kiến"], a:1},
+{q:"Why should Australians follow laws even if they disagree?", qVi:"Vì sao người Úc cần tuân thủ luật ngay cả khi không đồng ý?", opts:["Because laws are optional","Because laws apply to everyone","Only to avoid punishment","Only during elections"], optsVi:["Vì luật là tùy chọn","Vì luật áp dụng cho mọi người","Chỉ để tránh phạt","Chỉ trong bầu cử"], a:1},
+{q:"What is a responsibility when using public services?", qVi:"Trách nhiệm khi sử dụng dịch vụ công là gì?", opts:["Abusing services","Using them responsibly","Avoiding them","Ignoring rules"], optsVi:["Lạm dụng dịch vụ","Sử dụng có trách nhiệm","Tránh sử dụng","Phớt lờ quy định"], a:1},
+{q:"Why should citizens help maintain public order?", qVi:"Vì sao công dân cần giúp duy trì trật tự công cộng?", opts:["To restrict freedom","To ensure safety and fairness","To control others","Because it is optional"], optsVi:["Để hạn chế tự do","Để đảm bảo an toàn và công bằng","Để kiểm soát người khác","Vì đó là tùy chọn"], a:1},
+{q:"How can citizens change laws they disagree with?", qVi:"Công dân có thể thay đổi luật mà họ không đồng ý như thế nào?", opts:["By ignoring the law","By using violence","By lawful and democratic processes","By refusing duties"], optsVi:["Bằng cách phớt lờ luật","Bằng cách dùng bạo lực","Bằng các quy trình hợp pháp và dân chủ","Bằng cách từ chối nghĩa vụ"], a:2},
+{q:"How does paying tax help Australia?", qVi:"Đóng thuế giúp ích cho Úc như thế nào?", opts:["It benefits only government","It replaces voting","It funds services and infrastructure","It is optional"], optsVi:["Chỉ có lợi cho chính phủ","Thay thế bỏ phiếu","Tài trợ dịch vụ và hạ tầng","Là tùy chọn"], a:2},
+{q:"How should citizens respond during emergencies?", qVi:"Công dân nên phản ứng thế nào trong tình huống khẩn cấp?", opts:["Ignore instructions","Only help family","Follow emergency instructions","Wait for others"], optsVi:["Phớt lờ hướng dẫn","Chỉ giúp gia đình","Tuân theo hướng dẫn khẩn cấp","Chờ người khác"], a:2},
+{q:"How does jury service support justice?", qVi:"Phục vụ bồi thẩm hỗ trợ công lý như thế nào?", opts:["By enforcing laws","By making laws","By ensuring fair trials","By replacing judges"], optsVi:["Bằng cách thực thi luật","Bằng cách ban hành luật","Bằng cách đảm bảo xét xử công bằng","Bằng cách thay thế thẩm phán"], a:2},
+{q:"How can citizens contribute to community wellbeing?", qVi:"Công dân có thể đóng góp cho phúc lợi cộng đồng như thế nào?", opts:["By avoiding involvement","By focusing only on self","By helping and participating","By ignoring local issues"], optsVi:["Bằng cách tránh tham gia","Chỉ tập trung bản thân","Bằng cách giúp đỡ và tham gia","Bằng cách phớt lờ vấn đề địa phương"], a:2},
+{q:"How should disputes be resolved in Australia?", qVi:"Tranh chấp ở Úc nên được giải quyết như thế nào?", opts:["Through violence","By personal revenge","Through legal and peaceful means","By ignoring them"], optsVi:["Bằng bạo lực","Bằng trả thù cá nhân","Bằng biện pháp hợp pháp và ôn hòa","Bằng cách phớt lờ"], a:2},
+{q:"How does voting support democracy?", qVi:"Bỏ phiếu hỗ trợ nền dân chủ như thế nào?", opts:["By limiting choices","By avoiding debate","By choosing representatives","By replacing the law"], optsVi:["Bằng cách hạn chế lựa chọn","Bằng cách tránh tranh luận","Bằng cách chọn người đại diện","Bằng cách thay thế luật"], a:2},
+{q:"How should citizens treat public property?", qVi:"Công dân nên đối xử với tài sản công như thế nào?", opts:["By damaging it","By ignoring it","By using and caring for it responsibly","By avoiding it"], optsVi:["Bằng cách phá hoại","Bằng cách phớt lờ","Bằng cách sử dụng và giữ gìn có trách nhiệm","Bằng cách tránh sử dụng"], a:2},
+{q:"How does respecting diversity benefit society?", qVi:"Tôn trọng sự đa dạng mang lại lợi ích gì cho xã hội?", opts:["It causes division","It weakens unity","It promotes harmony","It reduces participation"], optsVi:["Gây chia rẽ","Làm suy yếu đoàn kết","Thúc đẩy sự hài hòa","Giảm sự tham gia"], a:2},
+{q:"How should citizens behave in public places?", qVi:"Công dân nên cư xử thế nào ở nơi công cộng?", opts:["Ignore rules","Disrupt others","Follow laws and respect others","Only follow personal rules"], optsVi:["Phớt lờ quy định","Gây rối người khác","Tuân thủ luật và tôn trọng người khác","Chỉ theo quy tắc cá nhân"], a:2},
+{q:"How can people support social harmony?", qVi:"Mọi người có thể hỗ trợ sự hài hòa xã hội như thế nào?", opts:["By spreading hatred","By avoiding others","By respecting differences","By forcing opinions"], optsVi:["Bằng cách lan truyền thù hận","Bằng cách tránh người khác","Bằng cách tôn trọng khác biệt","Bằng cách ép buộc ý kiến"], a:2},
+{q:"How does following workplace laws help?", qVi:"Tuân thủ luật nơi làm việc giúp ích thế nào?", opts:["It benefits only employers","It is optional","It ensures fairness and safety","It replaces unions"], optsVi:["Chỉ có lợi cho chủ lao động","Là tùy chọn","Đảm bảo công bằng và an toàn","Thay thế công đoàn"], a:2},
+{q:"How should citizens protect children?", qVi:"Công dân nên bảo vệ trẻ em như thế nào?", opts:["By ignoring risks","By leaving it to schools","By keeping them safe from harm","By avoiding responsibility"], optsVi:["Bằng cách phớt lờ rủi ro","Chỉ để trường học lo","Bằng cách giữ trẻ em an toàn khỏi nguy hại","Bằng cách tránh trách nhiệm"], a:2},
+{q:"How can Australians help the environment?", qVi:"Người Úc có thể giúp môi trường như thế nào?", opts:["By ignoring pollution","By avoiding action","By caring for and protecting it","By leaving it to government"], optsVi:["Bằng cách phớt lờ ô nhiễm","Bằng cách tránh hành động","Bằng cách chăm sóc và bảo vệ","Bằng cách để chính phủ lo"], a:2},
+{q:"How does volunteering benefit Australia?", qVi:"Tình nguyện mang lại lợi ích gì cho Úc?", opts:["It replaces paid jobs","It avoids tax","It supports communities","It is compulsory"], optsVi:["Thay thế việc làm trả lương","Tránh thuế","Hỗ trợ cộng đồng","Bắt buộc"], a:2},
+{q:"How should citizens respond to unsafe situations?", qVi:"Công dân nên phản ứng thế nào với tình huống không an toàn?", opts:["Ignore them","Encourage risk","Act responsibly or report","Record only"], optsVi:["Phớt lờ","Khuyến khích rủi ro","Hành động có trách nhiệm hoặc báo cáo","Chỉ ghi hình"], a:2},
+{q:"How does respecting the law protect freedoms?", qVi:"Tôn trọng pháp luật bảo vệ các quyền tự do như thế nào?", opts:["By limiting rights","By controlling people","By ensuring rights are protected","By replacing democracy"], optsVi:["Bằng cách hạn chế quyền","Bằng cách kiểm soát con người","Bằng cách đảm bảo các quyền được bảo vệ","Bằng cách thay thế dân chủ"], a:2},
+{q:"How should citizens engage with government decisions?", qVi:"Công dân nên tham gia vào các quyết định của chính phủ như thế nào?", opts:["By ignoring them","By protesting violently","By participating lawfully","By avoiding discussion"], optsVi:["Bằng cách phớt lờ","Bằng cách biểu tình bạo lực","Bằng cách tham gia hợp pháp","Bằng cách tránh thảo luận"], a:2},
+{q:"How does community participation help society?", qVi:"Tham gia cộng đồng giúp xã hội như thế nào?", opts:["It weakens unity","It causes conflict","It builds stronger communities","It replaces government"], optsVi:["Làm suy yếu đoàn kết","Gây xung đột","Xây dựng cộng đồng vững mạnh","Thay thế chính phủ"], a:2},
+{q:"How should citizens respect others' rights?", qVi:"Công dân nên tôn trọng quyền của người khác như thế nào?", opts:["By ignoring differences","By controlling behaviour","By treating everyone fairly","By avoiding contact"], optsVi:["Bằng cách phớt lờ khác biệt","Bằng cách kiểm soát hành vi","Bằng cách đối xử công bằng với mọi người","Bằng cách tránh tiếp xúc"], a:2},
+{q:"How does staying informed help citizens?", qVi:"Việc cập nhật thông tin giúp công dân như thế nào?", opts:["It is unnecessary","It causes confusion","It supports informed participation","It replaces voting"], optsVi:["Không cần thiết","Gây nhầm lẫn","Hỗ trợ tham gia có hiểu biết","Thay thế bỏ phiếu"], a:2},
+{q:"How should citizens treat emergency services?", qVi:"Công dân nên đối xử với các dịch vụ khẩn cấp như thế nào?", opts:["By ignoring them","By interfering","By respecting and assisting","By controlling them"], optsVi:["Bằng cách phớt lờ","Bằng cách cản trở","Bằng cách tôn trọng và hỗ trợ","Bằng cách kiểm soát"], a:2},
+{q:"How does obeying road rules help everyone?", qVi:"Tuân thủ luật giao thông giúp ích cho mọi người như thế nào?", opts:["It delays travel","It limits freedom","It improves safety","It benefits only police"], optsVi:["Làm chậm di chuyển","Hạn chế tự do","Cải thiện an toàn","Chỉ có lợi cho cảnh sát"], a:2},
+{q:"How can citizens strengthen democracy daily?", qVi:"Công dân có thể củng cố dân chủ hằng ngày như thế nào?", opts:["By avoiding public life","By ignoring laws","By acting responsibly and participating","By leaving decisions to others"], optsVi:["Bằng cách tránh đời sống công cộng","Bằng cách phớt lờ luật","Bằng cách hành động có trách nhiệm và tham gia","Bằng cách giao quyết định cho người khác"], a:2},
+{q:"How should Australians resolve disagreements?", qVi:"Người Úc nên giải quyết bất đồng như thế nào?", opts:["By force","By silence","By discussion and lawful means","By revenge"], optsVi:["Bằng vũ lực","Bằng im lặng","Bằng thảo luận và biện pháp hợp pháp","Bằng trả thù"], a:2},
+{q:"What may happen if Australian values are not respected?", qVi:"Điều gì có thể xảy ra nếu các giá trị Úc không được tôn trọng?", opts:["Democracy strengthens","Trust increases","Freedom expands","Social harmony may be damaged"], optsVi:["Dân chủ mạnh hơn","Niềm tin tăng","Tự do mở rộng","Sự hài hòa xã hội có thể bị tổn hại"], a:3},
+{q:"What could occur if people reject mutual respect?", qVi:"Điều gì có thể xảy ra nếu mọi người bác bỏ sự tôn trọng lẫn nhau?", opts:["Greater unity","More fairness","Better understanding","Conflict and division may increase"], optsVi:["Đoàn kết hơn","Công bằng hơn","Thấu hiểu hơn","Xung đột và chia rẽ có thể gia tăng"], a:3},
+{q:"What may result if freedom is used irresponsibly?", qVi:"Điều gì có thể xảy ra nếu tự do bị sử dụng một cách vô trách nhiệm?", opts:["Freedom grows","Rights increase","Democracy improves","Freedoms may be limited by law"], optsVi:["Tự do tăng","Quyền tăng","Dân chủ cải thiện","Các quyền tự do có thể bị hạn chế bởi pháp luật"], a:3},
+{q:"What can happen if tolerance is not practiced?", qVi:"Điều gì có thể xảy ra nếu sự khoan dung không được thực hiện?", opts:["Harmony improves","Respect grows","Society strengthens","Discrimination may increase"], optsVi:["Hài hòa cải thiện","Tôn trọng tăng","Xã hội mạnh hơn","Phân biệt đối xử có thể gia tăng"], a:3},
+{q:"What may occur if equality is ignored?", qVi:"Điều gì có thể xảy ra nếu sự bình đẳng bị phớt lờ?", opts:["Opportunities increase","Fairness improves","Trust grows","Unfair treatment may occur"], optsVi:["Cơ hội tăng","Công bằng cải thiện","Niềm tin tăng","Có thể xảy ra đối xử bất công"], a:3},
+{q:"What happens if people do not follow the rule of law?", qVi:"Điều gì xảy ra nếu mọi người không tuân theo pháp quyền?", opts:["Order improves","Justice strengthens","Freedom increases","Law and order may break down"], optsVi:["Trật tự cải thiện","Công lý mạnh hơn","Tự do tăng","Luật pháp và trật tự có thể suy yếu"], a:3},
+{q:"What may result if democratic participation declines?", qVi:"Điều gì có thể xảy ra nếu sự tham gia dân chủ suy giảm?", opts:["Democracy strengthens","Public trust grows","Fairness improves","Democracy may weaken"], optsVi:["Dân chủ mạnh hơn","Niềm tin công chúng tăng","Công bằng cải thiện","Nền dân chủ có thể suy yếu"], a:3},
+{q:"What can occur if people misuse freedom of speech?", qVi:"Điều gì có thể xảy ra nếu tự do ngôn luận bị lạm dụng?", opts:["Speech is unlimited","It is always protected","It improves society","Legal consequences may apply"], optsVi:["Ngôn luận không giới hạn","Luôn được bảo vệ","Xã hội cải thiện","Có thể có hậu quả pháp lý"], a:3},
+{q:"What may happen if people do not respect others’ dignity?", qVi:"Điều gì có thể xảy ra nếu không tôn trọng nhân phẩm của người khác?", opts:["Trust increases","Unity improves","Harmony grows","Social conflict may arise"], optsVi:["Niềm tin tăng","Đoàn kết cải thiện","Hài hòa tăng","Xung đột xã hội có thể phát sinh"], a:3},
+{q:"What could result from discrimination?", qVi:"Phân biệt đối xử có thể dẫn đến điều gì?", opts:["Equal opportunity","Social harmony","Greater inclusion","Exclusion and inequality"], optsVi:["Cơ hội bình đẳng","Hài hòa xã hội","Hòa nhập tốt hơn","Loại trừ và bất bình đẳng"], a:3},
+{q:"What may occur if people ignore civic responsibilities?", qVi:"Điều gì có thể xảy ra nếu mọi người phớt lờ trách nhiệm công dân?", opts:["Community strengthens","Participation increases","Trust grows","Community wellbeing may decline"], optsVi:["Cộng đồng mạnh hơn","Sự tham gia tăng","Niềm tin tăng","Phúc lợi cộng đồng có thể suy giảm"], a:3},
+{q:"What happens if people reject democratic values?", qVi:"Điều gì xảy ra nếu mọi người bác bỏ các giá trị dân chủ?", opts:["Democracy improves","Rights expand","Fairness grows","Democratic systems may be undermined"], optsVi:["Dân chủ cải thiện","Quyền mở rộng","Công bằng tăng","Hệ thống dân chủ có thể bị suy yếu"], a:3},
+{q:"What may result if freedom of religion is not respected?", qVi:"Điều gì có thể xảy ra nếu tự do tôn giáo không được tôn trọng?", opts:["Unity grows","Understanding improves","Peace increases","Religious discrimination may occur"], optsVi:["Đoàn kết tăng","Thấu hiểu cải thiện","Hòa bình tăng","Phân biệt tôn giáo có thể xảy ra"], a:3},
+{q:"What could happen if people do not accept diversity?", qVi:"Điều gì có thể xảy ra nếu mọi người không chấp nhận sự đa dạng?", opts:["Harmony improves","Inclusion grows","Community strengthens","Social division may increase"], optsVi:["Hài hòa cải thiện","Hòa nhập tăng","Cộng đồng mạnh hơn","Chia rẽ xã hội có thể gia tăng"], a:3},
+{q:"What may occur if freedom is not balanced with responsibility?", qVi:"Điều gì có thể xảy ra nếu tự do không được cân bằng với trách nhiệm?", opts:["More trust","Greater safety","Better democracy","Restrictions may be imposed"], optsVi:["Niềm tin tăng","An toàn hơn","Dân chủ tốt hơn","Có thể bị áp đặt hạn chế"], a:3},
+{q:"What happens if people disrespect democratic decisions?", qVi:"Điều gì xảy ra nếu mọi người không tôn trọng các quyết định dân chủ?", opts:["Participation grows","Trust improves","Fairness increases","Confidence in democracy may decline"], optsVi:["Sự tham gia tăng","Niềm tin cải thiện","Công bằng tăng","Niềm tin vào dân chủ có thể giảm"], a:3},
+{q:"What may result if people do not value fairness?", qVi:"Điều gì có thể xảy ra nếu mọi người không coi trọng sự công bằng?", opts:["Justice improves","Equality increases","Social trust grows","Unfair treatment may become common"], optsVi:["Công lý cải thiện","Bình đẳng tăng","Niềm tin xã hội tăng","Đối xử bất công có thể trở nên phổ biến"], a:3},
+{q:"What could occur if respect for others is lost?", qVi:"Điều gì có thể xảy ra nếu sự tôn trọng người khác bị mất?", opts:["Harmony strengthens","Unity grows","Community improves","Breakdown in social relationships"], optsVi:["Hài hòa mạnh hơn","Đoàn kết tăng","Cộng đồng cải thiện","Đổ vỡ các mối quan hệ xã hội"], a:3},
+{q:"What may happen if citizens disengage from society?", qVi:"Điều gì có thể xảy ra nếu công dân không còn tham gia xã hội?", opts:["Stronger democracy","More inclusion","Greater trust","Weaker communities"], optsVi:["Dân chủ mạnh hơn","Hòa nhập hơn","Niềm tin lớn hơn","Cộng đồng yếu đi"], a:3},
+{q:"What can result if people spread hatred?", qVi:"Điều gì có thể xảy ra nếu mọi người lan truyền thù hận?", opts:["Peace increases","Unity grows","Understanding improves","Social tension may rise"], optsVi:["Hòa bình tăng","Đoàn kết tăng","Thấu hiểu cải thiện","Căng thẳng xã hội có thể tăng"], a:3},
+{q:"What may occur if Australian values are ignored?", qVi:"Điều gì có thể xảy ra nếu các giá trị Úc bị phớt lờ?", opts:["Freedom expands","Democracy strengthens","Fairness improves","Rights and cohesion may be weakened"], optsVi:["Tự do mở rộng","Dân chủ mạnh hơn","Công bằng cải thiện","Quyền và sự gắn kết có thể bị suy yếu"], a:3},
+{q:"What happens if people do not act responsibly?", qVi:"Điều gì xảy ra nếu mọi người không hành động có trách nhiệm?", opts:["Safety improves","Trust increases","Harmony grows","Negative consequences for society"], optsVi:["An toàn cải thiện","Niềm tin tăng","Hài hòa tăng","Hậu quả tiêu cực cho xã hội"], a:3},
+{q:"What may result if shared values are not upheld?", qVi:"Điều gì có thể xảy ra nếu các giá trị chung không được gìn giữ?", opts:["Stronger unity","Greater trust","Better cooperation","Loss of social cohesion"], optsVi:["Đoàn kết mạnh hơn","Niềm tin lớn hơn","Hợp tác tốt hơn","Mất sự gắn kết xã hội"], a:3},
+{q:"What could happen if respect for freedom and dignity is lost?", qVi:"Điều gì có thể xảy ra nếu sự tôn trọng tự do và nhân phẩm bị mất?", opts:["Greater equality","More harmony","Stronger democracy","Erosion of human rights"], optsVi:["Bình đẳng lớn hơn","Hài hòa hơn","Dân chủ mạnh hơn","Xói mòn quyền con người"], a:3},
+{q:"What may occur if Australian values are not practiced daily?", qVi:"Điều gì có thể xảy ra nếu các giá trị Úc không được thực hành hằng ngày?", opts:["Society strengthens","Trust grows","Freedom expands","Social problems may increase"], optsVi:["Xã hội mạnh hơn","Niềm tin tăng","Tự do mở rộng","Các vấn đề xã hội có thể gia tăng"], a:3},
+
+
+
+{q: "// END PART 4" } // 87 Câu
+
+];
+
+        // ============ BIẾN TOÀN CỤC ============
+
+let CURRENT_QUESTIONS = [];
+let IS_ALL_MODE = false;
+let currentIndex = 0;
+let userAnswers = [];
+let timerInterval;
+let timeLeft = 45 * 60;
+
+// ============ HELPERS ============
+function getRealQuestions(list) {
+    return list.filter(q => Array.isArray(q.opts) && typeof q.a === "number");
+}
+
+function pickHalfRandom(list) {
+    const half = Math.ceil(list.length / 2);
+    return [...list].sort(() => Math.random() - 0.5).slice(0, half);
+}
+
+// ============ LOAD QUIZ ============
+function loadQuiz(selection) {
+    let list = [];
+    IS_ALL_MODE = false;
+
+    const isBasic = basic.checked;
+    const isAdvance = advance.checked;
+
+    if (selection === "all") {
+        IS_ALL_MODE = true;
+        list = getRealQuestions(QUESTION_BANK);
+        if (isBasic) list = pickHalfRandom(list);
+    }
+    else if (["part1","part2","part3","part4"].includes(selection)) {
+        IS_ALL_MODE = true;
+        const map = {
+            part1:["PART 1","END PART 1"],
+            part2:["PART 2","END PART 2"],
+            part3:["PART 3","END PART 3"],
+            part4:["PART 4","END PART 4"]
+        };
+        const [s,e] = map[selection];
+        const start = QUESTION_BANK.findIndex(q => q.q === `// ${s}`) + 1;
+        const end   = QUESTION_BANK.findIndex(q => q.q === `// ${e}`);
+        list = getRealQuestions(QUESTION_BANK.slice(start, end));
+        if (isBasic) list = pickHalfRandom(list);
+    }
+    else {
+        const n = parseInt(selection, 10);
+        const all = getRealQuestions(QUESTION_BANK);
+        list = all.slice((n - 1) * 20, n * 20);
+    }
+
+    CURRENT_QUESTIONS = list;
+    userAnswers = new Array(list.length).fill(null);
+    currentIndex = 0;
+
+    IS_ALL_MODE ? renderAllQuestions(vietnam.checked)
+                : renderSingleQuestion(0, vietnam.checked);
+}
+
+// ============ RENDER ============
+function renderSingleQuestion(idx, showVi) {
+    const q = CURRENT_QUESTIONS[idx];
+    const box = document.getElementById("questions");
+    box.innerHTML = "";
+
+    let html = `<strong>${idx + 1}. ${q.q}`;
+    if (showVi && q.qVi) html += ` <i style="color:#0066cc;">[${q.qVi}]</i>`;
+    html += `</strong><div style="margin-top:18px;">`;
+
+    q.opts.forEach((opt, i) => {
+        let txt = opt;
+        if (showVi && q.optsVi && q.optsVi[i]) {
+            txt += ` <i style="color:#0066cc;">[${q.optsVi[i]}]</i>`;
+        }
+        html += `
+        <label class="opt" id="q${idx}o${i}_lbl">
+            <input type="radio" name="q${idx}" onchange="saveAnswer(${idx},${i})">
+            ${txt}
+        </label>`;
+    });
+
+    html += "</div>";
+    box.innerHTML = html;
+
+    if (userAnswers[idx] !== null) {
+        box.querySelectorAll("input")[userAnswers[idx]].checked = true;
+    }
+}
+
+function renderAllQuestions(showVi) {
+    const box = document.getElementById("questions");
+    box.innerHTML = "";
+
+    CURRENT_QUESTIONS.forEach((q, idx) => {
+        let html = `<div style="margin:30px 0;"><strong>${idx + 1}. ${q.q}`;
+        if (showVi && q.qVi) html += ` <i>[${q.qVi}]</i>`;
+        html += `</strong><div style="margin-top:12px;">`;
+
+        q.opts.forEach((opt, i) => {
+            let txt = opt;
+            if (showVi && q.optsVi && q.optsVi[i]) txt += ` <i>[${q.optsVi[i]}]</i>`;
+            html += `
+            <label class="opt" id="q${idx}o${i}_lbl">
+                <input type="radio" name="q${idx}" onchange="checkAnswerInstant(${idx},${i})">
+                ${txt}
+            </label>`;
+        });
+
+        html += "</div></div>";
+        box.innerHTML += html;
+    });
+}
+
+// ============ ANSWERS ============
+function saveAnswer(i, v) { userAnswers[i] = v; }
+
+function checkAnswerInstant(i, v) {
+    const correct = CURRENT_QUESTIONS[i].a;
+    document.getElementById(`q${i}o${v}_lbl`)
+        .classList.add(v === correct ? "correct" : "wrong");
+    if (v !== correct) {
+        document.getElementById(`q${i}o${correct}_lbl`)
+            .classList.add("correct");
+    }
+}
+
+// ============ NAV ============
+function nextQuestion() {
+    currentIndex < CURRENT_QUESTIONS.length - 1
+        ? renderSingleQuestion(++currentIndex, vietnam.checked)
+        : submitQuiz();
+}
+function prevQuestion() {
+    if (currentIndex > 0)
+        renderSingleQuestion(--currentIndex, vietnam.checked);
+}
+
+// ============ SUBMIT ============
+function submitQuiz() {
+    let score = 0;
+    CURRENT_QUESTIONS.forEach((q,i)=>{
+        if (userAnswers[i] === q.a) score++;
+    });
+    alert(`Score: ${score}/${CURRENT_QUESTIONS.length}`);
+}
+
+// ============ INIT ============
+basic.checked = true;
+advance.checked = false;
+quizSelect.value = "part1";
+loadQuiz("part1");
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
