@@ -425,11 +425,15 @@
 
     <button id="resetBtn">Reset All</button>
 
-    <div id="results">
-        <p id="score"></p>
-        <p><strong>Các câu sai:</strong></p>
-        <ol id="wrongList"></ol>
-    </div>
+<div id="results">
+    <p id="score"></p>
+    <p><strong>Các câu sai:</strong></p>
+    <ol id="wrongList"></ol>
+
+    <!-- ✅ THÊM DÒNG NÀY -->
+    <div id="wrongDetails" style="margin-top:25px;"></div>
+</div>
+
 
     <script>
         let lastScrollTop = 0;
@@ -1286,6 +1290,7 @@ loadQuiz("part1");
     </script>
 </body>
 </html>
+
 
 
 
