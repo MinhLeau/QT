@@ -1185,14 +1185,36 @@ function loadQuiz(selection) {
 // ============ EVENTS ============
 quizSelectEl.addEventListener("change", e => loadQuiz(e.target.value));
 
-basicEl.addEventListener("change", () => {
-  if (basicEl.checked) advanceEl.checked = false;
+basicEl.addEventListener("click", () => {
+  // Nếu user cố bỏ Basic → giữ lại Basic
+  if (!basicEl.checked && !advanceEl.checked) {
+    basicEl.checked = true;
+    return;
+  }
+
+  // Nếu bật Basic → tắt Advance
+  if (basicEl.checked) {
+    advanceEl.checked = false;
+  }
+
   loadQuiz(quizSelectEl.value);
 });
-advanceEl.addEventListener("change", () => {
-  if (advanceEl.checked) basicEl.checked = false;
+
+advanceEl.addEventListener("click", () => {
+  // Nếu user cố bỏ Advance → giữ lại Advance
+  if (!advanceEl.checked && !basicEl.checked) {
+    advanceEl.checked = true;
+    return;
+  }
+
+  // Nếu bật Advance → tắt Basic
+  if (advanceEl.checked) {
+    basicEl.checked = false;
+  }
+
   loadQuiz(quizSelectEl.value);
 });
+
 
 prevBtnEl.onclick = prevQuestion;
 nextBtnEl.onclick = nextQuestion;
@@ -1213,6 +1235,7 @@ loadQuiz("part1");
     </script>
 </body>
 </html>
+
 
 
 
