@@ -1420,8 +1420,39 @@ loadQuiz("part1");
 
 
     </script>
+
+<script>
+    function showNotePopup() {
+        const popup = document.getElementById("notePopup");
+        if (popup) {
+            popup.classList.add("show");
+            document.body.style.overflow = "hidden"; // khóa scroll nền
+        }
+    }
+
+    function closeNotePopup() {
+        const popup = document.getElementById("notePopup");
+        if (popup) {
+            popup.classList.remove("show");
+            document.body.style.overflow = ""; // mở lại scroll
+        }
+    }
+
+    // Đóng popup khi click ra ngoài nội dung
+    document.addEventListener("click", function (e) {
+        const popup = document.getElementById("notePopup");
+        if (!popup) return;
+
+        if (popup.classList.contains("show") && e.target === popup) {
+            closeNotePopup();
+        }
+    });
+</script>
+
+	
 </body>
 </html>
+
 
 
 
