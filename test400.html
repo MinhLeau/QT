@@ -880,25 +880,25 @@
 ];
 
 // ============ DOM REFS (KHÔNG DÙNG BIẾN GLOBAL THEO ID) ============
-const quizSelectEl     = document.getElementById("quizSelect");
-const vietnamEl        = document.getElementById("vietnam");
-const basicEl          = document.getElementById("basic");
-const advanceEl        = document.getElementById("advance");
-const questionCountEl  = document.getElementById("questionCount");
+const quizSelectEl      = document.getElementById("quizSelect");
+const vietnamEl         = document.getElementById("vietnam");
+const basicEl           = document.getElementById("basic");
+const advanceEl         = document.getElementById("advance");
+const questionCountEl   = document.getElementById("questionCount");
 
-const quizHeaderEl     = document.getElementById("quizHeader");
-const progressBarEl    = document.getElementById("progressBar");
-const questionsEl      = document.getElementById("questions");
-const navigationEl     = document.getElementById("navigation");
-const resetBtnEl       = document.getElementById("resetBtn");
-const resultsEl        = document.getElementById("results");
+const quizHeaderEl      = document.getElementById("quizHeader");
+const progressBarEl     = document.getElementById("progressBar");
+const questionsEl       = document.getElementById("questions");
+const navigationEl      = document.getElementById("navigation");
+const resetBtnEl        = document.getElementById("resetBtn");
+const resultsEl         = document.getElementById("results");
 
-const prevBtnEl        = document.getElementById("prevBtn");
-const nextBtnEl        = document.getElementById("nextBtn");
+const prevBtnEl         = document.getElementById("prevBtn");
+const nextBtnEl         = document.getElementById("nextBtn");
 
-const currentQuestionEl= document.getElementById("currentQuestion");
-const quizTitleEl      = document.getElementById("quizTitle");
-const timerEl          = document.getElementById("timer");
+const currentQuestionEl = document.getElementById("currentQuestion");
+const quizTitleEl       = document.getElementById("quizTitle");
+const timerEl           = document.getElementById("timer");
 
 // ============ GLOBAL STATE ============
 let CURRENT_QUESTIONS = [];
@@ -909,143 +909,151 @@ let timerInterval;
 let timeLeft = 45 * 60;
 
 // ============ HELPERS ============
-function pickHalfRandom(list) {
-  const half = Math.ceil(list.length / 2);
-  return [...list].sort(() => Math.random() - 0.5).slice(0, half);
-}
-function getRealQuestions(list) {
-  return list.filter(q => q && Array.isArray(q.opts) && typeof q.a === "number");
-}
 function isPractice10(sel) {
   return ["1","2","3","4","5","6","7","8","9","10"].includes(sel);
 }
 
-// ============ BASIC MODE: 4 -> 3 options (remove 1 wrong) ============
-function reduceToThreeOptions(question) {
-  if (!question.opts || question.opts.length <= 3) return question;
+function getRealQuestions(list) {
+  return list.filter(q => q && Array.isArray(q.opts) && typeof q.a === "number");
+}
 
-  const correctIndex = question.a;
-  const wrongIndexes = question.opts.map((_, i) => i).filter(i => i !== correctIndex);
+function pickHalfRandom(list) {
+  const half = Math.ceil(list.length / 2);
+  return [...list].sort(() => Math.random() - 0.5).slice(0, half);
+}
 
-  // remove one wrong option randomly
-  const removedWrong = wrongIndexes[Math.floor(Math.random() * wrongIndexes.length)];
+// ===== BASIC MODE: 4 -> 3 OPTIONS =====
+function reduceToThreeOptions(q) {
+  if (!q.opts || q.opts.length <= 3) return q;
+
+  const correct = q.a;
+  const wrongs = q.opts.map((_, i) => i).filter(i => i !== correct);
+  const removed = wrongs[Math.floor(Math.random() * wrongs.length)];
 
   const newOpts = [];
   const newOptsVi = [];
-  let newCorrectIndex = null;
+  let newCorrect = null;
 
-  question.opts.forEach((opt, i) => {
-    if (i === removedWrong) return;
-    if (i === correctIndex) newCorrectIndex = newOpts.length;
+  q.opts.forEach((opt, i) => {
+    if (i === removed) return;
+    if (i === correct) newCorrect = newOpts.length;
     newOpts.push(opt);
-    if (Array.isArray(question.optsVi)) newOptsVi.push(question.optsVi[i]);
+    if (q.optsVi) newOptsVi.push(q.optsVi[i]);
   });
 
   return {
-    ...question,
+    ...q,
     opts: newOpts,
-    optsVi: newOptsVi.length ? newOptsVi : question.optsVi,
-    a: newCorrectIndex
+    optsVi: newOptsVi.length ? newOptsVi : q.optsVi,
+    a: newCorrect
   };
 }
 
-function applyLevelMode(questions) {
-  // Basic: 3 options; Advance: 4 options
-  if (basicEl.checked && !advanceEl.checked) return questions.map(reduceToThreeOptions);
-  return questions;
-}
-
-function updateQuestionCount() {
-  questionCountEl.textContent = CURRENT_QUESTIONS.length ? `(${CURRENT_QUESTIONS.length} questions)` : "";
-}
-
-function shuffleOptions(question) {
-  const indices = question.opts.map((_, i) => i);
-
-  // Fisher–Yates shuffle index
-  for (let i = indices.length - 1; i > 0; i--) {
+// ===== SHUFFLE OPTIONS =====
+function shuffleOptions(q) {
+  const idxs = q.opts.map((_, i) => i);
+  for (let i = idxs.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [indices[i], indices[j]] = [indices[j], indices[i]];
+    [idxs[i], idxs[j]] = [idxs[j], idxs[i]];
   }
 
   const newOpts = [];
   const newOptsVi = [];
-  let newCorrectIndex = null;
+  let newCorrect = null;
 
-  indices.forEach((oldIndex, newIndex) => {
-    newOpts.push(question.opts[oldIndex]);
-    if (question.optsVi) newOptsVi.push(question.optsVi[oldIndex]);
-    if (oldIndex === question.a) newCorrectIndex = newIndex;
+  idxs.forEach((oldIdx, newIdx) => {
+    newOpts.push(q.opts[oldIdx]);
+    if (q.optsVi) newOptsVi.push(q.optsVi[oldIdx]);
+    if (oldIdx === q.a) newCorrect = newIdx;
   });
 
   return {
-    ...question,
+    ...q,
     opts: newOpts,
-    optsVi: newOptsVi.length ? newOptsVi : question.optsVi,
-    a: newCorrectIndex
+    optsVi: newOptsVi.length ? newOptsVi : q.optsVi,
+    a: newCorrect
   };
 }
 
-		
-		
-
-// ============ RENDER ============
-function renderAllQuestions(showVi) {
-  questionsEl.innerHTML = "";
-  CURRENT_QUESTIONS.forEach((q, i) => {
-    let html = `<div style="margin:35px 0;"><strong>${i+1}. ${q.q}`;
-    if (showVi && q.qVi) html += ` <i style="color:#0066cc;">[${q.qVi}]</i>`;
-    html += `</strong><div style="margin-top:18px;">`;
-
-    q.opts.forEach((opt, j) => {
-      let txt = opt;
-      if (showVi && q.optsVi && q.optsVi[j]) txt += ` <i style="color:#0066cc;">[${q.optsVi[j]}]</i>`;
-      html += `<label class="opt" id="q${i}o${j}_lbl">
-        <input type="radio" name="q${i}" onchange="checkAnswerInstant(${i},${j})">${txt}
-      </label>`;
-    });
-
-    html += `</div></div>`;
-    questionsEl.innerHTML += html;
-  });
+function applyLevelMode(list) {
+  let out = list;
+  if (basicEl.checked && !advanceEl.checked) {
+    out = out.map(reduceToThreeOptions);
+  }
+  return out.map(shuffleOptions);
 }
 
+function isAustralianValueQuestion(q) {
+  return q.__part === "PART 4" || q.isValue === true;
+}
+
+function updateQuestionCount() {
+  questionCountEl.textContent =
+    CURRENT_QUESTIONS.length ? `(${CURRENT_QUESTIONS.length} questions)` : "";
+}
+
+// ============ RENDER ============
 function renderSingleQuestion(idx, showVi) {
   const q = CURRENT_QUESTIONS[idx];
   questionsEl.innerHTML = "";
 
-  let html = `<strong>${idx+1}. ${q.q}`;
+  let html = `<strong>${idx + 1}. ${q.q}`;
   if (showVi && q.qVi) html += ` <i style="color:#0066cc;">[${q.qVi}]</i>`;
   html += `</strong><div style="margin-top:20px;">`;
 
   q.opts.forEach((opt, i) => {
     let txt = opt;
-    if (showVi && q.optsVi && q.optsVi[i]) txt += ` <i style="color:#0066cc;">[${q.optsVi[i]}]</i>`;
-    html += `<label class="opt" id="q${idx}o${i}_lbl">
-      <input type="radio" name="q${idx}" onchange="saveAnswer(${idx},${i})">${txt}
-    </label>`;
+    if (showVi && q.optsVi && q.optsVi[i]) {
+      txt += ` <i style="color:#0066cc;">[${q.optsVi[i]}]</i>`;
+    }
+    html += `
+      <label class="opt" id="q${idx}o${i}_lbl">
+        <input type="radio" name="q${idx}" onchange="saveAnswer(${idx},${i})">
+        ${txt}
+      </label>`;
   });
 
-  html += `</div>`;
+  html += "</div>";
   questionsEl.innerHTML = html;
 
   if (userAnswers[idx] !== null) {
-    const inputs = questionsEl.querySelectorAll("input[type=radio]");
-    if (inputs[userAnswers[idx]]) inputs[userAnswers[idx]].checked = true;
+    const radios = questionsEl.querySelectorAll("input[type=radio]");
+    if (radios[userAnswers[idx]]) radios[userAnswers[idx]].checked = true;
   }
 
   prevBtnEl.disabled = idx === 0;
-  nextBtnEl.textContent = (idx === 19) ? "Submit" : "Next";
+  nextBtnEl.textContent = idx === 19 ? "Submit" : "Next";
   updateProgress();
 }
 
-// ✅ THIS is what makes Vietnam checkbox “work”
-function rerenderVietnam() {
-  const sel = quizSelectEl.value;
-  const showVi = (!isPractice10(sel)) && vietnamEl.checked;
+function renderAllQuestions(showVi) {
+  questionsEl.innerHTML = "";
+  CURRENT_QUESTIONS.forEach((q, i) => {
+    let html = `<div style="margin:35px 0;"><strong>${i + 1}. ${q.q}`;
+    if (showVi && q.qVi) html += ` <i style="color:#0066cc;">[${q.qVi}]</i>`;
+    html += `</strong><div style="margin-top:18px;">`;
 
-  if (IS_ALL_MODE) renderAllQuestions(showVi);
-  else renderSingleQuestion(currentIndex, showVi);
+    q.opts.forEach((opt, j) => {
+      let txt = opt;
+      if (showVi && q.optsVi && q.optsVi[j]) {
+        txt += ` <i style="color:#0066cc;">[${q.optsVi[j]}]</i>`;
+      }
+      html += `
+        <label class="opt" id="q${i}o${j}_lbl">
+          <input type="radio" name="q${i}" onchange="checkAnswerInstant(${i},${j})">
+          ${txt}
+        </label>`;
+    });
+
+    html += "</div></div>";
+    questionsEl.innerHTML += html;
+  });
+}
+
+// ============ VIETNAMESE TOGGLE ============
+function rerenderVietnam() {
+  const showVi = !isPractice10(quizSelectEl.value) && vietnamEl.checked;
+  IS_ALL_MODE ? renderAllQuestions(showVi) : renderSingleQuestion(currentIndex, showVi);
 }
 
 // ============ PROGRESS / TIMER ============
@@ -1059,84 +1067,109 @@ function buildProgressBar() {
   }
   updateProgress();
 }
+
 function updateProgress() {
-  document.querySelectorAll(".progress-item").forEach((el,i)=>{
+  document.querySelectorAll(".progress-item").forEach((el, i) => {
     el.classList.toggle("current", i === currentIndex);
   });
-  currentQuestionEl.textContent = `${currentIndex+1}/20`;
+  currentQuestionEl.textContent = `${currentIndex + 1}/20`;
 }
+
 function startTimer() {
   clearInterval(timerInterval);
   timeLeft = 45 * 60;
   timerEl.textContent = "Timer 45:00";
 
-  timerInterval = setInterval(()=>{
+  timerInterval = setInterval(() => {
     timeLeft--;
-    const m = String(Math.floor(timeLeft/60)).padStart(2,"0");
-    const s = String(timeLeft%60).padStart(2,"0");
+    const m = String(Math.floor(timeLeft / 60)).padStart(2, "0");
+    const s = String(timeLeft % 60).padStart(2, "0");
     timerEl.textContent = `Timer ${m}:${s}`;
     if (timeLeft <= 0) submitQuiz();
-  },1000);
+  }, 1000);
 }
 
 // ============ ANSWER ============
-function saveAnswer(i,v){ userAnswers[i]=v; }
-function checkAnswerInstant(i,v){
-  const c = CURRENT_QUESTIONS[i].a;
-  const pickedLbl = document.getElementById(`q${i}o${v}_lbl`);
-  if (pickedLbl) pickedLbl.classList.add(v===c ? "correct" : "wrong");
+function saveAnswer(i, v) {
+  userAnswers[i] = v;
+}
 
-  if (v!==c) {
-    const correctLbl = document.getElementById(`q${i}o${c}_lbl`);
-    if (correctLbl) correctLbl.classList.add("correct");
+function checkAnswerInstant(i, v) {
+  const c = CURRENT_QUESTIONS[i].a;
+  document.getElementById(`q${i}o${v}_lbl`)
+    .classList.add(v === c ? "correct" : "wrong");
+
+  if (v !== c) {
+    document.getElementById(`q${i}o${c}_lbl`)
+      .classList.add("correct");
   }
 }
 
 // ============ NAV ============
-function nextQuestion(){
-  const sel = quizSelectEl.value;
-  const showVi = (!isPractice10(sel)) && vietnamEl.checked;
-
-  if (currentIndex < 19) {
-    currentIndex++;
-    renderSingleQuestion(currentIndex, showVi);
-  } else {
-    submitQuiz();
-  }
+function nextQuestion() {
+  const showVi = !isPractice10(quizSelectEl.value) && vietnamEl.checked;
+  currentIndex < 19
+    ? renderSingleQuestion(++currentIndex, showVi)
+    : submitQuiz();
 }
-function prevQuestion(){
-  const sel = quizSelectEl.value;
-  const showVi = (!isPractice10(sel)) && vietnamEl.checked;
 
-  if(currentIndex>0){
-    currentIndex--;
-    renderSingleQuestion(currentIndex, showVi);
+function prevQuestion() {
+  if (currentIndex > 0) {
+    const showVi = !isPractice10(quizSelectEl.value) && vietnamEl.checked;
+    renderSingleQuestion(--currentIndex, showVi);
   }
 }
 
 // ============ SUBMIT ============
-function submitQuiz(){
+function submitQuiz() {
   clearInterval(timerInterval);
 
-  let score=0;
-  const wrong=[];
-  CURRENT_QUESTIONS.forEach((q,i)=>{
-    if(userAnswers[i]===q.a) score++;
+  let score = 0;
+  const wrong = [];
+
+  CURRENT_QUESTIONS.forEach((q, i) => {
+    if (userAnswers[i] === q.a) score++;
     else wrong.push(i);
   });
 
-  resultsEl.style.display="block";
-  document.getElementById("score").textContent = `Điểm: ${score}/${CURRENT_QUESTIONS.length}`;
+  resultsEl.style.display = "block";
+  document.getElementById("score").textContent =
+    `Điểm: ${score}/${CURRENT_QUESTIONS.length}`;
 
-  const wrongList = document.getElementById("wrongList");
-  if (wrongList) {
-    wrongList.innerHTML = "";
-    wrong.forEach(i=>{
-      const li = document.createElement("li");
-      li.textContent = `${i+1}. ${CURRENT_QUESTIONS[i].q}`;
-      wrongList.appendChild(li);
+  const wrongBox = document.getElementById("wrongDetails");
+  if (!wrongBox) return;
+  wrongBox.innerHTML = "";
+
+  if (!isPractice10(quizSelectEl.value)) return;
+
+  wrong.forEach(i => {
+    const q = CURRENT_QUESTIONS[i];
+    const picked = userAnswers[i];
+    const correct = q.a;
+    const isValue = isAustralianValueQuestion(q);
+
+    let html = `
+    <div style="border:3px solid ${isValue ? "#dc3545" : "#999"};
+                padding:15px;border-radius:12px;margin:20px 0;">
+      <strong>${i + 1}. ${q.q}</strong>
+      ${isValue ? `<div style="color:#dc3545;font-weight:bold;">
+        ⚠️ Australian values
+      </div>` : ""}
+      <ul>`;
+
+    q.opts.forEach((opt, idx) => {
+      let txt = opt;
+      if (q.optsVi && q.optsVi[idx] && vietnamEl.checked) {
+        txt += ` <i>[${q.optsVi[idx]}]</i>`;
+      }
+      if (idx === correct) txt = `✅ <b>${txt}</b>`;
+      else if (idx === picked) txt = `❌ <b>${txt}</b>`;
+      html += `<li>${txt}</li>`;
     });
-  }
+
+    html += "</ul></div>";
+    wrongBox.innerHTML += html;
+  });
 }
 
 // ============ LOAD QUIZ ============
@@ -1144,10 +1177,20 @@ function loadQuiz(selection) {
   let list = [];
   IS_ALL_MODE = false;
 
+  if (isPractice10(selection)) {
+    advanceEl.checked = true;
+    basicEl.checked = false;
+    basicEl.style.display = "none";
+    advanceEl.disabled = true;
+  } else {
+    basicEl.style.display = "";
+    advanceEl.disabled = false;
+    if (!basicEl.checked && !advanceEl.checked) basicEl.checked = true;
+  }
+
   if (selection === "all") {
     IS_ALL_MODE = true;
     list = getRealQuestions(QUESTION_BANK);
-    if (basicEl.checked && !advanceEl.checked) list = pickHalfRandom(list);
   }
   else if (["part1","part2","part3","part4"].includes(selection)) {
     IS_ALL_MODE = true;
@@ -1157,64 +1200,35 @@ function loadQuiz(selection) {
       part3:["PART 3","END PART 3"],
       part4:["PART 4","END PART 4"]
     };
-    const [s,e] = map[selection];
+    const [s, e] = map[selection];
     const start = QUESTION_BANK.findIndex(q => q.q === `// ${s}`) + 1;
     const end   = QUESTION_BANK.findIndex(q => q.q === `// ${e}`);
-    list = getRealQuestions(QUESTION_BANK.slice(start, end));
-    if (basicEl.checked && !advanceEl.checked) list = pickHalfRandom(list);
+    list = QUESTION_BANK.slice(start, end)
+      .filter(q => q.opts)
+      .map(q => ({ ...q, __part: s }));
   }
   else {
     const n = parseInt(selection, 10);
-    const allReal = getRealQuestions(QUESTION_BANK);
-    const start = (n - 1) * 20;
-    list = allReal.slice(start, start + 20);
+    const all = getRealQuestions(QUESTION_BANK);
+    list = all.slice((n - 1) * 20, n * 20);
   }
 
-// ===== FORCE ADVANCE MODE FOR PRACTICE 1–10 =====
-if (isPractice10(selection)) {
-  advanceEl.checked = true;
-  basicEl.checked = false;
-
-  // Ẩn Basic, khoá Advance
-  basicEl.style.display = "none";
-  advanceEl.disabled = true;
-} else {
-  // Hiện lại khi không phải Practice 1–10
-  basicEl.style.display = "";
-  advanceEl.disabled = false;
-
-  // Đảm bảo luôn có 1 cái được chọn
-  if (!basicEl.checked && !advanceEl.checked) {
-    basicEl.checked = true;
-  }
-}
-
-	
-  // apply Basic/Advance option-count rules
-  CURRENT_QUESTIONS = applyLevelMode(list).map(shuffleOptions);
-
-
+  CURRENT_QUESTIONS = applyLevelMode(list);
   userAnswers = new Array(CURRENT_QUESTIONS.length).fill(null);
   currentIndex = 0;
 
-  // Vietnam checkbox enable/disable
-  if (isPractice10(selection)) {
-    vietnamEl.checked = false;
-    vietnamEl.disabled = true;
-  } else {
-    vietnamEl.disabled = false;
-  }
+  vietnamEl.disabled = isPractice10(selection);
+  if (vietnamEl.disabled) vietnamEl.checked = false;
 
   updateQuestionCount();
 
-  const showVi = (!isPractice10(selection)) && vietnamEl.checked;
+  const showVi = !isPractice10(selection) && vietnamEl.checked;
 
   if (!IS_ALL_MODE) {
     quizHeaderEl.style.display = "flex";
     progressBarEl.style.display = "flex";
     navigationEl.style.display = "flex";
     resetBtnEl.style.display = "none";
-
     quizTitleEl.textContent = `Practice Quiz ${selection}`;
     buildProgressBar();
     startTimer();
@@ -1224,7 +1238,6 @@ if (isPractice10(selection)) {
     progressBarEl.style.display = "none";
     navigationEl.style.display = "none";
     resetBtnEl.style.display = "block";
-
     clearInterval(timerInterval);
     timerEl.textContent = "Timer 45:00";
     renderAllQuestions(showVi);
@@ -1237,41 +1250,27 @@ if (isPractice10(selection)) {
 quizSelectEl.addEventListener("change", e => loadQuiz(e.target.value));
 
 basicEl.addEventListener("click", () => {
-  // Nếu user cố bỏ Basic → giữ lại Basic
   if (!basicEl.checked && !advanceEl.checked) {
     basicEl.checked = true;
     return;
   }
-
-  // Nếu bật Basic → tắt Advance
-  if (basicEl.checked) {
-    advanceEl.checked = false;
-  }
-
+  if (basicEl.checked) advanceEl.checked = false;
   loadQuiz(quizSelectEl.value);
 });
 
 advanceEl.addEventListener("click", () => {
-  // Nếu user cố bỏ Advance → giữ lại Advance
   if (!advanceEl.checked && !basicEl.checked) {
     advanceEl.checked = true;
     return;
   }
-
-  // Nếu bật Advance → tắt Basic
-  if (advanceEl.checked) {
-    basicEl.checked = false;
-  }
-
+  if (advanceEl.checked) basicEl.checked = false;
   loadQuiz(quizSelectEl.value);
 });
-
 
 prevBtnEl.onclick = prevQuestion;
 nextBtnEl.onclick = nextQuestion;
 resetBtnEl.onclick = () => loadQuiz(quizSelectEl.value);
 
-// ✅ Vietnam checkbox now works (rerender immediately)
 vietnamEl.addEventListener("change", () => {
   if (isPractice10(quizSelectEl.value)) return;
   rerenderVietnam();
@@ -1283,9 +1282,11 @@ advanceEl.checked = false;
 quizSelectEl.value = "part1";
 loadQuiz("part1");
 
+
     </script>
 </body>
 </html>
+
 
 
 
