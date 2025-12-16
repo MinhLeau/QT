@@ -1140,6 +1140,26 @@ function loadQuiz(selection) {
     list = allReal.slice(start, start + 20);
   }
 
+// ===== FORCE ADVANCE MODE FOR PRACTICE 1–10 =====
+if (isPractice10(selection)) {
+  advanceEl.checked = true;
+  basicEl.checked = false;
+
+  // Ẩn Basic, khoá Advance
+  basicEl.style.display = "none";
+  advanceEl.disabled = true;
+} else {
+  // Hiện lại khi không phải Practice 1–10
+  basicEl.style.display = "";
+  advanceEl.disabled = false;
+
+  // Đảm bảo luôn có 1 cái được chọn
+  if (!basicEl.checked && !advanceEl.checked) {
+    basicEl.checked = true;
+  }
+}
+
+	
   // apply Basic/Advance option-count rules
   CURRENT_QUESTIONS = applyLevelMode(list);
 
@@ -1235,6 +1255,7 @@ loadQuiz("part1");
     </script>
 </body>
 </html>
+
 
 
 
