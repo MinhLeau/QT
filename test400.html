@@ -921,14 +921,45 @@ function getRealQuestions(list) {
   return list.filter(q => q && Array.isArray(q.opts) && typeof q.a === "number");
 }
 
-function pickHalfRandom(list) {
-  const half = Math.ceil(list.length / 2);
-  return [...list].sort(() => Math.random() - 0.5).slice(0, half);
+// ---- XÁC ĐỊNH PART CHO MỌI CÂU ----
+function attachPartInfo(q) {
+  const idx = QUESTION_BANK.indexOf(q);
+
+  const p1 = QUESTION_BANK.findIndex(x => x.q === "// PART 1");
+  const e1 = QUESTION_BANK.findIndex(x => x.q === "// END PART 1");
+  const p2 = QUESTION_BANK.findIndex(x => x.q === "// PART 2");
+  const e2 = QUESTION_BANK.findIndex(x => x.q === "// END PART 2");
+  const p3 = QUESTION_BANK.findIndex(x => x.q === "// PART 3");
+  const e3 = QUESTION_BANK.findIndex(x => x.q === "// END PART 3");
+  const p4 = QUESTION_BANK.findIndex(x => x.q === "// PART 4");
+  const e4 = QUESTION_BANK.findIndex(x => x.q === "// END PART 4");
+
+  if (idx > p1 && idx < e1) return { ...q, __part: "PART 1" };
+  if (idx > p2 && idx < e2) return { ...q, __part: "PART 2" };
+  if (idx > p3 && idx < e3) return { ...q, __part: "PART 3" };
+  if (idx > p4 && idx < e4) return { ...q, __part: "PART 4" };
+
+  return { ...q, __part: "" };
 }
 
-// ===== BASIC MODE: 4 -> 3 OPTIONS =====
+function isAustralianValueQuestion(q) {
+  return q.__part === "PART 4" || q.isValue === true;
+}
+
+// ---- ÉP ĐÚNG 5 CÂU AUSTRALIAN VALUES ----
+function pickExactlyFiveValues(all) {
+  const values = all.filter(q => q.__part === "PART 4");
+  const others = all.filter(q => q.__part !== "PART 4");
+
+  const pickedValues = [...values].sort(() => Math.random() - 0.5).slice(0, 5);
+  const pickedOthers = [...others].sort(() => Math.random() - 0.5).slice(0, 15);
+
+  return [...pickedValues, ...pickedOthers].sort(() => Math.random() - 0.5);
+}
+
+// ---- BASIC MODE: 4 → 3 ----
 function reduceToThreeOptions(q) {
-  if (!q.opts || q.opts.length <= 3) return q;
+  if (q.opts.length <= 3) return q;
 
   const correct = q.a;
   const wrongs = q.opts.map((_, i) => i).filter(i => i !== correct);
@@ -945,15 +976,10 @@ function reduceToThreeOptions(q) {
     if (q.optsVi) newOptsVi.push(q.optsVi[i]);
   });
 
-  return {
-    ...q,
-    opts: newOpts,
-    optsVi: newOptsVi.length ? newOptsVi : q.optsVi,
-    a: newCorrect
-  };
+  return { ...q, opts: newOpts, optsVi: newOptsVi, a: newCorrect };
 }
 
-// ===== SHUFFLE OPTIONS =====
+// ---- SHUFFLE OPTIONS ----
 function shuffleOptions(q) {
   const idxs = q.opts.map((_, i) => i);
   for (let i = idxs.length - 1; i > 0; i--) {
@@ -971,12 +997,7 @@ function shuffleOptions(q) {
     if (oldIdx === q.a) newCorrect = newIdx;
   });
 
-  return {
-    ...q,
-    opts: newOpts,
-    optsVi: newOptsVi.length ? newOptsVi : q.optsVi,
-    a: newCorrect
-  };
+  return { ...q, opts: newOpts, optsVi: newOptsVi, a: newCorrect };
 }
 
 function applyLevelMode(list) {
@@ -985,10 +1006,6 @@ function applyLevelMode(list) {
     out = out.map(reduceToThreeOptions);
   }
   return out.map(shuffleOptions);
-}
-
-function isAustralianValueQuestion(q) {
-  return q.__part === "PART 4" || q.isValue === true;
 }
 
 function updateQuestionCount() {
@@ -1001,15 +1018,13 @@ function renderSingleQuestion(idx, showVi) {
   const q = CURRENT_QUESTIONS[idx];
   questionsEl.innerHTML = "";
 
-  let html = `<strong>${idx + 1}. ${q.q}`;
+  let html = `<strong>${idx+1}. ${q.q}`;
   if (showVi && q.qVi) html += ` <i style="color:#0066cc;">[${q.qVi}]</i>`;
   html += `</strong><div style="margin-top:20px;">`;
 
-  q.opts.forEach((opt, i) => {
+  q.opts.forEach((opt,i)=>{
     let txt = opt;
-    if (showVi && q.optsVi && q.optsVi[i]) {
-      txt += ` <i style="color:#0066cc;">[${q.optsVi[i]}]</i>`;
-    }
+    if (showVi && q.optsVi && q.optsVi[i]) txt += ` <i style="color:#0066cc;">[${q.optsVi[i]}]</i>`;
     html += `
       <label class="opt" id="q${idx}o${i}_lbl">
         <input type="radio" name="q${idx}" onchange="saveAnswer(${idx},${i})">
@@ -1021,8 +1036,8 @@ function renderSingleQuestion(idx, showVi) {
   questionsEl.innerHTML = html;
 
   if (userAnswers[idx] !== null) {
-    const radios = questionsEl.querySelectorAll("input[type=radio]");
-    if (radios[userAnswers[idx]]) radios[userAnswers[idx]].checked = true;
+    const r = questionsEl.querySelectorAll("input[type=radio]");
+    if (r[userAnswers[idx]]) r[userAnswers[idx]].checked = true;
   }
 
   prevBtnEl.disabled = idx === 0;
@@ -1032,16 +1047,14 @@ function renderSingleQuestion(idx, showVi) {
 
 function renderAllQuestions(showVi) {
   questionsEl.innerHTML = "";
-  CURRENT_QUESTIONS.forEach((q, i) => {
-    let html = `<div style="margin:35px 0;"><strong>${i + 1}. ${q.q}`;
+  CURRENT_QUESTIONS.forEach((q,i)=>{
+    let html = `<div style="margin:35px 0;"><strong>${i+1}. ${q.q}`;
     if (showVi && q.qVi) html += ` <i style="color:#0066cc;">[${q.qVi}]</i>`;
     html += `</strong><div style="margin-top:18px;">`;
 
-    q.opts.forEach((opt, j) => {
+    q.opts.forEach((opt,j)=>{
       let txt = opt;
-      if (showVi && q.optsVi && q.optsVi[j]) {
-        txt += ` <i style="color:#0066cc;">[${q.optsVi[j]}]</i>`;
-      }
+      if (showVi && q.optsVi && q.optsVi[j]) txt += ` <i style="color:#0066cc;">[${q.optsVi[j]}]</i>`;
       html += `
         <label class="opt" id="q${i}o${j}_lbl">
           <input type="radio" name="q${i}" onchange="checkAnswerInstant(${i},${j})">
@@ -1054,242 +1067,180 @@ function renderAllQuestions(showVi) {
   });
 }
 
-// ============ VIETNAMESE TOGGLE ============
-function rerenderVietnam() {
-  const showVi = !isPractice10(quizSelectEl.value) && vietnamEl.checked;
-  IS_ALL_MODE ? renderAllQuestions(showVi) : renderSingleQuestion(currentIndex, showVi);
-}
-
-// ============ PROGRESS / TIMER ============
+// ============ TIMER / PROGRESS ============
 function buildProgressBar() {
   progressBarEl.innerHTML = "";
-  for (let i = 1; i <= 20; i++) {
-    const d = document.createElement("div");
-    d.className = "progress-item";
-    d.textContent = i;
+  for (let i=1;i<=20;i++){
+    const d=document.createElement("div");
+    d.className="progress-item";
+    d.textContent=i;
     progressBarEl.appendChild(d);
   }
   updateProgress();
 }
 
-function updateProgress() {
-  document.querySelectorAll(".progress-item").forEach((el, i) => {
-    el.classList.toggle("current", i === currentIndex);
+function updateProgress(){
+  document.querySelectorAll(".progress-item").forEach((el,i)=>{
+    el.classList.toggle("current",i===currentIndex);
   });
-  currentQuestionEl.textContent = `${currentIndex + 1}/20`;
+  currentQuestionEl.textContent=`${currentIndex+1}/20`;
 }
 
-function startTimer() {
+function startTimer(){
   clearInterval(timerInterval);
-  timeLeft = 45 * 60;
-  timerEl.textContent = "Timer 45:00";
-
-  timerInterval = setInterval(() => {
+  timeLeft=45*60;
+  timerEl.textContent="Timer 45:00";
+  timerInterval=setInterval(()=>{
     timeLeft--;
-    const m = String(Math.floor(timeLeft / 60)).padStart(2, "0");
-    const s = String(timeLeft % 60).padStart(2, "0");
-    timerEl.textContent = `Timer ${m}:${s}`;
-    if (timeLeft <= 0) submitQuiz();
-  }, 1000);
+    const m=String(Math.floor(timeLeft/60)).padStart(2,"0");
+    const s=String(timeLeft%60).padStart(2,"0");
+    timerEl.textContent=`Timer ${m}:${s}`;
+    if(timeLeft<=0)submitQuiz();
+  },1000);
 }
 
 // ============ ANSWER ============
-function saveAnswer(i, v) {
-  userAnswers[i] = v;
-}
-
-function checkAnswerInstant(i, v) {
-  const c = CURRENT_QUESTIONS[i].a;
-  document.getElementById(`q${i}o${v}_lbl`)
-    .classList.add(v === c ? "correct" : "wrong");
-
-  if (v !== c) {
-    document.getElementById(`q${i}o${c}_lbl`)
-      .classList.add("correct");
-  }
-}
-
-// ============ NAV ============
-function nextQuestion() {
-  const showVi = !isPractice10(quizSelectEl.value) && vietnamEl.checked;
-  currentIndex < 19
-    ? renderSingleQuestion(++currentIndex, showVi)
-    : submitQuiz();
-}
-
-function prevQuestion() {
-  if (currentIndex > 0) {
-    const showVi = !isPractice10(quizSelectEl.value) && vietnamEl.checked;
-    renderSingleQuestion(--currentIndex, showVi);
-  }
+function saveAnswer(i,v){userAnswers[i]=v;}
+function checkAnswerInstant(i,v){
+  const c=CURRENT_QUESTIONS[i].a;
+  document.getElementById(`q${i}o${v}_lbl`).classList.add(v===c?"correct":"wrong");
+  if(v!==c)document.getElementById(`q${i}o${c}_lbl`).classList.add("correct");
 }
 
 // ============ SUBMIT ============
-function submitQuiz() {
+function submitQuiz(){
   clearInterval(timerInterval);
-
-  let score = 0;
-  const wrong = [];
-
-  CURRENT_QUESTIONS.forEach((q, i) => {
-    if (userAnswers[i] === q.a) score++;
+  let score=0;
+  const wrong=[];
+  CURRENT_QUESTIONS.forEach((q,i)=>{
+    if(userAnswers[i]===q.a)score++;
     else wrong.push(i);
   });
 
-  resultsEl.style.display = "block";
-  document.getElementById("score").textContent =
-    `Điểm: ${score}/${CURRENT_QUESTIONS.length}`;
+  resultsEl.style.display="block";
+  document.getElementById("score").textContent=`Điểm: ${score}/${CURRENT_QUESTIONS.length}`;
 
-  const wrongBox = document.getElementById("wrongDetails");
-  if (!wrongBox) return;
-  wrongBox.innerHTML = "";
+  const wrongBox=document.getElementById("wrongDetails");
+  wrongBox.innerHTML="";
 
-  if (!isPractice10(quizSelectEl.value)) return;
+  if(!isPractice10(quizSelectEl.value))return;
 
-  wrong.forEach(i => {
-    const q = CURRENT_QUESTIONS[i];
-    const picked = userAnswers[i];
-    const correct = q.a;
-    const isValue = isAustralianValueQuestion(q);
+  wrong.forEach(i=>{
+    const q=CURRENT_QUESTIONS[i];
+    const isValue=isAustralianValueQuestion(q);
 
-    let html = `
-    <div style="border:3px solid ${isValue ? "#dc3545" : "#999"};
+    let html=`
+    <div style="border:3px solid ${isValue?"#dc3545":"#999"};
+                background:${isValue?"#fff3f3":"#f9f9f9"};
                 padding:15px;border-radius:12px;margin:20px 0;">
-      <strong>${i + 1}. ${q.q}</strong>
-      ${isValue ? `<div style="color:#dc3545;font-weight:bold;">
-        ⚠️ Australian values
-      </div>` : ""}
+      <strong>${i+1}. ${q.q}</strong>
+      ${isValue?`<div style="color:#dc3545;font-weight:bold;">⚠️ Australian values</div>`:""}
       <ul>`;
 
-    q.opts.forEach((opt, idx) => {
-      let txt = opt;
-      if (q.optsVi && q.optsVi[idx] && vietnamEl.checked) {
-        txt += ` <i>[${q.optsVi[idx]}]</i>`;
-      }
-      if (idx === correct) txt = `✅ <b>${txt}</b>`;
-      else if (idx === picked) txt = `❌ <b>${txt}</b>`;
-      html += `<li>${txt}</li>`;
+    q.opts.forEach((opt,idx)=>{
+      let txt=opt;
+      if(vietnamEl.checked && q.optsVi && q.optsVi[idx]) txt+=` <i>[${q.optsVi[idx]}]</i>`;
+      if(idx===q.a) txt=`✅ <b>${txt}</b>`;
+      else if(idx===userAnswers[i]) txt=`❌ <b>${txt}</b>`;
+      html+=`<li>${txt}</li>`;
     });
 
-    html += "</ul></div>";
-    wrongBox.innerHTML += html;
+    html+="</ul></div>";
+    wrongBox.innerHTML+=html;
   });
 }
 
 // ============ LOAD QUIZ ============
-function loadQuiz(selection) {
-  let list = [];
-  IS_ALL_MODE = false;
+function loadQuiz(selection){
+  let list=[];
+  IS_ALL_MODE=false;
 
-  if (isPractice10(selection)) {
-    advanceEl.checked = true;
-    basicEl.checked = false;
-    basicEl.style.display = "none";
-    advanceEl.disabled = true;
-  } else {
-    basicEl.style.display = "";
-    advanceEl.disabled = false;
-    if (!basicEl.checked && !advanceEl.checked) basicEl.checked = true;
+  if(isPractice10(selection)){
+    advanceEl.checked=true;
+    basicEl.checked=false;
+    basicEl.style.display="none";
+    advanceEl.disabled=true;
+  }else{
+    basicEl.style.display="";
+    advanceEl.disabled=false;
+    if(!basicEl.checked&&!advanceEl.checked)basicEl.checked=true;
   }
 
-  if (selection === "all") {
-    IS_ALL_MODE = true;
-    list = getRealQuestions(QUESTION_BANK);
+  if(selection==="all"){
+    IS_ALL_MODE=true;
+    list=getRealQuestions(QUESTION_BANK).map(attachPartInfo);
   }
-  else if (["part1","part2","part3","part4"].includes(selection)) {
-    IS_ALL_MODE = true;
-    const map = {
+  else if(["part1","part2","part3","part4"].includes(selection)){
+    IS_ALL_MODE=true;
+    const map={
       part1:["PART 1","END PART 1"],
       part2:["PART 2","END PART 2"],
       part3:["PART 3","END PART 3"],
       part4:["PART 4","END PART 4"]
     };
-    const [s, e] = map[selection];
-    const start = QUESTION_BANK.findIndex(q => q.q === `// ${s}`) + 1;
-    const end   = QUESTION_BANK.findIndex(q => q.q === `// ${e}`);
-    list = QUESTION_BANK.slice(start, end)
-      .filter(q => q.opts)
-      .map(q => ({ ...q, __part: s }));
+    const[s,e]=map[selection];
+    const st=QUESTION_BANK.findIndex(q=>q.q===`// ${s}`)+1;
+    const en=QUESTION_BANK.findIndex(q=>q.q===`// ${e}`);
+    list=QUESTION_BANK.slice(st,en).filter(q=>q.opts).map(attachPartInfo);
   }
-  else {
-    const n = parseInt(selection, 10);
-    const all = getRealQuestions(QUESTION_BANK);
-    list = all.slice((n - 1) * 20, n * 20);
+  else{
+    const n=parseInt(selection,10);
+    list=getRealQuestions(QUESTION_BANK).map(attachPartInfo)
+      .slice((n-1)*20,n*20);
+    list=pickExactlyFiveValues(list);
   }
 
-  CURRENT_QUESTIONS = applyLevelMode(list);
-  userAnswers = new Array(CURRENT_QUESTIONS.length).fill(null);
-  currentIndex = 0;
+  CURRENT_QUESTIONS=applyLevelMode(list);
+  userAnswers=new Array(CURRENT_QUESTIONS.length).fill(null);
+  currentIndex=0;
 
-  vietnamEl.disabled = isPractice10(selection);
-  if (vietnamEl.disabled) vietnamEl.checked = false;
+  vietnamEl.disabled=isPractice10(selection);
+  if(vietnamEl.disabled)vietnamEl.checked=false;
 
   updateQuestionCount();
 
-  const showVi = !isPractice10(selection) && vietnamEl.checked;
+  const showVi=!isPractice10(selection)&&vietnamEl.checked;
 
-  if (!IS_ALL_MODE) {
-    quizHeaderEl.style.display = "flex";
-    progressBarEl.style.display = "flex";
-    navigationEl.style.display = "flex";
-    resetBtnEl.style.display = "none";
-    quizTitleEl.textContent = `Practice Quiz ${selection}`;
+  if(!IS_ALL_MODE){
+    quizHeaderEl.style.display="flex";
+    progressBarEl.style.display="flex";
+    navigationEl.style.display="flex";
+    resetBtnEl.style.display="none";
+    quizTitleEl.textContent=`Practice Quiz ${selection}`;
     buildProgressBar();
     startTimer();
-    renderSingleQuestion(0, showVi);
-  } else {
-    quizHeaderEl.style.display = "none";
-    progressBarEl.style.display = "none";
-    navigationEl.style.display = "none";
-    resetBtnEl.style.display = "block";
+    renderSingleQuestion(0,showVi);
+  }else{
+    quizHeaderEl.style.display="none";
+    progressBarEl.style.display="none";
+    navigationEl.style.display="none";
+    resetBtnEl.style.display="block";
     clearInterval(timerInterval);
-    timerEl.textContent = "Timer 45:00";
+    timerEl.textContent="Timer 45:00";
     renderAllQuestions(showVi);
   }
 
-  resultsEl.style.display = "none";
+  resultsEl.style.display="none";
 }
 
 // ============ EVENTS ============
-quizSelectEl.addEventListener("change", e => loadQuiz(e.target.value));
-
-basicEl.addEventListener("click", () => {
-  if (!basicEl.checked && !advanceEl.checked) {
-    basicEl.checked = true;
-    return;
-  }
-  if (basicEl.checked) advanceEl.checked = false;
-  loadQuiz(quizSelectEl.value);
-});
-
-advanceEl.addEventListener("click", () => {
-  if (!advanceEl.checked && !basicEl.checked) {
-    advanceEl.checked = true;
-    return;
-  }
-  if (advanceEl.checked) basicEl.checked = false;
-  loadQuiz(quizSelectEl.value);
-});
-
-prevBtnEl.onclick = prevQuestion;
-nextBtnEl.onclick = nextQuestion;
-resetBtnEl.onclick = () => loadQuiz(quizSelectEl.value);
-
-vietnamEl.addEventListener("change", () => {
-  if (isPractice10(quizSelectEl.value)) return;
-  rerenderVietnam();
-});
+quizSelectEl.addEventListener("change",e=>loadQuiz(e.target.value));
+prevBtnEl.onclick=()=>{if(currentIndex>0)renderSingleQuestion(--currentIndex,!isPractice10(quizSelectEl.value)&&vietnamEl.checked);};
+nextBtnEl.onclick=()=>{currentIndex<19?renderSingleQuestion(++currentIndex,!isPractice10(quizSelectEl.value)&&vietnamEl.checked):submitQuiz();};
+resetBtnEl.onclick=()=>loadQuiz(quizSelectEl.value);
 
 // ============ INIT ============
-basicEl.checked = true;
-advanceEl.checked = false;
-quizSelectEl.value = "part1";
+basicEl.checked=true;
+advanceEl.checked=false;
+quizSelectEl.value="part1";
 loadQuiz("part1");
+
 
 
     </script>
 </body>
 </html>
+
 
 
 
