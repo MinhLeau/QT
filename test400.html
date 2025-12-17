@@ -1041,15 +1041,13 @@ function isAustralianValueQuestion(q) {
 }
 
 // ---- Build Practice set: luôn 20 câu, đúng 5 values ----
-function buildPracticeSet(allWithPart, quizNumber /*1..10*/) {
-  const seedBase = 1000 + quizNumber * 999; // seed ổn định theo số quiz
+function buildPracticeSet(allWithPart, quizNumber) {
+  const seedBase = 1000 + quizNumber * 999;
   const values = allWithPart.filter(q => q.__part === "PART 4");
   const others = allWithPart.filter(q => q.__part !== "PART 4");
 
   if (values.length < 5 || others.length < 15) {
-    // Fallback: nếu dữ liệu thiếu (hiếm)
-    const mixed = seededShuffle(allWithPart, seedBase).slice(0, 20);
-    return mixed;
+    return seededShuffle(allWithPart, seedBase).slice(0, 20);
   }
 
   const pickV = seededShuffle(values, seedBase + 1).slice(0, 5);
@@ -1057,7 +1055,7 @@ function buildPracticeSet(allWithPart, quizNumber /*1..10*/) {
   return seededShuffle([...pickV, ...pickO], seedBase + 3);
 }
 
-// ---- Basic: 4 -> 3 options (remove 1 wrong) ----
+// ---- Reduce to 3 options (remove 1 wrong) ----
 function reduceToThreeOptions(q) {
   if (!q.opts || q.opts.length <= 3) return q;
 
@@ -1079,7 +1077,7 @@ function reduceToThreeOptions(q) {
   return { ...q, opts: newOpts, optsVi: newOptsVi, a: newCorrect };
 }
 
-// ---- Shuffle options, update a accordingly ----
+// ---- Shuffle options ----
 function shuffleOptions(q) {
   const idxs = q.opts.map((_, i) => i);
   for (let i = idxs.length - 1; i > 0; i--) {
@@ -1100,16 +1098,20 @@ function shuffleOptions(q) {
   return { ...q, opts: newOpts, optsVi: newOptsVi, a: newCorrect };
 }
 
+// 🔥 FIX: tất cả các mode đều chạy 3 options
 function applyLevelMode(list) {
-  let out = list;
-  if (basicEl.checked && !advanceEl.checked) out = out.map(reduceToThreeOptions);
-  return out.map(shuffleOptions);
+  return list
+    .map(reduceToThreeOptions)
+    .map(shuffleOptions);
 }
 
 function updateQuestionCount() {
   questionCountEl.textContent =
     CURRENT_QUESTIONS.length ? `(${CURRENT_QUESTIONS.length} questions)` : "";
 }
+
+
+
 
 // ============ RENDER ============
 function renderSingleQuestion(idx, showVi) {
@@ -1525,6 +1527,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
