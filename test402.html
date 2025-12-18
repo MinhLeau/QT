@@ -975,7 +975,6 @@
 
 ];
 
-
 // ============ DOM REFS (KHÔNG DÙNG BIẾN GLOBAL THEO ID) ============
 const quizSelectEl      = document.getElementById("quizSelect");
 const vietnamEl         = document.getElementById("vietnam");
@@ -1005,8 +1004,6 @@ let userAnswers = [];
 let timerInterval;
 let timeLeft = 45 * 60;
 
-
-let quizSubmitted = false; // after submit: Next becomes New Test
 // ============ HELPERS ============
 function isPractice10(sel) {
   return ["1","2","3","4","5","6","7","8","9","10"].includes(sel);
@@ -1017,21 +1014,6 @@ function getRealQuestions(list) {
 function pickHalfRandom(list) {
   const half = Math.ceil(list.length / 2);
   return [...list].sort(() => Math.random() - 0.5).slice(0, half);
-}
-
-// ---- Practice 1–10: require answer before Next/Submit ----
-function updateNextButtonState() {
-  const sel = quizSelectEl.value;
-  if (!isPractice10(sel)) {
-    nextBtnEl.disabled = false;
-    return;
-  }
-  if (quizSubmitted) {
-    nextBtnEl.disabled = false;
-    return;
-  }
-  const answered = userAnswers[currentIndex] !== null && userAnswers[currentIndex] !== undefined;
-  nextBtnEl.disabled = !answered;
 }
 
 // ---- Seeded RNG để Practice 1–10 ổn định theo số quiz ----
@@ -1177,8 +1159,6 @@ function renderSingleQuestion(idx, showVi) {
   prevBtnEl.disabled = idx === 0;
   nextBtnEl.textContent = (idx === 19) ? "Submit" : "Next";
   updateProgress();
-
-  updateNextButtonState();
 }
 
 function renderAllQuestions(showVi) {
@@ -1240,7 +1220,7 @@ function startTimer() {
 }
 
 // ============ ANSWER ============
-function saveAnswer(i, v) { userAnswers[i] = v; updateNextButtonState(); }
+function saveAnswer(i, v) { userAnswers[i] = v; }
 function checkAnswerInstant(i, v) {
   const c = CURRENT_QUESTIONS[i].a;
   document.getElementById(`q${i}o${v}_lbl`).classList.add(v===c ? "correct":"wrong");
@@ -1251,18 +1231,6 @@ function checkAnswerInstant(i, v) {
 function nextQuestion() {
   const sel = quizSelectEl.value;
   const showVi = !isPractice10(sel) && vietnamEl.checked;
-
-  // After submit in Practice 1–10: Next button becomes "New Test"
-  if (quizSubmitted && isPractice10(sel)) {
-    window.location.href = "test402.html";
-    return;
-  }
-
-  // Practice 1–10: must answer before Next/Submit
-  if (isPractice10(sel) && (userAnswers[currentIndex] === null || userAnswers[currentIndex] === undefined)) {
-    return;
-  }
-
   if (currentIndex < 19) {
     currentIndex++;
     renderSingleQuestion(currentIndex, showVi);
@@ -1282,8 +1250,8 @@ function prevQuestion() {
 // ============ SUBMIT ============
 function submitQuiz() {
   clearInterval(timerInterval);
-  quizSubmitted = true;
-let score = 0;
+
+  let score = 0;
   const wrong = [];
   let wrongValueCount = 0;
 
@@ -1417,39 +1385,9 @@ let score = 0;
   });
 }
 
-  // ===== UI after Submit (Practice 1–10) =====
-  if (isPractice10(quizSelectEl.value)) {
-    // Change Next -> New Test
-    nextBtnEl.textContent = "New Test";
-    nextBtnEl.disabled = false;
-
-    // Insert FINISH label between Prev and New Test (once)
-    let finishEl = document.getElementById("finishLabel");
-    if (!finishEl) {
-      finishEl = document.createElement("div");
-      finishEl.id = "finishLabel";
-      finishEl.textContent = "Finish";
-      finishEl.style.color = "red";
-      finishEl.style.fontWeight = "bold";
-      finishEl.style.fontSize = "20px";
-      finishEl.style.flex = "1";
-      finishEl.style.textAlign = "center";
-      finishEl.style.userSelect = "none";
-      // make sure nav is flex
-      navigationEl.style.alignItems = "center";
-      // Put it right before next button
-      navigationEl.insertBefore(finishEl, nextBtnEl);
-    } else {
-      finishEl.style.display = "";
-    }
-  }
-
-}
-
 
 // ============ LOAD QUIZ ============
 function loadQuiz(selection) {
-  quizSubmitted = false;
   let list = [];
   IS_ALL_MODE = false;
 
@@ -1515,8 +1453,7 @@ function loadQuiz(selection) {
     buildProgressBar();
     startTimer();
     renderSingleQuestion(0, showVi);
-  
-    updateNextButtonState();} else {
+  } else {
     quizHeaderEl.style.display = "none";
     progressBarEl.style.display = "none";
     navigationEl.style.display = "none";
@@ -1527,9 +1464,6 @@ function loadQuiz(selection) {
   }
 
   resultsEl.style.display = "none";
-}
-  const finishEl = document.getElementById('finishLabel');
-  if (finishEl) finishEl.style.display = 'none';
 }
 
 // ============ EVENTS ============
@@ -1574,8 +1508,11 @@ basicEl.checked = true;
 advanceEl.checked = false;
 quizSelectEl.value = "part1";
 loadQuiz("part1");
-</script>
 
+
+
+
+    </script>
 
 <script>
     function showNotePopup() {
@@ -1608,89 +1545,6 @@ loadQuiz("part1");
 	
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
