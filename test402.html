@@ -1320,7 +1320,8 @@ function submitQuiz() {
   }
 
   // chèn ngay dưới dòng Điểm
-  document.getElementById("score").insertAdjacentHTML("afterend", resultHtml);
+  document.getElementById("score")
+    .insertAdjacentHTML("afterend", resultHtml);
 
   // ===== DANH SÁCH SAI (NGẮN) =====
   const wrongList = document.getElementById("wrongList");
@@ -1330,7 +1331,7 @@ function submitQuiz() {
       const q = CURRENT_QUESTIONS[i];
       const li = document.createElement("li");
       li.innerHTML = `
-        ${i+1}. ${q.q}
+        ${i + 1}. ${q.q}
         ${isAustralianValueQuestion(q)
           ? '<span style="color:#dc3545;font-weight:bold;"> ⚠️ Australian values</span>'
           : ''}`;
@@ -1340,58 +1341,67 @@ function submitQuiz() {
 
   // ===== CHI TIẾT (Practice 1–10) =====
   const wrongBox = document.getElementById("wrongDetails");
-  if (!wrongBox || !isPractice10(quizSelectEl.value)) return;
+  if (wrongBox && isPractice10(quizSelectEl.value)) {
+    wrongBox.innerHTML = "";
 
-  wrongBox.innerHTML = "";
+    if (wrong.length === 0) {
+      wrongBox.innerHTML = `
+        <div style="color:#0a7d00;font-weight:bold;margin-top:15px;">
+          🎉 Không sai câu nào!
+        </div>`;
+    } else {
+      wrong.forEach(i => {
+        const q = CURRENT_QUESTIONS[i];
+        const picked = userAnswers[i];
+        const correct = q.a;
+        const isValue = isAustralianValueQuestion(q);
 
-  if (wrong.length === 0) {
-    wrongBox.innerHTML = `
-      <div style="color:#0a7d00;font-weight:bold;margin-top:15px;">
-        🎉 Không sai câu nào!
-      </div>`;
-    return;
+        let html = `
+          <div style="
+            border:3px solid ${isValue ? "#dc3545" : "#999"};
+            background:${isValue ? "#fff3f3" : "#f9f9f9"};
+            padding:15px;
+            border-radius:12px;
+            margin:20px 0;">
+            <strong>${i + 1}. ${q.q}</strong>
+            ${isValue
+              ? `<div style="color:#dc3545;font-weight:bold;margin-top:6px;">
+                   ⚠️ Australian values – BẮT BUỘC PHẢI ĐÚNG
+                 </div>`
+              : ""}
+            <ul style="margin-top:10px;">`;
+
+        q.opts.forEach((opt, idx) => {
+          let txt = opt;
+          if (vietnamEl.checked && q.optsVi && q.optsVi[idx]) {
+            txt += ` <i style="color:#0066cc;">[${q.optsVi[idx]}]</i>`;
+          }
+
+          if (idx === correct) {
+            txt = `✅ <b>${txt}</b> (Đáp án đúng)`;
+          } else if (idx === picked) {
+            txt = `❌ <b>${txt}</b> (Bạn chọn)`;
+          }
+
+          html += `<li>${txt}</li>`;
+        });
+
+        html += `</ul></div>`;
+        wrongBox.innerHTML += html;
+      });
+    }
   }
 
-  wrong.forEach(i => {
-    const q = CURRENT_QUESTIONS[i];
-    const picked = userAnswers[i];
-    const correct = q.a;
-    const isValue = isAustralianValueQuestion(q);
+  // ===== SUBMIT -> FINISH =====
+  nextBtnEl.textContent = "Finish";
+  nextBtnEl.style.background = "#dc3545";
+  nextBtnEl.style.color = "#fff";
 
-    let html = `
-      <div style="
-        border:3px solid ${isValue ? "#dc3545" : "#999"};
-        background:${isValue ? "#fff3f3" : "#f9f9f9"};
-        padding:15px;
-        border-radius:12px;
-        margin:20px 0;">
-        <strong>${i+1}. ${q.q}</strong>
-        ${isValue
-          ? `<div style="color:#dc3545;font-weight:bold;margin-top:6px;">
-               ⚠️ Australian values – BẮT BUỘC PHẢI ĐÚNG
-             </div>`
-          : ""}
-        <ul style="margin-top:10px;">`;
-
-    q.opts.forEach((opt, idx) => {
-      let txt = opt;
-      if (vietnamEl.checked && q.optsVi && q.optsVi[idx]) {
-        txt += ` <i style="color:#0066cc;">[${q.optsVi[idx]}]</i>`;
-      }
-
-      if (idx === correct) {
-        txt = `✅ <b>${txt}</b> (Đáp án đúng)`;
-      } else if (idx === picked) {
-        txt = `❌ <b>${txt}</b> (Bạn chọn)`;
-      }
-
-      html += `<li>${txt}</li>`;
-    });
-
-    html += `</ul></div>`;
-    wrongBox.innerHTML += html;
-  });
+  nextBtnEl.onclick = () => {
+    window.location.href = "test402.html";
+  };
 }
+
 
 
 // ============ LOAD QUIZ ============
@@ -1553,6 +1563,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
