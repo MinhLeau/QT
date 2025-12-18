@@ -1231,6 +1231,13 @@ function checkAnswerInstant(i, v) {
 function nextQuestion() {
   const sel = quizSelectEl.value;
   const showVi = !isPractice10(sel) && vietnamEl.checked;
+
+  // 🔒 Practice Quiz 1–10: bắt buộc trả lời
+  if (isPractice10(sel) && userAnswers[currentIndex] === null) {
+    alert("⚠️ Bạn phải chọn đáp án trước khi sang câu tiếp theo.");
+    return;
+  }
+
   if (currentIndex < 19) {
     currentIndex++;
     renderSingleQuestion(currentIndex, showVi);
@@ -1238,6 +1245,7 @@ function nextQuestion() {
     submitQuiz();
   }
 }
+
 function prevQuestion() {
   const sel = quizSelectEl.value;
   const showVi = !isPractice10(sel) && vietnamEl.checked;
@@ -1545,6 +1553,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
