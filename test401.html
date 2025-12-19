@@ -1795,6 +1795,12 @@ function loadQuiz(selection) {
     if (!basicEl.checked && !advanceEl.checked) basicEl.checked = true;
   }
 
+	  if (isPractice10(selection)) {
+    topBtnEl.style.display = "none";
+  } else {
+    topBtnEl.style.display = "inline-flex";
+  }
+	
   const allWithPart = getRealQuestions(QUESTION_BANK).map(attachPartInfo);
 
   if (selection === "all") {
@@ -1960,6 +1966,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
