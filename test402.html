@@ -1254,7 +1254,7 @@ function updateQuestionCount() {
   if (["all","part1","part2","part3","part4"].includes(sel)) {
     const total = ALL_FULL_QUESTIONS.length || CURRENT_QUESTIONS.length;
     questionCountEl.textContent = total
-      ? `(Total: ${total} Questions)`
+      ? `(${total} Questions)`
       : "";
     return;
   }
@@ -1718,6 +1718,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
