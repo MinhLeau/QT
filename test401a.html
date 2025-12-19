@@ -1356,13 +1356,40 @@
 ];
 
 		
-		// ============ GLOBAL STATE ============
+// ============ DOM REFS (KHÔNG DÙNG BIẾN GLOBAL THEO ID) ============
+const quizSelectEl      = document.getElementById("quizSelect");
+const vietnamEl         = document.getElementById("vietnam");
+const basicEl           = document.getElementById("basic");
+const advanceEl         = document.getElementById("advance");
+const questionCountEl   = document.getElementById("questionCount");
+
+const quizHeaderEl      = document.getElementById("quizHeader");
+const progressBarEl     = document.getElementById("progressBar");
+const questionsEl       = document.getElementById("questions");
+const navigationEl      = document.getElementById("navigation");
+const resetBtnEl        = document.getElementById("resetBtn");
+const resultsEl         = document.getElementById("results");
+
+const prevBtnEl         = document.getElementById("prevBtn");
+const nextBtnEl         = document.getElementById("nextBtn");
+const timerEl           = document.getElementById("timer");
+const currentQuestionEl = document.getElementById("currentQuestion");
+const quizTitleEl       = document.getElementById("quizTitle");
+
+
+// ============ GLOBAL STATE ============
 let CURRENT_QUESTIONS = [];
 let IS_ALL_MODE = false;
 let currentIndex = 0;
 let userAnswers = [];
 let timerInterval;
 let timeLeft = 45 * 60;
+
+// ---- Paging cho Practice Quiz All ----
+const ALL_PAGE_SIZE = 100;
+let ALL_FULL_QUESTIONS = [];
+let ALL_LOADED_COUNT = 0;
+
 
 // ============ HELPERS ============
 function isPractice10(sel) {
@@ -1395,7 +1422,7 @@ function seededShuffle(arr, seed) {
   return a;
 }
 
-// ---- Attach PART info (để nhận biết Australian values) ----
+// ---- Attach PART info ----
 function attachPartInfo(q) {
   const idx = QUESTION_BANK.indexOf(q);
 
@@ -1418,7 +1445,7 @@ function isAustralianValueQuestion(q) {
   return q.__part === "PART 4" || q.isValue === true;
 }
 
-// ---- Build Practice set: luôn 20 câu, đúng 5 values ----
+// ---- Build Practice set: 20 câu, đúng 5 values ----
 function buildPracticeSet(allWithPart, quizNumber) {
   const seedBase = 1000 + quizNumber * 999;
   const values = allWithPart.filter(q => q.__part === "PART 4");
@@ -1433,7 +1460,7 @@ function buildPracticeSet(allWithPart, quizNumber) {
   return seededShuffle([...pickV, ...pickO], seedBase + 3);
 }
 
-// ---- Reduce to 3 options (remove 1 wrong) ----
+// ---- Reduce to 3 options ----
 function reduceToThreeOptions(q) {
   if (!q.opts || q.opts.length <= 3) return q;
 
@@ -1478,17 +1505,18 @@ function shuffleOptions(q) {
 
 // 🔥 FIX: tất cả các mode đều chạy 3 options
 function applyLevelMode(list) {
-  return list
-    .map(reduceToThreeOptions)
-    .map(shuffleOptions);
+  return list.map(reduceToThreeOptions).map(shuffleOptions);
 }
 
 function updateQuestionCount() {
-  questionCountEl.textContent =
-    CURRENT_QUESTIONS.length ? `(${CURRENT_QUESTIONS.length} Questions)` : "";
+  if (IS_ALL_MODE && quizSelectEl.value === "all") {
+    questionCountEl.textContent =
+      `(Loaded ${CURRENT_QUESTIONS.length}/${ALL_FULL_QUESTIONS.length} Questions)`;
+  } else {
+    questionCountEl.textContent =
+      CURRENT_QUESTIONS.length ? `(${CURRENT_QUESTIONS.length} Questions)` : "";
+  }
 }
-
-
 
 
 // ============ RENDER ============
@@ -1541,227 +1569,78 @@ function renderAllQuestions(showVi) {
   });
 }
 
-// Vietnam toggle re-render
-function rerenderVietnam() {
-  const sel = quizSelectEl.value;
-  const showVi = !isPractice10(sel) && vietnamEl.checked;
-  if (IS_ALL_MODE) renderAllQuestions(showVi);
-  else renderSingleQuestion(currentIndex, showVi);
-}
 
-// ============ PROGRESS / TIMER ============
-function buildProgressBar() {
-  progressBarEl.innerHTML = "";
-  for (let i = 1; i <= 20; i++) {
-    const d = document.createElement("div");
-    d.className = "progress-item";
-    d.textContent = i;
-    progressBarEl.appendChild(d);
-  }
-  updateProgress();
-}
-function updateProgress() {
-  document.querySelectorAll(".progress-item").forEach((el, i) => {
-    el.classList.toggle("current", i === currentIndex);
-  });
-  currentQuestionEl.textContent = `${currentIndex+1}/20`;
-}
-function startTimer() {
-  clearInterval(timerInterval);
-  timeLeft = 45 * 60;
-  timerEl.textContent = "Timer 45:00";
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    const m = String(Math.floor(timeLeft/60)).padStart(2,"0");
-    const s = String(timeLeft%60).padStart(2,"0");
-    timerEl.textContent = `Timer ${m}:${s}`;
-    if (timeLeft <= 0) submitQuiz();
-  }, 1000);
-}
+// ===== Append thêm 100 câu cho Practice Quiz All =====
+function ensureMoreBtn(showVi) {
+  let btn = document.getElementById("more100Btn");
 
-// ============ ANSWER ============
-function saveAnswer(i, v) { userAnswers[i] = v; }
-function checkAnswerInstant(i, v) {
-  const c = CURRENT_QUESTIONS[i].a;
-  document.getElementById(`q${i}o${v}_lbl`).classList.add(v===c ? "correct":"wrong");
-  if (v !== c) document.getElementById(`q${i}o${c}_lbl`).classList.add("correct");
-}
-
-// ============ NAV ============
-function nextQuestion() {
-  const sel = quizSelectEl.value;
-  const showVi = !isPractice10(sel) && vietnamEl.checked;
-
-  // 🔒 Practice Quiz 1–10: bắt buộc trả lời
-  if (isPractice10(sel) && userAnswers[currentIndex] === null) {
-    alert("⚠️ Bạn phải chọn đáp án trước khi sang câu tiếp theo.");
+  if (!IS_ALL_MODE || quizSelectEl.value !== "all") {
+    if (btn) btn.remove();
     return;
   }
 
-  if (currentIndex < 19) {
-    currentIndex++;
-    renderSingleQuestion(currentIndex, showVi);
-  } else {
-    submitQuiz();
+  if (ALL_LOADED_COUNT >= ALL_FULL_QUESTIONS.length) {
+    if (btn) btn.remove();
+    return;
+  }
+
+  if (!btn) {
+    btn = document.createElement("button");
+    btn.id = "more100Btn";
+    btn.textContent = "More 100 Questions";
+    btn.style.cssText = `
+      display:block;
+      margin:30px auto;
+      padding:14px 36px;
+      font-size:18px;
+      font-weight:bold;
+      background:#ff9800;
+      color:white;
+      border:none;
+      border-radius:12px;
+      cursor:pointer;
+    `;
+    btn.onclick = () => loadMoreAllQuestions(showVi);
+    questionsEl.insertAdjacentElement("afterend", btn);
   }
 }
 
-function prevQuestion() {
-  const sel = quizSelectEl.value;
-  const showVi = !isPractice10(sel) && vietnamEl.checked;
-  if (currentIndex > 0) {
-    currentIndex--;
-    renderSingleQuestion(currentIndex, showVi);
-  }
-}
+function loadMoreAllQuestions(showVi) {
+  const next = ALL_FULL_QUESTIONS.slice(
+    ALL_LOADED_COUNT,
+    ALL_LOADED_COUNT + ALL_PAGE_SIZE
+  );
 
-// ============ SUBMIT ============
-function submitQuiz() {
-  clearInterval(timerInterval);
+  if (!next.length) return;
 
-  let score = 0;
-  const wrong = [];
-  let wrongValueCount = 0;
+  const start = CURRENT_QUESTIONS.length;
+  CURRENT_QUESTIONS = CURRENT_QUESTIONS.concat(next);
+  ALL_LOADED_COUNT = CURRENT_QUESTIONS.length;
 
-  CURRENT_QUESTIONS.forEach((q, i) => {
-    if (userAnswers[i] === q.a) {
-      score++;
-    } else {
-      wrong.push(i);
-      if (isAustralianValueQuestion(q)) {
-        wrongValueCount++;
-      }
-    }
-  });
+  userAnswers = userAnswers.concat(new Array(next.length).fill(null));
 
-  resultsEl.style.display = "block";
+  // append HTML mới (không render lại toàn bộ)
+  for (let i = start; i < CURRENT_QUESTIONS.length; i++) {
+    const q = CURRENT_QUESTIONS[i];
+    let html = `<div style="margin:35px 0;"><strong>${i+1}. ${q.q}`;
+    if (showVi && q.qVi) html += ` <i style="color:#0066cc;">[${q.qVi}]</i>`;
+    html += `</strong><div style="margin-top:18px;">`;
 
-  // ===== SCORE =====
-  document.getElementById("score").textContent =
-    `Điểm: ${score}/${CURRENT_QUESTIONS.length}`;
-
-  // ===== PASS / FAIL LOGIC =====
-  let pass = true;
-  let failReasons = [];
-
-  if (wrongValueCount > 0) {
-    pass = false;
-    failReasons.push("❌ Trả lời sai câu hỏi thuộc Australian values");
-  }
-
-  if (score < 15) {
-    pass = false;
-    failReasons.push("❌ Tổng số câu trả lời đúng dưới 15 câu");
-  }
-
-  // ===== RESULT LINE =====
-  let resultHtml = "";
-  if (pass) {
-    resultHtml = `
-      <div style="
-        margin-top:10px;
-        font-size:22px;
-        font-weight:bold;
-        color:#0a7d00;">
-        ✅ Kết quả: ĐẬU
-      </div>`;
-  } else {
-    resultHtml = `
-      <div style="
-        margin-top:10px;
-        font-size:22px;
-        font-weight:bold;
-        color:#dc3545;">
-        ❌ Kết quả: RỚT
-      </div>
-      <ul style="margin-top:8px;color:#dc3545;font-weight:bold;">
-        ${failReasons.map(r => `<li>${r}</li>`).join("")}
-      </ul>`;
-  }
-
-  // chèn ngay dưới dòng Điểm
-  document.getElementById("score")
-    .insertAdjacentHTML("afterend", resultHtml);
-
-  // ===== DANH SÁCH SAI (NGẮN) =====
-  const wrongList = document.getElementById("wrongList");
-  if (wrongList) {
-    wrongList.innerHTML = "";
-    wrong.forEach(i => {
-      const q = CURRENT_QUESTIONS[i];
-      const li = document.createElement("li");
-      li.innerHTML = `
-        ${i + 1}. ${q.q}
-        ${isAustralianValueQuestion(q)
-          ? '<span style="color:#dc3545;font-weight:bold;"> ⚠️ Australian values</span>'
-          : ''}`;
-      wrongList.appendChild(li);
+    q.opts.forEach((opt, j) => {
+      let txt = opt;
+      if (showVi && q.optsVi && q.optsVi[j]) txt += ` <i style="color:#0066cc;">[${q.optsVi[j]}]</i>`;
+      html += `<label class="opt" id="q${i}o${j}_lbl">
+        <input type="radio" name="q${i}" onchange="checkAnswerInstant(${i},${j})">${txt}
+      </label>`;
     });
+
+    html += `</div></div>`;
+    questionsEl.insertAdjacentHTML("beforeend", html);
   }
 
-  // ===== CHI TIẾT (Practice 1–10) =====
-  const wrongBox = document.getElementById("wrongDetails");
-  if (wrongBox && isPractice10(quizSelectEl.value)) {
-    wrongBox.innerHTML = "";
-
-    if (wrong.length === 0) {
-      wrongBox.innerHTML = `
-        <div style="color:#0a7d00;font-weight:bold;margin-top:15px;">
-          🎉 Không sai câu nào!
-        </div>`;
-    } else {
-      wrong.forEach(i => {
-        const q = CURRENT_QUESTIONS[i];
-        const picked = userAnswers[i];
-        const correct = q.a;
-        const isValue = isAustralianValueQuestion(q);
-
-        let html = `
-          <div style="
-            border:3px solid ${isValue ? "#dc3545" : "#999"};
-            background:${isValue ? "#fff3f3" : "#f9f9f9"};
-            padding:15px;
-            border-radius:12px;
-            margin:20px 0;">
-            <strong>${i + 1}. ${q.q}</strong>
-            ${isValue
-              ? `<div style="color:#dc3545;font-weight:bold;margin-top:6px;">
-                   ⚠️ Australian values – BẮT BUỘC PHẢI ĐÚNG
-                 </div>`
-              : ""}
-            <ul style="margin-top:10px;">`;
-
-        q.opts.forEach((opt, idx) => {
-          let txt = opt;
-          if (vietnamEl.checked && q.optsVi && q.optsVi[idx]) {
-            txt += ` <i style="color:#0066cc;">[${q.optsVi[idx]}]</i>`;
-          }
-
-          if (idx === correct) {
-            txt = `✅ <b>${txt}</b> (Đáp án đúng)`;
-          } else if (idx === picked) {
-            txt = `❌ <b>${txt}</b> (Bạn chọn)`;
-          }
-
-          html += `<li>${txt}</li>`;
-        });
-
-        html += `</ul></div>`;
-        wrongBox.innerHTML += html;
-      });
-    }
-  }
-
-  // ===== SUBMIT -> FINISH =====
-  nextBtnEl.textContent = "Finish";
-  nextBtnEl.style.background = "#dc3545";
-  nextBtnEl.style.color = "#fff";
-
-  nextBtnEl.onclick = () => {
-    window.location.href = "test401.html";
-  };
+  updateQuestionCount();
+  ensureMoreBtn(showVi);
 }
-
 
 
 // ============ LOAD QUIZ ============
@@ -1787,7 +1666,32 @@ function loadQuiz(selection) {
     IS_ALL_MODE = true;
     list = allWithPart;
     if (basicEl.checked && !advanceEl.checked) list = pickHalfRandom(list);
+
+    ALL_FULL_QUESTIONS = applyLevelMode(list);
+    ALL_LOADED_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
+    CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_LOADED_COUNT);
+
+    userAnswers = new Array(CURRENT_QUESTIONS.length).fill(null);
+    currentIndex = 0;
+
+    updateQuestionCount();
+    const showVi = vietnamEl.checked;
+
+    quizHeaderEl.style.display = "none";
+    progressBarEl.style.display = "none";
+    navigationEl.style.display = "none";
+    resetBtnEl.style.display = "block";
+    clearInterval(timerInterval);
+    timerEl.textContent = "Timer 45:00";
+
+    renderAllQuestions(showVi);
+    ensureMoreBtn(showVi);
+
+    resultsEl.style.display = "none";
+    return;
   }
+
+  // ---- Part / Practice 1–10 giữ nguyên ----
   else if (["part1","part2","part3","part4"].includes(selection)) {
     IS_ALL_MODE = true;
     const map = {
@@ -1801,25 +1705,16 @@ function loadQuiz(selection) {
     const end   = QUESTION_BANK.findIndex(q => q.q === `// ${e}`);
     list = getRealQuestions(QUESTION_BANK.slice(start, end)).map(attachPartInfo);
     if (basicEl.checked && !advanceEl.checked) list = pickHalfRandom(list);
-  }
-  else {
-    // Practice 1–10: build 20 câu, đúng 5 values
+  } else {
     const n = parseInt(selection, 10);
-    list = buildPracticeSet(allWithPart, n); // luôn 20 câu
+    list = buildPracticeSet(allWithPart, n);
   }
 
-  // Apply Basic/Advance option count + shuffle options
   CURRENT_QUESTIONS = applyLevelMode(list);
-
   userAnswers = new Array(CURRENT_QUESTIONS.length).fill(null);
   currentIndex = 0;
 
-  // Vietnam checkbox
-  vietnamEl.disabled = isPractice10(selection);
-  if (vietnamEl.disabled) vietnamEl.checked = false;
-
   updateQuestionCount();
-
   const showVi = !isPractice10(selection) && vietnamEl.checked;
 
   if (!IS_ALL_MODE) {
@@ -1844,20 +1739,22 @@ function loadQuiz(selection) {
   resultsEl.style.display = "none";
 }
 
-// ============ EVENTS ============
 
-// Quiz select
+// ============ EVENTS ============
 quizSelectEl.addEventListener("change", e => loadQuiz(e.target.value));
 
-// Vietnam toggle
 vietnamEl.addEventListener("change", () => {
   if (isPractice10(quizSelectEl.value)) return;
-  rerenderVietnam();
+  const showVi = vietnamEl.checked;
+  if (IS_ALL_MODE) {
+    renderAllQuestions(showVi);
+    ensureMoreBtn(showVi);
+  } else {
+    renderSingleQuestion(currentIndex, showVi);
+  }
 });
 
-// Basic/Advance: luôn có 1 cái được chọn
 basicEl.addEventListener("click", () => {
-  // nếu cố bỏ cả 2 -> giữ Basic
   if (!basicEl.checked && !advanceEl.checked) {
     basicEl.checked = true;
     return;
@@ -1867,7 +1764,6 @@ basicEl.addEventListener("click", () => {
 });
 
 advanceEl.addEventListener("click", () => {
-  // nếu cố bỏ cả 2 -> giữ Advance
   if (!advanceEl.checked && !basicEl.checked) {
     advanceEl.checked = true;
     return;
@@ -1876,10 +1772,10 @@ advanceEl.addEventListener("click", () => {
   loadQuiz(quizSelectEl.value);
 });
 
-// Nav
 prevBtnEl.onclick = prevQuestion;
 nextBtnEl.onclick = nextQuestion;
 resetBtnEl.onclick = () => loadQuiz(quizSelectEl.value);
+
 
 // ============ INIT ============
 basicEl.checked = true;
@@ -1887,7 +1783,8 @@ advanceEl.checked = false;
 quizSelectEl.value = "part1";
 loadQuiz("part1");
 
-    </script>
+
+    
 
 		
 
@@ -1924,6 +1821,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
