@@ -1406,7 +1406,7 @@ let timerInterval;
 let timeLeft = 45 * 60;
 
 // ===== NEW: Pagination for "Practice Quiz All" =====
-const ALL_PAGE_SIZE = 100;
+const ALL_PAGE_SIZE = 50;
 let ALL_FULL_QUESTIONS = [];   // full list after applyLevelMode
 let ALL_SHOWN_COUNT = 0;       // currently rendered count
 
@@ -1416,7 +1416,7 @@ function ensureMoreAllBtn() {
 
   moreAllBtnEl = document.createElement("button");
   moreAllBtnEl.id = "moreAllBtn";
-  moreAllBtnEl.textContent = "More 100 Question";
+  moreAllBtnEl.textContent = "More Question";
   moreAllBtnEl.style.padding = "14px 30px";
   moreAllBtnEl.style.fontSize = "18px";
   moreAllBtnEl.style.background = "#006400";
@@ -2029,6 +2029,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
