@@ -1076,6 +1076,7 @@ const progressBarEl     = document.getElementById("progressBar");
 const questionsEl       = document.getElementById("questions");
 const navigationEl      = document.getElementById("navigation");
 const resetBtnEl        = document.getElementById("resetBtn");
+const topBtnEl 			= document.getElementById("topBtn");
 const resultsEl         = document.getElementById("results");
 
 const prevBtnEl         = document.getElementById("prevBtn");
@@ -1590,6 +1591,12 @@ function loadQuiz(selection) {
     if (!basicEl.checked && !advanceEl.checked) basicEl.checked = true;
   }
 
+  if (isPractice10(selection)) {
+    topBtnEl.style.display = "none";
+  } else {
+    topBtnEl.style.display = "inline-flex";
+  }
+	
   const allWithPart = getRealQuestions(QUESTION_BANK).map(attachPartInfo);
 
   if (selection === "all") {
@@ -1707,7 +1714,7 @@ prevBtnEl.onclick = prevQuestion;
 nextBtnEl.onclick = nextQuestion;
 resetBtnEl.onclick = () => loadQuiz(quizSelectEl.value);
 
-const topBtnEl = document.getElementById("topBtn");
+
 
 topBtnEl.onclick = () => {
   window.scrollTo({
@@ -1755,6 +1762,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
