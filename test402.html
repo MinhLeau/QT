@@ -221,6 +221,14 @@
     background: #084298;
 }
 
+		#basic,
+#advance,
+label:has(#basic),
+label:has(#advance) {
+    display: none !important;
+}
+
+
 
         select {
             -webkit-appearance: none;
@@ -1579,65 +1587,57 @@ function loadQuiz(selection) {
   ALL_SHOWN_COUNT = 0;
   ensureMoreAllBtn().style.display = "none";
 
-  // Force Advance for Practice 1–10
-  if (isPractice10(selection)) {
-    advanceEl.checked = true;
-    basicEl.checked = false;
-    basicEl.style.display = "none";
-    advanceEl.disabled = true;
-  } else {
-    basicEl.style.display = "";
-    advanceEl.disabled = false;
-    if (!basicEl.checked && !advanceEl.checked) basicEl.checked = true;
-  }
+  // 🔒 FORCE ADVANCE FOR ALL MODES (hide Basic / Advance)
+  advanceEl.checked = true;
+  basicEl.checked = false;
+  basicEl.style.display = "none";
+  advanceEl.style.display = "none";
+  advanceEl.disabled = true;
+  basicEl.disabled = true;
 
+  // Top button
   if (isPractice10(selection)) {
     topBtnEl.style.display = "none";
   } else {
     topBtnEl.style.display = "inline-flex";
   }
-	
+
   const allWithPart = getRealQuestions(QUESTION_BANK).map(attachPartInfo);
 
   if (selection === "all") {
     IS_ALL_MODE = true;
     list = allWithPart;
-    if (basicEl.checked && !advanceEl.checked) list = pickHalfRandom(list);
 
-    // ✅ NEW: applyLevelMode on full list, but only render first 50
+    // ✅ always full list (Advance behaviour)
     ALL_FULL_QUESTIONS = applyLevelMode(list);
     ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
     CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
   }
   else if (["part1","part2","part3","part4"].includes(selection)) {
-  IS_ALL_MODE = true;
+    IS_ALL_MODE = true;
 
-  const map = {
-    part1:["PART 1","END PART 1"],
-    part2:["PART 2","END PART 2"],
-    part3:["PART 3","END PART 3"],
-    part4:["PART 4","END PART 4"]
-  };
+    const map = {
+      part1:["PART 1","END PART 1"],
+      part2:["PART 2","END PART 2"],
+      part3:["PART 3","END PART 3"],
+      part4:["PART 4","END PART 4"]
+    };
 
-  const [s, e] = map[selection];
-  const start = QUESTION_BANK.findIndex(q => q.q === `// ${s}`) + 1;
-  const end   = QUESTION_BANK.findIndex(q => q.q === `// ${e}`);
+    const [s, e] = map[selection];
+    const start = QUESTION_BANK.findIndex(q => q.q === `// ${s}`) + 1;
+    const end   = QUESTION_BANK.findIndex(q => q.q === `// ${e}`);
 
-  list = getRealQuestions(QUESTION_BANK.slice(start, end)).map(attachPartInfo);
-  if (basicEl.checked && !advanceEl.checked) list = pickHalfRandom(list);
+    list = getRealQuestions(QUESTION_BANK.slice(start, end)).map(attachPartInfo);
 
-  // ✅ APPLY LEVEL MODE TO FULL LIST
-  ALL_FULL_QUESTIONS = applyLevelMode(list);
-
-  // ✅ CHỈ LOAD 50 CÂU ĐẦU
-  ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
-  CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
-}
-
+    // ✅ always full list (Advance behaviour)
+    ALL_FULL_QUESTIONS = applyLevelMode(list);
+    ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
+    CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
+  }
   else {
     // Practice 1–10: build 20 câu, đúng 5 values
     const n = parseInt(selection, 10);
-    list = buildPracticeSet(allWithPart, n); // luôn 20 câu
+    list = buildPracticeSet(allWithPart, n);
     CURRENT_QUESTIONS = applyLevelMode(list);
   }
 
@@ -1669,13 +1669,13 @@ function loadQuiz(selection) {
     clearInterval(timerInterval);
     timerEl.textContent = "Timer 45:00";
 
-    // ✅ render all-mode list (already paged for selection === "all")
     renderAllQuestions(showVi);
     updateMoreAllBtn(showVi);
   }
 
   resultsEl.style.display = "none";
 }
+
 
 // ============ EVENTS ============
 
@@ -1725,8 +1725,11 @@ topBtnEl.onclick = () => {
 
 		
 // ============ INIT ============
-basicEl.checked = true;
-advanceEl.checked = false;
+//basicEl.checked = true;
+//advanceEl.checked = false;
+basicEl.checked = false;
+advanceEl.checked = true;
+		
 quizSelectEl.value = "part1";
 loadQuiz("part1");
 </script>
@@ -1762,20 +1765,6 @@ loadQuiz("part1");
 	
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
