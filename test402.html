@@ -192,16 +192,35 @@
             text-align: center;
         }
         #score { font-size: 28px; font-weight: bold; color: #006400; margin-bottom: 15px; }
-        #resetBtn {
-            padding: 14px 30px;
-            font-size: 18px;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
+#resetBtn,
+#topBtn {
+    padding: 14px 30px;        /* 👈 QUAN TRỌNG */
+    font-size: 18px;
+    height: 52px;              /* 👈 ÉP cùng chiều cao */
+    line-height: 24px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Giữ màu riêng */
+#resetBtn {
+    background: #dc3545;
+    color: #fff;
+}
+
+#topBtn {
+    background: #0b5ed7;
+    color: #fff;
+}
+
+#topBtn:hover {
+    background: #084298;
+}
+
 
         select {
             -webkit-appearance: none;
@@ -359,18 +378,7 @@
             pointer-events: none;
         }
 
-#topBtn {
-    padding: 14px 30px;
-    font-size: 18px;
-    background: #0b5ed7;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-}
-#topBtn:hover {
-    background: #084298;
-}
+
 
 		
     </style>
@@ -1747,6 +1755,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
