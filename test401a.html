@@ -1911,34 +1911,7 @@ function loadMoreQuestions() {
 }
 
 		
-function renderMoreButton() {
-  let btn = document.getElementById("moreBtn");
 
-  if (loadedCount >= allQuestions.length) {
-    if (btn) btn.remove();
-    return;
-  }
-
-  if (!btn) {
-    btn = document.createElement("button");
-    btn.id = "moreBtn";
-    btn.textContent = "More 100 Questions";
-    btn.style.cssText = `
-      display:block;
-      margin:40px auto;
-      padding:16px 40px;
-      font-size:20px;
-      font-weight:bold;
-      background:#ff9800;
-      color:white;
-      border:none;
-      border-radius:14px;
-      cursor:pointer;
-    `;
-    btn.onclick = loadNextBatch;
-    document.body.appendChild(btn);
-  }
-}
 
 
 		
@@ -1981,6 +1954,37 @@ advanceEl.checked = false;
 quizSelectEl.value = "part1";
 loadQuiz("part1");
 
+function renderMoreButton() {
+  let btn = document.getElementById("moreBtn");
+
+  if (loadedCount >= allQuestions.length) {
+    if (btn) btn.remove();
+    return;
+  }
+
+  if (!btn) {
+    btn = document.createElement("button");
+    btn.id = "moreBtn";
+    btn.textContent = "More 100 Questions";
+    btn.style.cssText = `
+      display:block;
+      margin:40px auto;
+      padding:16px 40px;
+      font-size:20px;
+      font-weight:bold;
+      background:#ff9800;
+      color:white;
+      border:none;
+      border-radius:14px;
+      cursor:pointer;
+    `;
+    btn.onclick = loadNextBatch;
+    document.body.appendChild(btn);
+  }
+}
+
+		
+
     </script>
 
 <script>
@@ -2014,6 +2018,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
