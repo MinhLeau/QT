@@ -192,16 +192,35 @@
             text-align: center;
         }
         #score { font-size: 28px; font-weight: bold; color: #006400; margin-bottom: 15px; }
-        #resetBtn {
-            padding: 14px 30px;
-            font-size: 18px;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
+#resetBtn,
+#topBtn {
+    padding: 14px 30px;        /* 👈 QUAN TRỌNG */
+    font-size: 18px;
+    height: 52px;              /* 👈 ÉP cùng chiều cao */
+    line-height: 24px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Giữ màu riêng */
+#resetBtn {
+    background: #dc3545;
+    color: #fff;
+}
+
+#topBtn {
+    background: #0b5ed7;
+    color: #fff;
+}
+
+#topBtn:hover {
+    background: #084298;
+}
+
 
         select {
             -webkit-appearance: none;
@@ -506,7 +525,11 @@
         <button id="nextBtn">Next</button>
     </div>
 
-    <button id="resetBtn">Reset All</button>
+    <div style="display:flex; gap:15px; justify-content:center; margin-top:20px;">
+  <button id="resetBtn">Reset All</button>
+  <button id="topBtn">Top</button>
+</div>
+
 
 <div id="results">
     <p id="score"></p>
@@ -1635,6 +1658,17 @@ prevBtnEl.onclick = prevQuestion;
 nextBtnEl.onclick = nextQuestion;
 resetBtnEl.onclick = () => loadQuiz(quizSelectEl.value);
 
+const topBtnEl = document.getElementById("topBtn");
+
+topBtnEl.onclick = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+};
+
+
+		
 // ============ INIT ============
 basicEl.checked = true;
 advanceEl.checked = false;
@@ -1673,6 +1707,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
