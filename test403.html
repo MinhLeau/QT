@@ -1197,9 +1197,28 @@ function applyLevelMode(list) {
 }
 
 function updateQuestionCount() {
+  const sel = quizSelectEl.value;
+
+  // Practice Quiz 1–10 → luôn 20 câu
+  if (isPractice10(sel)) {
+    questionCountEl.textContent = "(20 Questions)";
+    return;
+  }
+
+  // All + Part_1 → Part_4: dùng tổng thực sự
+  if (["all","part1","part2","part3","part4"].includes(sel)) {
+    const total = ALL_FULL_QUESTIONS.length || CURRENT_QUESTIONS.length;
+    questionCountEl.textContent = total
+      ? `(Total: ${total} Questions)`
+      : "";
+    return;
+  }
+
+  // fallback (an toàn)
   questionCountEl.textContent =
     CURRENT_QUESTIONS.length ? `(${CURRENT_QUESTIONS.length} Questions)` : "";
 }
+
 
 // ============ RENDER ============
 function renderSingleQuestion(idx, showVi) {
@@ -1654,6 +1673,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
