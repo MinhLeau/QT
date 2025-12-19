@@ -374,14 +374,16 @@
         <button class="note-btn" onclick="showNotePopup()">📝 Note</button>
     </div>
 
-    <div class="quiz-select-container" style="display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <b>Chọn bài Test:</b>
-            <select id="quizSelect" style="padding:12px; font-size:18px; border-radius:8px; width:450px; max-width:100%;">
+<div class="quiz-select-container" style="display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
+    <div style="display:flex; align-items:center; gap:10px;">
+        <b>Chọn bài Test:</b>
+        <select id="quizSelect" style="padding:12px; font-size:18px; border-radius:8px; width:450px; max-width:100%;">
+            <option value="">-- Bộ đề I --</option> 	
                 <option value="part1">Part_1 (Australia and its people)</option>
                 <option value="part2">Part_2 (Democratic beliefs, rights and liberties)</option>
                 <option value="part3">Part_3 (Government and the law)</option>
                 <option value="part4">Part_4 (Australian values)-Important</option>
+			    <option value="all">Practice Quiz All</option>
                 <option value="1">Practice Quiz 1</option>
                 <option value="2">Practice Quiz 2</option>
                 <option value="3">Practice Quiz 3</option>
@@ -392,10 +394,22 @@
                 <option value="8">Practice Quiz 8</option>
                 <option value="9">Practice Quiz 9</option>
                 <option value="10">Practice Quiz 10</option>
-                <option value="all">Practice Quiz All</option>
+			    <option value="test402.html">Bộ đề II</option>
+            	<option value="test403.html">Bộ đề III</option>
+                
+				
             </select>
         </div>
 
+<script>
+    document.getElementById('quizSelect').addEventListener('change', function() {
+        const selectedValue = this.value;
+        if (selectedValue) {
+            window.location.href = selectedValue;
+        }
+    });
+</script>
+		
         <div style="display:flex; align-items:center; gap:10px; white-space:nowrap;">
             <span id="questionCount" style="font-weight:bold; color:#006400;"></span>
 
@@ -2010,6 +2024,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
