@@ -370,7 +370,7 @@
     <h1> Australian Citizenship - Our Common Bond</h1>
 
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
-        <h2>Bộ đề II: Australian Citizenship Practice Quiz</h2>
+        <h2>Bộ đề III: Australian Citizenship Practice Quiz</h2>
         <button class="note-btn" onclick="showNotePopup()">📝 Note</button>
     </div>
 
@@ -380,7 +380,7 @@
 
     <div class="quiz-select-container" style="display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
         <div style="display:flex; align-items:center; gap:10px;">
-            <b>Chọn bài Test (Bộ đê I):</b>
+            <b>Chọn bài Test (Bộ đê III):</b>
             <select id="quizSelect" style="padding:12px; font-size:18px; border-radius:8px; width:450px; max-width:100%;">
                 <option value="part1">Part_1 (Australia and its people)</option>
                 <option value="part2">Part_2 (Democratic beliefs, rights and liberties)</option>
@@ -397,7 +397,7 @@
                 <option value="8">Practice Quiz 8</option>
                 <option value="9">Practice Quiz 9</option>
                 <option value="10">Practice Quiz 10</option>
-				<option value="12">Bộ đề I</option>
+				<option value="11">Bộ đề I</option>
                 <option value="12">Bộ đề II</option>
 
             </select>
@@ -409,9 +409,9 @@
         
         // Chỉ redirect nếu value là "2" thì đi test2.html, "3" thì test3.html, v.v.
         // Practice1 có value="11" sẽ KHÔNG redirect
-        if (selectedValue === "12") {
+        if (selectedValue === "11") {
             window.location.href = "test401.html";
-        } else if (selectedValue === "13") {
+        } else if (selectedValue === "12") {
             window.location.href = "test402.html";
         } 
 
@@ -1643,6 +1643,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
