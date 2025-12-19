@@ -1077,6 +1077,7 @@
 {q: "// END PART 4" }
 
 ];
+
 // ============ DOM REFS (KHÔNG DÙNG BIẾN GLOBAL THEO ID) ============
 const quizSelectEl      = document.getElementById("quizSelect");
 const vietnamEl         = document.getElementById("vietnam");
@@ -1105,6 +1106,61 @@ let currentIndex = 0;
 let userAnswers = [];
 let timerInterval;
 let timeLeft = 45 * 60;
+
+// ===== NEW: Pagination for "Practice Quiz All" =====
+const ALL_PAGE_SIZE = 100;
+let ALL_FULL_QUESTIONS = [];   // full list after applyLevelMode
+let ALL_SHOWN_COUNT = 0;       // currently rendered count
+
+let moreAllBtnEl = null;
+function ensureMoreAllBtn() {
+  if (moreAllBtnEl) return moreAllBtnEl;
+
+  moreAllBtnEl = document.createElement("button");
+  moreAllBtnEl.id = "moreAllBtn";
+  moreAllBtnEl.textContent = "More 100 Question";
+  moreAllBtnEl.style.padding = "14px 30px";
+  moreAllBtnEl.style.fontSize = "18px";
+  moreAllBtnEl.style.background = "#006400";
+  moreAllBtnEl.style.color = "white";
+  moreAllBtnEl.style.border = "none";
+  moreAllBtnEl.style.borderRadius = "12px";
+  moreAllBtnEl.style.cursor = "pointer";
+  moreAllBtnEl.style.margin = "25px 0 10px";
+  moreAllBtnEl.style.width = "100%";
+  moreAllBtnEl.style.display = "none";
+
+  // chèn ngay dưới khu vực questions
+  questionsEl.insertAdjacentElement("afterend", moreAllBtnEl);
+  return moreAllBtnEl;
+}
+
+function updateMoreAllBtn(showVi) {
+  const btn = ensureMoreAllBtn();
+
+  // chỉ hiện ở chế độ All + selection === "all"
+  if (!IS_ALL_MODE || quizSelectEl.value !== "all") {
+    btn.style.display = "none";
+    return;
+  }
+
+  if (ALL_SHOWN_COUNT >= ALL_FULL_QUESTIONS.length) {
+    btn.style.display = "none";
+    return;
+  }
+
+  btn.style.display = "block";
+  btn.onclick = () => {
+    ALL_SHOWN_COUNT = Math.min(ALL_SHOWN_COUNT + ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
+    CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
+    renderAllQuestions(showVi);
+    updateQuestionCount();
+    updateMoreAllBtn(showVi);
+
+    // cuộn xuống gần phần vừa load thêm (cho đỡ “mù đường”)
+    btn.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+}
 
 // ============ HELPERS ============
 function isPractice10(sel) {
@@ -1230,9 +1286,6 @@ function updateQuestionCount() {
     CURRENT_QUESTIONS.length ? `(${CURRENT_QUESTIONS.length} Questions)` : "";
 }
 
-
-
-
 // ============ RENDER ============
 function renderSingleQuestion(idx, showVi) {
   const q = CURRENT_QUESTIONS[idx];
@@ -1287,8 +1340,13 @@ function renderAllQuestions(showVi) {
 function rerenderVietnam() {
   const sel = quizSelectEl.value;
   const showVi = !isPractice10(sel) && vietnamEl.checked;
-  if (IS_ALL_MODE) renderAllQuestions(showVi);
-  else renderSingleQuestion(currentIndex, showVi);
+
+  if (IS_ALL_MODE) {
+    renderAllQuestions(showVi);
+    updateMoreAllBtn(showVi);
+  } else {
+    renderSingleQuestion(currentIndex, showVi);
+  }
 }
 
 // ============ PROGRESS / TIMER ============
@@ -1504,12 +1562,15 @@ function submitQuiz() {
   };
 }
 
-
-
 // ============ LOAD QUIZ ============
 function loadQuiz(selection) {
   let list = [];
   IS_ALL_MODE = false;
+
+  // reset state pagination
+  ALL_FULL_QUESTIONS = [];
+  ALL_SHOWN_COUNT = 0;
+  ensureMoreAllBtn().style.display = "none";
 
   // Force Advance for Practice 1–10
   if (isPractice10(selection)) {
@@ -1529,6 +1590,11 @@ function loadQuiz(selection) {
     IS_ALL_MODE = true;
     list = allWithPart;
     if (basicEl.checked && !advanceEl.checked) list = pickHalfRandom(list);
+
+    // ✅ NEW: applyLevelMode on full list, but only render first 100
+    ALL_FULL_QUESTIONS = applyLevelMode(list);
+    ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
+    CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
   }
   else if (["part1","part2","part3","part4"].includes(selection)) {
     IS_ALL_MODE = true;
@@ -1543,15 +1609,15 @@ function loadQuiz(selection) {
     const end   = QUESTION_BANK.findIndex(q => q.q === `// ${e}`);
     list = getRealQuestions(QUESTION_BANK.slice(start, end)).map(attachPartInfo);
     if (basicEl.checked && !advanceEl.checked) list = pickHalfRandom(list);
+
+    CURRENT_QUESTIONS = applyLevelMode(list);
   }
   else {
     // Practice 1–10: build 20 câu, đúng 5 values
     const n = parseInt(selection, 10);
     list = buildPracticeSet(allWithPart, n); // luôn 20 câu
+    CURRENT_QUESTIONS = applyLevelMode(list);
   }
-
-  // Apply Basic/Advance option count + shuffle options
-  CURRENT_QUESTIONS = applyLevelMode(list);
 
   userAnswers = new Array(CURRENT_QUESTIONS.length).fill(null);
   currentIndex = 0;
@@ -1580,7 +1646,10 @@ function loadQuiz(selection) {
     resetBtnEl.style.display = "block";
     clearInterval(timerInterval);
     timerEl.textContent = "Timer 45:00";
+
+    // ✅ render all-mode list (already paged for selection === "all")
     renderAllQuestions(showVi);
+    updateMoreAllBtn(showVi);
   }
 
   resultsEl.style.display = "none";
@@ -1628,8 +1697,7 @@ basicEl.checked = true;
 advanceEl.checked = false;
 quizSelectEl.value = "part1";
 loadQuiz("part1");
-
-    </script>
+</script>
 
 <script>
     function showNotePopup() {
@@ -1662,6 +1730,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
