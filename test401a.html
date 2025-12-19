@@ -1374,6 +1374,10 @@ const nextBtnEl         = document.getElementById("nextBtn");
 const currentQuestionEl = document.getElementById("currentQuestion");
 const quizTitleEl       = document.getElementById("quizTitle");
 const timerEl           = document.getElementById("timer");
+const PAGE_SIZE = 100;
+let allQuestions = [];
+let loadedCount = 0;
+
 
 // ============ GLOBAL STATE ============
 let CURRENT_QUESTIONS = [];
@@ -1866,7 +1870,78 @@ function loadQuiz(selection) {
 // ============ EVENTS ============
 
 // Quiz select
-quizSelectEl.addEventListener("change", e => loadQuiz(e.target.value));
+quizSelectEl.addEventListener("change", () => {
+  const val = quizSelectEl.value;
+
+  if (val === "all") {
+    allQuestions = QUESTION_BANK.filter(q => q.q && !q.q.startsWith("//"));
+    loadedCount = 0;
+    CURRENT_QUESTIONS = [];
+    loadNextBatch();
+    return;
+  }
+
+  // ===== logic cũ giữ nguyên cho part1, part2, quiz 1–10 =====
+});
+
+
+function loadNextBatch() {
+  const next = allQuestions.slice(loadedCount, loadedCount + PAGE_SIZE);
+  CURRENT_QUESTIONS = CURRENT_QUESTIONS.concat(next);
+  loadedCount += next.length;
+
+  renderQuestions();
+
+  renderMoreButton();
+}
+
+function loadMoreQuestions() {
+  const next = ALL_QUESTIONS.slice(
+    loadedCount,
+    loadedCount + PAGE_SIZE
+  );
+
+  CURRENT_QUESTIONS = CURRENT_QUESTIONS.concat(next);
+  loadedCount += next.length;
+
+  questionCountEl.textContent =
+    `Loaded ${loadedCount} / ${ALL_QUESTIONS.length}`;
+
+  renderMoreButton();
+}
+
+		
+function renderMoreButton() {
+  let btn = document.getElementById("moreBtn");
+
+  if (loadedCount >= allQuestions.length) {
+    if (btn) btn.remove();
+    return;
+  }
+
+  if (!btn) {
+    btn = document.createElement("button");
+    btn.id = "moreBtn";
+    btn.textContent = "More 100 Questions";
+    btn.style.cssText = `
+      display:block;
+      margin:40px auto;
+      padding:16px 40px;
+      font-size:20px;
+      font-weight:bold;
+      background:#ff9800;
+      color:white;
+      border:none;
+      border-radius:14px;
+      cursor:pointer;
+    `;
+    btn.onclick = loadNextBatch;
+    document.body.appendChild(btn);
+  }
+}
+
+
+		
 
 // Vietnam toggle
 vietnamEl.addEventListener("change", () => {
@@ -1939,6 +2014,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
