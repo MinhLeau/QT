@@ -801,7 +801,7 @@ function attachPartInfo(q) {
 
 
 function isAustralianValueQuestion(q) {
-  return q && q.__part === "PART 4";
+  return q && q.__part === "part4";
 }
 
 // ---- chọn 5 câu values + 15 câu non-values (seeded theo n) ----
@@ -1134,6 +1134,25 @@ function submitQuiz() {
       `);
     });
   }
+
+  // ===== SCROLL UP 2 LINES (sau khi Submit) =====
+  window.scrollBy({
+    top: +200,
+    behavior: "smooth"
+  });
+	
+  // ===== SUBMIT → FINISH =====
+  nextBtnEl.textContent = "Finish";
+  nextBtnEl.style.background = "#dc3545"; // màu đỏ
+  nextBtnEl.style.color = "white";
+
+  // xoá handler cũ (an toàn)
+  nextBtnEl.onclick = null;
+
+  // bấm Finish → quay về 401.html
+  nextBtnEl.addEventListener("click", () => {
+    window.location.href = "test401.html";
+  }, { once: true });
 }
 
 // ============ LOAD QUIZ ============
@@ -1368,6 +1387,7 @@ setTimeout(() => {
 	
 </body>
 </html>
+
 
 
 
