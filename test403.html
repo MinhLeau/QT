@@ -1266,16 +1266,28 @@ loadQuiz("part1");
         }
     });
 
-// 🔒 Luôn về đầu trang khi F5 / Refresh
+// 🔒 TẮT TỰ ĐỘNG RESTORE SCROLL KHI REFRESH
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+
+// 🔒 VỀ ĐẦU TRANG NGAY KHI LOAD
 window.addEventListener("load", () => {
   window.scrollTo(0, 0);
 });
+
+// 🔒 DỰ PHÒNG: CHẠY LẠI SAU 1 TICK (chống browser ghi đè)
+setTimeout(() => {
+  window.scrollTo(0, 0);
+}, 0);
+
 	
 </script>
 
 	
 </body>
 </html>
+
 
 
 
