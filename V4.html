@@ -141,6 +141,10 @@ const firebaseConfig = {
             <!-- SEARCH -->
         <button id="searchBtn" class="btn">Search</button>
         <input type="text" id="searchInput" placeholder="Nhập từ cần tìm..." />        
+<input type="text" id="searchInput" placeholder="Nhập từ cần tìm..." list="vocabSuggestions">
+<datalist id="vocabSuggestions"></datalist>
+
+        
         <strong>Chọn giọng đọc:</strong>
         <select id="voiceSelect"></select>
         <div id="notice" class="notice" style="display:none;">Không tìm thấy giọng Australian? Cài đặt ngôn ngữ English (Australia) trong máy!</div>
@@ -208,6 +212,12 @@ document.getElementById("searchInput").addEventListener("keydown", function(e) {
     if (e.key === "Enter") doSearch();
 });
 
+<script>
+document.getElementById("searchBtn").addEventListener("click", doSearch);
+document.getElementById("searchInput").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") doSearch();
+});
+
 function doSearch() {
     const keyword = document.getElementById("searchInput").value.trim().toLowerCase();
     if (!keyword) return;
@@ -215,24 +225,54 @@ function doSearch() {
     const rows = document.querySelectorAll("#vocabTable tbody tr");
     let found = false;
 
-    rows.forEach(row => {
-        row.style.background = ""; // reset highlight
-    });
+    rows.forEach(row => row.style.background = "");
 
     for (let row of rows) {
-        if (row.innerText.toLowerCase().includes(keyword)) {
+        const vocabCell = row.querySelector("td:nth-child(3)");
+        if (!vocabCell) continue;
+
+        const vocabText = vocabCell.textContent.toLowerCase();
+        if (vocabText.includes(keyword)) {
             row.scrollIntoView({ behavior: "smooth", block: "center" });
-            row.style.background = "#fff3cd"; // highlight vàng nhẹ
+            row.style.background = "#fff3cd";
             found = true;
             break;
         }
     }
 
     if (!found) {
-        alert("❌ Không tìm thấy từ: " + keyword);
+        alert("❌ Không tìm thấy từ trong cột Vocabulary");
     }
 }
 </script>
+<script>
+const searchInput = document.getElementById("searchInput");
+const suggestionBox = document.getElementById("vocabSuggestions");
+
+// Lấy toàn bộ từ trong cột Vocabulary
+function buildVocabularySuggestions() {
+    const rows = document.querySelectorAll("#vocabTable tbody tr");
+    const vocabSet = new Set();
+
+    rows.forEach(row => {
+        const cell = row.querySelector("td:nth-child(3)");
+        if (cell) {
+            vocabSet.add(cell.textContent.trim());
+        }
+    });
+
+    suggestionBox.innerHTML = "";
+    vocabSet.forEach(word => {
+        const option = document.createElement("option");
+        option.value = word;
+        suggestionBox.appendChild(option);
+    });
+}
+
+// Gọi 1 lần khi load trang
+buildVocabularySuggestions();
+</script>
+
 
 
     
@@ -261,6 +301,7 @@ window.addEventListener('scroll', () => {
 
 </body>
 </html>
+
 
 
 
