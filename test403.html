@@ -663,16 +663,32 @@ function updateMoreAllBtn(showVi) {
   }
 
   btn.style.display = "block";
-  btn.onclick = () => {
-    ALL_SHOWN_COUNT = Math.min(ALL_SHOWN_COUNT + ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
-    CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
-    renderAllQuestions(showVi);
-    updateQuestionCount();
-    updateMoreAllBtn(showVi);
+btn.onclick = () => {
+  const prevCount = CURRENT_QUESTIONS.length;
 
-    // cuộn xuống gần phần vừa load thêm (cho đỡ “mù đường”)
-    btn.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
+  // tăng số câu được hiển thị
+  ALL_SHOWN_COUNT = Math.min(
+    ALL_SHOWN_COUNT + ALL_PAGE_SIZE,
+    ALL_FULL_QUESTIONS.length
+  );
+
+  CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
+
+  // 🔑 MỞ RỘNG userAnswers, KHÔNG reset
+  for (let i = prevCount; i < CURRENT_QUESTIONS.length; i++) {
+    if (typeof userAnswers[i] === "undefined") {
+      userAnswers[i] = null;
+    }
+  }
+
+  renderAllQuestions(showVi);
+  updateQuestionCount();
+  updateMoreAllBtn(showVi);
+
+  // cuộn xuống vùng vừa load thêm
+  btn.scrollIntoView({ behavior: "smooth", block: "start" });
+};
+
 }
 
 // ============ HELPERS ============
@@ -1283,6 +1299,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
