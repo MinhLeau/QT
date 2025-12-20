@@ -850,23 +850,40 @@ function renderSingleQuestion(idx, showVi) {
 
 function renderAllQuestions(showVi) {
   questionsEl.innerHTML = "";
+
   CURRENT_QUESTIONS.forEach((q, i) => {
     let html = `<div style="margin:35px 0;"><strong>${i+1}. ${q.q}`;
-    if (showVi && q.qVi) html += ` <i style="color:#0066cc;">[${q.qVi}]</i>`;
+    if (showVi && q.qVi) {
+      html += ` <i style="color:#0066cc;">[${q.qVi}]</i>`;
+    }
     html += `</strong><div style="margin-top:18px;">`;
 
     q.opts.forEach((opt, j) => {
       let txt = opt;
-      if (showVi && q.optsVi && q.optsVi[j]) txt += ` <i style="color:#0066cc;">[${q.optsVi[j]}]</i>`;
-      html += `<label class="opt" id="q${i}o${j}_lbl">
-        <input type="radio" name="q${i}" onchange="checkAnswerInstant(${i},${j})">${txt}
-      </label>`;
+      if (showVi && q.optsVi && q.optsVi[j]) {
+        txt += ` <i style="color:#0066cc;">[${q.optsVi[j]}]</i>`;
+      }
+
+      const checked = (userAnswers[i] === j) ? "checked" : "";
+
+      html += `
+        <label class="opt" id="q${i}o${j}_lbl">
+          <input
+            type="radio"
+            name="q${i}"
+            value="${j}"
+            ${checked}
+            onchange="checkAnswerInstant(${i},${j})"
+          >
+          ${txt}
+        </label>`;
     });
 
     html += `</div></div>`;
     questionsEl.innerHTML += html;
   });
 }
+
 
 // Vietnam toggle re-render
 function rerenderVietnam() {
@@ -1283,6 +1300,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
