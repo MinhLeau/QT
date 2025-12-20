@@ -47,24 +47,75 @@ const firebaseConfig = {
 
 
 <style>
-    .logout-btn {
-        position: fixed;
-        top: 13px;
-        left: 85px;
-        padding: 8px 16px;
-        background: #dc3545;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: bold;
-        z-index: 1000;
-        transition: all 0.3s;
-    }
-    .logout-btn:hover {
-        background: #c82333;
-        transform: translateY(-2px);
-    }
+        .logout-btn {
+            position: fixed;
+            top: 13px;
+            left: 85px;
+            padding: 8px 16px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        .logout-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        /* --- SEARCH UI --- */
+        .search-wrap {
+            position: relative;            /* quan trọng để suggestions bám theo input (iPhone ổn định) */
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        #searchInput {
+            padding: 6px 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 180px;                  /* muốn rộng/hẹp sửa số này */
+            outline: none;
+        }
+
+        #searchBtn {
+            margin-right: 8px;
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            max-height: 220px;
+            overflow-y: auto;
+            display: none;
+            z-index: 9999;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .search-suggestions .item {
+            padding: 8px 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .search-suggestions .item:hover {
+            background: #f1f1f1;
+        }
+
+        /* highlight dòng tìm thấy */
+        .search-hit {
+            background: #fff3cd !important;
+        }
+    
 </style>
 
 <!-- <button class="logout-btn hide-on-scroll-target" onclick="logout()">Logout</button> -->
@@ -127,8 +178,16 @@ const firebaseConfig = {
         </div>
     </div>
 </div>
-    <div class="controls">
-        <strong>Chọn giọng đọc:</strong>
+        <div class="controls">
+            <!-- SEARCH: nút Search ở bên trái, ô Search nằm bên trái ô Chọn giọng đọc -->
+            <button id="searchBtn" class="btn" type="button">Search</button>
+
+            <div class="search-wrap">
+                <input type="text" id="searchInput" placeholder="Nhập từ cần tìm..." autocomplete="off">
+                <div id="searchSuggestions" class="search-suggestions"></div>
+            </div>
+
+            <strong>Giọng đọc:</strong>
         <select id="voiceSelect"></select>
         <div id="notice" class="notice" style="display:none;">Không tìm thấy giọng Australian? Cài đặt ngôn ngữ English (Australia) trong máy!</div>
     </div>
@@ -285,57 +344,169 @@ const firebaseConfig = {
     </tbody>
 </table>
 
-<script src="vocab.js"></script>
-	    <script>
-let lastScrollTop = 0;
+    <!-- Script gốc của bạn -->
+    <script src="vocab.js"></script>
 
-const hideTargets = [
-    document.querySelector('.logout-btn'),
-    document.querySelector('.home-btn'),
-    document.querySelector('.home-btnTS')
-];
+    <!-- SEARCH + Fix iPhone suggestions -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const table = document.getElementById("vocabTable");
+            const searchBtn = document.getElementById("searchBtn");
+            const searchInput = document.getElementById("searchInput");
+            const suggestionBox = document.getElementById("searchSuggestions");
 
-window.addEventListener('scroll', () => {
-    const st = window.pageYOffset || document.documentElement.scrollTop;
-    const isScrollingDown = st > lastScrollTop;
+            // nếu thiếu DOM (tránh lỗi kiểu null.addEventListener)
+            if (!table || !searchBtn || !searchInput || !suggestionBox) return;
 
-    hideTargets.forEach(el => {
-        if (!el) return;
-        el.classList.toggle('hide-on-scroll', isScrollingDown);
-    });
+            let vocabularyList = [];
 
-    lastScrollTop = st <= 0 ? 0 : st;
+            function getVocabularyList() {
+                const rows = table.querySelectorAll("tbody tr");
+                const set = new Set();
+
+                rows.forEach(row => {
+                    // cột Vocabulary = cột 3
+                    const vocabCell = row.querySelector("td:nth-child(3)");
+                    if (!vocabCell) return;
+                    const word = vocabCell.textContent.trim();
+                    if (word) set.add(word);
+                });
+
+                vocabularyList = Array.from(set);
+            }
+
+            function clearHit() {
+                table.querySelectorAll("tbody tr.search-hit").forEach(r => r.classList.remove("search-hit"));
+            }
+
+            function doSearch() {
+                const keywordRaw = searchInput.value.trim();
+                const keyword = keywordRaw.toLowerCase();
+                if (!keyword) return;
+
+                const rows = table.querySelectorAll("tbody tr");
+                clearHit();
+
+                for (const row of rows) {
+                    const vocabCell = row.querySelector("td:nth-child(3)");
+                    if (!vocabCell) continue;
+
+                    const vocabText = vocabCell.textContent.trim().toLowerCase();
+
+                    // tìm trong cột Vocabulary בלבד
+                    if (vocabText.includes(keyword)) {
+                        row.classList.add("search-hit");
+                        row.scrollIntoView({ behavior: "smooth", block: "center" });
+                        hideSuggestions();
+                        return;
+                    }
+                }
+
+                alert("❌ Không tìm thấy từ trong cột Vocabulary");
+                hideSuggestions();
+            }
+
+            function hideSuggestions() {
+                suggestionBox.style.display = "none";
+                suggestionBox.innerHTML = "";
+            }
+
+            function showSuggestions(inputValue) {
+                const v = (inputValue || "").trim();
+                if (v.length < 2) { // chỉ hiện khi >= 2 ký tự
+                    hideSuggestions();
+                    return;
+                }
+
+                const keyword = v.toLowerCase();
+                const matches = vocabularyList
+                    .filter(word => word.toLowerCase().startsWith(keyword))
+                    .slice(0, 30);
+
+                if (matches.length === 0) {
+                    hideSuggestions();
+                    return;
+                }
+
+                suggestionBox.innerHTML = "";
+                matches.forEach(word => {
+                    const div = document.createElement("div");
+                    div.className = "item";
+                    div.textContent = word;
+
+                    // iPhone: dùng touchstart để chọn không bị mất click
+div.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    searchInput.value = word;
+    hideSuggestions();
+    doSearch();              // ⭐ TỰ ĐỘNG SEARCH
+}, { passive: false });
+
+div.addEventListener("click", (e) => {
+    e.preventDefault();
+    searchInput.value = word;
+    hideSuggestions();
+    doSearch();              // ⭐ TỰ ĐỘNG SEARCH
 });
-</script>
 
+
+                    suggestionBox.appendChild(div);
+                });
+
+                suggestionBox.style.display = "block";
+            }
+
+            // init vocab list
+            getVocabularyList();
+
+            // events
+            searchBtn.addEventListener("click", doSearch);
+
+            searchInput.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") doSearch();
+            });
+
+            // input event: iPhone OK
+            searchInput.addEventListener("input", () => {
+                showSuggestions(searchInput.value);
+            });
+
+            // ẩn khi chạm/click ra ngoài
+            document.addEventListener("click", (e) => {
+                if (!searchInput.contains(e.target) && !suggestionBox.contains(e.target)) {
+                    hideSuggestions();
+                }
+            });
+
+            document.addEventListener("touchstart", (e) => {
+                if (!searchInput.contains(e.target) && !suggestionBox.contains(e.target)) {
+                    hideSuggestions();
+                }
+            }, { passive: true });
+        });
+    </script>
+
+    <!-- Hide home buttons on scroll (giữ nguyên logic của bạn, dọn lại gọn) -->
+    <script>
+        let lastScrollTop = 0;
+
+        const hideTargets = [
+            document.querySelector('.logout-btn'),
+            document.querySelector('.home-btn'),
+            document.querySelector('.home-btnTS')
+        ];
+
+        window.addEventListener('scroll', () => {
+            const st = window.pageYOffset || document.documentElement.scrollTop;
+            const isScrollingDown = st > lastScrollTop;
+
+            hideTargets.forEach(el => {
+                if (!el) return;
+                el.classList.toggle('hide-on-scroll', isScrollingDown);
+            });
+
+            lastScrollTop = st <= 0 ? 0 : st;
+        });
+    </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
