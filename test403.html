@@ -745,8 +745,16 @@ function attachPartInfo(q) {
   const p4 = QUESTION_BANK.findIndex(x => norm(x && x.q) === "// PART 4");
   const e4 = QUESTION_BANK.findIndex(x => norm(x && x.q) === "// END PART 4");
 
+  let part = null;
+
+  if (p1 !== -1 && e1 !== -1 && idx > p1 && idx < e1) part = "part1";
+  else if (p2 !== -1 && e2 !== -1 && idx > p2 && idx < e2) part = "part2";
+  else if (p3 !== -1 && e3 !== -1 && idx > p3 && idx < e3) part = "part3";
+  else if (p4 !== -1 && e4 !== -1 && idx > p4 && idx < e4) part = "part4";
+
   return { ...q, __part: part };
 }
+
 
 function isAustralianValueQuestion(q) {
   return q && q.__part === "PART 4";
@@ -1108,7 +1116,7 @@ function loadQuiz(selection) {
 
   IS_ALL_MODE = false;
 
-  // 🔒 FIX CHÍNH XÁC: PRACTICE 1–10 → KHÔNG BAO GIỜ CÓ MORE QUESTIONS
+  // 🔒 PRACTICE 1–10 → KHÔNG CÓ MORE QUESTIONS
   if (isPractice10(selection)) {
     ensureMoreAllBtn().style.display = "none";
   }
@@ -1120,35 +1128,17 @@ function loadQuiz(selection) {
     topBtnEl.style.display = "inline-flex";
   }
 
-  // ---- helper: lấy câu hỏi theo marker (có fallback để không bị trắng) ----
-  function getQuestionsForPart(sel) {
-    const map = {
-      part1: ["PART 1", "END PART 1"],
-      part2: ["PART 2", "END PART 2"],
-      part3: ["PART 3", "END PART 3"],
-      part4: ["PART 4", "END PART 4"]
-    };
+  const norm = (s) => String(s ?? "").replace(/\s+/g, " ").trim();
 
-    const [s, e] = map[sel];
-    const startIdx = QUESTION_BANK.findIndex(q => q && q.q === `// ${s}`);
-    const endIdx   = QUESTION_BANK.findIndex(q => q && q.q === `// ${e}`);
+  const findMarkerIndex = (label) => {
+    const want = norm(`// ${label}`);
+    return QUESTION_BANK.findIndex(x => norm(x && x.q) === want);
+  };
 
-    // ✅ ưu tiên dùng marker nếu hợp lệ
-    if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
-      return QUESTION_BANK.slice(startIdx + 1, endIdx);
-    }
-
-    // ⚠️ fallback: nếu marker không có / sai → tránh trắng trang
-    // (vẫn trả về toàn bộ câu hỏi thật để app chạy được)
-    console.warn("[Part mode] Không tìm thấy marker hoặc marker sai:", `// ${s}`, `// ${e}`);
-    return QUESTION_BANK;
-  }
-
-  // ✅ allWithPart vẫn giữ như code của bạn
   const allWithPart = getRealQuestions(QUESTION_BANK).map(attachPartInfo);
-
   let list = [];
 
+  // ================= ALL =================
   if (selection === "all") {
     IS_ALL_MODE = true;
     list = allWithPart;
@@ -1157,47 +1147,44 @@ function loadQuiz(selection) {
     ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
     CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
   }
+
+  // ================= PART 1–4 =================
   else if (["part1","part2","part3","part4"].includes(selection)) {
-  IS_ALL_MODE = true;
+    IS_ALL_MODE = true;
 
-  const map = {
-    part1:["PART 1","END PART 1"],
-    part2:["PART 2","END PART 2"],
-    part3:["PART 3","END PART 3"],
-    part4:["PART 4","END PART 4"]
-  };
+    const map = {
+      part1: ["PART 1", "END PART 1"],
+      part2: ["PART 2", "END PART 2"],
+      part3: ["PART 3", "END PART 3"],
+      part4: ["PART 4", "END PART 4"]
+    };
 
-  const norm = (s) => String(s ?? "").replace(/\s+/g, " ").trim();
+    const [s, e] = map[selection];
+    const startIdx = findMarkerIndex(s);
+    const endIdx   = findMarkerIndex(e);
 
-  const idxOfMarker = (label) => {
-    const want = norm(`// ${label}`);
-    return QUESTION_BANK.findIndex(x => norm(x && x.q) === want);
-  };
+    if (startIdx === -1 || endIdx === -1 || endIdx <= startIdx) {
+      console.warn("[Part mode] Marker lỗi hoặc không tồn tại:", `// ${s}`, `// ${e}`);
+      list = allWithPart; // fallback an toàn
+    } else {
+      list = getRealQuestions(
+        QUESTION_BANK.slice(startIdx + 1, endIdx)
+      ).map(attachPartInfo);
+    }
 
-  const [s, e] = map[selection];
-  const startIdx = idxOfMarker(s);
-  const endIdx   = idxOfMarker(e);
-
-  if (startIdx === -1 || endIdx === -1 || endIdx <= startIdx) {
-    console.warn("[Part mode] Không tìm thấy marker hoặc marker sai:", `// ${s}`, `// ${e}`);
-    // fallback: để không trắng trang
-    list = getRealQuestions(QUESTION_BANK).map(attachPartInfo);
-  } else {
-    list = getRealQuestions(QUESTION_BANK.slice(startIdx + 1, endIdx)).map(attachPartInfo);
+    ALL_FULL_QUESTIONS = applyLevelMode(list);
+    ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
+    CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
   }
 
-  ALL_FULL_QUESTIONS = applyLevelMode(list);
-  ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
-  CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
-}
-
+  // ================= PRACTICE 1–10 =================
   else {
-    // Practice 1–10
     const n = parseInt(selection, 10);
     list = buildPracticeSet(allWithPart, n);
     CURRENT_QUESTIONS = applyLevelMode(list);
   }
 
+  // ================= COMMON INIT =================
   userAnswers = new Array(CURRENT_QUESTIONS.length).fill(null);
   currentIndex = 0;
 
@@ -1208,6 +1195,7 @@ function loadQuiz(selection) {
 
   const showVi = !isPractice10(selection) && vietnamEl.checked;
 
+  // ================= RENDER =================
   if (!IS_ALL_MODE) {
     quizHeaderEl.style.display = "flex";
     progressBarEl.style.display = "flex";
@@ -1231,7 +1219,6 @@ function loadQuiz(selection) {
 
   resultsEl.style.display = "none";
 }
-
 
 
 
@@ -1326,6 +1313,7 @@ setTimeout(() => {
 	
 </body>
 </html>
+
 
 
 
