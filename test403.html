@@ -1090,23 +1090,12 @@ function submitQuiz() {
 
 // ============ LOAD QUIZ ============
 function loadQuiz(selection) {
-  let list = [];
-  IS_ALL_MODE = false;
-
-  // ✅ FIX: luôn ẩn nút More Questions khi đổi quiz (tránh bị kẹt từ All/Part)
-  ensureMoreAllBtn().style.display = "none";
-
-  // ✅ Practice 1–10: chắc chắn không bao giờ hiện
-  if (isPractice10(selection)) {
-    ensureMoreAllBtn().style.display = "none";
-  }
 
   // reset state pagination
   ALL_FULL_QUESTIONS = [];
   ALL_SHOWN_COUNT = 0;
   ensureMoreAllBtn().style.display = "none";
 
-	
   // reset UI
   resultsEl.style.display = "none";
   questionsEl.innerHTML = "";
@@ -1122,6 +1111,11 @@ function loadQuiz(selection) {
 
   IS_ALL_MODE = false;
 
+  // 🔒 FIX CHÍNH XÁC: PRACTICE 1–10 → KHÔNG BAO GIỜ CÓ MORE QUESTIONS
+  if (isPractice10(selection)) {
+    ensureMoreAllBtn().style.display = "none";
+  }
+
   // Top button
   if (isPractice10(selection)) {
     topBtnEl.style.display = "none";
@@ -1136,7 +1130,6 @@ function loadQuiz(selection) {
     IS_ALL_MODE = true;
     list = allWithPart;
 
-    // ✅ always full list (Advance behaviour)
     ALL_FULL_QUESTIONS = applyLevelMode(list);
     ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
     CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
@@ -1157,13 +1150,12 @@ function loadQuiz(selection) {
 
     list = getRealQuestions(QUESTION_BANK.slice(start, end)).map(attachPartInfo);
 
-    // ✅ always full list (Advance behaviour)
     ALL_FULL_QUESTIONS = applyLevelMode(list);
     ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
     CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
   }
   else {
-    // Practice 1–10: build 20 câu, đúng 5 values
+    // Practice 1–10
     const n = parseInt(selection, 10);
     list = buildPracticeSet(allWithPart, n);
     CURRENT_QUESTIONS = applyLevelMode(list);
@@ -1172,7 +1164,6 @@ function loadQuiz(selection) {
   userAnswers = new Array(CURRENT_QUESTIONS.length).fill(null);
   currentIndex = 0;
 
-  // Vietnam checkbox
   vietnamEl.disabled = isPractice10(selection);
   if (vietnamEl.disabled) vietnamEl.checked = false;
 
@@ -1243,10 +1234,7 @@ topBtnEl.addEventListener("click", () => {
 quizSelectEl.value = "part1";
 loadQuiz("part1");
 
-// 🔒 Luôn về đầu trang khi F5 / Refresh
-window.addEventListener("load", () => {
-  window.scrollTo(0, 0);
-});
+
 
 		
 </script>
@@ -1277,11 +1265,18 @@ window.addEventListener("load", () => {
             closeNotePopup();
         }
     });
+
+// 🔒 Luôn về đầu trang khi F5 / Refresh
+window.addEventListener("load", () => {
+  window.scrollTo(0, 0);
+});
+	
 </script>
 
 	
 </body>
 </html>
+
 
 
 
