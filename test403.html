@@ -664,7 +664,7 @@ function updateMoreAllBtn(showVi) {
 
   btn.style.display = "block";
 btn.onclick = () => {
-  const firstNewIndex = CURRENT_QUESTIONS.length; // 🔑 nhớ câu đầu batch mới
+  const firstNewIndex = CURRENT_QUESTIONS.length; // N
 
   ALL_SHOWN_COUNT = Math.min(
     ALL_SHOWN_COUNT + ALL_PAGE_SIZE,
@@ -683,12 +683,14 @@ btn.onclick = () => {
   updateQuestionCount();
   updateMoreAllBtn(showVi);
 
-  // ✅ SCROLL TỚI CÂU ĐẦU TIÊN CỦA MORE QUESTIONS
-  const firstNewEl = document.getElementById(`q${firstNewIndex}o0_lbl`);
-  if (firstNewEl) {
-    firstNewEl.scrollIntoView({ behavior: "smooth", block: "start" });
+  // ✅ SCROLL TỚI CÂU ĐẦU TIÊN CỦA MORE QUESTIONS - 1
+  const scrollIndex = firstNewIndex - 1;
+  const el = document.getElementById(`q${scrollIndex}o0_lbl`);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 };
+
 }
 
 // ============ HELPERS ============
@@ -1250,6 +1252,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
