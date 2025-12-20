@@ -733,22 +733,17 @@ function seededShuffle(arr, seed) {
 
 // ---- Attach PART info (để nhận biết Australian values) ----
 function attachPartInfo(q) {
+  const norm = (s) => String(s ?? "").replace(/\s+/g, " ").trim();
   const idx = QUESTION_BANK.indexOf(q);
 
-  const p1 = QUESTION_BANK.findIndex(x => x.q === "// PART 1");
-  const e1 = QUESTION_BANK.findIndex(x => x.q === "// END PART 1");
-  const p2 = QUESTION_BANK.findIndex(x => x.q === "// PART 2");
-  const e2 = QUESTION_BANK.findIndex(x => x.q === "// END PART 2");
-  const p3 = QUESTION_BANK.findIndex(x => x.q === "// PART 3");
-  const e3 = QUESTION_BANK.findIndex(x => x.q === "// END PART 3");
-  const p4 = QUESTION_BANK.findIndex(x => x.q === "// PART 4");
-  const e4 = QUESTION_BANK.findIndex(x => x.q === "// END PART 4");
-
-  let part = null;
-  if (idx > p1 && idx < e1) part = "PART 1";
-  if (idx > p2 && idx < e2) part = "PART 2";
-  if (idx > p3 && idx < e3) part = "PART 3";
-  if (idx > p4 && idx < e4) part = "PART 4";
+  const p1 = QUESTION_BANK.findIndex(x => norm(x && x.q) === "// PART 1");
+  const e1 = QUESTION_BANK.findIndex(x => norm(x && x.q) === "// END PART 1");
+  const p2 = QUESTION_BANK.findIndex(x => norm(x && x.q) === "// PART 2");
+  const e2 = QUESTION_BANK.findIndex(x => norm(x && x.q) === "// END PART 2");
+  const p3 = QUESTION_BANK.findIndex(x => norm(x && x.q) === "// PART 3");
+  const e3 = QUESTION_BANK.findIndex(x => norm(x && x.q) === "// END PART 3");
+  const p4 = QUESTION_BANK.findIndex(x => norm(x && x.q) === "// PART 4");
+  const e4 = QUESTION_BANK.findIndex(x => norm(x && x.q) === "// END PART 4");
 
   return { ...q, __part: part };
 }
@@ -1163,18 +1158,39 @@ function loadQuiz(selection) {
     CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
   }
   else if (["part1","part2","part3","part4"].includes(selection)) {
-    IS_ALL_MODE = true;
+  IS_ALL_MODE = true;
 
-    // ✅ lấy theo marker nếu có, nếu không có marker thì fallback
-    const rawPart = getQuestionsForPart(selection);
+  const map = {
+    part1:["PART 1","END PART 1"],
+    part2:["PART 2","END PART 2"],
+    part3:["PART 3","END PART 3"],
+    part4:["PART 4","END PART 4"]
+  };
 
-    // giữ đúng pipeline của bạn
-    list = getRealQuestions(rawPart).map(attachPartInfo);
+  const norm = (s) => String(s ?? "").replace(/\s+/g, " ").trim();
 
-    ALL_FULL_QUESTIONS = applyLevelMode(list);
-    ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
-    CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
+  const idxOfMarker = (label) => {
+    const want = norm(`// ${label}`);
+    return QUESTION_BANK.findIndex(x => norm(x && x.q) === want);
+  };
+
+  const [s, e] = map[selection];
+  const startIdx = idxOfMarker(s);
+  const endIdx   = idxOfMarker(e);
+
+  if (startIdx === -1 || endIdx === -1 || endIdx <= startIdx) {
+    console.warn("[Part mode] Không tìm thấy marker hoặc marker sai:", `// ${s}`, `// ${e}`);
+    // fallback: để không trắng trang
+    list = getRealQuestions(QUESTION_BANK).map(attachPartInfo);
+  } else {
+    list = getRealQuestions(QUESTION_BANK.slice(startIdx + 1, endIdx)).map(attachPartInfo);
   }
+
+  ALL_FULL_QUESTIONS = applyLevelMode(list);
+  ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
+  CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
+}
+
   else {
     // Practice 1–10
     const n = parseInt(selection, 10);
@@ -1310,6 +1326,7 @@ setTimeout(() => {
 	
 </body>
 </html>
+
 
 
 
