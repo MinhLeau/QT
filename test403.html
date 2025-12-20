@@ -1090,6 +1090,23 @@ function submitQuiz() {
 
 // ============ LOAD QUIZ ============
 function loadQuiz(selection) {
+  let list = [];
+  IS_ALL_MODE = false;
+
+  // ✅ FIX: luôn ẩn nút More Questions khi đổi quiz (tránh bị kẹt từ All/Part)
+  ensureMoreAllBtn().style.display = "none";
+
+  // ✅ Practice 1–10: chắc chắn không bao giờ hiện
+  if (isPractice10(selection)) {
+    ensureMoreAllBtn().style.display = "none";
+  }
+
+  // reset state pagination
+  ALL_FULL_QUESTIONS = [];
+  ALL_SHOWN_COUNT = 0;
+  ensureMoreAllBtn().style.display = "none";
+
+	
   // reset UI
   resultsEl.style.display = "none";
   questionsEl.innerHTML = "";
@@ -1265,6 +1282,7 @@ window.addEventListener("load", () => {
 	
 </body>
 </html>
+
 
 
 
