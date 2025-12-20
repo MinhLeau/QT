@@ -1225,6 +1225,13 @@ topBtnEl.addEventListener("click", () => {
 		
 quizSelectEl.value = "part1";
 loadQuiz("part1");
+
+// 🔒 Luôn về đầu trang khi F5 / Refresh
+window.addEventListener("load", () => {
+  window.scrollTo(0, 0);
+});
+
+		
 </script>
 
 <script>
@@ -1258,6 +1265,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
