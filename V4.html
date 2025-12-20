@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Từ vựng Phần 4: Australian values</title>
-    <link rel="icon" type="image/x-icon" href="TS.ico">
-    <link rel="stylesheet" href="vocab.css">
-    <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Từ vựng Phần 4: Australian values</title>
 
-   
+<link rel="icon" type="image/x-icon" href="TS.ico">
+<link rel="stylesheet" href="vocab.css">
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
 const firebaseConfig = {
   apiKey: "AIzaSyDvB54m2uxhjuE2moJQ09NcuAEVhro7Zh4",
   authDomain: "quoctichuc-43f28.firebaseapp.com",
@@ -20,62 +22,26 @@ const firebaseConfig = {
   appId: "1:710420527110:web:ba4281739f963e76656b87"
 };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-    // Kiểm tra đăng nhập
-    onAuthStateChanged(auth, (user) => {
-        if (!user) {
-            // Chưa đăng nhập, chuyển về trang login
-            window.location.href = 'login.html';
-        } else {
-            // Đã đăng nhập, hiển thị thông tin user
-            console.log('Logged in as:', user.email);
-        }
-    });
+onAuthStateChanged(auth, (user) => {
+    if (!user) window.location.href = 'login.html';
+});
 
-    // Hàm đăng xuất (gọi khi user click nút logout)
-    window.logout = async function() {
-        try {
-            await signOut(auth);
-            window.location.href = 'login.html';
-        } catch (error) {
-            console.error('Logout error:', error);
-        }
-    };
+window.logout = async function () {
+    await signOut(auth);
+    window.location.href = 'login.html';
+};
+</script>
 
+<style>
 #searchInput {
     padding: 6px 8px;
     border-radius: 5px;
     border: 1px solid #ccc;
-    margin-right: 8px;
-    width: 180px; /* muốn rộng/hẹp thì sửa số này */
+    width: 180px;
 }
-
-        
-</script>
-
-
-<style>
-    .logout-btn {
-        position: fixed;
-        top: 13px;
-        left: 85px;
-        padding: 8px 16px;
-        background: #dc3545;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: bold;
-        z-index: 1000;
-        transition: all 0.3s;
-    }
-    .logout-btn:hover {
-        background: #c82333;
-        transform: translateY(-2px);
-    }
-
 
 .search-suggestions {
     position: absolute;
@@ -86,7 +52,7 @@ const firebaseConfig = {
     overflow-y: auto;
     display: none;
     z-index: 9999;
-    width: 180px; /* nên bằng width ô search */
+    width: 180px;
 }
 
 .search-suggestions div {
@@ -97,103 +63,38 @@ const firebaseConfig = {
 .search-suggestions div:hover {
     background: #f1f1f1;
 }
-
-
-    
 </style>
-
-<!-- <button class="logout-btn hide-on-scroll-target" onclick="logout()">Logout</button> -->
-
 </head>
+
 <body>
 
-    <!-- Nút Home mới -->
-    <a href="onluyenthiquoctich.html" class="home-btn" title="Về trang chủ"></a>
-    <a href="#" class="home-btnTS" title="Thomas"></a>
-
-<h1>Australian Citizenship - Our Common Bond</h1><h4 class="credit">Created by Thomas</h4>
+<h1>Australian Citizenship - Our Common Bond</h1>
 <h2>TỪ VỰNG PHẦN 4: AUSTRALIAN VALUES</h2>
 
-<div class="nav-bar">
-    <a href="V1.html" class="btn">PART_ONE</a>
-    <a href="V2.html" class="btn">PART_TWO</a>
-    <a href="V3.html" class="btn">PART_THREE</a>
-    <a href="V4.html" class="btn">PART_FOUR</a>
-    <a href="Glossary.html" class="btn">Glossary</a>
-
-</div>
-<br>
-<!-- Wrapper mới chứa filter-bar và controls -->
 <div class="filter-controls-wrapper">
-    <div class="filter-bar">
-        <div class="filter-btn active" data-mode="all">Show All</div>
-        <div class="filter-btn" data-mode="checked">Checked</div>
-        <div class="filter-btn" data-mode="unchecked">Unchecked</div>
-        <div class="filter-btn reset-btn" id="resetBtn">Reset</div>
-        <div class="tips-btn2" id="tipsBtn">💡Tips</div>
-    </div>
-<!-- Popup Tips -->
-<div id="tipsPopup" class="tips-popup">
-    <div class="tips-content">
-        <div class="tips-close">&times;</div>
-        <h2>💡 Mẹo học từ vựng hiệu quả</h2>
-        <div class="tips-body">
-            <h3>1. Cách sử dụng các nút Show All / Checked / Unchecked</h3>
-            <ul>
-                <li><strong>Checked:</strong> Danh sách các từ bạn đã đánh dấu cần học.</li>
-                <li><strong>Unchecked:</strong> Danh sách các từ bạn không cần học nữa (đã biết).</li>
-                <li><strong>Show All / Checked / Unchecked:</strong> Lọc hiển thị tất cả, chỉ từ đã check hoặc chưa check.</li>
-                <li><strong>Reset:</strong> Bỏ hết dấu check và quay về hiển thị tất cả.</li>
-            </ul>
-            <h3>2. Cách sử dụng các tính năng</h3>
-            <ul>
-                <li><strong>Nghe:</strong> Bấm nút "Nghe" để nghe phát âm từ.</li>
-                <li><strong>Read:</strong> Bấm nút "Read" để nghe cả câu ví dụ đầy đủ.</li>
-                <li><strong>Chọn giọng đọc:</strong> Ưu tiên chọn giọng English (Australia) để nghe chuẩn giọng Úc.</li>
-            </ul>
-            <h3>3. Mẹo học thuộc lâu</h3>
-            <ol>
-                <li>Học theo ngữ cảnh: Đọc kỹ câu ví dụ và bản dịch.</li>
-                <li>Lặp lại nhiều lần: Nghe + đọc to theo câu ví dụ.(Có thể luyện thêm sau khi thi xong)</li>
-                <li>Uncheck các từ khi đã thuộc: Khi bạn có thể nhớ nghĩa + phát âm mà không nhìn.</li>
-                <li>Học mỗi ngày một ít: Quay lại các từ đã uncheck để ôn lại định kỳ.</li>
-            </ol>
-            <p><strong>Chúc bạn học tốt và sớm vượt qua kỳ thi quốc tịch Úc!</strong>/p>
-        </div>
-    </div>
-</div>
     <div class="controls">
-            <!-- SEARCH -->
         <button id="searchBtn" class="btn">Search</button>
-        <input type="text" id="searchInput" placeholder="Nhập từ cần tìm..." />        
-<input type="text" id="searchInput" placeholder="Nhập từ cần tìm..." list="vocabSuggestions">
-<input type="text" id="searchInput" placeholder="Nhập từ cần tìm..." autocomplete="off">
-<div id="searchSuggestions" class="search-suggestions"></div>
+        <input type="text" id="searchInput" placeholder="Nhập từ cần tìm..." autocomplete="off">
+        <div id="searchSuggestions" class="search-suggestions"></div>
 
-        
-<datalist id="vocabSuggestions"></datalist>
-
-        
         <strong>Chọn giọng đọc:</strong>
         <select id="voiceSelect"></select>
-        <div id="notice" class="notice" style="display:none;">Không tìm thấy giọng Australian? Cài đặt ngôn ngữ English (Australia) trong máy!</div>
     </div>
 </div>
 
-
 <table id="vocabTable">
-    <thead>
-        <tr>
-            <th>No.</th>
-            <th>Options</th>
-            <th>Vocabulary</th>
-            <th>Pronunciation</th>
-            <th>Translation</th>
-            <th>Audio</th>
-            <th>Example</th>
-            <th>Read</th>
-        </tr>
-    </thead>
+<thead>
+<tr>
+    <th>No.</th>
+    <th>Options</th>
+    <th>Vocabulary</th>
+    <th>Pronunciation</th>
+    <th>Translation</th>
+    <th>Audio</th>
+    <th>Example</th>
+    <th>Read</th>
+</tr>
+</thead>
     <tbody>
         
         <tr><td>1</td><td><input type="checkbox" class="row-check"></td><td>congratulations</td><td>/kənˌɡrætʃ.uˈleɪ.ʃənz/</td><td>chúc mừng</td><td><button class="btn" onclick="speak('congratulations')">Nghe</button></td><td class="example">Congratulations on choosing to become an Australian citizen. [Chúc mừng bạn đã chọn trở thành công dân Úc.]</td><td><button class="btn" data-sentence="Congratulations on choosing to become an Australian citizen.">Read</button></td></tr>
@@ -235,189 +136,98 @@ const firebaseConfig = {
 </table>
 
 <script src="vocab.js"></script>
-<script>
-document.getElementById("searchBtn").addEventListener("click", doSearch);
-document.getElementById("searchInput").addEventListener("keydown", function(e) {
-    if (e.key === "Enter") doSearch();
-});
 
 <script>
-document.getElementById("searchBtn").addEventListener("click", doSearch);
-document.getElementById("searchInput").addEventListener("keydown", function (e) {
-    if (e.key === "Enter") doSearch();
-});
+document.addEventListener("DOMContentLoaded", () => {
 
-function doSearch() {
-    const keyword = document.getElementById("searchInput").value.trim().toLowerCase();
-    if (!keyword) return;
+    const searchInput = document.getElementById("searchInput");
+    const searchBtn = document.getElementById("searchBtn");
+    const suggestionBox = document.getElementById("searchSuggestions");
 
-    const rows = document.querySelectorAll("#vocabTable tbody tr");
-    let found = false;
+    let vocabularyList = [];
 
-    rows.forEach(row => row.style.background = "");
+    function loadVocabulary() {
+        const rows = document.querySelectorAll("#vocabTable tbody tr");
+        const set = new Set();
 
-    for (let row of rows) {
-        const vocabCell = row.querySelector("td:nth-child(3)");
-        if (!vocabCell) continue;
+        rows.forEach(row => {
+            const cell = row.querySelector("td:nth-child(3)");
+            if (cell) set.add(cell.textContent.trim());
+        });
 
-        const vocabText = vocabCell.textContent.toLowerCase();
-        if (vocabText.includes(keyword)) {
-            row.scrollIntoView({ behavior: "smooth", block: "center" });
-            row.style.background = "#fff3cd";
-            found = true;
-            break;
+        vocabularyList = [...set];
+    }
+
+    function doSearch() {
+        const keyword = searchInput.value.trim().toLowerCase();
+        if (!keyword) return;
+
+        const rows = document.querySelectorAll("#vocabTable tbody tr");
+        let found = false;
+
+        rows.forEach(r => r.style.background = "");
+
+        for (let row of rows) {
+            const cell = row.querySelector("td:nth-child(3)");
+            if (!cell) continue;
+
+            if (cell.textContent.toLowerCase().includes(keyword)) {
+                row.scrollIntoView({ behavior: "smooth", block: "center" });
+                row.style.background = "#fff3cd";
+                found = true;
+                break;
+            }
         }
+
+        if (!found) alert("❌ Không tìm thấy từ trong cột Vocabulary");
     }
 
-    if (!found) {
-        alert("❌ Không tìm thấy từ trong cột Vocabulary");
-    }
-}
-</script>
-<script>
-const searchInput = document.getElementById("searchInput");
-const suggestionBox = document.getElementById("vocabSuggestions");
+    function showSuggestions(value) {
+        suggestionBox.innerHTML = "";
 
-// Lấy toàn bộ từ trong cột Vocabulary
-function buildVocabularySuggestions() {
-    const rows = document.querySelectorAll("#vocabTable tbody tr");
-    const vocabSet = new Set();
-
-    rows.forEach(row => {
-        const cell = row.querySelector("td:nth-child(3)");
-        if (cell) {
-            vocabSet.add(cell.textContent.trim());
-        }
-    });
-
-    suggestionBox.innerHTML = "";
-    vocabSet.forEach(word => {
-        const option = document.createElement("option");
-        option.value = word;
-        suggestionBox.appendChild(option);
-    });
-}
-
-// Gọi 1 lần khi load trang
-buildVocabularySuggestions();
-</script>
-<script>
-const searchInput = document.getElementById("searchInput");
-const suggestionBox = document.getElementById("searchSuggestions");
-
-let vocabularyList = [];
-
-// Lấy danh sách Vocabulary (cột 3)
-function loadVocabulary() {
-    const rows = document.querySelectorAll("#vocabTable tbody tr");
-    const set = new Set();
-
-    rows.forEach(row => {
-        const cell = row.querySelector("td:nth-child(3)");
-        if (cell) set.add(cell.textContent.trim());
-    });
-
-    vocabularyList = [...set];
-}
-
-// Hiển thị gợi ý
-function showSuggestions(value) {
-    suggestionBox.innerHTML = "";
-    if (value.length < 2) {
-        suggestionBox.style.display = "none";
-        return;
-    }
-
-    const keyword = value.toLowerCase();
-    const matches = vocabularyList.filter(word =>
-        word.toLowerCase().startsWith(keyword)
-    );
-
-    if (matches.length === 0) {
-        suggestionBox.style.display = "none";
-        return;
-    }
-
-    matches.forEach(word => {
-        const div = document.createElement("div");
-        div.textContent = word;
-        div.onclick = () => {
-            searchInput.value = word;
+        if (value.length < 2) {
             suggestionBox.style.display = "none";
-        };
-        suggestionBox.appendChild(div);
-    });
+            return;
+        }
 
-    const rect = searchInput.getBoundingClientRect();
-    suggestionBox.style.top = rect.bottom + window.scrollY + "px";
-    suggestionBox.style.left = rect.left + window.scrollX + "px";
-    suggestionBox.style.display = "block";
-}
+        const matches = vocabularyList.filter(w =>
+            w.toLowerCase().startsWith(value.toLowerCase())
+        );
 
-// Sự kiện gõ (iPhone OK)
-searchInput.addEventListener("input", () => {
-    showSuggestions(searchInput.value);
-});
+        if (!matches.length) {
+            suggestionBox.style.display = "none";
+            return;
+        }
 
-// Ẩn khi click ra ngoài
-document.addEventListener("click", (e) => {
-    if (!searchInput.contains(e.target) && !suggestionBox.contains(e.target)) {
-        suggestionBox.style.display = "none";
+        matches.forEach(word => {
+            const div = document.createElement("div");
+            div.textContent = word;
+            div.onclick = () => {
+                searchInput.value = word;
+                suggestionBox.style.display = "none";
+            };
+            suggestionBox.appendChild(div);
+        });
+
+        const rect = searchInput.getBoundingClientRect();
+        suggestionBox.style.top = rect.bottom + window.scrollY + "px";
+        suggestionBox.style.left = rect.left + window.scrollX + "px";
+        suggestionBox.style.display = "block";
     }
-});
 
-// Init
-loadVocabulary();
-</script>
+    searchBtn.onclick = doSearch;
+    searchInput.onkeydown = e => e.key === "Enter" && doSearch();
+    searchInput.oninput = () => showSuggestions(searchInput.value);
 
-
-
-    
-    <script>
-let lastScrollTop = 0;
-
-const hideTargets = [
-    document.querySelector('.logout-btn'),
-    document.querySelector('.home-btn'),
-    document.querySelector('.home-btnTS')
-];
-
-window.addEventListener('scroll', () => {
-    const st = window.pageYOffset || document.documentElement.scrollTop;
-    const isScrollingDown = st > lastScrollTop;
-
-    hideTargets.forEach(el => {
-        if (!el) return;
-        el.classList.toggle('hide-on-scroll', isScrollingDown);
+    document.addEventListener("click", e => {
+        if (!searchInput.contains(e.target) && !suggestionBox.contains(e.target)) {
+            suggestionBox.style.display = "none";
+        }
     });
 
-    lastScrollTop = st <= 0 ? 0 : st;
+    loadVocabulary();
 });
 </script>
-
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
