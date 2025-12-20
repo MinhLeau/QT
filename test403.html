@@ -1135,26 +1135,42 @@ function loadQuiz(selection) {
     ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
     CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
   }
-  else if (["part1","part2","part3","part4"].includes(selection)) {
-    IS_ALL_MODE = true;
+else if (["part1","part2","part3","part4"].includes(selection)) {
+  IS_ALL_MODE = true;
 
-    const map = {
-      part1:["PART 1","END PART 1"],
-      part2:["PART 2","END PART 2"],
-      part3:["PART 3","END PART 3"],
-      part4:["PART 4","END PART 4"]
-    };
+  const map = {
+    part1:["PART 1","END PART 1"],
+    part2:["PART 2","END PART 2"],
+    part3:["PART 3","END PART 3"],
+    part4:["PART 4","END PART 4"]
+  };
 
-    const [s, e] = map[selection];
-    const start = QUESTION_BANK.findIndex(q => q.q === `// ${s}`) + 1;
-    const end   = QUESTION_BANK.findIndex(q => q.q === `// ${e}`);
+  const [s, e] = map[selection];
 
-    list = getRealQuestions(QUESTION_BANK.slice(start, end)).map(attachPartInfo);
+  let inPart = false;
+  list = [];
 
-    ALL_FULL_QUESTIONS = applyLevelMode(list);
-    ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
-    CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
+  for (const q of QUESTION_BANK) {
+    if (q.q === `// ${s}`) {
+      inPart = true;
+      continue;
+    }
+    if (q.q === `// ${e}`) {
+      inPart = false;
+      break;
+    }
+    if (inPart && q.q && !q.q.startsWith("//")) {
+      list.push(q);
+    }
   }
+
+  list = getRealQuestions(list).map(attachPartInfo);
+
+  ALL_FULL_QUESTIONS = applyLevelMode(list);
+  ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
+  CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
+}
+
   else {
     // Practice 1–10
     const n = parseInt(selection, 10);
@@ -1288,6 +1304,7 @@ setTimeout(() => {
 	
 </body>
 </html>
+
 
 
 
