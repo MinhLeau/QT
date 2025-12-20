@@ -663,17 +663,31 @@ function updateMoreAllBtn(showVi) {
   }
 
   btn.style.display = "block";
-  btn.onclick = () => {
-    ALL_SHOWN_COUNT = Math.min(ALL_SHOWN_COUNT + ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
-    CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
-    renderAllQuestions(showVi);
-    updateQuestionCount();
-    updateMoreAllBtn(showVi);
+btn.onclick = () => {
+  const prevCount = CURRENT_QUESTIONS.length;
 
-    // cuộn xuống gần phần vừa load thêm (cho đỡ “mù đường”)
-    btn.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-}
+  ALL_SHOWN_COUNT = Math.min(
+    ALL_SHOWN_COUNT + ALL_PAGE_SIZE,
+    ALL_FULL_QUESTIONS.length
+  );
+
+  CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
+
+  // 👉 chỉ append các câu mới
+  appendAllQuestions(prevCount, showVi);
+
+  updateQuestionCount();
+  updateMoreAllBtn(showVi);
+
+  // cuộn xuống câu đầu tiên vừa load thêm
+  const firstNew = document.querySelector(
+    `[data-qindex="${prevCount}"]`
+  );
+  if (firstNew) {
+    firstNew.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+};
+
 
 // ============ HELPERS ============
 function isPractice10(sel) {
@@ -868,6 +882,40 @@ function renderAllQuestions(showVi) {
   });
 }
 
+function appendAllQuestions(fromIndex, showVi) {
+  for (let i = fromIndex; i < CURRENT_QUESTIONS.length; i++) {
+    const q = CURRENT_QUESTIONS[i];
+
+    let html = `<div style="margin:35px 0;" data-qindex="${i}">
+      <strong>${i + 1}. ${q.q}`;
+
+    if (showVi && q.qVi) {
+      html += ` <i style="color:#0066cc;">[${q.qVi}]</i>`;
+    }
+
+    html += `</strong><div style="margin-top:18px;">`;
+
+    q.opts.forEach((opt, j) => {
+      let txt = opt;
+      if (showVi && q.optsVi && q.optsVi[j]) {
+        txt += ` <i style="color:#0066cc;">[${q.optsVi[j]}]</i>`;
+      }
+
+      const checked = userAnswers[i] === j ? "checked" : "";
+
+      html += `<label class="opt" id="q${i}o${j}_lbl">
+        <input type="radio" name="q${i}" ${checked}
+               onchange="checkAnswerInstant(${i},${j}); saveAnswer(${i},${j});">
+        ${txt}
+      </label>`;
+    });
+
+    html += `</div></div>`;
+    questionsEl.insertAdjacentHTML("beforeend", html);
+  }
+}
+
+		
 // Vietnam toggle re-render
 function rerenderVietnam() {
   const sel = quizSelectEl.value;
@@ -1283,6 +1331,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
