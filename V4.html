@@ -43,6 +43,16 @@ const firebaseConfig = {
             console.error('Logout error:', error);
         }
     };
+
+#searchInput {
+    padding: 6px 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-right: 8px;
+    width: 180px; /* muốn rộng/hẹp thì sửa số này */
+}
+
+        
 </script>
 
 
@@ -128,6 +138,9 @@ const firebaseConfig = {
     </div>
 </div>
     <div class="controls">
+            <!-- SEARCH -->
+        <button id="searchBtn" class="btn">Search</button>
+        <input type="text" id="searchInput" placeholder="Nhập từ cần tìm..." />        
         <strong>Chọn giọng đọc:</strong>
         <select id="voiceSelect"></select>
         <div id="notice" class="notice" style="display:none;">Không tìm thấy giọng Australian? Cài đặt ngôn ngữ English (Australia) trong máy!</div>
@@ -189,6 +202,40 @@ const firebaseConfig = {
 </table>
 
 <script src="vocab.js"></script>
+<script>
+document.getElementById("searchBtn").addEventListener("click", doSearch);
+document.getElementById("searchInput").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") doSearch();
+});
+
+function doSearch() {
+    const keyword = document.getElementById("searchInput").value.trim().toLowerCase();
+    if (!keyword) return;
+
+    const rows = document.querySelectorAll("#vocabTable tbody tr");
+    let found = false;
+
+    rows.forEach(row => {
+        row.style.background = ""; // reset highlight
+    });
+
+    for (let row of rows) {
+        if (row.innerText.toLowerCase().includes(keyword)) {
+            row.scrollIntoView({ behavior: "smooth", block: "center" });
+            row.style.background = "#fff3cd"; // highlight vàng nhẹ
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        alert("❌ Không tìm thấy từ: " + keyword);
+    }
+}
+</script>
+
+
+    
     <script>
 let lastScrollTop = 0;
 
@@ -214,6 +261,7 @@ window.addEventListener('scroll', () => {
 
 </body>
 </html>
+
 
 
 
