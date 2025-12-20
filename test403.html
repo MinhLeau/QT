@@ -664,9 +664,8 @@ function updateMoreAllBtn(showVi) {
 
   btn.style.display = "block";
 btn.onclick = () => {
-  const prevCount = CURRENT_QUESTIONS.length;
+  const firstNewIndex = CURRENT_QUESTIONS.length; // 🔑 nhớ câu đầu batch mới
 
-  // tăng số câu được hiển thị
   ALL_SHOWN_COUNT = Math.min(
     ALL_SHOWN_COUNT + ALL_PAGE_SIZE,
     ALL_FULL_QUESTIONS.length
@@ -674,8 +673,7 @@ btn.onclick = () => {
 
   CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
 
-  // 🔑 MỞ RỘNG userAnswers, KHÔNG reset
-  for (let i = prevCount; i < CURRENT_QUESTIONS.length; i++) {
+  for (let i = firstNewIndex; i < CURRENT_QUESTIONS.length; i++) {
     if (typeof userAnswers[i] === "undefined") {
       userAnswers[i] = null;
     }
@@ -685,11 +683,13 @@ btn.onclick = () => {
   updateQuestionCount();
   updateMoreAllBtn(showVi);
 
-  // cuộn xuống vùng vừa load thêm
-  btn.scrollIntoView({ behavior: "smooth", block: "start" });
+  // ✅ SCROLL TỚI CÂU ĐẦU TIÊN CỦA MORE QUESTIONS
+  const firstNewEl = document.getElementById(`q${firstNewIndex}o0_lbl`);
+  if (firstNewEl) {
+    firstNewEl.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 };
 
-}
 
 // ============ HELPERS ============
 function isPractice10(sel) {
@@ -1250,6 +1250,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
