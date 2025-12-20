@@ -173,8 +173,16 @@
         </div>
     </div>
 </div>
-    <div class="controls">
-        <strong>Chọn giọng đọc:</strong>
+        <div class="controls">
+            <!-- SEARCH: nút Search ở bên trái, ô Search nằm bên trái ô Chọn giọng đọc -->
+            <button id="searchBtn" class="btn" type="button">Search</button>
+
+            <div class="search-wrap">
+                <input type="text" id="searchInput" placeholder="Nhập từ cần tìm..." autocomplete="off">
+                <div id="searchSuggestions" class="search-suggestions"></div>
+            </div>
+
+            <strong>Giọng đọc:</strong>
         <select id="voiceSelect"></select>
         <div id="notice" class="notice" style="display:none;">Không tìm thấy giọng Australian? Cài đặt ngôn ngữ English (Australia) trong máy!</div>
     </div>
@@ -279,33 +287,172 @@
     </tbody>
 </table>
 
-<script src="vocab.js"></script>
+    <!-- Script gốc của bạn -->
+    <script src="vocab.js"></script>
 
-	    <script>
-let lastScrollTop = 0;
+    <!-- SEARCH + Fix iPhone suggestions -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const table = document.getElementById("vocabTable");
+            const searchBtn = document.getElementById("searchBtn");
+            const searchInput = document.getElementById("searchInput");
+            const suggestionBox = document.getElementById("searchSuggestions");
 
-const hideTargets = [
-    document.querySelector('.logout-btn'),
-    document.querySelector('.home-btn'),
-    document.querySelector('.home-btnTS')
-];
+            // nếu thiếu DOM (tránh lỗi kiểu null.addEventListener)
+            if (!table || !searchBtn || !searchInput || !suggestionBox) return;
 
-window.addEventListener('scroll', () => {
-    const st = window.pageYOffset || document.documentElement.scrollTop;
-    const isScrollingDown = st > lastScrollTop;
+            let vocabularyList = [];
 
-    hideTargets.forEach(el => {
-        if (!el) return;
-        el.classList.toggle('hide-on-scroll', isScrollingDown);
-    });
+            function getVocabularyList() {
+                const rows = table.querySelectorAll("tbody tr");
+                const set = new Set();
 
-    lastScrollTop = st <= 0 ? 0 : st;
+                rows.forEach(row => {
+                    // cột Vocabulary = cột 3
+                    const vocabCell = row.querySelector("td:nth-child(3)");
+                    if (!vocabCell) return;
+                    const word = vocabCell.textContent.trim();
+                    if (word) set.add(word);
+                });
+
+                vocabularyList = Array.from(set);
+            }
+
+            function clearHit() {
+                table.querySelectorAll("tbody tr.search-hit").forEach(r => r.classList.remove("search-hit"));
+            }
+
+            function doSearch() {
+                const keywordRaw = searchInput.value.trim();
+                const keyword = keywordRaw.toLowerCase();
+                if (!keyword) return;
+
+                const rows = table.querySelectorAll("tbody tr");
+                clearHit();
+
+                for (const row of rows) {
+                    const vocabCell = row.querySelector("td:nth-child(3)");
+                    if (!vocabCell) continue;
+
+                    const vocabText = vocabCell.textContent.trim().toLowerCase();
+
+                    // tìm trong cột Vocabulary בלבד
+                    if (vocabText.includes(keyword)) {
+                        row.classList.add("search-hit");
+                        row.scrollIntoView({ behavior: "smooth", block: "center" });
+                        hideSuggestions();
+                        return;
+                    }
+                }
+
+                alert("❌ Không tìm thấy từ trong cột Vocabulary");
+                hideSuggestions();
+            }
+
+            function hideSuggestions() {
+                suggestionBox.style.display = "none";
+                suggestionBox.innerHTML = "";
+            }
+
+            function showSuggestions(inputValue) {
+                const v = (inputValue || "").trim();
+                if (v.length < 2) { // chỉ hiện khi >= 2 ký tự
+                    hideSuggestions();
+                    return;
+                }
+
+                const keyword = v.toLowerCase();
+                const matches = vocabularyList
+                    .filter(word => word.toLowerCase().startsWith(keyword))
+                    .slice(0, 30);
+
+                if (matches.length === 0) {
+                    hideSuggestions();
+                    return;
+                }
+
+                suggestionBox.innerHTML = "";
+                matches.forEach(word => {
+                    const div = document.createElement("div");
+                    div.className = "item";
+                    div.textContent = word;
+
+                    // iPhone: dùng touchstart để chọn không bị mất click
+div.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    searchInput.value = word;
+    hideSuggestions();
+    doSearch();              // ⭐ TỰ ĐỘNG SEARCH
+}, { passive: false });
+
+div.addEventListener("click", (e) => {
+    e.preventDefault();
+    searchInput.value = word;
+    hideSuggestions();
+    doSearch();              // ⭐ TỰ ĐỘNG SEARCH
 });
-</script>
 
+
+                    suggestionBox.appendChild(div);
+                });
+
+                suggestionBox.style.display = "block";
+            }
+
+            // init vocab list
+            getVocabularyList();
+
+            // events
+            searchBtn.addEventListener("click", doSearch);
+
+            searchInput.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") doSearch();
+            });
+
+            // input event: iPhone OK
+            searchInput.addEventListener("input", () => {
+                showSuggestions(searchInput.value);
+            });
+
+            // ẩn khi chạm/click ra ngoài
+            document.addEventListener("click", (e) => {
+                if (!searchInput.contains(e.target) && !suggestionBox.contains(e.target)) {
+                    hideSuggestions();
+                }
+            });
+
+            document.addEventListener("touchstart", (e) => {
+                if (!searchInput.contains(e.target) && !suggestionBox.contains(e.target)) {
+                    hideSuggestions();
+                }
+            }, { passive: true });
+        });
+    </script>
+
+    <!-- Hide home buttons on scroll (giữ nguyên logic của bạn, dọn lại gọn) -->
+    <script>
+        let lastScrollTop = 0;
+
+        const hideTargets = [
+            document.querySelector('.logout-btn'),
+            document.querySelector('.home-btn'),
+            document.querySelector('.home-btnTS')
+        ];
+
+        window.addEventListener('scroll', () => {
+            const st = window.pageYOffset || document.documentElement.scrollTop;
+            const isScrollingDown = st > lastScrollTop;
+
+            hideTargets.forEach(el => {
+                if (!el) return;
+                el.classList.toggle('hide-on-scroll', isScrollingDown);
+            });
+
+            lastScrollTop = st <= 0 ? 0 : st;
+        });
+    </script>
 </body>
 </html>
-
 
 
 
