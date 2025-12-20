@@ -334,23 +334,20 @@
                     div.textContent = word;
 
                     // iPhone: dùng touchstart để chọn không bị mất click
-                    div.addEventListener("touchstart", (e) => {
-                        e.preventDefault();
-                        searchInput.value = word;
-                        hideSuggestions();
-                        searchInput.focus();
-                    }, { passive: false });
+div.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    searchInput.value = word;
+    hideSuggestions();
+    doSearch();              // ⭐ TỰ ĐỘNG SEARCH
+}, { passive: false });
 
-                    div.addEventListener("mousedown", (e) => {
-                        // tránh blur input trước khi click
-                        e.preventDefault();
-                    });
+div.addEventListener("click", (e) => {
+    e.preventDefault();
+    searchInput.value = word;
+    hideSuggestions();
+    doSearch();              // ⭐ TỰ ĐỘNG SEARCH
+});
 
-                    div.addEventListener("click", () => {
-                        searchInput.value = word;
-                        hideSuggestions();
-                        searchInput.focus();
-                    });
 
                     suggestionBox.appendChild(div);
                 });
@@ -412,4 +409,5 @@
     </script>
 </body>
 </html>
+
 
