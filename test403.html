@@ -1090,6 +1090,7 @@ function submitQuiz() {
 }
 
 // ============ LOAD QUIZ ============
+// ============ LOAD QUIZ ============
 function loadQuiz(selection) {
 
   // reset state pagination
@@ -1127,6 +1128,8 @@ function loadQuiz(selection) {
   const allWithPart = getRealQuestions(QUESTION_BANK).map(attachPartInfo);
 
   let list = [];
+
+  // ================= ALL =================
   if (selection === "all") {
     IS_ALL_MODE = true;
     list = allWithPart;
@@ -1135,49 +1138,50 @@ function loadQuiz(selection) {
     ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
     CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
   }
-else if (["part1","part2","part3","part4"].includes(selection)) {
-  IS_ALL_MODE = true;
 
-  const map = {
-    part1:["PART 1","END PART 1"],
-    part2:["PART 2","END PART 2"],
-    part3:["PART 3","END PART 3"],
-    part4:["PART 4","END PART 4"]
-  };
+  // ================= PART 1–4 (FIXED) =================
+  else if (["part1","part2","part3","part4"].includes(selection)) {
+    IS_ALL_MODE = true;
 
-  const [s, e] = map[selection];
+    const map = {
+      part1: ["PART 1", "END PART 1"],
+      part2: ["PART 2", "END PART 2"],
+      part3: ["PART 3", "END PART 3"],
+      part4: ["PART 4", "END PART 4"]
+    };
 
-  let inPart = false;
-  list = [];
+    const [startMark, endMark] = map[selection];
+    let inPart = false;
+    list = [];
 
-  for (const q of QUESTION_BANK) {
-    if (q.q === `// ${s}`) {
-      inPart = true;
-      continue;
+    for (const q of QUESTION_BANK) {
+      if (q.q === `// ${startMark}`) {
+        inPart = true;
+        continue;
+      }
+      if (q.q === `// ${endMark}`) {
+        break;
+      }
+      if (inPart && q.q && !q.q.startsWith("//")) {
+        list.push(q);
+      }
     }
-    if (q.q === `// ${e}`) {
-      inPart = false;
-      break;
-    }
-    if (inPart && q.q && !q.q.startsWith("//")) {
-      list.push(q);
-    }
+
+    list = getRealQuestions(list).map(attachPartInfo);
+
+    ALL_FULL_QUESTIONS = applyLevelMode(list);
+    ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
+    CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
   }
 
-  list = getRealQuestions(list).map(attachPartInfo);
-
-  ALL_FULL_QUESTIONS = applyLevelMode(list);
-  ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
-  CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
-}
-
+  // ================= PRACTICE 1–10 =================
   else {
-    // Practice 1–10
     const n = parseInt(selection, 10);
     list = buildPracticeSet(allWithPart, n);
     CURRENT_QUESTIONS = applyLevelMode(list);
   }
 
+  // ================= COMMON INIT =================
   userAnswers = new Array(CURRENT_QUESTIONS.length).fill(null);
   currentIndex = 0;
 
@@ -1188,6 +1192,7 @@ else if (["part1","part2","part3","part4"].includes(selection)) {
 
   const showVi = !isPractice10(selection) && vietnamEl.checked;
 
+  // ================= RENDER MODE =================
   if (!IS_ALL_MODE) {
     quizHeaderEl.style.display = "flex";
     progressBarEl.style.display = "flex";
@@ -1211,6 +1216,7 @@ else if (["part1","part2","part3","part4"].includes(selection)) {
 
   resultsEl.style.display = "none";
 }
+
 
 
 // ============ EVENTS ============
@@ -1304,6 +1310,7 @@ setTimeout(() => {
 	
 </body>
 </html>
+
 
 
 
