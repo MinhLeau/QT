@@ -1137,6 +1137,12 @@ function submitQuiz() {
     });
   }
 
+  // ===== SCROLL UP 2 LINES (sau khi Submit) =====
+  window.scrollBy({
+    top: -60,
+    behavior: "smooth"
+  });
+	
   // ===== SUBMIT → FINISH =====
   nextBtnEl.textContent = "Finish";
   nextBtnEl.style.background = "#dc3545"; // màu đỏ
@@ -1383,6 +1389,7 @@ setTimeout(() => {
 	
 </body>
 </html>
+
 
 
 
