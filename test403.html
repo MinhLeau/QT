@@ -650,9 +650,14 @@ function ensureMoreAllBtn() {
 function updateMoreAllBtn(showVi) {
   const btn = ensureMoreAllBtn();
 
-  // chỉ hiện ở chế độ All + selection === "all"
-  if (!IS_ALL_MODE || !["all","part1","part2","part3","part4"].includes(quizSelectEl.value)) {
+  // ❌ KHÔNG HIỆN NÚT MORE QUESTIONS Ở PRACTICE QUIZ 1–10
+  if (isPractice10(quizSelectEl.value)) {
+    btn.style.display = "none";
+    return;
+  }
 
+  // chỉ hiện ở chế độ All + Part
+  if (!IS_ALL_MODE || !["all","part1","part2","part3","part4"].includes(quizSelectEl.value)) {
     btn.style.display = "none";
     return;
   }
@@ -663,35 +668,36 @@ function updateMoreAllBtn(showVi) {
   }
 
   btn.style.display = "block";
-btn.onclick = () => {
-  const firstNewIndex = CURRENT_QUESTIONS.length; // N
 
-  ALL_SHOWN_COUNT = Math.min(
-    ALL_SHOWN_COUNT + ALL_PAGE_SIZE,
-    ALL_FULL_QUESTIONS.length
-  );
+  btn.onclick = () => {
+    const firstNewIndex = CURRENT_QUESTIONS.length; // N
 
-  CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
+    ALL_SHOWN_COUNT = Math.min(
+      ALL_SHOWN_COUNT + ALL_PAGE_SIZE,
+      ALL_FULL_QUESTIONS.length
+    );
 
-  for (let i = firstNewIndex; i < CURRENT_QUESTIONS.length; i++) {
-    if (typeof userAnswers[i] === "undefined") {
-      userAnswers[i] = null;
+    CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
+
+    for (let i = firstNewIndex; i < CURRENT_QUESTIONS.length; i++) {
+      if (typeof userAnswers[i] === "undefined") {
+        userAnswers[i] = null;
+      }
     }
-  }
 
-  renderAllQuestions(showVi);
-  updateQuestionCount();
-  updateMoreAllBtn(showVi);
+    renderAllQuestions(showVi);
+    updateQuestionCount();
+    updateMoreAllBtn(showVi);
 
-  // ✅ SCROLL TỚI CÂU ĐẦU TIÊN CỦA MORE QUESTIONS - 1
-  const scrollIndex = firstNewIndex - 1;
-  const el = document.getElementById(`q${scrollIndex}o0_lbl`);
-  if (el) {
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-};
-
+    // ✅ SCROLL TỚI CÂU ĐẦU TIÊN CỦA MORE QUESTIONS - 1
+    const scrollIndex = firstNewIndex - 1;
+    const el = document.getElementById(`q${scrollIndex}o0_lbl`);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 }
+
 
 // ============ HELPERS ============
 function isPractice10(sel) {
@@ -1252,6 +1258,7 @@ loadQuiz("part1");
 	
 </body>
 </html>
+
 
 
 
