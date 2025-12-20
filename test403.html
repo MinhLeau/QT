@@ -1125,11 +1125,35 @@ function loadQuiz(selection) {
     topBtnEl.style.display = "inline-flex";
   }
 
+  // ---- helper: lấy câu hỏi theo marker (có fallback để không bị trắng) ----
+  function getQuestionsForPart(sel) {
+    const map = {
+      part1: ["PART 1", "END PART 1"],
+      part2: ["PART 2", "END PART 2"],
+      part3: ["PART 3", "END PART 3"],
+      part4: ["PART 4", "END PART 4"]
+    };
+
+    const [s, e] = map[sel];
+    const startIdx = QUESTION_BANK.findIndex(q => q && q.q === `// ${s}`);
+    const endIdx   = QUESTION_BANK.findIndex(q => q && q.q === `// ${e}`);
+
+    // ✅ ưu tiên dùng marker nếu hợp lệ
+    if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+      return QUESTION_BANK.slice(startIdx + 1, endIdx);
+    }
+
+    // ⚠️ fallback: nếu marker không có / sai → tránh trắng trang
+    // (vẫn trả về toàn bộ câu hỏi thật để app chạy được)
+    console.warn("[Part mode] Không tìm thấy marker hoặc marker sai:", `// ${s}`, `// ${e}`);
+    return QUESTION_BANK;
+  }
+
+  // ✅ allWithPart vẫn giữ như code của bạn
   const allWithPart = getRealQuestions(QUESTION_BANK).map(attachPartInfo);
 
   let list = [];
 
-  // ================= ALL =================
   if (selection === "all") {
     IS_ALL_MODE = true;
     list = allWithPart;
@@ -1138,50 +1162,26 @@ function loadQuiz(selection) {
     ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
     CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
   }
-
-  // ================= PART 1–4 (FIXED) =================
   else if (["part1","part2","part3","part4"].includes(selection)) {
     IS_ALL_MODE = true;
 
-    const map = {
-      part1: ["PART 1", "END PART 1"],
-      part2: ["PART 2", "END PART 2"],
-      part3: ["PART 3", "END PART 3"],
-      part4: ["PART 4", "END PART 4"]
-    };
+    // ✅ lấy theo marker nếu có, nếu không có marker thì fallback
+    const rawPart = getQuestionsForPart(selection);
 
-    const [startMark, endMark] = map[selection];
-    let inPart = false;
-    list = [];
-
-    for (const q of QUESTION_BANK) {
-      if (q.q === `// ${startMark}`) {
-        inPart = true;
-        continue;
-      }
-      if (q.q === `// ${endMark}`) {
-        break;
-      }
-      if (inPart && q.q && !q.q.startsWith("//")) {
-        list.push(q);
-      }
-    }
-
-    list = getRealQuestions(list).map(attachPartInfo);
+    // giữ đúng pipeline của bạn
+    list = getRealQuestions(rawPart).map(attachPartInfo);
 
     ALL_FULL_QUESTIONS = applyLevelMode(list);
     ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
     CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
   }
-
-  // ================= PRACTICE 1–10 =================
   else {
+    // Practice 1–10
     const n = parseInt(selection, 10);
     list = buildPracticeSet(allWithPart, n);
     CURRENT_QUESTIONS = applyLevelMode(list);
   }
 
-  // ================= COMMON INIT =================
   userAnswers = new Array(CURRENT_QUESTIONS.length).fill(null);
   currentIndex = 0;
 
@@ -1192,7 +1192,6 @@ function loadQuiz(selection) {
 
   const showVi = !isPractice10(selection) && vietnamEl.checked;
 
-  // ================= RENDER MODE =================
   if (!IS_ALL_MODE) {
     quizHeaderEl.style.display = "flex";
     progressBarEl.style.display = "flex";
@@ -1216,6 +1215,7 @@ function loadQuiz(selection) {
 
   resultsEl.style.display = "none";
 }
+
 
 
 
@@ -1310,6 +1310,7 @@ setTimeout(() => {
 	
 </body>
 </html>
+
 
 
 
