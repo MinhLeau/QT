@@ -157,6 +157,11 @@
             justify-content: space-between;
             margin: 40px 0 20px;
         }
+
+#questions .opt {
+    font-weight: normal !important;
+}
+
         #prevBtn, #nextBtn {
             padding: 16px 40px;
             font-size: 20px;
@@ -340,3 +345,4 @@ label:has(#advance) {
             pointer-events: none;
 
         }
+
