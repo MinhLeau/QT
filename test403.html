@@ -487,7 +487,7 @@ function promptSaveWrongQuestion(q) {
 
   __myPracticeAsked.add(q.__id);
 
-  const ok = confirm("Bạn có muốn lưu câu hỏi này để học lại sau?");
+  const ok = confirm("Bạn đã chọn câu trả lời sai!<br>Bạn có muốn lưu câu hỏi này để học lại sau?");
   if (ok) {
     const added = addToMyPractice(q);
     if (added) {
@@ -1176,3 +1176,4 @@ setTimeout(() => {
 
 </body>
 </html>
+
