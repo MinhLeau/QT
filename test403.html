@@ -759,13 +759,7 @@ function renderAllQuestions(showVi) {
 }
 
 
-  // 🔑 restore highlight for answered questions
-  for (let i = 0; i < userAnswers.length; i++) {
-    if (userAnswers[i] !== null && typeof userAnswers[i] !== "undefined") {
-      checkAnswerInstant(i, userAnswers[i]);
-    }
-  }
-}
+
 
 // Vietnam toggle re-render
 function rerenderVietnam() {
@@ -1235,6 +1229,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
