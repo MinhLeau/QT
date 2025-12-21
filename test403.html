@@ -406,37 +406,38 @@ const MY_PRACTICE_KEY = "test403_mypractice_v1";
 let __myPracticeAsked = new Set();
 
 function makeQuestionId(q) {
-  // id ổn định theo nội dung (không phụ thuộc object reference)
-  const base = JSON.stringify({
-    q: q?.q || "",
-    qVi: q?.qVi || "",
-    opts: q?.opts || [],
-    optsVi: q?.optsVi || [],
-    a: typeof q?.a === "number" ? q.a : null,
-    part: q?.__part || null
-  });
+  // chỉ dựa vào nội dung câu hỏi (ổn định qua mọi lần load)
+  const base = (
+    (q?.q || "").trim().toLowerCase() +
+    "||" +
+    (q?.qVi || "").trim().toLowerCase()
+  );
 
-  // hash đơn giản (FNV-1a 32-bit)
+  // hash FNV-1a 32bit
   let h = 0x811c9dc5;
   for (let i = 0; i < base.length; i++) {
     h ^= base.charCodeAt(i);
     h = Math.imul(h, 0x01000193);
   }
+
   return "q_" + (h >>> 0).toString(16);
 }
 
+
 function normalizeForStore(q) {
   if (!q || typeof q !== "object") return null;
+
   return {
     q: q.q,
     qVi: q.qVi,
-    opts: Array.isArray(q.opts) ? q.opts : [],
-    optsVi: Array.isArray(q.optsVi) ? q.optsVi : [],
-    a: typeof q.a === "number" ? q.a : 0,
+    opts: q.opts || [],        // vẫn lưu để hiển thị
+    optsVi: q.optsVi || [],
+    a: q.a,
     __part: q.__part || null,
     __id: q.__id || makeQuestionId(q)
   };
 }
+
 
 function loadMyPractice() {
   try {
@@ -1229,6 +1230,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
