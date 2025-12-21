@@ -355,8 +355,8 @@ function updateMoreAllBtn(showVi) {
     return;
   }
 
-  // chỉ hiện ở chế độ All + Part
-  if (!IS_ALL_MODE || !["all","part1","part2","part3","part4"].includes(quizSelectEl.value)) {
+  // chỉ hiện ở chế độ All + Part + MyPractice
+  if (!IS_ALL_MODE || !["all","part1","part2","part3","part4","mypractice"].includes(quizSelectEl.value)) {
     btn.style.display = "none";
     return;
   }
@@ -395,6 +395,107 @@ function updateMoreAllBtn(showVi) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
+}
+
+
+// ============ MY PRACTICE (SAVE WRONG QUESTIONS) ============
+// Lưu danh sách câu sai để học lại sau (localStorage)
+const MY_PRACTICE_KEY = "test403_mypractice_v1";
+
+// Tránh popup lặp lại cho cùng 1 câu trong 1 lượt làm bài
+let __myPracticeAsked = new Set();
+
+function makeQuestionId(q) {
+  // id ổn định theo nội dung (không phụ thuộc object reference)
+  const base = JSON.stringify({
+    q: q?.q || "",
+    qVi: q?.qVi || "",
+    opts: q?.opts || [],
+    optsVi: q?.optsVi || [],
+    a: typeof q?.a === "number" ? q.a : null,
+    part: q?.__part || null
+  });
+
+  // hash đơn giản (FNV-1a 32-bit)
+  let h = 0x811c9dc5;
+  for (let i = 0; i < base.length; i++) {
+    h ^= base.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return "q_" + (h >>> 0).toString(16);
+}
+
+function normalizeForStore(q) {
+  if (!q || typeof q !== "object") return null;
+  return {
+    q: q.q,
+    qVi: q.qVi,
+    opts: Array.isArray(q.opts) ? q.opts : [],
+    optsVi: Array.isArray(q.optsVi) ? q.optsVi : [],
+    a: typeof q.a === "number" ? q.a : 0,
+    __part: q.__part || null,
+    __id: q.__id || makeQuestionId(q)
+  };
+}
+
+function loadMyPractice() {
+  try {
+    const raw = localStorage.getItem(MY_PRACTICE_KEY);
+    if (!raw) return [];
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? arr.filter(Boolean) : [];
+  } catch (e) {
+    console.warn("MyPractice load failed:", e);
+    return [];
+  }
+}
+
+function saveMyPractice(list) {
+  try {
+    localStorage.setItem(MY_PRACTICE_KEY, JSON.stringify(list || []));
+  } catch (e) {
+    console.warn("MyPractice save failed:", e);
+  }
+}
+
+function addToMyPractice(questionObj) {
+  const q = normalizeForStore(questionObj);
+  if (!q) return false;
+
+  const list = loadMyPractice();
+  const exists = list.some(x => x && (x.__id === q.__id));
+  if (exists) return false;
+
+  list.push(q);
+  saveMyPractice(list);
+  return true;
+}
+
+function shouldPromptSaveWrong() {
+  const sel = quizSelectEl.value;
+  return ["all","part1","part2","part3","part4"].includes(sel);
+}
+
+function promptSaveWrongQuestion(q) {
+  if (!q) return;
+
+  // gắn __id nếu thiếu
+  if (!q.__id) q.__id = makeQuestionId(q);
+
+  // đã hỏi rồi thì thôi
+  if (__myPracticeAsked.has(q.__id)) return;
+
+  __myPracticeAsked.add(q.__id);
+
+  const ok = confirm("Bạn có muốn lưu câu hỏi này để học lại sau?");
+  if (ok) {
+    const added = addToMyPractice(q);
+    if (added) {
+      alert("✅ Đã lưu vào My Practice.");
+    } else {
+      alert("ℹ️ Câu này đã có trong My Practice rồi.");
+    }
+  }
 }
 
 
@@ -455,8 +556,6 @@ function attachPartInfo(q) {
   // fallback (trường hợp hiếm)
   return { ...q, __part: null };
 }
-
-
 
 function isAustralianValueQuestion(q) {
   return q && q.__part === "part4";
@@ -534,8 +633,8 @@ function updateQuestionCount() {
     return;
   }
 
-  // All + Part_1 → Part_4: dùng tổng thực sự
-  if (["all","part1","part2","part3","part4"].includes(sel)) {
+  // All + Part_1 → Part_4 + MyPractice: dùng tổng thực sự
+  if (["all","part1","part2","part3","part4","mypractice"].includes(sel)) {
     const total = ALL_FULL_QUESTIONS.length || CURRENT_QUESTIONS.length;
     questionCountEl.textContent = total
       ? `(${total} Questions)`
@@ -659,6 +758,11 @@ function checkAnswerInstant(i, v) {
   const c = CURRENT_QUESTIONS[i].a;
   document.getElementById(`q${i}o${v}_lbl`).classList.add(v===c ? "correct":"wrong");
   if (v !== c) document.getElementById(`q${i}o${c}_lbl`).classList.add("correct");
+
+  // ✅ popup lưu câu sai → My Practice (chỉ Part1-4 & All)
+  if (v !== c && shouldPromptSaveWrong()) {
+    promptSaveWrongQuestion(CURRENT_QUESTIONS[i]);
+  }
 }
 
 // ============ NAV ============
@@ -822,6 +926,9 @@ function loadQuiz(selection) {
   ALL_SHOWN_COUNT = 0;
   ensureMoreAllBtn().style.display = "none";
 
+  // reset popup cache (mỗi lần load quiz)
+  __myPracticeAsked = new Set();
+
   // reset UI
   resultsEl.style.display = "none";
   questionsEl.innerHTML = "";
@@ -853,6 +960,25 @@ function loadQuiz(selection) {
   const allWithPart = getRealQuestions(QUESTION_BANK).map(attachPartInfo);
 
   let list = [];
+
+  // ================= MY PRACTICE =================
+  if (selection === "mypractice") {
+    IS_ALL_MODE = true;
+
+    list = loadMyPractice();
+
+    // đảm bảo có __part / __id
+    list = list.map(q => {
+      if (!q || typeof q !== "object") return q;
+      if (!q.__id) q.__id = makeQuestionId(q);
+      if (!("__part" in q)) q.__part = null;
+      return q;
+    });
+
+    ALL_FULL_QUESTIONS = applyLevelMode(list);
+    ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
+    CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
+  }
 
   // ================= ALL =================
   if (selection === "all") {
@@ -910,7 +1036,7 @@ function loadQuiz(selection) {
   }
 
   // ================= PRACTICE 1–10 =================
-  else {
+  else if (!["mypractice","all","part1","part2","part3","part4"].includes(selection)) {
     const n = parseInt(selection, 10);
     list = buildPracticeSet(allWithPart, n);
     CURRENT_QUESTIONS = applyLevelMode(list);
@@ -946,6 +1072,17 @@ function loadQuiz(selection) {
     timerEl.textContent = "Timer 45:00";
 
     renderAllQuestions(showVi);
+
+    // nếu My Practice rỗng → hiển thị hướng dẫn
+    if (selection === "mypractice" && ALL_FULL_QUESTIONS.length === 0) {
+      questionsEl.innerHTML = `
+        <div style="margin:20px 0; padding:14px; border:2px dashed #ccc; border-radius:12px;">
+          <b>My Practice</b> hiện chưa có câu nào.<br>
+          Hãy làm Part_1 → Part_4 hoặc Practice Quiz All, nếu chọn sai sẽ có popup hỏi lưu câu để học lại sau.
+        </div>
+      `;
+    }
+
     updateMoreAllBtn(showVi);
   }
 
@@ -988,13 +1125,9 @@ topBtnEl.addEventListener("click", () => {
 // default load
 //loadQuiz(quizSelectEl.value);
 
-		
 quizSelectEl.value = "part1";
 loadQuiz("part1");
 
-
-
-		
 </script>
 
 <script>
@@ -1039,80 +1172,7 @@ setTimeout(() => {
   window.scrollTo(0, 0);
 }, 0);
 
-	
 </script>
 
-	
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
