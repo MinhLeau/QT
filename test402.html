@@ -409,6 +409,7 @@ label:has(#advance) {
         <div style="display:flex; align-items:center; gap:10px;">
             <b>Chọn bài Test:</b>
             <select id="quizSelect" style="padding:12px; font-size:18px; border-radius:8px; width:450px; max-width:100%;">
+				<option value="mypractice">My Practice</option>
                 <option value="part1">Part_1 (Australia and its people)</option>
                 <option value="part2">Part_2 (Democratic beliefs, rights and liberties)</option>
                 <option value="part3">Part_3 (Government and the law)</option>
@@ -697,8 +698,8 @@ function updateMoreAllBtn(showVi) {
     return;
   }
 
-  // chỉ hiện ở chế độ All + Part
-  if (!IS_ALL_MODE || !["all","part1","part2","part3","part4"].includes(quizSelectEl.value)) {
+  // chỉ hiện ở chế độ All + Part + MyPractice
+  if (!IS_ALL_MODE || !["all","part1","part2","part3","part4","mypractice"].includes(quizSelectEl.value)) {
     btn.style.display = "none";
     return;
   }
@@ -737,6 +738,116 @@ function updateMoreAllBtn(showVi) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
+}
+
+
+// ============ MY PRACTICE (SAVE WRONG QUESTIONS) ============
+// Lưu danh sách câu sai để học lại sau (localStorage)
+const MY_PRACTICE_KEY = "test403_mypractice_v1";
+
+// Tránh popup lặp lại cho cùng 1 câu trong 1 lượt làm bài
+let __myPracticeAsked = new Set();
+
+function makeQuestionId(q) {
+  // chỉ dựa vào nội dung câu hỏi (ổn định qua mọi lần load)
+  const base = (
+    (q?.q || "").trim().toLowerCase() +
+    "||" +
+    (q?.qVi || "").trim().toLowerCase()
+  );
+
+  // hash FNV-1a 32bit
+  let h = 0x811c9dc5;
+  for (let i = 0; i < base.length; i++) {
+    h ^= base.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+
+  return "q_" + (h >>> 0).toString(16);
+}
+
+
+function normalizeForStore(q) {
+  if (!q || typeof q !== "object") return null;
+
+  return {
+    q: q.q,
+    qVi: q.qVi,
+    opts: q.opts || [],        // vẫn lưu để hiển thị
+    optsVi: q.optsVi || [],
+    a: q.a,
+    __part: q.__part || null,
+    __id: q.__id || makeQuestionId(q)
+  };
+}
+
+
+function loadMyPractice() {
+  try {
+    const raw = localStorage.getItem(MY_PRACTICE_KEY);
+    if (!raw) return [];
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? arr.filter(Boolean) : [];
+  } catch (e) {
+    console.warn("MyPractice load failed:", e);
+    return [];
+  }
+}
+
+function saveMyPractice(list) {
+  try {
+    localStorage.setItem(MY_PRACTICE_KEY, JSON.stringify(list || []));
+  } catch (e) {
+    console.warn("MyPractice save failed:", e);
+  }
+}
+
+function addToMyPractice(questionObj) {
+  const q = normalizeForStore(questionObj);
+  if (!q) return false;
+
+  const list = loadMyPractice();
+  const exists = list.some(x => x && (x.__id === q.__id));
+  if (exists) return false;
+
+  list.push(q);
+  saveMyPractice(list);
+  return true;
+}
+
+function removeFromMyPractice(id) {
+  if (!id) return;
+  const list = loadMyPractice().filter(q => q && q.__id !== id);
+  saveMyPractice(list);
+}
+
+		
+
+function shouldPromptSaveWrong() {
+  const sel = quizSelectEl.value;
+  return ["all","part1","part2","part3","part4"].includes(sel);
+}
+
+function promptSaveWrongQuestion(q) {
+  if (!q) return;
+
+  // gắn __id nếu thiếu
+  if (!q.__id) q.__id = makeQuestionId(q);
+
+  // đã hỏi rồi thì thôi
+  if (__myPracticeAsked.has(q.__id)) return;
+
+  __myPracticeAsked.add(q.__id);
+
+  const ok = confirm("⚠️SAI⚠️\nBạn có muốn lưu câu hỏi này để học lại sau?");
+  if (ok) {
+    const added = addToMyPractice(q);
+    if (added) {
+      alert("✅ Đã lưu vào My Practice.");
+    } else {
+      alert("ℹ️ Câu này đã có trong My Practice rồi.");
+    }
+  }
 }
 
 
@@ -797,8 +908,6 @@ function attachPartInfo(q) {
   // fallback (trường hợp hiếm)
   return { ...q, __part: null };
 }
-
-
 
 function isAustralianValueQuestion(q) {
   return q && q.__part === "part4";
@@ -876,8 +985,8 @@ function updateQuestionCount() {
     return;
   }
 
-  // All + Part_1 → Part_4: dùng tổng thực sự
-  if (["all","part1","part2","part3","part4"].includes(sel)) {
+  // All + Part_1 → Part_4 + MyPractice: dùng tổng thực sự
+  if (["all","part1","part2","part3","part4","mypractice"].includes(sel)) {
     const total = ALL_FULL_QUESTIONS.length || CURRENT_QUESTIONS.length;
     questionCountEl.textContent = total
       ? `(${total} Questions)`
@@ -924,33 +1033,77 @@ function renderSingleQuestion(idx, showVi) {
 /* ✅✅✅ FIX Ở ĐÂY: ALL MODE phải lưu userAnswers + restore checked */
 function renderAllQuestions(showVi) {
   questionsEl.innerHTML = "";
+
   CURRENT_QUESTIONS.forEach((q, i) => {
-    let html = `<div style="margin:35px 0;"><strong>${i+1}. ${q.q}`;
-    if (showVi && q.qVi) html += ` <i style="color:#0066cc;">[${q.qVi}]</i>`;
-    html += `</strong><div style="margin-top:18px;">`;
+
+    let html = `
+      <div style="margin:35px 0; position:relative;">
+        <strong>${i+1}. ${q.q}
+    `;
+
+    if (showVi && q.qVi) {
+      html += ` <i style="color:#0066cc;">[${q.qVi}]</i>`;
+    }
+
+    html += `</strong>`;
+
+    // ===== CHỈ HIỆN NÚT REMOVE Ở MY PRACTICE =====
+    if (quizSelectEl.value === "mypractice" && q.__id) {
+      html += `
+        <button
+          style="
+            position:absolute;
+            right:0;
+            top:0;
+            background:#dc3545;
+            color:white;
+            border:none;
+            border-radius:6px;
+            padding:4px 8px;
+            cursor:pointer;
+            font-size:13px;
+          "
+          onclick="removeFromMyPractice('${q.__id}'); loadQuiz('mypractice');"
+        >
+          ❌ Remove
+        </button>
+      `;
+    }
+
+    html += `<div style="margin-top:18px;">`;
 
     q.opts.forEach((opt, j) => {
       let txt = opt;
-      if (showVi && q.optsVi && q.optsVi[j]) txt += ` <i style="color:#0066cc;">[${q.optsVi[j]}]</i>`;
+      if (showVi && q.optsVi && q.optsVi[j]) {
+        txt += ` <i style="color:#0066cc;">[${q.optsVi[j]}]</i>`;
+      }
 
       const checked = (userAnswers[i] === j) ? "checked" : "";
-      html += `<label class="opt" id="q${i}o${j}_lbl">
-        <input type="radio" name="q${i}" ${checked}
-               onchange="saveAnswer(${i},${j});checkAnswerInstant(${i},${j})">${txt}
-      </label>`;
+
+      html += `
+        <label class="opt" id="q${i}o${j}_lbl">
+          <input type="radio" name="q${i}" ${checked}
+            onchange="saveAnswer(${i},${j});checkAnswerInstant(${i},${j})">
+          ${txt}
+        </label>
+      `;
     });
 
     html += `</div></div>`;
+
     questionsEl.innerHTML += html;
   });
 
-  // 🔑 restore highlight for answered questions
+  // 🔑 restore highlight cho các câu đã trả lời
   for (let i = 0; i < userAnswers.length; i++) {
     if (userAnswers[i] !== null && typeof userAnswers[i] !== "undefined") {
       checkAnswerInstant(i, userAnswers[i]);
     }
   }
 }
+
+
+
 
 // Vietnam toggle re-render
 function rerenderVietnam() {
@@ -1001,6 +1154,11 @@ function checkAnswerInstant(i, v) {
   const c = CURRENT_QUESTIONS[i].a;
   document.getElementById(`q${i}o${v}_lbl`).classList.add(v===c ? "correct":"wrong");
   if (v !== c) document.getElementById(`q${i}o${c}_lbl`).classList.add("correct");
+
+  // ✅ popup lưu câu sai → My Practice (chỉ Part1-4 & All)
+  if (v !== c && shouldPromptSaveWrong()) {
+    promptSaveWrongQuestion(CURRENT_QUESTIONS[i]);
+  }
 }
 
 // ============ NAV ============
@@ -1158,11 +1316,15 @@ function submitQuiz() {
 // ============ LOAD QUIZ ============
 
 function loadQuiz(selection) {
+__myPracticeAsked = new Set(); // reset popup asked per quiz
 
   // reset state pagination
   ALL_FULL_QUESTIONS = [];
   ALL_SHOWN_COUNT = 0;
   ensureMoreAllBtn().style.display = "none";
+
+  // reset popup cache (mỗi lần load quiz)
+  __myPracticeAsked = new Set();
 
   // reset UI
   resultsEl.style.display = "none";
@@ -1195,6 +1357,25 @@ function loadQuiz(selection) {
   const allWithPart = getRealQuestions(QUESTION_BANK).map(attachPartInfo);
 
   let list = [];
+
+  // ================= MY PRACTICE =================
+  if (selection === "mypractice") {
+    IS_ALL_MODE = true;
+
+    list = loadMyPractice();
+
+    // đảm bảo có __part / __id
+    list = list.map(q => {
+      if (!q || typeof q !== "object") return q;
+      if (!q.__id) q.__id = makeQuestionId(q);
+      if (!("__part" in q)) q.__part = null;
+      return q;
+    });
+
+    ALL_FULL_QUESTIONS = applyLevelMode(list);
+    ALL_SHOWN_COUNT = Math.min(ALL_PAGE_SIZE, ALL_FULL_QUESTIONS.length);
+    CURRENT_QUESTIONS = ALL_FULL_QUESTIONS.slice(0, ALL_SHOWN_COUNT);
+  }
 
   // ================= ALL =================
   if (selection === "all") {
@@ -1252,7 +1433,7 @@ function loadQuiz(selection) {
   }
 
   // ================= PRACTICE 1–10 =================
-  else {
+  else if (!["mypractice","all","part1","part2","part3","part4"].includes(selection)) {
     const n = parseInt(selection, 10);
     list = buildPracticeSet(allWithPart, n);
     CURRENT_QUESTIONS = applyLevelMode(list);
@@ -1288,6 +1469,17 @@ function loadQuiz(selection) {
     timerEl.textContent = "Timer 45:00";
 
     renderAllQuestions(showVi);
+
+    // nếu My Practice rỗng → hiển thị hướng dẫn
+    if (selection === "mypractice" && ALL_FULL_QUESTIONS.length === 0) {
+      questionsEl.innerHTML = `
+        <div style="margin:20px 0; padding:14px; border:2px dashed #ccc; border-radius:12px;">
+          <b>My Practice</b> hiện chưa có câu nào.<br>
+          Hãy làm Part_1 → Part_4 hoặc Practice Quiz All, nếu chọn sai sẽ có popup hỏi lưu câu để học lại sau.
+        </div>
+      `;
+    }
+
     updateMoreAllBtn(showVi);
   }
 
@@ -1330,13 +1522,9 @@ topBtnEl.addEventListener("click", () => {
 // default load
 //loadQuiz(quizSelectEl.value);
 
-		
 quizSelectEl.value = "part1";
 loadQuiz("part1");
 
-
-
-		
 </script>
 
 <script>
@@ -1381,23 +1569,10 @@ setTimeout(() => {
   window.scrollTo(0, 0);
 }, 0);
 
-	
 </script>
 
-	
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
 
 
 
