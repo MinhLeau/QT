@@ -942,17 +942,28 @@ function submitQuiz() {
   document.getElementById("score")
     .insertAdjacentHTML("afterend", resultHtml);
 
-  // ===== DANH SÁCH SAI (NGẮN) =====
-  const wrongList = document.getElementById("wrongList");
-  if (wrongList) {
-    wrongList.innerHTML = "";
-    wrong.forEach(i => {
-      const li = document.createElement("li");
-      li.textContent = `${i+1}. ${CURRENT_QUESTIONS[i].q}`;
-      wrongList.appendChild(li);
-    });
-  }
 
+
+// ===== DANH SÁCH SAI (NGẮN) =====
+const wrongList = document.getElementById("wrongList");
+if (wrongList) {
+  wrongList.innerHTML = "";
+  wrong.forEach(i => {
+    const q = CURRENT_QUESTIONS[i];
+    const li = document.createElement("li");
+
+    if (isAustralianValueQuestion(q)) {
+      li.innerHTML = `❗ <strong>${i+1}. ${q.q}</strong>`;
+    } else {
+      li.textContent = `${i+1}. ${q.q}`;
+    }
+
+    wrongList.appendChild(li);
+  });
+}
+
+
+	
   // ===== WRONG DETAILS (FULL) =====
   const wrongDetails = document.getElementById("wrongDetails");
   if (wrongDetails) {
@@ -1258,6 +1269,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
