@@ -878,19 +878,21 @@ function prevQuestion() {
 function submitQuiz() {
   clearInterval(timerInterval);
 
-  let score = 0;
-  const wrong = [];
-  let wrongValueCount = 0;
+let score = 0;
+const wrong = [];            // tất cả câu sai (index)
+const wrongValues = [];      // câu sai Australian values (index)
+
 
   CURRENT_QUESTIONS.forEach((q, i) => {
-    if (userAnswers[i] === q.a) {
-      score++;
-    } else {
-      wrong.push(i);
-      if (isAustralianValueQuestion(q)) {
-        wrongValueCount++;
-      }
-    }
+if (userAnswers[i] === q.a) {
+  score++;
+} else {
+  wrong.push(i);
+  if (isAustralianValueQuestion(q)) {
+    wrongValues.push(i);
+  }
+}
+
   });
 
   resultsEl.style.display = "block";
@@ -900,18 +902,27 @@ function submitQuiz() {
     `Điểm: ${score}/${CURRENT_QUESTIONS.length}`;
 
   // ===== PASS / FAIL LOGIC =====
-  let pass = true;
-  let failReasons = [];
+let pass = true;
+let failReasons = [];
 
-  if (wrongValueCount > 0) {
-    pass = false;
-    failReasons.push("❌ Trả lời sai câu hỏi thuộc Australian values");
-  }
+// ❌ Australian values
+if (wrongValues.length > 0) {
+  pass = false;
+  const list = wrongValues.map(i => i + 1).join(", ");
+  failReasons.push(
+    `❌ Trả lời sai câu hỏi thuộc Australian values: ${list}`
+  );
+}
 
-  if (score < 15) {
-    pass = false;
-    failReasons.push("❌ Tổng số câu trả lời đúng dưới 15 câu");
-  }
+// ❌ Tổng điểm
+if (score < 15) {
+  pass = false;
+  const list = wrong.map(i => i + 1).join(", ");
+  failReasons.push(
+    `❌ Tổng số câu trả lời đúng dưới 15 câu, các câu sai: ${list}`
+  );
+}
+
 
   // ===== RESULT LINE =====
   let resultHtml = "";
@@ -1274,6 +1285,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
