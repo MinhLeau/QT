@@ -993,10 +993,11 @@ if (wrongDetails) {
     const correctTxt = q.opts[correct];
 
     wrongDetails.insertAdjacentHTML("beforeend", `
+	<p><strong>Chi tiết</strong></p>
       <div style="margin-bottom:18px; padding:12px; border:2px solid #ddd; border-radius:10px;">
         <div style="font-weight:bold;">
           ${isValue ? "❗ " : ""}${i+1}. ${q.q}
-		  <p><strong>Chi tiết</strong></p>
+		  
         </div>
 		
         <div style="margin-top:6px; color:#dc3545;"><b>Bạn chọn:</b> ${userTxt}</div>
@@ -1287,6 +1288,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
