@@ -228,6 +228,7 @@
 
 
     <!-- ✅ THÊM DÒNG NÀY -->
+	
     <div id="wrongDetails" style="margin-top:25px;"></div>
 </div>
 
@@ -909,7 +910,7 @@ if (wrongValues.length > 0) {
   pass = false;
   const list = wrongValues.map(i => i + 1).join(", ");
   failReasons.push(
-    `❌ Trả lời sai câu hỏi thuộc Australian values: ${list}`
+    `❌ Trả lời sai câu hỏi thuộc Australian values(❗): ${list}`
   );
 }
 
@@ -918,7 +919,7 @@ if (score < 15) {
   pass = false;
   const list = wrong.map(i => i + 1).join(", ");
   failReasons.push(
-    `❌ Tổng số câu trả lời đúng dưới 15 câu, các câu sai: ${list}`
+    `❌ Tổng số câu trả lời đúng dưới 15 câu, các câu sai: ${list}\n<strong>Chi tiết</strong>`
   );
 }
 
@@ -1284,6 +1285,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
