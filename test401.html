@@ -228,7 +228,7 @@
 
 
     <!-- ✅ THÊM DÒNG NÀY -->
-	
+	<p><strong>Chi tiết</strong></p>
     <div id="wrongDetails" style="margin-top:25px;"></div>
 </div>
 
@@ -993,7 +993,7 @@ if (wrongDetails) {
     const correctTxt = q.opts[correct];
 
     wrongDetails.insertAdjacentHTML("beforeend", `
-	<p><strong>Chi tiết</strong></p>
+	
       <div style="margin-bottom:18px; padding:12px; border:2px solid #ddd; border-radius:10px;">
         <div style="font-weight:bold;">
           ${isValue ? "❗ " : ""}${i+1}. ${q.q}
@@ -1288,6 +1288,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
