@@ -203,11 +203,11 @@
 
 <div id="results">
     <p id="score"></p>
-    <p><strong>Các câu sai:</strong></p>
-    <ol id="wrongList"></ol>
+
 
     <!-- ✅ THÊM DÒNG NÀY -->
-    <div id="wrongDetails" style="margin-top:25px;"></div>
+	<br><strong>Chi tiết</strong>
+    <div id="wrongDetails" style="margin-top:5px;"></div>
 </div>
 
 
@@ -854,19 +854,21 @@ function prevQuestion() {
 function submitQuiz() {
   clearInterval(timerInterval);
 
-  let score = 0;
-  const wrong = [];
-  let wrongValueCount = 0;
+let score = 0;
+const wrong = [];            // tất cả câu sai (index)
+const wrongValues = [];      // câu sai Australian values (index)
+
 
   CURRENT_QUESTIONS.forEach((q, i) => {
-    if (userAnswers[i] === q.a) {
-      score++;
-    } else {
-      wrong.push(i);
-      if (isAustralianValueQuestion(q)) {
-        wrongValueCount++;
-      }
-    }
+if (userAnswers[i] === q.a) {
+  score++;
+} else {
+  wrong.push(i);
+  if (isAustralianValueQuestion(q)) {
+    wrongValues.push(i);
+  }
+}
+
   });
 
   resultsEl.style.display = "block";
@@ -876,18 +878,28 @@ function submitQuiz() {
     `Điểm: ${score}/${CURRENT_QUESTIONS.length}`;
 
   // ===== PASS / FAIL LOGIC =====
-  let pass = true;
-  let failReasons = [];
+let pass = true;
+let failReasons = [];
 
-  if (wrongValueCount > 0) {
-    pass = false;
-    failReasons.push("❌ Trả lời sai câu hỏi thuộc Australian values");
-  }
+// ❌ Australian values
+if (wrongValues.length > 0) {
+  pass = false;
+  const list = wrongValues.map(i => i + 1).join(", ");
+  failReasons.push(
+   // `❌ Trả lời sai câu hỏi thuộc Australian values(❗): ${list}`
+	`❌ Trả lời sai câu hỏi thuộc Australian values(❗).`  
+  );
+}
 
-  if (score < 15) {
-    pass = false;
-    failReasons.push("❌ Tổng số câu trả lời đúng dưới 15 câu");
-  }
+// ❌ Tổng điểm
+if (score < 15) {
+  pass = false;
+  const list = wrong.map(i => i + 1).join(", ");
+  failReasons.push(
+    `❌ Tổng số câu trả lời đúng dưới 15 câu.<br> Các câu bạn trả lời sai: ${list}`
+  );
+}
+
 
   // ===== RESULT LINE =====
   let resultHtml = "";
@@ -918,41 +930,60 @@ function submitQuiz() {
   document.getElementById("score")
     .insertAdjacentHTML("afterend", resultHtml);
 
-  // ===== DANH SÁCH SAI (NGẮN) =====
-  const wrongList = document.getElementById("wrongList");
-  if (wrongList) {
-    wrongList.innerHTML = "";
-    wrong.forEach(i => {
-      const li = document.createElement("li");
-      li.textContent = `${i+1}. ${CURRENT_QUESTIONS[i].q}`;
-      wrongList.appendChild(li);
-    });
-  }
 
-  // ===== WRONG DETAILS (FULL) =====
-  const wrongDetails = document.getElementById("wrongDetails");
-  if (wrongDetails) {
-    wrongDetails.innerHTML = "";
-    wrong.forEach(i => {
-      const q = CURRENT_QUESTIONS[i];
-      const user = userAnswers[i];
-      const correct = q.a;
 
-      const userTxt = (user === null || typeof user === "undefined")
-        ? "(Chưa trả lời)"
-        : q.opts[user];
+// ===== DANH SÁCH SAI (NGẮN) =====
+const wrongList = document.getElementById("wrongList");
+if (wrongList) {
+  wrongList.innerHTML = "";
+  wrong.forEach(i => {
+    const q = CURRENT_QUESTIONS[i];
+    const li = document.createElement("li");
 
-      const correctTxt = q.opts[correct];
+    if (isAustralianValueQuestion(q)) {
+      li.innerHTML = `❗ <strong>${i+1}. ${q.q}</strong>`;
+    } else {
+      li.textContent = `${i+1}. ${q.q}`;
+    }
 
-      wrongDetails.insertAdjacentHTML("beforeend", `
-        <div style="margin-bottom:18px; padding:12px; border:2px solid #ddd; border-radius:10px;">
-          <div style="font-weight:bold;">${i+1}. ${q.q}</div>
-          <div style="margin-top:6px; color:#dc3545;"><b>Bạn chọn:</b> ${userTxt}</div>
-          <div style="margin-top:6px; color:#0a7d00;"><b>Đáp án đúng:</b> ${correctTxt}</div>
+    wrongList.appendChild(li);
+  });
+}
+
+
+	
+// ===== WRONG DETAILS (FULL) =====
+const wrongDetails = document.getElementById("wrongDetails");
+if (wrongDetails) {
+  wrongDetails.innerHTML = "";
+  wrong.forEach(i => {
+    const q = CURRENT_QUESTIONS[i];
+    const user = userAnswers[i];
+    const correct = q.a;
+
+    const isValue = isAustralianValueQuestion(q); // 🔑
+
+    const userTxt = (user === null || typeof user === "undefined")
+      ? "(Chưa trả lời)"
+      : q.opts[user];
+
+    const correctTxt = q.opts[correct];
+
+    wrongDetails.insertAdjacentHTML("beforeend", `
+	
+      <div style="margin-bottom:18px; padding:12px; border:2px solid #ddd; border-radius:10px;">
+        <div style="font-weight:bold;">
+          ${isValue ? "❗ " : ""}${i+1}. ${q.q}
+		  
         </div>
-      `);
-    });
-  }
+		
+        <div style="margin-top:6px; color:#dc3545;"><b>Bạn chọn:</b> ${userTxt}</div>
+        <div style="margin-top:6px; color:#0a7d00;"><b>Đáp án đúng:</b> ${correctTxt}</div>
+      </div>
+    `);
+  });
+}
+
 
   // ===== SCROLL UP 2 LINES (sau khi Submit) =====
   window.scrollBy({
@@ -1234,18 +1265,6 @@ setTimeout(() => {
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
