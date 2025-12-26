@@ -964,30 +964,35 @@ if (wrongList) {
 
 
 	
-  // ===== WRONG DETAILS (FULL) =====
-  const wrongDetails = document.getElementById("wrongDetails");
-  if (wrongDetails) {
-    wrongDetails.innerHTML = "";
-    wrong.forEach(i => {
-      const q = CURRENT_QUESTIONS[i];
-      const user = userAnswers[i];
-      const correct = q.a;
+// ===== WRONG DETAILS (FULL) =====
+const wrongDetails = document.getElementById("wrongDetails");
+if (wrongDetails) {
+  wrongDetails.innerHTML = "";
+  wrong.forEach(i => {
+    const q = CURRENT_QUESTIONS[i];
+    const user = userAnswers[i];
+    const correct = q.a;
 
-      const userTxt = (user === null || typeof user === "undefined")
-        ? "(Chưa trả lời)"
-        : q.opts[user];
+    const isValue = isAustralianValueQuestion(q); // 🔑
 
-      const correctTxt = q.opts[correct];
+    const userTxt = (user === null || typeof user === "undefined")
+      ? "(Chưa trả lời)"
+      : q.opts[user];
 
-      wrongDetails.insertAdjacentHTML("beforeend", `
-        <div style="margin-bottom:18px; padding:12px; border:2px solid #ddd; border-radius:10px;">
-          <div style="font-weight:bold;">${i+1}. ${q.q}</div>
-          <div style="margin-top:6px; color:#dc3545;"><b>Bạn chọn:</b> ${userTxt}</div>
-          <div style="margin-top:6px; color:#0a7d00;"><b>Đáp án đúng:</b> ${correctTxt}</div>
+    const correctTxt = q.opts[correct];
+
+    wrongDetails.insertAdjacentHTML("beforeend", `
+      <div style="margin-bottom:18px; padding:12px; border:2px solid #ddd; border-radius:10px;">
+        <div style="font-weight:bold;">
+          ${isValue ? "❗ " : ""}${i+1}. ${q.q}
         </div>
-      `);
-    });
-  }
+        <div style="margin-top:6px; color:#dc3545;"><b>Bạn chọn:</b> ${userTxt}</div>
+        <div style="margin-top:6px; color:#0a7d00;"><b>Đáp án đúng:</b> ${correctTxt}</div>
+      </div>
+    `);
+  });
+}
+
 
   // ===== SCROLL UP 2 LINES (sau khi Submit) =====
   window.scrollBy({
@@ -1269,6 +1274,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
