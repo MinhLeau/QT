@@ -951,7 +951,11 @@ if (pass) {
   `;
 
 } else {
-  // ❌ GIỮ NGUYÊN TOÀN BỘ CODE RỚT CỦA BẠN
+  const wrongListText =
+    wrong.length > 0
+      ? wrong.map(i => i + 1).join(", ")
+      : "Không có";
+
   resultHtml = `
     <div style="
       margin-top:10px;
@@ -960,10 +964,13 @@ if (pass) {
       color:#dc3545;">
       ❌ Kết quả: RỚT
     </div>
+
     <ul style="margin-top:8px;color:#dc3545;font-weight:bold;">
       ${failReasons.map(r => `<li>${r}</li>`).join("")}
+      <li>❌ Các câu bạn trả lời sai: ${wrongListText}</li>
     </ul>`;
 }
+
 
 
 
@@ -1302,6 +1309,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
