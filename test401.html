@@ -225,11 +225,11 @@
 
 <div id="results">
     <p id="score"></p>
-
+    <p><strong>Các câu sai:</strong></p>
+    <ol id="wrongList"></ol>
 
     <!-- ✅ THÊM DÒNG NÀY -->
-	<br><strong>Chi tiết</strong>
-    <div id="wrongDetails" style="margin-top:5px;"></div>
+    <div id="wrongDetails" style="margin-top:25px;"></div>
 </div>
 
 
@@ -878,21 +878,19 @@ function prevQuestion() {
 function submitQuiz() {
   clearInterval(timerInterval);
 
-let score = 0;
-const wrong = [];            // tất cả câu sai (index)
-const wrongValues = [];      // câu sai Australian values (index)
-
+  let score = 0;
+  const wrong = [];
+  let wrongValueCount = 0;
 
   CURRENT_QUESTIONS.forEach((q, i) => {
-if (userAnswers[i] === q.a) {
-  score++;
-} else {
-  wrong.push(i);
-  if (isAustralianValueQuestion(q)) {
-    wrongValues.push(i);
-  }
-}
-
+    if (userAnswers[i] === q.a) {
+      score++;
+    } else {
+      wrong.push(i);
+      if (isAustralianValueQuestion(q)) {
+        wrongValueCount++;
+      }
+    }
   });
 
   resultsEl.style.display = "block";
@@ -902,77 +900,47 @@ if (userAnswers[i] === q.a) {
     `Điểm: ${score}/${CURRENT_QUESTIONS.length}`;
 
   // ===== PASS / FAIL LOGIC =====
-let pass = true;
-let failReasons = [];
+  let pass = true;
+  let failReasons = [];
 
-// ❌ Australian values
-if (wrongValues.length > 0) {
-  pass = false;
-  const list = wrongValues.map(i => i + 1).join(", ");
-  failReasons.push(
-   // `❌ Trả lời sai câu hỏi thuộc Australian values(❗): ${list}`
-	`❌ Trả lời sai câu hỏi thuộc Australian values(❗).`  
-  );
-}
+  if (wrongValueCount > 0) {
+    pass = false;
+    failReasons.push("❌ Trả lời sai câu hỏi thuộc Australian values");
+  }
 
-// ❌ Tổng điểm
-if (score < 15) {
-  pass = false;
-  const list = wrong.map(i => i + 1).join(", ");
-  failReasons.push(
-    `❌ Tổng số câu trả lời đúng dưới 15 câu.<br> Các câu bạn trả lời sai: ${list}`
-  );
-}
+  if (score < 15) {
+    pass = false;
+    failReasons.push("❌ Tổng số câu trả lời đúng dưới 15 câu");
+  }
 
+  // ===== RESULT LINE =====
+  let resultHtml = "";
+  if (pass) {
+    resultHtml = `
+      <div style="
+        margin-top:10px;
+        font-size:22px;
+        font-weight:bold;
+        color:#0a7d00;">
+        ✅ Kết quả: ĐẬU
+      </div>`;
+  } else {
+    resultHtml = `
+      <div style="
+        margin-top:10px;
+        font-size:22px;
+        font-weight:bold;
+        color:#dc3545;">
+        ❌ Kết quả: RỚT
+      </div>
+      <ul style="margin-top:8px;color:#dc3545;font-weight:bold;">
+        ${failReasons.map(r => `<li>${r}</li>`).join("")}
+      </ul>`;
+  }
 
-// ===== RESULT LINE =====
-let resultHtml = "";
-if (pass) {
-
-  const wrongListText =
-    wrong.length > 0
-      ? wrong.map(i => i + 1).join(", ")
-      : "Không có";
-
-  resultHtml = `
-    <div style="
-      margin-top:10px;
-      font-size:22px;
-      font-weight:bold;
-      color:#0a7d00;">
-      ✅ Kết quả: ĐẬU
-    </div>
-
-    <ul style="margin-top:8px; color:#0a7d00; font-weight:bold;">
-      <li>✔ Trả lời không bị sai câu hỏi thuộc Australian values (❗).</li>
-      <li>✔ Tổng số câu trả lời đúng trên 15 câu.</li>
-      <li>✔ Các câu bạn trả lời sai: ${wrongListText}</li>
-    </ul>
-  `;
-
-} else {
-  const wrongListText =
-    wrong.length > 0
-      ? wrong.map(i => i + 1).join(", ")
-      : "Không có";
-
-  resultHtml = `
-    <div style="
-      margin-top:10px;
-      font-size:22px;
-      font-weight:bold;
-      color:#dc3545;">
-      ❌ Kết quả: RỚT
-    </div>
-
-    <ul style="margin-top:8px;color:#dc3545;font-weight:bold;">
-      ${failReasons.map(r => `<li>${r}</li>`).join("")}
-      <li>❌ Các câu bạn trả lời sai: ${wrongListText}</li>
-    </ul>`;
-}
-
-
-
+  // chèn ngay dưới dòng Điểm
+  document.getElementById("score")
+    .insertAdjacentHTML("afterend", resultHtml);
 
 
 
@@ -1014,13 +982,10 @@ if (wrongDetails) {
     const correctTxt = q.opts[correct];
 
     wrongDetails.insertAdjacentHTML("beforeend", `
-	
       <div style="margin-bottom:18px; padding:12px; border:2px solid #ddd; border-radius:10px;">
         <div style="font-weight:bold;">
           ${isValue ? "❗ " : ""}${i+1}. ${q.q}
-		  
         </div>
-		
         <div style="margin-top:6px; color:#dc3545;"><b>Bạn chọn:</b> ${userTxt}</div>
         <div style="margin-top:6px; color:#0a7d00;"><b>Đáp án đúng:</b> ${correctTxt}</div>
       </div>
@@ -1309,22 +1274,6 @@ setTimeout(() => {
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
