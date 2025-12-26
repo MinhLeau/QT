@@ -925,34 +925,45 @@ if (score < 15) {
 }
 
 
-  // ===== RESULT LINE =====
-  let resultHtml = "";
-  if (pass) {
-    resultHtml = `
-      <div style="
-        margin-top:10px;
-        font-size:22px;
-        font-weight:bold;
-        color:#0a7d00;">
-        ✅ Kết quả: ĐẬU
-      </div>`;
-  } else {
-    resultHtml = `
-      <div style="
-        margin-top:10px;
-        font-size:22px;
-        font-weight:bold;
-        color:#dc3545;">
-        ❌ Kết quả: RỚT
-      </div>
-      <ul style="margin-top:8px;color:#dc3545;font-weight:bold;">
-        ${failReasons.map(r => `<li>${r}</li>`).join("")}
-      </ul>`;
-  }
+// ===== RESULT LINE =====
+let resultHtml = "";
+if (pass) {
 
-  // chèn ngay dưới dòng Điểm
-  document.getElementById("score")
-    .insertAdjacentHTML("afterend", resultHtml);
+  const wrongListText =
+    wrong.length > 0
+      ? wrong.map(i => i + 1).join(", ")
+      : "Không có";
+
+  resultHtml = `
+    <div style="
+      margin-top:10px;
+      font-size:22px;
+      font-weight:bold;
+      color:#0a7d00;">
+      ✅ Kết quả: ĐẬU
+    </div>
+
+    <ul style="margin-top:8px; color:#0a7d00; font-weight:bold;">
+      <li>✔ Trả lời không bị sai câu hỏi thuộc Australian values (❗).</li>
+      <li>✔ Tổng số câu trả lời đúng trên 15 câu.</li>
+      <li>✔ Các câu bạn trả lời sai: ${wrongListText}</li>
+    </ul>
+  `;
+
+} else {
+  resultHtml = `
+    <div style="
+      margin-top:10px;
+      font-size:22px;
+      font-weight:bold;
+      color:#dc3545;">
+      ❌ Kết quả: RỚT
+    </div>
+    <ul style="margin-top:8px;color:#dc3545;font-weight:bold;">
+      ${failReasons.map(r => `<li>${r}</li>`).join("")}
+    </ul>`;
+}
+
 
 
 
@@ -1289,6 +1300,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
