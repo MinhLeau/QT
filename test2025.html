@@ -79,7 +79,7 @@
 
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
        
-        <h2><b style="text-decoration: underline;">Bộ đề I:</b> Australian Citizenship Practice Quiz</h2>
+        <h2><b style="text-decoration: underline;">Bộ đề 2025:</b> Australian Citizenship Practice Quiz</h2>
 		<button class="note-btn" onclick="showNotePopup()">📝 Notes</button>
     </div>
 
@@ -103,8 +103,7 @@
                 <option value="8">Practice Quiz 8</option>
                 <option value="9">Practice Quiz 9</option>
                 <option value="10">Practice Quiz 10</option>
-				<option value="12"style="font-weight:bold; color:blue;">Bộ đề II</option>
-				<option value="13"style="font-weight:bold;">Bộ đề III</option>
+				<option value="12"style="font-weight:bold; color:blue;">Bộ đề 2026</option>
 				<option value="14"style="font-weight:bold;">Trang: theaustraliantest</option>
             
 				
@@ -119,9 +118,7 @@
         // Chỉ redirect nếu value là "2" thì đi test2.html, "3" thì test3.html, v.v.
         // Practice1 có value="11" sẽ KHÔNG redirect
         if (selectedValue === "12") {
-            window.location.href = "test402.html";
-        } else if (selectedValue === "13") {
-            window.location.href = "test403.html";
+            window.location.href = "test2026.html";
         } else if (selectedValue === "14") {
             window.location.href = "https://www.theaustraliantest.com/citizenship/";
         } 
@@ -1028,7 +1025,7 @@ if (wrongDetails) {
 
   // bấm Finish → quay về 401.html
   nextBtnEl.addEventListener("click", () => {
-    window.location.href = "test401.html";
+    window.location.href = "test2025.html";
   }, { once: true });
 }
 
@@ -1292,6 +1289,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
