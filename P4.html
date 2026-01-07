@@ -2,49 +2,129 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Australian Citizenship Common Bond - Part 4</title>
+    <title>Australian Citizenship Common Bond - Part 1</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.2; }
         h1 { text-align: center; }
 		h2, h3 { text-align: left; }
+		
         .english { font-weight: bold; color: blue; margin-top: 20px; margin-bottom: 5px;}
-        .viet { margin-left: 20px; margin-top: 1px; margin-bottom: 1px;}
+        .viet { margin-left: 20px; margin-top: 1px; margin-bottom: 5px;}
 
-        table { width: 80%; margin: 30px auto; border-collapse: collapse; }
-        th, td { border: 1px solid #000; padding: 8px; text-align: left; }
+        table { width: 40%; margin: 30px 10px; border-collapse: collapse; }
+        th, td { border: 1px solid #000; align: left; padding: 5px; text-align: left; }
         th { background-color: #f0f0f0; }
+		th:nth-child(1), td:nth-child(1) { width: 50%; }
+		th:nth-child(2), td:nth-child(2) { width: 30%; }
 		
 		.note {
 		  margin: 6px 0;
 		  line-height: 1.5;
-		  
 
 		}
 
 		.note-icon {
 		  margin-right: 6px;
 		  font-size: 1.0em;     /* chỉnh riêng icon */
-		  margin-top: 1px;
+		  margin-top: 5px;
 		}
 
 		.note-text {
 		  color: red;
-		  margin-top: 1px;
+		  margin-top: 5px;
 		  
 		}
+		.note-paragraph {
+          margin-top: 5px;
+		}
+
+		        .credit {
+            position: absolute;
+            top: 55px;
+            right: 20px;
+            z-index: 10;
+            font-size: 0.6rem;
+            color: #006400;
+            text-shadow: 1px 1px 6px rgba(0,0,0,0.8);
+            font-weight: normal;
+        }
+        .home-btn, .home-btnTS {
+            position: absolute;
+            top: 5px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        .home-btn { left: 15px; background: #006400; }
+        .home-btn::before { content: "🏠"; }
+        .home-btn:hover { background: #004d00; transform: scale(1.1); }
+        .home-btnTS { right: 37px; background: url("TS.jpg") center / 100% no-repeat, #006400; }
+        .home-btnTS:hover { transform: scale(1.1); }
 
 
-    .note-paragraph {
-      margin-top: 5px;
-    }
-
+		.section-links {
+		  background-color: #e0e0e0;
+		  padding: 10px;
+		  border-radius: 6px;
+		 font-weight: bold; 
+			color: red; 
+			text-align: left;	
+		}
 
 		
     </style>
+	    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDvB54m2uxhjuE2moJQ09NcuAEVhro7Zh4",
+          authDomain: "quoctichuc-43f28.firebaseapp.com",
+          projectId: "quoctichuc-43f28",
+          storageBucket: "quoctichuc-43f28.firebasestorage.app",
+          messagingSenderId: "710420527110",
+          appId: "1:710420527110:web:ba4281739f963e76656b87"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            }
+        });
+
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        };
+    </script>
 </head>
 <body>
+	    <a href="onluyenthiquoctich.html" class="home-btn" title="Về trang chủ"></a>
+    <a href="#" class="home-btnTS" title="Thomas"></a>
+    <h4 class="credit">Created by Thomas</h4>
+
+
 
 <h1>Australian Citizenship Common Bond</h1>
+<h4 class="section-links">
+  Học kiến thức cơ bản qua các câu hỏi:
+  <a href="P1.html">Phần I</a>, <a href="P2.html">Phần II</a>, <a href="P3.html">Phần III</a>, <a href="P4.html">Phần IV</a>
+</h4>
 <h2>Part 4: Australian Values</h2>
 
 <p class="english">1. Australian values based on freedom, respect, fairness and equality of opportunity are central to our community remaining a secure, prosperous and peaceful place to live.</p>
@@ -518,4 +598,5 @@
 <p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: specific community donations.</span></p>
 
 </body>
+
 </html>
