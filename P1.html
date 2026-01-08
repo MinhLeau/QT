@@ -79,7 +79,14 @@
 			text-align: left;	
 		}
 
-		
+		.flag-image {
+  display: block;          /* để margin auto hoạt động */
+  max-width: 300px;        /* kích thước ảnh */
+  width: 100%;             /* responsive */
+  margin: 10px auto 15px;  /* canh giữa + khoảng cách trên/dưới */
+  border-radius: 6px;      /* bo góc nhẹ */
+}
+
     </style>
 	    <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
@@ -550,7 +557,8 @@
 <p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: honour courage, reflect on meanings of war.</p>
 
 <h3>Australia’s flags</h3>
-
+<img src="AU_flag_mean.png" class="flag-image" alt="Australian National Flag">
+	
 <p class="english">92. The Australian National Flag is the official flag of our nation.</p>
 <p class="viet">- Cờ Quốc gia Úc là cờ chính thức của quốc gia chúng ta.</p>
 <p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: official national flag.</p>
@@ -704,6 +712,7 @@
 </body>
 
 </html>
+
 
 
 
