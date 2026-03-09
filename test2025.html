@@ -130,6 +130,7 @@
             <span id="questionCount" style="font-weight:bold; color:#006400;"></span>
 
             <label><input type="checkbox" id="vietnam">Vietnamese</label>
+			<label><input type="checkbox" id="sound">Sound</label>
             <label><input type="checkbox" id="basic" checked>Basic</label>
             <label><input type="checkbox" id="advance">Advance</label>
 
@@ -693,13 +694,15 @@ function renderSingleQuestion(idx, showVi) {
   if (showVi && q.qVi) html += ` <i style="color:#0066cc;">[${q.qVi}]</i>`;
   html += `</strong><div style="margin-top:20px;">`;
 
-  q.opts.forEach((opt, i) => {
-    let txt = opt;
-    if (showVi && q.optsVi && q.optsVi[i]) txt += ` <i style="color:#0066cc;">[${q.optsVi[i]}]</i>`;
-    html += `<label class="opt" id="q${idx}o${i}_lbl">
-      <input type="radio" name="q${idx}" onchange="saveAnswer(${idx},${i})">${txt}
-    </label>`;
-  });
+q.opts.forEach((opt, i) => {
+  let txt = opt;
+  if (showVi && q.optsVi && q.optsVi[i]) txt += ` <i style="color:#0066cc;">[${q.optsVi[i]}]</i>`;
+  html += `<label class="opt" id="q${idx}o${i}_lbl">
+    <input type="radio" name="q${idx}" 
+           onchange="saveAnswer(${idx},${i}); playSoundOnAnswer(${idx},${i})">
+    ${txt}
+  </label>`;
+});
 
   html += `</div>`;
   questionsEl.innerHTML = html;
@@ -756,22 +759,20 @@ function renderAllQuestions(showVi) {
 
     html += `<div style="margin-top:18px;">`;
 
-    q.opts.forEach((opt, j) => {
-      let txt = opt;
-      if (showVi && q.optsVi && q.optsVi[j]) {
-        txt += ` <i style="color:#0066cc;">[${q.optsVi[j]}]</i>`;
-      }
-
-      const checked = (userAnswers[i] === j) ? "checked" : "";
-
-      html += `
-        <label class="opt" id="q${i}o${j}_lbl">
-          <input type="radio" name="q${i}" ${checked}
-            onchange="saveAnswer(${i},${j});checkAnswerInstant(${i},${j})">
-          ${txt}
-        </label>
-      `;
-    });
+q.opts.forEach((opt, j) => {
+  let txt = opt;
+  if (showVi && q.optsVi && q.optsVi[j]) {
+    txt += ` <i style="color:#0066cc;">[${q.optsVi[j]}]</i>`;
+  }
+  const checked = (userAnswers[i] === j) ? "checked" : "";
+  html += `
+    <label class="opt" id="q${i}o${j}_lbl">
+      <input type="radio" name="q${i}" ${checked}
+        onchange="saveAnswer(${i},${j});checkAnswerInstant(${i},${j});playSoundOnAnswer(${i},${j})">
+      ${txt}
+    </label>
+  `;
+});
 
     html += `</div></div>`;
 
@@ -1028,6 +1029,39 @@ if (wrongDetails) {
   }, { once: true });
 }
 
+// === Âm thanh đúng / sai (dùng base64 hoặc URL miễn phí) ===
+const correctSound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3");
+const wrongSound   = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3");
+
+// Hoặc dùng base64 ngắn gọn (nếu muốn không phụ thuộc mạng):
+/*
+const correctSound = new Audio("data:audio/mp3;base64,//MkxAA..."); // thay bằng base64 thật nếu cần
+const wrongSound   = new Audio("data:audio/mp3;base64,//MkxAA...");
+*/
+
+// Tùy chọn: giảm âm lượng nếu cần
+correctSound.volume = 0.6;
+wrongSound.volume   = 0.6;
+
+function playSoundOnAnswer(questionIndex, selectedIndex) {
+  // Chỉ phát khi checkbox Sound được check
+  if (!document.getElementById("sound").checked) return;
+
+  const question = CURRENT_QUESTIONS[questionIndex];
+  if (!question) return;
+
+  const isCorrect = (selectedIndex === question.a);
+
+  const sound = isCorrect ? correctSound : wrongSound;
+
+  // Reset về đầu và phát (tránh chồng âm)
+  sound.currentTime = 0;
+  sound.play().catch(err => {
+    // Bỏ qua lỗi autoplay (thường xảy ra trên mobile khi chưa tương tác)
+    console.log("Play sound error:", err);
+  });
+}		
+		
 // ============ LOAD QUIZ ============
 
 function loadQuiz(selection) {
@@ -1153,7 +1187,12 @@ __myPracticeAsked = new Set(); // reset popup asked per quiz
     list = buildPracticeSet(allWithPart, n);
     CURRENT_QUESTIONS = applyLevelMode(list);
   }
-
+  // Tắt sound ở practice có thời gian
+  const soundCheckbox = document.getElementById("sound");
+  if (isPractice10(selection)) {
+    soundCheckbox.checked = false;
+    // soundCheckbox.disabled = true;   // nếu muốn khóa hẳn thì mở dòng này
+  }
   // ================= COMMON INIT =================
   userAnswers = new Array(CURRENT_QUESTIONS.length).fill(null);
   currentIndex = 0;
@@ -1288,6 +1327,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
