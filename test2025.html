@@ -1085,21 +1085,41 @@ if (wrongDetails) {
 // === Âm thanh đúng / sai (dùng base64 hoặc URL miễn phí) ===
 const correctSound = new Audio("https://minhleau.github.io/QT/correct.mp3");
 const wrongSound   = new Audio("https://minhleau.github.io/QT/incorrect.mp3");
+correctSound.preload = "auto";
+wrongSound.preload = "auto";
+// === Unlock audio context trên iOS/mobile ===
+let audioUnlocked = false;
 
-// Hoặc dùng base64 ngắn gọn (nếu muốn không phụ thuộc mạng):
-/*
-const correctSound = new Audio("data:audio/mp3;base64,//MkxAA..."); // thay bằng base64 thật nếu cần
-const wrongSound   = new Audio("data:audio/mp3;base64,//MkxAA...");
-*/
+function unlockAudio() {
+    if (audioUnlocked) return;
+    
+    // Phát âm thanh im lặng để kích hoạt audio context
+    const silent = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=");
+    silent.play().catch(() => {});
+    
+    // Preload lại hai file âm thanh
+    correctSound.load();
+    wrongSound.load();
+    
+    audioUnlocked = true;
+    
+    // Xóa listener sau khi unlock thành công (chỉ unlock 1 lần)
+    document.removeEventListener('touchend', unlockAudio, true);
+    document.removeEventListener('click', unlockAudio, true);
+}
 
-// Tùy chọn: giảm âm lượng nếu cần
-correctSound.volume = 0.6;
-wrongSound.volume   = 0.6;
+// Gắn listener sớm nhất có thể (capture phase)
+document.addEventListener('touchend', unlockAudio, { once: true, passive: true });
+document.addEventListener('click', unlockAudio, { once: true });
+
+// Optional: giảm volume để tránh một số trường hợp bị chặn
+correctSound.volume = 0.5;
+wrongSound.volume = 0.5;
 
 function playSoundOnAnswer(questionIndex, selectedIndex) {
     const soundCheckbox = document.getElementById("sound");
     
-
+    // Kiểm tra điều kiện bật sound
     if (!soundCheckbox || soundCheckbox.disabled || !soundCheckbox.checked) {
         return;
     }
@@ -1110,11 +1130,25 @@ function playSoundOnAnswer(questionIndex, selectedIndex) {
     const isCorrect = (selectedIndex === question.a);
     const sound = isCorrect ? correctSound : wrongSound;
 
-    sound.currentTime = 0;
-    sound.play().catch(err => {
-        // console.log("Play sound error:", err); // có thể comment nếu không cần log
-    });
-}		
+    // Fix cho mobile/iOS: luôn reset và thử play an toàn
+    sound.pause();              // dừng nếu đang phát
+    sound.currentTime = 0;      // reset về đầu
+
+    const playPromise = sound.play();
+
+    if (playPromise !== undefined) {
+        playPromise
+            .then(() => {
+                // Phát thành công (có thể log nếu cần debug)
+                // console.log("Sound played:", isCorrect ? "correct" : "wrong");
+            })
+            .catch(err => {
+                console.warn("Play sound failed:", err.message);
+                // Thử unlock lại nếu bị lỗi (đôi khi cần)
+                unlockAudio();
+            });
+    }
+}
 		
 // ============ LOAD QUIZ ============
 
@@ -1384,6 +1418,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
