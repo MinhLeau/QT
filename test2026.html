@@ -1083,44 +1083,94 @@ if (wrongDetails) {
   }, { once: true });
 }
 
-// === Âm thanh đúng / sai (dùng base64 hoặc URL miễn phí) ===
-const correctSound = new Audio("https://minhleau.github.io/QT/correct.mp3");
-const wrongSound   = new Audio("https://minhleau.github.io/QT/incorrect.mp3");
+// === Âm thanh đúng / sai ===
+const SOUND_CORRECT_URL = "https://minhleau.github.io/QT/correct.mp3";
+const SOUND_WRONG_URL   = "https://minhleau.github.io/QT/incorrect.mp3";
+
+// Audio gốc chỉ để preload / giữ quyền phát trên iOS
+const correctSound = new Audio(SOUND_CORRECT_URL);
+const wrongSound   = new Audio(SOUND_WRONG_URL);
+
 correctSound.preload = "auto";
 wrongSound.preload = "auto";
-// === Unlock audio context trên iOS/mobile ===
-let audioUnlocked = false;
-
-function unlockAudio() {
-    if (audioUnlocked) return;
-    
-    // Phát âm thanh im lặng để kích hoạt audio context
-    const silent = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=");
-    silent.play().catch(() => {});
-    
-    // Preload lại hai file âm thanh
-    correctSound.load();
-    wrongSound.load();
-    
-    audioUnlocked = true;
-    
-    // Xóa listener sau khi unlock thành công (chỉ unlock 1 lần)
-    document.removeEventListener('touchend', unlockAudio, true);
-    document.removeEventListener('click', unlockAudio, true);
-}
-
-// Gắn listener sớm nhất có thể (capture phase)
-document.addEventListener('touchend', unlockAudio, { once: true, passive: true });
-document.addEventListener('click', unlockAudio, { once: true });
-
-// Optional: giảm volume để tránh một số trường hợp bị chặn
 correctSound.volume = 0.5;
 wrongSound.volume = 0.5;
+correctSound.playsInline = true;
+wrongSound.playsInline = true;
+correctSound.setAttribute("webkit-playsinline", "true");
+wrongSound.setAttribute("webkit-playsinline", "true");
+
+let audioUnlocked = false;
+let lastSoundInstance = null;
+
+// === Unlock audio context trên iOS/mobile ===
+function unlockAudio() {
+    if (audioUnlocked) return;
+
+    // Âm thanh im lặng cực ngắn để "mở khóa" audio trên iPhone
+    const silent = new Audio(
+        "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA="
+    );
+    silent.preload = "auto";
+    silent.volume = 0;
+    silent.playsInline = true;
+    silent.setAttribute("webkit-playsinline", "true");
+
+    const p = silent.play();
+    if (p && typeof p.then === "function") {
+        p.then(() => {
+            silent.pause();
+            silent.currentTime = 0;
+
+            // preload lại 2 file chính
+            correctSound.load();
+            wrongSound.load();
+
+            audioUnlocked = true;
+        }).catch(() => {
+            // vẫn cứ thử preload
+            correctSound.load();
+            wrongSound.load();
+        });
+    } else {
+        correctSound.load();
+        wrongSound.load();
+        audioUnlocked = true;
+    }
+}
+
+// Gắn listener sớm nhất có thể
+document.addEventListener("touchstart", unlockAudio, { passive: true });
+document.addEventListener("touchend", unlockAudio, { passive: true });
+document.addEventListener("click", unlockAudio, true);
+
+// Khi quay lại tab trên iPhone, một số máy bị mất trạng thái audio
+document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) {
+        audioUnlocked = false;
+        unlockAudio();
+    }
+});
+
+window.addEventListener("pageshow", () => {
+    audioUnlocked = false;
+    unlockAudio();
+});
+
+// Tạo audio instance mới mỗi lần phát để tránh Safari bị "đơ" sau vài lần
+function createPlayableAudio(src, volume = 0.5) {
+    const a = new Audio(src);
+    a.preload = "auto";
+    a.volume = volume;
+    a.playsInline = true;
+    a.setAttribute("webkit-playsinline", "true");
+    return a;
+}
 
 function playSoundOnAnswer(questionIndex, selectedIndex) {
     const soundCheckbox = document.getElementById("sound");
-    
-    // Kiểm tra điều kiện bật sound
+
+    // Kiểm tra switch sound
     if (!soundCheckbox || soundCheckbox.disabled || !soundCheckbox.checked) {
         return;
     }
@@ -1129,27 +1179,51 @@ function playSoundOnAnswer(questionIndex, selectedIndex) {
     if (!question) return;
 
     const isCorrect = (selectedIndex === question.a);
-    const sound = isCorrect ? correctSound : wrongSound;
+    const src = isCorrect ? SOUND_CORRECT_URL : SOUND_WRONG_URL;
 
-    // Fix cho mobile/iOS: luôn reset và thử play an toàn
-    sound.pause();              // dừng nếu đang phát
-    sound.currentTime = 0;      // reset về đầu
+    // đảm bảo đã unlock
+    if (!audioUnlocked) {
+        unlockAudio();
+    }
+
+    // Dừng instance trước nếu còn đang phát
+    if (lastSoundInstance) {
+        try {
+            lastSoundInstance.pause();
+            lastSoundInstance.src = "";
+            lastSoundInstance.load();
+        } catch (e) {}
+        lastSoundInstance = null;
+    }
+
+    // Tạo instance mới cho lần phát này
+    const sound = createPlayableAudio(src, 0.5);
+    lastSoundInstance = sound;
 
     const playPromise = sound.play();
 
-    if (playPromise !== undefined) {
+    if (playPromise && typeof playPromise.then === "function") {
         playPromise
             .then(() => {
-                // Phát thành công (có thể log nếu cần debug)
-                // console.log("Sound played:", isCorrect ? "correct" : "wrong");
+                // phát OK
             })
             .catch(err => {
-                console.warn("Play sound failed:", err.message);
-                // Thử unlock lại nếu bị lỗi (đôi khi cần)
+                console.warn("Play sound failed:", err && err.message ? err.message : err);
+
+                // thử unlock lại rồi phát lại 1 lần
+                audioUnlocked = false;
                 unlockAudio();
+
+                setTimeout(() => {
+                    const retrySound = createPlayableAudio(src, 0.5);
+                    lastSoundInstance = retrySound;
+                    retrySound.play().catch(e => {
+                        console.warn("Retry play failed:", e && e.message ? e.message : e);
+                    });
+                }, 80);
             });
     }
-}	
+}
 		
 // ============ LOAD QUIZ ============
 
@@ -1419,6 +1493,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
