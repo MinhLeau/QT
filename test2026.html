@@ -66,6 +66,20 @@
             transform: translateY(-15px);
             pointer-events: none;
         }
+
+/* Làm mờ và vô hiệu hóa checkbox Sound khi ở Practice 1-10 */
+#sound:disabled,
+#sound:disabled + span,
+label:has(#sound):has(input:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Optional: làm mờ cả text "Sound" */
+label:has(#sound) {
+    transition: opacity 0.2s;
+}
+		
     </style>
     <!-- <button class="logout-btn hide-on-scroll-target" onclick="logout()">Logout</button> -->
 
@@ -1289,6 +1303,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
