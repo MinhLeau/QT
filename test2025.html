@@ -521,16 +521,38 @@ function promptSaveWrongQuestion(q) {
 
   // đã hỏi rồi thì thôi
   if (__myPracticeAsked.has(q.__id)) return;
-
   __myPracticeAsked.add(q.__id);
 
-  const ok = confirm("⚠️SAI⚠️\nBạn có muốn lưu câu hỏi này để học lại sau?");
-  if (ok) {
-    const added = addToMyPractice(q);
-    if (added) {
-      alert("✅ Đã lưu vào My Practice.");
-    } else {
-      alert("ℹ️ Câu này đã có trong My Practice rồi.");
+  const soundCheckbox = document.getElementById("sound");
+  const wantSound = soundCheckbox && soundCheckbox.checked;
+
+  if (wantSound) {
+    // Phát âm thanh sai ngay lập tức
+    wrongSound.currentTime = 0;
+    wrongSound.play().catch(() => {});
+
+    // Delay một chút để người dùng nghe được âm thanh trước khi hiện confirm
+    setTimeout(() => {
+      const ok = confirm("⚠️SAI⚠️\nBạn có muốn lưu câu hỏi này để học lại sau?");
+      if (ok) {
+        const added = addToMyPractice(q);
+        if (added) {
+          alert("✅ Đã lưu vào My Practice.");
+        } else {
+          alert("ℹ️ Câu này đã có trong My Practice rồi.");
+        }
+      }
+    }, 1400);  // 1400ms = 1.4 giây — bạn có thể chỉnh thành 1200, 1500, 1800 tùy độ dài âm thanh
+  } else {
+    // Không bật sound → hiện confirm ngay lập tức như cũ
+    const ok = confirm("⚠️SAI⚠️\nBạn có muốn lưu câu hỏi này để học lại sau?");
+    if (ok) {
+      const added = addToMyPractice(q);
+      if (added) {
+        alert("✅ Đã lưu vào My Practice.");
+      } else {
+        alert("ℹ️ Câu này đã có trong My Practice rồi.");
+      }
     }
   }
 }
@@ -1327,6 +1349,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
