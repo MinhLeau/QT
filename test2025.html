@@ -66,6 +66,19 @@
             transform: translateY(-15px);
             pointer-events: none;
         }
+/* Làm mờ và vô hiệu hóa checkbox Sound khi ở Practice 1-10 */
+#sound:disabled,
+#sound:disabled + span,
+label:has(#sound):has(input:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Optional: làm mờ cả text "Sound" */
+label:has(#sound) {
+    transition: opacity 0.2s;
+}
+		
     </style>
     <!-- <button class="logout-btn hide-on-scroll-target" onclick="logout()">Logout</button> -->
 
@@ -707,6 +720,24 @@ function updateQuestionCount() {
 }
 
 
+// Thêm hàm này (đặt gần các hàm helper khác)
+function updateSoundControlUI() {
+    const soundCheckbox = document.getElementById("sound");
+    if (!soundCheckbox) return;
+
+    const isPracticeMode = isPractice10(quizSelectEl.value);
+
+    if (isPracticeMode) {
+        // Tắt hoàn toàn ở Practice 1-10
+        soundCheckbox.disabled = true;
+        soundCheckbox.checked = false;     // buộc tắt
+    } else {
+        // Cho phép bật/tắt ở các mode khác
+        soundCheckbox.disabled = false;
+        // Không tự động bật — giữ nguyên trạng thái người dùng chọn trước đó
+    }
+}
+		
 // ============ RENDER ============
 function renderSingleQuestion(idx, showVi) {
   const q = CURRENT_QUESTIONS[idx];
@@ -1066,22 +1097,23 @@ correctSound.volume = 0.6;
 wrongSound.volume   = 0.6;
 
 function playSoundOnAnswer(questionIndex, selectedIndex) {
-  // Chỉ phát khi checkbox Sound được check
-  if (!document.getElementById("sound").checked) return;
+    const soundCheckbox = document.getElementById("sound");
+    
 
-  const question = CURRENT_QUESTIONS[questionIndex];
-  if (!question) return;
+    if (!soundCheckbox || soundCheckbox.disabled || !soundCheckbox.checked) {
+        return;
+    }
 
-  const isCorrect = (selectedIndex === question.a);
+    const question = CURRENT_QUESTIONS[questionIndex];
+    if (!question) return;
 
-  const sound = isCorrect ? correctSound : wrongSound;
+    const isCorrect = (selectedIndex === question.a);
+    const sound = isCorrect ? correctSound : wrongSound;
 
-  // Reset về đầu và phát (tránh chồng âm)
-  sound.currentTime = 0;
-  sound.play().catch(err => {
-    // Bỏ qua lỗi autoplay (thường xảy ra trên mobile khi chưa tương tác)
-    console.log("Play sound error:", err);
-  });
+    sound.currentTime = 0;
+    sound.play().catch(err => {
+        // console.log("Play sound error:", err); // có thể comment nếu không cần log
+    });
 }		
 		
 // ============ LOAD QUIZ ============
@@ -1223,7 +1255,7 @@ __myPracticeAsked = new Set(); // reset popup asked per quiz
   if (vietnamEl.disabled) vietnamEl.checked = false;
 
   updateQuestionCount();
-
+updateSoundControlUI();
   const showVi = !isPractice10(selection) && vietnamEl.checked;
 
   // ================= RENDER =================
@@ -1267,8 +1299,11 @@ __myPracticeAsked = new Set(); // reset popup asked per quiz
 // ============ EVENTS ============
 
 // Quiz select
-quizSelectEl.addEventListener("change", e => loadQuiz(e.target.value));
-
+//quizSelectEl.addEventListener("change", e => loadQuiz(e.target.value));
+quizSelectEl.addEventListener("change", e => {
+    loadQuiz(e.target.value);
+    
+});
 // Vietnamese toggle
 vietnamEl.addEventListener("change", rerenderVietnam);
 
@@ -1349,6 +1384,7 @@ setTimeout(() => {
 
 </body>
 </html>
+
 
 
 
