@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Australian Citizenship Common Bond - Part 1</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.2; }
+        h1 { text-align: center; }
+		h2, h3 { text-align: left; }
+		
+        .english { font-weight: bold; color: blue; margin-top: 20px; margin-bottom: 5px;}
+        .viet { margin-left: 20px; margin-top: 1px; margin-bottom: 5px;}
+
+        table { width: 40%; margin: 30px 10px; border-collapse: collapse; }
+        th, td { border: 1px solid #000; align: left; padding: 5px; text-align: left; }
+        th { background-color: #f0f0f0; }
+		th:nth-child(1), td:nth-child(1) { width: 50%; }
+		th:nth-child(2), td:nth-child(2) { width: 30%; }
+		
+		.note {
+		  margin: 6px 0;
+		  line-height: 1.5;
+
+		}
+
+		.note-icon {
+		  margin-right: 6px;
+		  font-size: 1.0em;     /* chỉnh riêng icon */
+		  margin-top: 5px;
+		}
+
+		.note-text {
+		  color: red;
+		  margin-top: 5px;
+		  
+		}
+		.note-paragraph {
+          margin-top: 5px;
+		}
+
+		        .credit {
+            position: absolute;
+            top: 55px;
+            right: 20px;
+            z-index: 10;
+            font-size: 0.6rem;
+            color: #006400;
+            text-shadow: 1px 1px 6px rgba(0,0,0,0.8);
+            font-weight: normal;
+        }
+        .home-btn, .home-btnTS {
+            position: absolute;
+            top: 5px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        .home-btn { left: 15px; background: #006400; }
+        .home-btn::before { content: "🏠"; }
+        .home-btn:hover { background: #004d00; transform: scale(1.1); }
+        .home-btnTS { right: 37px; background: url("TS.jpg") center / 100% no-repeat, #006400; }
+        .home-btnTS:hover { transform: scale(1.1); }
+
+
+		.section-links {
+		  background-color: #e0e0e0;
+		  padding: 10px;
+		  border-radius: 6px;
+		 font-weight: bold; 
+			color: red; 
+			text-align: left;	
+		}
+
+.flag-image {
+  max-width: 400px;
+  float: left;
+  margin: 8px 15px 10px 0;
+}
+
+
+    </style>
+	    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDvB54m2uxhjuE2moJQ09NcuAEVhro7Zh4",
+          authDomain: "quoctichuc-43f28.firebaseapp.com",
+          projectId: "quoctichuc-43f28",
+          storageBucket: "quoctichuc-43f28.firebasestorage.app",
+          messagingSenderId: "710420527110",
+          appId: "1:710420527110:web:ba4281739f963e76656b87"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            }
+        });
+
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        };
+    </script>
+</head>
+<body>
+	    <a href="onluyenthiquoctich.html" class="home-btn" title="Về trang chủ"></a>
+    <a href="#" class="home-btnTS" title="Thomas"></a>
+    <h4 class="credit">Created by Thomas</h4>
+
+
+
+<h1>Australian Citizenship Common Bond</h1>
+<h4 class="section-links">
+  Học kiến thức cơ bản qua các câu hỏi:
+  <a href="P1.html">Phần I</a>, <a href="P2.html">Phần II</a>, <a href="P3.html">Phần III</a>, <a href="P4.html">Phần IV</a>
+</h4>	
+<h2>Part 1: Australia and its people</h2>
+
+<h3>Aboriginal and Torres Strait Islander peoples</h3>
+
+<p class="english">1. Australia’s first inhabitants are the Aboriginal and Torres Strait Islander peoples, who have the oldest continuous cultures and traditions in the world.</p>
+<p class="viet">- Những cư dân đầu tiên của Úc là người Aboriginal và Torres Strait Islander, những người có nền văn hóa và truyền thống liên tục cổ xưa nhất trên thế giới.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text">Hãy nhớ: first inhabitants + oldest continuous cultures.</span></p>
+
+
+<p class="english">2. Aboriginal people are from mainland Australia and Tasmania.</p>
+<p class="viet">- Người Aboriginal đến từ lục địa Úc và Tasmania.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: Aboriginal from mainland Australia and Tasmania.</p>
+
+<p class="english">3. Aboriginal peoples arrived in Australia between 65,000 and 40,000 years ago.</p>
+<p class="viet">- Người Aboriginal đến Úc giữa 65,000 và 40,000 năm trước.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: arrived between 65,000 and 40,000 years ago.</p>
+
+<p class="english">4. the Aboriginal peoples believe they are central to the creation stories of this land, and their creation stories commence with the beginning of time.</p>
+<p class="viet">- Người Aboriginal tin rằng họ là trung tâm của các câu chuyện sáng tạo về vùng đất này, và các câu chuyện sáng tạo của họ bắt đầu từ thuở ban đầu.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: central to creation stories, beginning of time.</p>
+
+<p class="english">5. Torres Strait Islander people are from islands between the northern tip of Queensland and Papua New Guinea.</p>
+<p class="viet">- Người Torres Strait Islander đến từ các đảo giữa mũi phía bắc của Queensland và Papua New Guinea.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: from islands between northern tip of Queensland and Papua New Guinea.</p>
+
+<p class="english">6. Aboriginal and Torres Strait Islander peoples have age-old beliefs and traditions that still guide them today.</p>
+<p class="viet">- Người Aboriginal và Torres Strait Islander có những niềm tin và truyền thống cổ xưa vẫn hướng dẫn họ ngày nay.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: age-old beliefs and traditions still guide today.</p>
+
+<p class="english">7. They have a deep connection with the land, which is expressed in their stories, art and dance.</p>
+<p class="viet">- Họ có mối liên kết sâu sắc với đất đai, được thể hiện trong các câu chuyện, nghệ thuật và vũ điệu của họ.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: deep connection with the land, expressed in stories, art, dance.</p>
+
+<p class="english">8. Indigenous cultures are diverse and an important part of Australia’s national identity.</p>
+<p class="viet">- Các văn hóa bản địa đa dạng và là phần quan trọng của bản sắc dân tộc Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: diverse indigenous cultures, important part of national identity.</p>
+
+<h3>Early days of European settlement</h3>
+
+<p class="english">9. European settlement started when the first 11 convict ships, which became known as the ‘First Fleet’, arrived from Great Britain on 26 January 1788.</p>
+<p class="viet">- Việc định cư của người châu Âu bắt đầu khi 11 con tàu tù nhân đầu tiên, được biết đến là 'Hạm đội Đầu tiên', đến từ Anh Quốc vào ngày 26 tháng 1 năm 1788.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: First Fleet, 26 January 1788.</p>
+
+<p class="english">10. British laws were harsh and the jails could not hold the large number of people imprisoned for their crimes.</p>
+<p class="viet">- Luật pháp Anh khắc nghiệt và các nhà tù không thể chứa hết số lượng lớn người bị tù vì tội phạm của họ.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: harsh British laws, jails overflowed.</p>
+
+<p class="english">11. To manage this problem, the British Government decided to transport convicts to the other side of the world:</p>
+<p class="viet">- Để giải quyết vấn đề này, Chính phủ Anh quyết định vận chuyển tù nhân sang phía bên kia thế giới.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: transport convicts to solve jail problem.</p>
+
+<p class="english">12. to the new colony of New South Wales.</p>
+<p class="viet">- đến thuộc địa mới của New South Wales.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: new colony of New South Wales.</p>
+
+<p class="english">13. The first Governor of the colony of New South Wales was Captain Arthur Phillip.</p>
+<p class="viet">- Thống đốc đầu tiên của thuộc địa New South Wales là Đại úy Arthur Phillip.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: first Governor Captain Arthur Phillip.</p>
+
+<p class="english">14. The colony survived, and as more convicts and free settlers arrived, it grew and developed.</p>
+<p class="viet">- Thuộc địa sống sót, và khi có thêm tù nhân và người định cư tự do đến, nó phát triển và mở rộng.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: colony grew with convicts and free settlers.</p>
+
+<p class="english">15. More colonies were established in other parts of Australia.</p>
+<p class="viet">- Nhiều thuộc địa hơn được thành lập ở các phần khác của Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: more colonies established.</p>
+
+<p class="english">16. Early free settlers came from Great Britain and Ireland.</p>
+<p class="viet">- Những người định cư tự do ban đầu đến từ Anh Quốc và Ireland.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: early free settlers from Great Britain and Ireland.</p>
+
+<p class="english">17. This British and Irish heritage has had a major influence on Australia’s recent history, culture and politics.</p>
+<p class="viet">- Di sản Anh và Ireland này có ảnh hưởng lớn đến lịch sử gần đây, văn hóa và chính trị của Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: major influence of British and Irish heritage.</p>
+
+<p class="english">18. In 1851, a ‘gold rush’ began when gold was discovered in the colonies of New South Wales and Victoria.</p>
+<p class="viet">- Năm 1851, 'cơn sốt vàng' bắt đầu khi vàng được phát hiện ở thuộc địa New South Wales và Victoria.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: gold rush in 1851, NSW and Victoria.</p>
+
+<p class="english">19. People from all around the world came to these colonies to try to make their fortunes.</p>
+<p class="viet">- Người từ khắp nơi trên thế giới đến các thuộc địa này để thử vận may làm giàu.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: people from around the world for fortunes.</p>
+
+<p class="english">20. Chinese people arriving at this time were the first large group of migrants not from Europe.</p>
+<p class="viet">- Người Trung Quốc đến vào thời điểm này là nhóm di cư lớn đầu tiên không từ châu Âu.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: first large non-European migrants: Chinese.</p>
+
+<p class="english">21. In 10 years, Australia’s population more than doubled.</p>
+<p class="viet">- Trong 10 năm, dân số Úc tăng hơn gấp đôi.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: population more than doubled in 10 years.</p>
+
+<h3>The nation of Australia</h3>
+
+<p class="english">22. In 1901, the separate colonies were united into a federation of states called the Commonwealth of Australia.</p>
+<p class="viet">- Năm 1901, các thuộc địa riêng lẻ được thống nhất thành liên bang các bang gọi là Khối thịnh vượng chung Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: federation in 1901, Commonwealth of Australia.</p>
+
+<p class="english">23. It was at this time that our national democratic institutions, including our national parliament, government and the High Court were established under the new Australian Constitution.</p>
+<p class="viet">- Chính lúc này, các cơ quan dân chủ quốc gia của chúng ta, bao gồm quốc hội quốc gia, chính phủ và Tòa án Tối cao được thành lập theo Hiến pháp Úc mới.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: established national parliament, government, High Court under Constitution.</p>
+
+<p class="english">24. In 1901, Australia’s population was about four million.</p>
+<p class="viet">- Năm 1901, dân số Úc khoảng bốn triệu.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: population about four million in 1901.</p>
+
+<p class="english">25. This number did not include Aboriginal and Torres Strait Islander peoples, as it was not until after a Referendum in 1967 that they were included in official estimates of the Australian population.</p>
+<p class="viet">- Con số này không bao gồm người Aboriginal và Torres Strait Islander, vì phải đến sau Cuộc trưng cầu dân ý năm 1967 họ mới được bao gồm trong ước tính dân số chính thức của Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: not included until 1967 Referendum.</p>
+
+<p class="english">26. Throughout the first half of the 20th century, migration levels rose and fell.</p>
+<p class="viet">- Suốt nửa đầu thế kỷ 20, mức độ di cư tăng và giảm.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: migration levels rose and fell in first half of 20th century.</p>
+
+<p class="english">27. There were programs to actively encourage British migrants to settle here, and many did.</p>
+<p class="viet">- Có các chương trình tích cực khuyến khích di dân Anh định cư ở đây, và nhiều người đã làm vậy.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: programs to encourage British migrants.</p>
+
+<p class="english">28. A wave of non-British migration came after World War II, when millions of people in Europe had to leave their homelands.</p>
+<p class="viet">- Một làn sóng di cư không phải Anh đến sau Thế chiến II, khi hàng triệu người ở châu Âu phải rời quê hương.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: non-British migration wave after WWII.</p>
+
+<p class="english">29. Large numbers of Europeans came to Australia to build a new life.</p>
+<p class="viet">- Số lượng lớn người châu Âu đến Úc để xây dựng cuộc sống mới.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: Europeans came for new life.</p>
+
+<p class="english">30. In recent years, our migration and refugee programs have brought people to Australia from all over the world.</p>
+<p class="viet">- Trong những năm gần đây, các chương trình di cư và tị nạn của chúng ta đã mang người đến Úc từ khắp nơi trên thế giới.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: migration and refugee programs from all over the world.</p>
+
+<p class="english">31. People have come here to join family, to make a new life, or to escape poverty, war or persecution.</p>
+<p class="viet">- Người ta đến đây để đoàn tụ gia đình, làm cuộc sống mới, hoặc thoát nghèo đói, chiến tranh hoặc đàn áp.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: reasons: join family, new life, escape poverty/war/persecution.</p>
+
+<p class="english">32. The diversity of Australia’s population has increased over the last two centuries.</p>
+<p class="viet">- Sự đa dạng của dân số Úc đã tăng trong hai thế kỷ qua.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: diversity increased over last two centuries.</p>
+
+<p class="english">33. This diverse and prosperous society enhances Australia’s connection to the world.</p>
+<p class="viet">- Xã hội đa dạng và thịnh vượng này tăng cường kết nối của Úc với thế giới.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: diverse society enhances global connection.</p>
+
+<p class="english">34. While we celebrate the diversity of Australia’s people, we also aim to build a cohesive and unified nation.</p>
+<p class="viet">- Trong khi chúng ta kỷ niệm sự đa dạng của người dân Úc, chúng ta cũng nhắm đến xây dựng một quốc gia gắn kết và thống nhất.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: celebrate diversity, build cohesive nation.</p>
+
+<p class="english">35. Australia’s national language is English. It is part of our national identity.</p>
+<p class="viet">- Ngôn ngữ quốc gia của Úc là tiếng Anh. Nó là phần của bản sắc dân tộc chúng ta.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: national language English, part of identity.</p>
+
+<p class="english">36. In keeping with Australian values, migrants should learn and use English to help them participate in Australian society.</p>
+<p class="viet">- Để phù hợp với giá trị Úc, di dân nên học và sử dụng tiếng Anh để giúp họ tham gia vào xã hội Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: migrants should learn English for participation.</p>
+
+<p class="english">37. Communicating in English is important for making the most of living and working in Australia.</p>
+<p class="viet">- Giao tiếp bằng tiếng Anh quan trọng để tận dụng tối đa cuộc sống và làm việc ở Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: English important for living and working.</p>
+
+<p class="english">38. Other languages are also valued, including more than 100 distinct Aboriginal and Torres Strait Islander languages.</p>
+<p class="viet">- Các ngôn ngữ khác cũng được đánh giá cao, bao gồm hơn 100 ngôn ngữ Aboriginal và Torres Strait Islander riêng biệt.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: other languages valued, including >100 indigenous languages.</p>
+
+<h3>Australia’s states and territories</h3>
+
+<p class="english">39. The Commonwealth of Australia is a federation of states and territories.</p>
+<p class="viet">- Khối thịnh vượng chung Úc là liên bang của các bang và lãnh thổ.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: federation of states and territories.</p>
+
+<p class="english">40. There are six states and two mainland territories.</p>
+<p class="viet">- Có sáu bang và hai lãnh thổ lục địa.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: 6 states + 2 mainland territories.</p>
+
+<p class="english">41. Canberra is Australia’s capital city, and each state and mainland territory has its own capital.</p>
+<p class="viet">- Canberra là thủ đô của Úc, và mỗi bang và lãnh thổ lục địa có thủ đô riêng.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: Canberra capital, each has own capital.</p>
+
+<h3>Australia’s states and territories - Bảng bang và thủ đô</h3>
+<img src="state.png" class="flag-image" alt="Australian National Flag">
+<table>
+    <tr><th>State</th><th>Capital city</th></tr>
+    <tr><td>New South Wales - NSW</td><td>Sydney</td></tr>
+    <tr><td>Victoria - VIC</td><td>Melbourne</td></tr>
+    <tr><td>Queensland - QLD</td><td>Brisbane</td></tr>
+    <tr><td>Western Australia - WA</td><td>Perth</td></tr>
+    <tr><td>South Australia - SA</td><td>Adelaide</td></tr>
+    <tr><td>Tasmania - TAS</td><td>Hobart</td></tr>
+    <tr><th>Territory</th><th>Capital city</th></tr>
+    <tr><td>Australian Capital Territory - ACT</td><td>Canberra</td></tr>
+    <tr><td>Northern Territory - NT</td><td>Darwin</td></tr>
+</table>
+
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: List of states and capitals.</p>
+
+<h3>The State</h3>
+
+<h3>New South Wales</h3>
+
+<p class="english">42. New South Wales was the first colony established by the British.</p>
+<p class="viet">- New South Wales là thuộc địa đầu tiên được Anh thành lập.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: first colony by British.</p>
+
+<p class="english">43. Sydney is the capital city of New South Wales and is the nation’s largest city.</p>
+<p class="viet">- Sydney là thủ đô của New South Wales và là thành phố lớn nhất quốc gia.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: Sydney capital and largest city.</p>
+
+<p class="english">44. The Sydney Harbour Bridge and Opera House are national icons.</p>
+<p class="viet">- Cầu Sydney Harbour và Nhà hát Opera là biểu tượng quốc gia.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: national icons: Harbour Bridge and Opera House.</p>
+
+<h3>Victoria</h3>
+
+<p class="english">45. Victoria is the smallest of the mainland states.</p>
+<p class="viet">- Victoria là bang nhỏ nhất trên lục địa.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: smallest mainland state.</p>
+
+<p class="english">46. Victoria’s capital city is Melbourne.</p>
+<p class="viet">- Thủ đô của Victoria là Melbourne.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: capital Melbourne.</p>
+
+<p class="english">47. Many fine buildings in Victoria were built from the wealth created by the gold rush of the 1850s.</p>
+<p class="viet">- Nhiều tòa nhà đẹp ở Victoria được xây từ sự giàu có từ cơn sốt vàng những năm 1850.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: buildings from 1850s gold rush wealth.</p>
+
+<p class="english">48. Victoria’s icons include the Melbourne Cricket Ground, the 12 Apostles, and the Royal Exhibition Building.</p>
+<p class="viet">- Biểu tượng của Victoria bao gồm Sân cricket Melbourne, 12 Apostles, và Tòa nhà Triển lãm Hoàng gia.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: icons: MCG, 12 Apostles, Royal Exhibition Building.</p>
+
+<h3>Queensland</h3>
+
+<p class="english">49. Queensland is the second largest state.</p>
+<p class="viet">- Queensland là bang lớn thứ hai.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: second largest state.</p>
+
+<p class="english">50. Queensland’s capital city is Brisbane.</p>
+<p class="viet">- Thủ đô của Queensland là Brisbane.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: capital Brisbane.</p>
+
+<p class="english">51. The Torres Strait Islands lie to the north of the state and the world-famous Great Barrier Reef runs along its eastern coast.</p>
+<p class="viet">- Quần đảo Torres Strait nằm ở phía bắc bang và Rạn san hô Great Barrier nổi tiếng thế giới chạy dọc bờ biển phía đông.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: Torres Strait Islands north, Great Barrier Reef east.</p>
+
+<p class="english">52. Queensland has tropical rainforests, temperate coastal areas and an often dry inland.</p>
+<p class="viet">- Queensland có rừng mưa nhiệt đới, khu vực ven biển ôn đới và nội địa thường khô.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: tropical rainforests, temperate coasts, dry inland.</p>
+
+<h3>Western Australia</h3>
+
+<p class="english">53. Western Australia is the largest state.</p>
+<p class="viet">- Western Australia là bang lớn nhất.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: largest state.</p>
+
+<p class="english">54. Perth is the capital city of Western Australia.</p>
+<p class="viet">- Perth là thủ đô của Western Australia.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: capital Perth.</p>
+
+<p class="english">55. The east of the state is mostly desert, while the south-west is a rich agricultural and wine-growing area.</p>
+<p class="viet">- Phía đông bang chủ yếu là sa mạc, trong khi tây nam là khu vực nông nghiệp và trồng nho giàu có.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: east desert, south-west agricultural/wine.</p>
+
+<p class="english">56. The state is home to many large mining projects.</p>
+<p class="viet">- Bang là nơi có nhiều dự án khai thác mỏ lớn.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: home to large mining projects.</p>
+
+<p class="english">57. Western Australia’s icons include the Ningaloo Coast, Margaret River, and the Kimberley region.</p>
+<p class="viet">- Biểu tượng của Western Australia bao gồm Bờ biển Ningaloo, Sông Margaret, và vùng Kimberley.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: icons: Ningaloo Coast, Margaret River, Kimberley.</p>
+
+<h3>South Australia</h3>
+
+<p class="english">58. South Australia has a rugged coastline and many famous wine regions.</p>
+<p class="viet">- South Australia có bờ biển gồ ghề và nhiều vùng rượu nổi tiếng.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: rugged coastline, famous wine regions.</p>
+
+<p class="english">59. Adelaide, the capital city, has many examples of fine colonial architecture.</p>
+<p class="viet">- Adelaide, thủ đô, có nhiều ví dụ về kiến trúc thuộc địa đẹp.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: capital Adelaide, fine colonial architecture.</p>
+
+<p class="english">60. South Australia’s icons include the Barossa Valley and the Flinders Ranges.</p>
+<p class="viet">- Biểu tượng của South Australia bao gồm Thung lũng Barossa và Dãy Flinders.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: icons: Barossa Valley, Flinders Ranges.</p>
+
+<h3>Tasmania</h3>
+
+<p class="english">61. Tasmania is the smallest state, separated from the mainland by the Bass Strait.</p>
+<p class="viet">- Tasmania là bang nhỏ nhất, tách khỏi lục địa bởi Eo biển Bass.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: smallest state, separated by Bass Strait.</p>
+
+<p class="english">62. Tasmania’s capital city is Hobart.</p>
+<p class="viet">- Thủ đô của Tasmania là Hobart.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: capital Hobart.</p>
+
+<p class="english">63. Much of the island has unspoilt wilderness landscapes.</p>
+<p class="viet">- Phần lớn đảo có cảnh quan hoang dã chưa bị hư hại.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: unspoilt wilderness landscapes.</p>
+
+<p class="english">64. Tasmanian icons include Cradle Mountain, Port Arthur, and the Bay of Fires.</p>
+<p class="viet">- Biểu tượng Tasmania bao gồm Núi Cradle, Port Arthur, và Vịnh Fires.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: icons: Cradle Mountain, Port Arthur, Bay of Fires.</p>
+
+<h3>The territories</h3>
+
+<h3>Australian Capital Territory</h3>
+
+<p class="english">65. The Australian Capital Territory is located between Sydney and Melbourne.</p>
+<p class="viet">- Lãnh thổ Thủ đô Úc nằm giữa Sydney và Melbourne.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: located between Sydney and Melbourne.</p>
+
+<p class="english">66. It is home to the nation’s capital city, Canberra.</p>
+<p class="viet">- Nó là nơi có thủ đô quốc gia, Canberra.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: home to capital Canberra.</p>
+
+<p class="english">67. Several national institutions are located in Canberra, including Parliament House and the High Court of Australia.</p>
+<p class="viet">- Một số cơ quan quốc gia nằm ở Canberra, bao gồm Tòa nhà Quốc hội và Tòa án Tối cao Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: national institutions: Parliament House, High Court.</p>
+
+<h3>Northern Territory</h3>
+
+<p class="english">68. The Northern Territory has a tropical environment in the north of the state and dry red desert in the south.</p>
+<p class="viet">- Lãnh thổ Phía Bắc có môi trường nhiệt đới ở phía bắc và sa mạc đỏ khô ở phía nam.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: tropical north, dry red desert south.</p>
+
+<p class="english">69. Darwin is the capital city.</p>
+<p class="viet">- Darwin là thủ đô.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: capital Darwin.</p>
+
+<p class="english">70. Northern Territory icons include Uluru, Kata Tjuta and Kings Canyon.</p>
+<p class="viet">- Biểu tượng Lãnh thổ Phía Bắc bao gồm Uluru, Kata Tjuta và Hẻm núi Kings.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: icons: Uluru, Kata Tjuta, Kings Canyon.</p>
+
+<h3>Traditions</h3>
+
+<h3>Welcome to Country</h3>
+
+<p class="english">71. A Welcome to Country is a cultural practice performed by an Aboriginal or Torres Strait Islander custodian of the local region, welcoming visitors to their traditional land.</p>
+<p class="viet">- Lời Chào mừng đến Quốc gia là một thực hành văn hóa do người giữ gìn Aboriginal hoặc Torres Strait Islander của vùng địa phương thực hiện, chào đón du khách đến vùng đất truyền thống của họ.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: cultural practice by custodian, welcoming to traditional land.</p>
+
+<p class="english">72. This was traditionally performed to ensure visitors had a safe and protected journey during their time on that land.</p>
+<p class="viet">- Điều này truyền thống được thực hiện để đảm bảo du khách có hành trình an toàn và được bảo vệ trong thời gian trên đất đó.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: ensure safe journey.</p>
+
+<p class="english">73. A Welcome to Country can take place through many forms, including songs, dances, smoking ceremonies or speeches in traditional language or English.</p>
+<p class="viet">- Lời Chào mừng đến Quốc gia có thể diễn ra qua nhiều hình thức, bao gồm bài hát, điệu múa, lễ hun khói hoặc bài phát biểu bằng ngôn ngữ truyền thống hoặc tiếng Anh.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: forms: songs, dances, smoking ceremonies, speeches.</p>
+
+<p class="english">74. A Welcome to Country is usually the first item of proceedings to open an event.</p>
+<p class="viet">- Lời Chào mừng đến Quốc gia thường là mục đầu tiên của chương trình để mở sự kiện.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: first item to open event.</p>
+
+<h3>Acknowledgement of Country</h3>
+
+<p class="english">75. An Acknowledgement of Country is an opportunity to recognise that the gathering is on Aboriginal or Torres Strait Islander land; pay respect to Traditional Custodians, particularly Elders past and present; and pay respect to Aboriginal and Torres Strait Islander peoples in attendance.</p>
+<p class="viet">- Lời Công nhận Quốc gia là cơ hội để công nhận rằng cuộc tụ họp diễn ra trên đất Aboriginal hoặc Torres Strait Islander; bày tỏ sự tôn trọng đối với Người giữ gìn Truyền thống, đặc biệt là Các trưởng lão quá khứ và hiện tại; và bày tỏ sự tôn trọng đối với người Aboriginal và Torres Strait Islander có mặt.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: recognise land, respect custodians/Elders, respect attendees.</p>
+
+<p class="english">76. An Acknowledgement of Country is usually delivered as part of the Welcome and Housekeeping at meetings and events.</p>
+<p class="viet">- Lời Công nhận Quốc gia thường được trình bày như phần của Lời Chào mừng và Quản lý tại các cuộc họp và sự kiện.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: part of Welcome and Housekeeping.</p>
+
+<p class="english">77. Anyone can deliver an Acknowledgement of Country.</p>
+<p class="viet">- Bất kỳ ai cũng có thể trình bày Lời Công nhận Quốc gia.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: anyone can deliver.</p>
+
+<p class="english">78. At meetings/events, this would generally be done by the Chair or Master of Ceremonies.</p>
+<p class="viet">- Tại các cuộc họp/sự kiện, điều này thường do Chủ tọa hoặc Người dẫn chương trình thực hiện.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: done by Chair or Master of Ceremonies.</p>
+
+<p class="english">79. These practices are performed to show respect for Aboriginal and Torres Strait Islander peoples.</p>
+<p class="viet">- Những thực hành này được thực hiện để thể hiện sự tôn trọng đối với người Aboriginal và Torres Strait Islander.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: show respect for indigenous peoples.</p>
+
+<h3>Important days for Australians</h3>
+
+<h3>Australia Day</h3>
+
+<p class="english">80. On 26 January each year, we celebrate Australia Day.</p>
+<p class="viet">- Vào ngày 26 tháng 1 hàng năm, chúng ta kỷ niệm Ngày Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: 26 January, Australia Day.</p>
+
+<p class="english">81. Australia Day is a public holiday in every state and territory in Australia.</p>
+<p class="viet">- Ngày Úc là ngày lễ công cộng ở mọi bang và lãnh thổ Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: public holiday everywhere.</p>
+
+<p class="english">82. It is the anniversary of the arrival of the First Fleet from Great Britain in 1788.</p>
+<p class="viet">- Đó là kỷ niệm ngày đến của Hạm đội Đầu tiên từ Anh Quốc năm 1788.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: anniversary of First Fleet arrival 1788.</p>
+
+<p class="english">83. On Australia Day, communities across Australia reflect on our history, and the people who have contributed to our shared achievements.</p>
+<p class="viet">- Vào Ngày Úc, các cộng đồng trên toàn Úc suy ngẫm về lịch sử của chúng ta, và những người đã đóng góp vào thành tựu chung.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: reflect on history and contributions.</p>
+
+<p class="english">84. It is the biggest annual public holiday in Australia.</p>
+<p class="viet">- Đó là ngày lễ công cộng hàng năm lớn nhất ở Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: biggest annual public holiday.</p>
+
+<p class="english">85. Australia Day is about acknowledging and celebrating the contribution that every Australian makes to our contemporary and dynamic nation: from our Aboriginal and Torres Strait Islander peoples—who have been here for approximately 65,000 years—to those who have lived here for generations, and those who have come from all corners of the globe to call our country home.</p>
+<p class="viet">- Ngày Úc là về việc công nhận và kỷ niệm đóng góp mà mọi người Úc làm cho quốc gia đương đại và năng động của chúng ta: từ người Aboriginal và Torres Strait Islander—những người đã ở đây khoảng 65,000 năm—đến những người đã sống ở đây qua các thế hệ, và những người đến từ khắp nơi trên thế giới để gọi đất nước chúng ta là nhà.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: acknowledge contributions from all, including indigenous for 65,000 years.</p>
+
+<p class="english">86. Australia Day is marked by events across Australia, including special citizenship ceremonies.</p>
+<p class="viet">- Ngày Úc được đánh dấu bởi các sự kiện trên toàn Úc, bao gồm lễ nhập tịch đặc biệt.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: events including citizenship ceremonies.</p>
+
+<p class="english">87. During Australia Day celebrations, the Prime Minister announces the Australian of the Year Awards in Canberra.</p>
+<p class="viet">- Trong lễ kỷ niệm Ngày Úc, Thủ tướng công bố Giải thưởng Người Úc của Năm tại Canberra.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: PM announces Australian of the Year in Canberra.</p>
+
+<h3>Anzac Day</h3>
+
+<p class="english">88. Anzac Day is commemorated on 25 April each year.</p>
+<p class="viet">- Ngày Anzac được kỷ niệm vào ngày 25 tháng 4 hàng năm.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: 25 April, Anzac Day.</p>
+
+<p class="english">89. Anzac Day is named after the Australian and New Zealand Army Corps, which landed at Gallipoli in Türkiye during World War I on 25 April 1915.</p>
+<p class="viet">- Ngày Anzac được đặt tên theo Quân đoàn Quân đội Úc và New Zealand, đã đổ bộ tại Gallipoli ở Thổ Nhĩ Kỳ trong Thế chiến I vào ngày 25 tháng 4 năm 1915.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: named after ANZAC, Gallipoli landing 1915.</p>
+
+<p class="english">90. Anzac Day is a solemn day when we remember the sacrifice of all Australians who served and died in wars, conflicts and peacekeeping operations.</p>
+<p class="viet">- Ngày Anzac là ngày trang nghiêm khi chúng ta tưởng Hãy nhớ sự hy sinh của tất cả người Úc đã phục vụ và chết trong chiến tranh, xung đột và hoạt động gìn giữ hòa bình.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: remember sacrifices in wars, conflicts, peacekeeping.</p>
+
+<p class="english">91. We also honour the courage and commitment of all servicemen and women and reflect on the many different meanings of war.</p>
+<p class="viet">- Chúng ta cũng tôn vinh lòng dũng cảm và cam kết của tất cả quân nhân nam nữ và suy ngẫm về nhiều ý nghĩa khác nhau của chiến tranh.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: honour courage, reflect on meanings of war.</p>
+
+<h3>Australia’s flags</h3>
+
+	
+<p class="english">92. The Australian National Flag is the official flag of our nation.</p>
+<p class="viet">- Cờ Quốc gia Úc là cờ chính thức của quốc gia chúng ta.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: official national flag.</p>
+
+<p class="english">93. Other flags that are officially recognised and may be flown in the community include the Australian Aboriginal Flag and the Torres Strait Islander Flag.</p>
+<p class="viet">- Các cờ khác được công nhận chính thức và có thể treo trong cộng đồng bao gồm Cờ Aboriginal Úc và Cờ Torres Strait Islander.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: recognised flags: Aboriginal and Torres Strait Islander.</p>
+
+<h3>The Australian National Flag</h3>
+<img src="AU_flag_mean.png" class="flag-image" alt="Australian National Flag">
+<p class="english">94. The Australian National Flag is blue, white and red.</p>
+<p class="viet">- Cờ Quốc gia Úc là màu xanh dương, trắng và đỏ.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: colours: blue, white, red.</p>
+
+<p class="english">95. The ‘Union Jack’, which is the flag of the United Kingdom is in the top left corner.</p>
+<p class="viet">- 'Union Jack', cờ của Vương quốc Anh, ở góc trên bên trái.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: Union Jack top left.</p>
+
+<p class="english">96. It represents our history of British settlement and the laws and institutions we inherited as a result.</p>
+<p class="viet">- Nó đại diện cho lịch sử định cư Anh của chúng ta và các luật pháp và cơ quan chúng ta kế thừa.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: represents British settlement history.</p>
+
+<p class="english">97. The Commonwealth Star is under the Union Jack.</p>
+<p class="viet">- Ngôi sao Khối thịnh vượng chung ở dưới Union Jack.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: Commonwealth Star under Union Jack.</p>
+
+<p class="english">98. This star has seven points, each point representing one of the six states and one point for the territories.</p>
+<p class="viet">- Ngôi sao này có bảy cánh, mỗi cánh đại diện cho một trong sáu bang và một cho các lãnh thổ.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: 7 points: 6 states + territories.</p>
+
+<p class="english">99. The Southern Cross, on the right, is a group of stars that can be seen in the southern sky.</p>
+<p class="viet">- Chòm sao Southern Cross, ở bên phải, là nhóm sao có thể thấy ở bầu trời phía nam.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: Southern Cross on right, southern sky stars.</p>
+
+<h3>The Australian Aboriginal Flag</h3>
+<img src="AU-Aboriginal_flag_mean.png" class="flag-image" alt="Australian National Flag">
+<p class="english">100. The Australian Aboriginal Flag is black, red and yellow.</p>
+<p class="viet">- Cờ Aboriginal Úc là đen, đỏ và vàng.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: colours: black, red, yellow.</p>
+
+<p class="english">101. The top half is black and represents the Aboriginal peoples of Australia.</p>
+<p class="viet">- Nửa trên là đen và đại diện cho người Aboriginal của Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: black top: Aboriginal peoples.</p>
+
+<p class="english">102. The bottom half is red and represents the earth, which has ceremonial significance.</p>
+<p class="viet">- Nửa dưới là đỏ và đại diện cho đất đai, có ý nghĩa nghi lễ.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: red bottom: earth, ceremonial significance.</p>
+
+<p class="english">103. The yellow circle represents the sun.</p>
+<p class="viet">- Vòng tròn vàng đại diện cho mặt trời.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: yellow circle: sun.</p>
+
+<h3>The Torres Strait Islander Flag</h3>
+<img src="AU-Torres Strait Islander_flag_mean.png" class="flag-image" alt="Australian National Flag">
+<p class="english">104. The Torres Strait Islander Flag is green, blue, black and white.</p>
+<p class="viet">- Cờ Torres Strait Islander là xanh lá, xanh dương, đen và trắng.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: colours: green, blue, black, white.</p>
+
+<p class="english">105. The green stripes represent the land.</p>
+<p class="viet">- Các sọc xanh lá đại diện cho đất đai.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: green stripes: land.</p>
+
+<p class="english">106. The blue panel in the centre represents the sea.</p>
+<p class="viet">- Bảng xanh dương ở giữa đại diện cho biển.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: blue centre: sea.</p>
+
+<p class="english">107. The black lines represent the Torres Strait Islander people.</p>
+<p class="viet">- Các đường đen đại diện cho người Torres Strait Islander.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: black lines: people.</p>
+
+<p class="english">108. The white dancer's headdress in the centre is a symbol for all Torres Strait Islanders.</p>
+<p class="viet">- Mũ lông vũ công trắng ở giữa là biểu tượng cho tất cả người Torres Strait Islander.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: white headdress: symbol for all Islanders.</p>
+
+<p class="english">109. The points of the white star represent the island groups in the Torres Strait, and the colour white symbolises peace.</p>
+<p class="viet">- Các cánh của ngôi sao trắng đại diện cho các nhóm đảo ở Torres Strait, và màu trắng tượng trưng cho hòa bình.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: white star points: island groups, white for peace.</p>
+
+<h3>Australia's symbols</h3>
+
+<h3>Commonwealth Coat of Arms</h3>
+<img src="Coat_of_Arms.png" class="flag-image" alt="Australian National Flag">
+<p class="english">110. The Commonwealth Coat of Arms is the official symbol of the Commonwealth of Australia.</p>
+<p class="viet">- Huy hiệu Khối thịnh vượng chung là biểu tượng chính thức của Khối thịnh vượng chung Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: official symbol.</p>
+
+<p class="english">111. It represents our national unity.</p>
+<p class="viet">- Nó đại diện cho sự thống nhất quốc gia của chúng ta.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: represents national unity.</p>
+
+<p class="english">112. It identifies the authority and property of the Commonwealth of Australia.</p>
+<p class="viet">- Nó xác định quyền lực và tài sản của Khối thịnh vượng chung Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: identifies authority and property.</p>
+
+<p class="english">113. The shield in the centre represents the six states and federation.</p>
+<p class="viet">- Khiên ở giữa đại diện cho sáu bang và liên bang.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: shield: 6 states and federation.</p>
+
+<p class="english">114. A Kangaroo and an Emu support the shield on each side. Both are native Australian animals.</p>
+<p class="viet">- Một con Kangaroo và một con Emu đỡ khiên ở mỗi bên. Cả hai đều là động vật bản địa Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: kangaroo and emu support shield, native animals.</p>
+
+<p class="english">115. A gold Commonwealth Star sits above the shield.</p>
+<p class="viet">- Ngôi sao Khối thịnh vượng chung vàng ở trên khiên.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: gold Commonwealth Star above.</p>
+
+<p class="english">116. The background is the golden wattle, Australia’s national flower.</p>
+<p class="viet">- Nền là golden wattle, hoa quốc gia Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: background golden wattle, national flower.</p>
+
+<h3>Australia’s national flowers</h3>
+<img src="Golden_Wattle.png" class="flag-image" alt="Australian National Flag">
+<p class="english">117. Australia’s national flower is the golden wattle.</p>
+<p class="viet">- Hoa quốc gia Úc là golden wattle.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: national flower golden wattle.</p>
+
+<p class="english">118. This is a small tree grows mainly in south-eastern Australia.</p>
+<p class="viet">- Đây là cây nhỏ mọc chủ yếu ở đông nam Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: small tree in south-eastern Australia.</p>
+
+<p class="english">119. It has bright green leaves and many golden yellow flowers in spring.</p>
+<p class="viet">- Nó có lá xanh sáng và nhiều hoa vàng vàng vào mùa xuân.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: bright green leaves, golden yellow flowers in spring.</p>
+
+<p class="english">120. Each of the states and territories of Australia also has its own floral emblem.</p>
+<p class="viet">- Mỗi bang và lãnh thổ Úc cũng có biểu tượng hoa riêng.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: each state/territory has own floral emblem.</p>
+
+<h3>Australia’s national colours</h3>
+
+<p class="english">121. Australia’s national colours are green and gold - the colours of the golden wattle. The uniform of our national sports teams are usually green and gold.</p>
+<p class="viet">- Màu quốc gia Úc là xanh lá và vàng - màu của golden wattle. Đồng phục của các đội thể thao quốc gia thường là xanh lá và vàng.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: green and gold, like golden wattle, sports uniforms.</p>
+
+<h3>Australia’s national gemstone</h3>
+
+<p class="english">122. The opal is Australia’s national gemstone. According to Aboriginal legend, a rainbow touched the earth and created the colours of the opal.</p>
+<p class="viet">- Opal là đá quý quốc gia Úc. Theo truyền thuyết Aboriginal, cầu vồng chạm đất và tạo ra màu sắc của opal.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: opal national gemstone, Aboriginal legend with rainbow.</p>
+
+<h3>Australia’s national anthem</h3>
+
+<p class="english">123. ‘Advance Australia Fair’ is Australia’s national anthem.</p>
+<p class="viet">- 'Advance Australia Fair' là quốc ca Úc.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: national anthem Advance Australia Fair.</p>
+
+<p class="english">124. It is sung on occasions of national importance, including at Australian citizenship ceremonies and major sporting events.</p>
+<p class="viet">- Nó được hát trong các dịp quan trọng quốc gia, bao gồm tại lễ nhập tịch Úc và các sự kiện thể thao lớn.</p>
+<p class="note-paragraph"><span class="note-icon">💡</span><span class="note-text"> Hãy nhớ: sung at citizenship ceremonies and sporting events.</p>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
