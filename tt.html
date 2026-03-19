@@ -196,6 +196,27 @@
     /* ─── FOOTER ─── */
     footer { text-align: center; margin-top: 56px; padding: 0 16px; color: var(--text2); font-size: 0.84rem; line-height: 1.8; }
     footer strong { color: var(--gold); }
+
+	          .home-btn, .home-btnTS {
+            position: absolute;
+            top: 5px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        .home-btn { left: 15px; background: #006400; }
+        .home-btn::before { content: "🏠"; }
+        .home-btn:hover { background: #004d00; transform: scale(1.1); }
+        .home-btnTS { right: 37px; background: url("TS.jpg") center / 100% no-repeat, #006400; }
+        .home-btnTS:hover { transform: scale(1.1); }
   </style>
 	    <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
@@ -244,7 +265,7 @@
 <a>quay về: </a>
 <a href="test2025.html" style="text-decoration:none;">test2025</a>
 <a href="test2026.html" style="text-decoration:none;">test2026</a><br><br>
-<span style="color:red;font-weight:bold; font-size: 1.5em;">Part 1: Australia and its people</span>
+
 
 
 <div class="main">
