@@ -3,120 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <title>80-Câu Hỏi Khó & Dễ Gây Nhầm Lẫn</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.2; }
-        h1 { text-align: center; }
-		h2, h3 { text-align: left; }
-		
-        .english { font-weight: bold; color: blue; margin-top: 20px; margin-bottom: 5px;}
-        .viet { margin-left: 20px; margin-top: 1px; margin-bottom: 5px;}
+  <style>
+    :root {
+      --bg: #0d1520;
+      --card: #131e30;
+      --border: #1d2d45;
+      --border2: #253750;
+      --gold: #f0b429;
+      --correct-bg: #08203e;
+      --correct-border: #1a6eb5;
+      --correct-text: #5ab4f5;
+      --correct-tag: #ff6565;
+      --muted: #6b7fa0;
+      --text: #d8e4f4;
+      --text2: #3d5472;
+      --shadow: 0 4px 28px rgba(0,0,0,0.5);
+      --glow: 0 0 20px rgba(26,110,181,0.13);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      background-image:
+        radial-gradient(ellipse at 18% 0%, rgba(0,32,91,0.4) 0%, transparent 52%),
+        radial-gradient(ellipse at 82% 100%, rgba(26,110,181,0.1) 0%, transparent 48%);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      padding-bottom: 80px;
+    }
 
-        table { width: 40%; margin: 30px 10px; border-collapse: collapse; }
-        th, td { border: 1px solid #000; align: left; padding: 5px; text-align: left; }
-        th { background-color: #f0f0f0; }
-		th:nth-child(1), td:nth-child(1) { width: 50%; }
-		th:nth-child(2), td:nth-child(2) { width: 30%; }
-		
-		.note {
-		  margin: 6px 0;
-		  line-height: 1.5;
+    /* ─── HERO ─── */
+    .hero {
+      padding: 54px 24px 46px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 180px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(240,180,41,0.1);
+      border: 1px solid rgba(240,180,41,0.22);
+      border-radius: 30px;
+      padding: 5px 16px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 22px;
+    }
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.9rem, 5vw, 3.1rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .hero h1 span { color: var(--gold); font-style: italic; }
+    .hero-sub {
+      font-size: 0.97rem;
+      color: var(--muted);
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      padding: 11px 20px;
+      text-align: center;
+      min-width: 108px;
+    }
+    .stat .v {
+      font-family: 'Fraunces', serif;
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat .l { font-size: 0.7rem; color: var(--muted); margin-top: 4px; letter-spacing: 0.3px; }
 
-		}
+    /* ─── DIVIDER ─── */
+    .divider {
+      max-width: 880px;
+      margin: 44px auto 20px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .div-label {
+      background: linear-gradient(135deg, #00205b, #0d3a80);
+      color: rgba(255,255,255,0.85);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
 
-		.note-icon {
-		  margin-right: 6px;
-		  font-size: 1.0em;     /* chỉnh riêng icon */
-		  margin-top: 5px;
-		}
+    /* ─── MAIN ─── */
+    .main { max-width: 880px; margin: 0 auto; padding: 0 16px; }
 
-		.note-text {
-		  color: red;
-		  margin-top: 5px;
-		  
-		}
-		.note-paragraph {
-          margin-top: 5px;
-		}
+    /* ─── CARD ─── */
+    .q-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .q-card:hover {
+      border-color: var(--border2);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow), var(--glow);
+    }
+    .q-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 20px 22px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .num-wrap { display: flex; flex-direction: column; align-items: center; gap: 5px; flex-shrink: 0; }
+    .q-num {
+      background: linear-gradient(135deg, #00205b, #0d3a80);
+      color: rgba(255,255,255,0.9);
+      font-family: 'Fraunces', serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .q-orig { font-size: 0.6rem; color: var(--text2); text-align: center; line-height: 1.3; }
+    .q-body { flex: 1; }
+    .q-text { font-size: 1.03rem; font-weight: 500; color: #eaf2ff; line-height: 1.55; }
 
-		        .credit {
-            position: absolute;
-            top: 55px;
-            right: 20px;
-            z-index: 10;
-            font-size: 0.6rem;
-            color: #006400;
-            text-shadow: 1px 1px 6px rgba(0,0,0,0.8);
-            font-weight: normal;
-        }
-        .home-btn, .home-btnTS {
-            position: absolute;
-            top: 5px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            text-decoration: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            z-index: 1000;
-            transition: all 0.3s;
-        }
-        .home-btn { left: 15px; background: #006400; }
-        .home-btn::before { content: "🏠"; }
-        .home-btn:hover { background: #004d00; transform: scale(1.1); }
-        .home-btnTS { right: 37px; background: url("TS.jpg") center / 100% no-repeat, #006400; }
-        .home-btnTS:hover { transform: scale(1.1); }
+    /* ─── TRAP ─── */
+    .trap {
+      margin: 0 22px;
+      padding: 9px 14px;
+      background: rgba(230,57,70,0.07);
+      border-left: 3px solid rgba(230,57,70,0.42);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.8rem;
+      color: #ff9595;
+      line-height: 1.55;
+    }
+    .trap strong { color: #ffb3b3; }
 
+    /* ─── OPTIONS ─── */
+    .q-opts { padding: 14px 22px 18px; display: flex; flex-direction: column; gap: 9px; }
+    .opt {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; border-radius: 9px;
+      background: rgba(255,255,255,0.025);
+      border: 1.5px solid var(--border);
+      font-size: 0.93rem; color: #364e6a; line-height: 1.5;
+    }
+    .ol { font-weight: 700; font-size: 0.8rem; color: #1e3050; width: 18px; flex-shrink: 0; padding-top: 1px; }
+    .ot { flex: 1; }
+    .opt.correct { background: var(--correct-bg); border-color: var(--correct-border); color: var(--correct-text); font-weight: 500; }
+    .opt.correct .ol { color: var(--correct-text); }
+    .ctag { color: var(--correct-tag); font-weight: 700; font-size: 0.82rem; white-space: nowrap; flex-shrink: 0; padding-top: 2px; }
 
-		.section-links {
-		  background-color: #e0e0e0;
-		  padding: 10px;
-		  border-radius: 6px;
-		 font-weight: bold; 
-			color: red; 
-			text-align: left;	
-		}
-
-.flag-image {
-  max-width: 400px;
-  float: left;
-  margin: 8px 15px 10px 0;
-}
-
-.question{margin-bottom:20px;padding:15px;background:#fff;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
-
-		h1 {
-            text-align: center;
-            color: #2c3e50;
-        }
-		        .intro {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 1.1em;
-        }
-        .correct {
-            color: blue;
-            font-weight: bold;
-        }
-        .correct-label {
-            color: red;
-            font-weight: bold;
-            margin-left: 8px;
-        }
-				h2 {
-            text-align: left;
-            color: #2c3e50;
-			font-size: 2.0em;
-        }
-
-		body{
-    font-family:Arial;
-    padding:20px;
-    background: linear-gradient(135deg, #eef2f7, #dbeafe);
-}
-    </style>
+    /* ─── FOOTER ─── */
+    footer { text-align: center; margin-top: 56px; padding: 0 16px; color: var(--text2); font-size: 0.84rem; line-height: 1.8; }
+    footer strong { color: var(--gold); }
+  </style>
 	    <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
@@ -178,687 +255,334 @@
     </div>
 </div>
 
-<div class="question">
-    <div class="q-title">2. The Aboriginal people are the first inhabitants of?</div>
-    <div class="options">
-        A. Tasmania only<br>
-        B. Mainland Australia only<br>
-        <span class="correct">C. Mainland Australia and Tasmania</span><span class="correct-label"> <- Correct</span><br>
-        D. Islands between Queensland and Papua New Guinea
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">3. Torres Strait Islander people come from islands located between?</div>
-    <div class="options">
-        A. Indonesia and Papua New Guinea<br>
-        <span class="correct">B. The northern tip of Queensland and Papua New Guinea</span><span class="correct-label"> <- Correct</span><br>
-        C. New Zealand and Fiji<br>
-        D. Mainland Australia and Tasmania
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">4. When did Aboriginal people first arrive in Australia?</div>
-    <div class="options">
-        A. About 5,000 years ago<br>
-        B. About 1,000 years ago<br>
-        <span class="correct">C. Between 65,000 and 40,000 years ago</span><span class="correct-label"> <- Correct</span><br>
-        D. About 500 years ago
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">5. The deep and continuing connection of Aboriginal and Torres Strait Islander peoples to the country is expressed through?</div>
-    <div class="options">
-        A. Art only<br>
-        B. Stories only<br>
-        C. Dance only<br>
-        <span class="correct">D. All of the above (art, stories, dance)</span><span class="correct-label"> <- Correct</span>
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">6. Indigenous cultures form?</div>
-    <div class="options">
-        A. A small part of Australia’s identity<br>
-        <span class="correct">B. An important part of Australia’s identity</span><span class="correct-label"> <- Correct</span><br>
-        C. No part of Australia’s identity<br>
-        D. The only part of Australia’s identity
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">7. Family violence in Australia is?</div>
-    <div class="options">
-        A. Physical abuse only<br>
-        B. Verbal abuse only<br>
-        <span class="correct">C. Both physical and verbal abuse</span><span class="correct-label"> <- Correct</span><br>
-        D. Allowed in private homes
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">8. European settlement in Australia began on?</div>
-    <div class="options">
-        A. 26 January 1770<br>
-        B. 26 January 1780<br>
-        <span class="correct">C. 26 January 1788</span><span class="correct-label"> <- Correct</span><br>
-        D. 26 January 1790
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">9. What does European settlement refer to?</div>
-    <div class="options">
-        A. Free migration from Europe<br>
-        <span class="correct">B. The arrival of the First Fleet – 11 convict ships from Great Britain</span><span class="correct-label"> <- Correct</span><br>
-        C. Trade opening only<br>
-        D. All of the above
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">10. The First Fleet consisted of how many ships?</div>
-    <div class="options">
-        A. 8 ships<br>
-        B. 9 ships<br>
-        C. 10 ships<br>
-        <span class="correct">D. 11 ships</span><span class="correct-label"> <- Correct</span>
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">11. Why were convicts transported to Australia?</div>
-    <div class="options">
-        A. Britain had strict laws and overcrowded prisons<br>
-        B. No space left in British jails<br>
-        C. To establish a new colony<br>
-        <span class="correct">D. All of the above</span><span class="correct-label"> <- Correct</span>
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">12. Many free settlers came to Australia in the 1800s mainly because of?</div>
-    <div class="options">
-        A. War in Europe<br>
-        <span class="correct">B. The gold rushes (especially 1850s)</span><span class="correct-label"> <- Correct</span><br>
-        C. Religious freedom<br>
-        D. Political exile
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">13. In the early days of settlement, who made up a large part of the population?</div>
-    <div class="options">
-        A. Free settlers only<br>
-        <span class="correct">B. Convicts and free settlers</span><span class="correct-label"> <- Correct</span><br>
-        C. Indigenous people only<br>
-        D. Soldiers only
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">14. Australia’s population in 1901 (at Federation) was approximately?</div>
-    <div class="options">
-        A. 1 million<br>
-        <span class="correct">B. 4 million</span><span class="correct-label"> <- Correct</span><br>
-        C. 10 million<br>
-        D. 20 million
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">15. Which state had major buildings and architecture from the 1850s gold rush?</div>
-    <div class="options">
-        A. New South Wales<br>
-        <span class="correct">B. Victoria (especially Melbourne)</span><span class="correct-label"> <- Correct</span><br>
-        C. Queensland<br>
-        D. South Australia
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">16. Australia Day is celebrated on?</div>
-    <div class="options">
-        A. 25 April<br>
-        <span class="correct">B. 26 January</span><span class="correct-label"> <- Correct</span><br>
-        C. 1 January<br>
-        D. 25 December
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">17. The biggest annual public holiday in Australia is?</div>
-    <div class="options">
-        A. New Year’s Day<br>
-        <span class="correct">B. Australia Day (26 January)</span><span class="correct-label"> <- Correct</span><br>
-        C. Anzac Day<br>
-        D. Christmas Day
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">18. Under the rule of law in Australia?</div>
-    <div class="options">
-        A. The Prime Minister is above the law<br>
-        B. Judges are above the law<br>
-        <span class="correct">C. No one is above the law</span><span class="correct-label"> <- Correct</span><br>
-        D. Only citizens are under the law
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">19. Freedom of speech in Australia includes?</div>
-    <div class="options">
-        A. Newspapers and media only<br>
-        <span class="correct">B. Newspapers, TV, radio, and public expression</span><span class="correct-label"> <- Correct</span><br>
-        C. Unlimited without responsibility<br>
-        D. Only in private
-    </div>
-</div>
-
-<div class="question">
-    <div class="q-title">20. Australians have the right to?</div>
-    <div class="options">
-        A. Gather only with permission<br>
-        <span class="correct">B. Peacefully gather, meet, and protest</span><span class="correct-label"> <- Correct</span><br>
-        C. Protest violently<br>
-        D. Gather only indoors
-    </div>
-</div>
-<span style="color:red;font-weight:bold; font-size: 1.5em;">Part 2: Democratic beliefs, rights and liberties</span>
-
-<div class="question">
-1. What is one responsibility of Australian citizens?<br>
-A. To vote in federal and state elections<br>
-B. To pay taxes<br>
-C. To serve on a jury if called<br>
-D. <span style="color:blue;font-weight:bold;">All of the above <span style="color:red;">&lt;- Correct</span></span><br>
-</div>
-
-<div class="question">
-2. Which of the following is a freedom in Australia?<br>
-A. Freedom of speech<br>
-B. Freedom of religion<br>
-C. Freedom of association<br>
-D. <span style="color:blue;font-weight:bold;">All of the above <span style="color:red;">&lt;- Correct</span></span><br>
-</div>
-
-<div class="question">
-3. What does equality before the law mean?<br>
-A. Laws apply only to citizens<br>
-B. <span style="color:blue;font-weight:bold;">Laws apply to everyone equally <span style="color:red;">&lt;- Correct</span></span><br>
-C. Laws apply only to politicians<br>
-D. Laws apply differently depending on wealth<br>
-</div>
-
-<div class="question">
-4. What is freedom of speech?<br>
-A. You can say anything without consequence<br>
-B. <span style="color:blue;font-weight:bold;">You can express opinions within the law <span style="color:red;">&lt;- Correct</span></span><br>
-C. Only media can speak freely<br>
-D. Only citizens can speak freely<br>
-</div>
-
-<div class="question">
-5. What is the rule of law?<br>
-A. The government is above the law<br>
-B. Only police follow the law<br>
-C. <span style="color:blue;font-weight:bold;">Everyone must follow the law <span style="color:red;">&lt;- Correct</span></span><br>
-D. Laws apply only to courts<br>
-</div>
-
-<div class="question">
-6. Which statement about religion is correct?<br>
-A. Australia has an official religion<br>
-B. You must follow a religion<br>
-C. <span style="color:blue;font-weight:bold;">You can choose any religion or none <span style="color:red;">&lt;- Correct</span></span><br>
-D. Only Christianity is allowed<br>
-</div>
-
-<div class="question">
-7. What is one responsibility of Australian citizens aged 18+?<br>
-A. <span style="color:blue;font-weight:bold;">Voting in elections <span style="color:red;">&lt;- Correct</span></span><br>
-B. Joining the military<br>
-C. Owning property<br>
-D. Paying rent<br>
-</div>
-
-<div class="question">
-8. What is freedom of association?<br>
-A. <span style="color:blue;font-weight:bold;">You can join or leave groups freely <span style="color:red;">&lt;- Correct</span></span><br>
-B. You must join a political party<br>
-C. Only workers can join unions<br>
-D. Associations must be approved by police<br>
-</div>
-
-<div class="question">
-9. What is meant by equality of opportunity?<br>
-A. Everyone gets same result<br>
-B. <span style="color:blue;font-weight:bold;">Everyone has same chance to succeed <span style="color:red;">&lt;- Correct</span></span><br>
-C. Only rich people succeed<br>
-D. Government gives jobs to all<br>
-</div>
-
-<div class="question">
-10. Can Australians protest the government?<br>
-A. No<br>
-B. <span style="color:blue;font-weight:bold;">Yes, peacefully and within the law <span style="color:red;">&lt;- Correct</span></span><br>
-C. Only with permission from PM<br>
-D. Only in elections<br>
-</div>
-
-<div class="question">
-11. What is jury service?<br>
-A. Optional volunteering<br>
-B. <span style="color:blue;font-weight:bold;">A legal responsibility if selected <span style="color:red;">&lt;- Correct</span></span><br>
-C. Only for lawyers<br>
-D. Only for police<br>
-</div>
-
-<div class="question">
-12. What happens if you break the law?<br>
-A. Nothing<br>
-B. <span style="color:blue;font-weight:bold;">You may be punished <span style="color:red;">&lt;- Correct</span></span><br>
-C. Only foreigners are punished<br>
-D. Only police decide punishment<br>
-</div>
-
-<div class="question">
-13. Who must obey Australian laws?<br>
-A. Citizens only<br>
-B. Visitors only<br>
-C. <span style="color:blue;font-weight:bold;">Everyone in Australia <span style="color:red;">&lt;- Correct</span></span><br>
-D. Government only<br>
-</div>
-
-<div class="question">
-14. What is freedom of religion?<br>
-A. You must follow one religion<br>
-B. <span style="color:blue;font-weight:bold;">You can follow any religion or none <span style="color:red;">&lt;- Correct</span></span><br>
-C. Only citizens can choose religion<br>
-D. Religion is controlled by government<br>
-</div>
-
-<div class="question">
-15. Which is a democratic belief?<br>
-A. Equality<br>
-B. Rule of law<br>
-C. Freedom<br>
-D. <span style="color:blue;font-weight:bold;">All of the above <span style="color:red;">&lt;- Correct</span></span><br>
-</div>
-
-<div class="question">
-16. What is required when voting?<br>
-A. It is optional<br>
-B. <span style="color:blue;font-weight:bold;">It is compulsory for citizens 18+ <span style="color:red;">&lt;- Correct</span></span><br>
-C. Only men vote<br>
-D. Only workers vote<br>
-</div>
-
-<div class="question">
-17. What does “respect for others” mean?<br>
-A. Ignore others<br>
-B. <span style="color:blue;font-weight:bold;">Treat people fairly <span style="color:red;">&lt;- Correct</span></span><br>
-C. Follow only your beliefs<br>
-D. Avoid interaction<br>
-</div>
-
-<div class="question">
-18. Can laws change in Australia?<br>
-A. No<br>
-B. <span style="color:blue;font-weight:bold;">Yes, through parliament <span style="color:red;">&lt;- Correct</span></span><br>
-C. Only courts decide<br>
-D. Only citizens vote laws directly<br>
-</div>
-
-<div class="question">
-19. What is tolerance?<br>
-A. <span style="color:blue;font-weight:bold;">Accepting differences <span style="color:red;">&lt;- Correct</span></span><br>
-B. Ignoring others<br>
-C. Forcing beliefs<br>
-D. Avoiding people<br>
-</div>
-
-<div class="question">
-20. What is civic duty?<br>
-A. Ignoring government<br>
-B. <span style="color:blue;font-weight:bold;">Participating in society responsibly <span style="color:red;">&lt;- Correct</span></span><br>
-C. Avoiding voting<br>
-D. Only paying taxes<br>
-</div>
-
-<span style="color:red;font-weight:bold; font-size: 1.5em;">Part 3: Government and the law</span>
-
-<div class="question">
-1. What is Australia's system of government?<br>
-A. Republic<br>
-B. <span style="color:blue;font-weight:bold;">Parliamentary democracy <span style="color:red;">&lt;- Correct</span></span><br>
-C. Dictatorship<br>
-D. Monarchy only<br>
-</div>
-
-<div class="question">
-2. Where does government power come from?<br>
-A. The King<br>
-B. Parliament<br>
-C. <span style="color:blue;font-weight:bold;">The Australian people <span style="color:red;">&lt;- Correct</span></span><br>
-D. The courts<br>
-</div>
-
-<div class="question">
-3. What is a “fair go”?<br>
-A. Equal pay for all<br>
-B. <span style="color:blue;font-weight:bold;">Equal opportunity for everyone <span style="color:red;">&lt;- Correct</span></span><br>
-C. Government support only<br>
-D. Same outcome for all<br>
-</div>
-
-<div class="question">
-4. Can Australians hold dual citizenship?<br>
-A. No<br>
-B. Only by permission<br>
-C. <span style="color:blue;font-weight:bold;">Yes, if allowed by other country <span style="color:red;">&lt;- Correct</span></span><br>
-D. Only politicians<br>
-</div>
-
-<div class="question">
-5. What is illegal in Australia?<br>
-A. Peaceful protest<br>
-B. Free speech<br>
-C. <span style="color:blue;font-weight:bold;">Forced marriage <span style="color:red;">&lt;- Correct</span></span><br>
-D. Voting<br>
-</div>
-
-<div class="question">
-6. What is expected of Australians in society?<br>
-A. Stay independent<br>
-B. Ignore others<br>
-C. <span style="color:blue;font-weight:bold;">Participate and contribute <span style="color:red;">&lt;- Correct</span></span><br>
-D. Avoid community<br>
-</div>
-
-<div class="question">
-7. What is mateship?<br>
-A. Political system<br>
-B. Law enforcement<br>
-C. <span style="color:blue;font-weight:bold;">Helping each other in need <span style="color:red;">&lt;- Correct</span></span><br>
-D. Business relationship<br>
-</div>
-
-<div class="question">
-8. What language is important in Australia?<br>
-A. French<br>
-B. Chinese<br>
-C. <span style="color:blue;font-weight:bold;">English <span style="color:red;">&lt;- Correct</span></span><br>
-D. Latin<br>
-</div>
-
-<div class="question">
-9. What must citizens do if they suspect serious crime?<br>
-A. Ignore it<br>
-B. Handle themselves<br>
-C. <span style="color:blue;font-weight:bold;">Report to authorities <span style="color:red;">&lt;- Correct</span></span><br>
-D. Share online<br>
-</div>
-
-<div class="question">
-10. What is cyber abuse?<br>
-A. Legal behavior<br>
-B. Harmless joke<br>
-C. <span style="color:blue;font-weight:bold;">Illegal online harm or harassment <span style="color:red;">&lt;- Correct</span></span><br>
-D. Political speech<br>
-</div>
-
-<div class="question">
-11. What must Australians do regarding laws?<br>
-A. Follow only if watched<br>
-B. Choose which laws<br>
-C. <span style="color:blue;font-weight:bold;">Obey all laws at all times <span style="color:red;">&lt;- Correct</span></span><br>
-D. Only serious laws<br>
-</div>
-
-<div class="question">
-12. What is not acceptable in Australia?<br>
-A. Debate<br>
-B. Protest<br>
-C. <span style="color:blue;font-weight:bold;">Violence <span style="color:red;">&lt;- Correct</span></span><br>
-D. Voting<br>
-</div>
-
-<div class="question">
-13. What does tolerance mean?<br>
-A. Agree with everyone<br>
-B. Ignore others<br>
-C. <span style="color:blue;font-weight:bold;">Respect different views <span style="color:red;">&lt;- Correct</span></span><br>
-D. Avoid discussion<br>
-</div>
-
-<div class="question">
-14. What is racism?<br>
-A. Cultural respect<br>
-B. Equality<br>
-C. <span style="color:blue;font-weight:bold;">Discrimination based on race <span style="color:red;">&lt;- Correct</span></span><br>
-D. Political belief<br>
-</div>
-
-<div class="question">
-15. What must be respected in Australia?<br>
-A. Only your opinion<br>
-B. Government only<br>
-C. <span style="color:blue;font-weight:bold;">Freedom and dignity of others <span style="color:red;">&lt;- Correct</span></span><br>
-D. Religion only<br>
-</div>
-
-<div class="question">
-16. What is required for jobs in Australia?<br>
-A. Wealth<br>
-B. Gender<br>
-C. <span style="color:blue;font-weight:bold;">Skills and experience <span style="color:red;">&lt;- Correct</span></span><br>
-D. Nationality<br>
-</div>
-
-<div class="question">
-17. What is illegal regarding relationships?<br>
-A. Marriage<br>
-B. Divorce<br>
-C. <span style="color:blue;font-weight:bold;">Violence against partner <span style="color:red;">&lt;- Correct</span></span><br>
-D. Friendship<br>
-</div>
-
-<div class="question">
-18. What is democracy?<br>
-A. Rule by king<br>
-B. Military rule<br>
-C. <span style="color:blue;font-weight:bold;">People vote to choose government <span style="color:red;">&lt;- Correct</span></span><br>
-D. No elections<br>
-</div>
-
-<div class="question">
-19. What is compulsory in Australia?<br>
-A. Religion<br>
-B. Military service<br>
-C. <span style="color:blue;font-weight:bold;">Voting in elections <span style="color:red;">&lt;- Correct</span></span><br>
-D. Owning house<br>
-</div>
-
-<div class="question">
-20. What is loyalty to Australia?<br>
-A. Ignoring laws<br>
-B. Supporting other countries first<br>
-C. <span style="color:blue;font-weight:bold;">Following laws and supporting Australia <span style="color:red;">&lt;- Correct</span></span><br>
-D. Only symbolic<br>
-</div>
-
-<span style="color:red;font-weight:bold; font-size: 1.5em;">Part 4: Australian values</span>
-
-<div class="question">
-1. What is the capital city of Australia?<br>
-A. Sydney<br>
-B. Melbourne<br>
-C. <span style="color:blue;font-weight:bold;">Canberra <span style="color:red;">&lt;- Correct</span></span><br>
-D. Brisbane<br>
-</div>
-
-<div class="question">
-2. What is the capital city of Tasmania?<br>
-A. Launceston<br>
-B. <span style="color:blue;font-weight:bold;">Hobart <span style="color:red;">&lt;- Correct</span></span><br>
-C. Darwin<br>
-D. Adelaide<br>
-</div>
-
-<div class="question">
-3. Which day is Australia Day?<br>
-A. 1 January<br>
-B. <span style="color:blue;font-weight:bold;">26 January <span style="color:red;">&lt;- Correct</span></span><br>
-C. 25 April<br>
-D. 31 December<br>
-</div>
-
-<div class="question">
-4. What happened on 25 April 1915?<br>
-A. Federation<br>
-B. Constitution signed<br>
-C. <span style="color:blue;font-weight:bold;">ANZAC landed at Gallipoli <span style="color:red;">&lt;- Correct</span></span><br>
-D. Australia became republic<br>
-</div>
-
-<div class="question">
-5. What is the Commonwealth Coat of Arms?<br>
-A. Flag of Australia<br>
-B. National anthem<br>
-C. <span style="color:blue;font-weight:bold;">Official symbol of Australia <span style="color:red;">&lt;- Correct</span></span><br>
-D. Currency symbol<br>
-</div>
-
-<div class="question">
-6. What is Australia’s national anthem?<br>
-A. Waltzing Matilda<br>
-B. God Save the King<br>
-C. <span style="color:blue;font-weight:bold;">Advance Australia Fair <span style="color:red;">&lt;- Correct</span></span><br>
-D. Southern Cross<br>
-</div>
-
-<div class="question">
-7. Who must follow Australian laws?<br>
-A. Citizens only<br>
-B. Visitors only<br>
-C. <span style="color:blue;font-weight:bold;">Everyone in Australia <span style="color:red;">&lt;- Correct</span></span><br>
-D. Government only<br>
-</div>
-
-<div class="question">
-8. What happens if you break a law unknowingly?<br>
-A. No punishment<br>
-B. Only warning<br>
-C. <span style="color:blue;font-weight:bold;">You may still be penalised <span style="color:red;">&lt;- Correct</span></span><br>
-D. Only citizens punished<br>
-</div>
-
-<div class="question">
-9. What is a referendum?<br>
-A. Election for PM<br>
-B. Court decision<br>
-C. <span style="color:blue;font-weight:bold;">Vote to change the Constitution <span style="color:red;">&lt;- Correct</span></span><br>
-D. Tax system<br>
-</div>
-
-<div class="question">
-10. What does constitutional monarchy mean?<br>
-A. King rules country<br>
-B. No laws<br>
-C. <span style="color:blue;font-weight:bold;">Monarch + constitution limits power <span style="color:red;">&lt;- Correct</span></span><br>
-D. Military rule<br>
-</div>
-
-<div class="question">
-11. Who represents the King in Australia?<br>
-A. Prime Minister<br>
-B. Premier<br>
-C. <span style="color:blue;font-weight:bold;">Governor-General <span style="color:red;">&lt;- Correct</span></span><br>
-D. Mayor<br>
-</div>
-
-<div class="question">
-12. What is the role of police?<br>
-A. Make laws<br>
-B. Judge people<br>
-C. <span style="color:blue;font-weight:bold;">Maintain law and order <span style="color:red;">&lt;- Correct</span></span><br>
-D. Collect tax<br>
-</div>
-
-<div class="question">
-13. Can men and women be treated equally?<br>
-A. No<br>
-B. Only in work<br>
-C. <span style="color:blue;font-weight:bold;">Yes, equal rights under law <span style="color:red;">&lt;- Correct</span></span><br>
-D. Only citizens<br>
-</div>
-
-<div class="question">
-14. What is freedom of religion?<br>
-A. Must follow religion<br>
-B. Government chooses religion<br>
-C. <span style="color:blue;font-weight:bold;">Choose any religion or none <span style="color:red;">&lt;- Correct</span></span><br>
-D. Only one religion allowed<br>
-</div>
-
-<div class="question">
-15. What is allowed in a democracy?<br>
-A. Violence<br>
-B. Dictatorship<br>
-C. <span style="color:blue;font-weight:bold;">Peaceful protest <span style="color:red;">&lt;- Correct</span></span><br>
-D. No elections<br>
-</div>
-
-<div class="question">
-16. Who can vote in Australia?<br>
-A. Everyone<br>
-B. Visitors<br>
-C. <span style="color:blue;font-weight:bold;">Citizens aged 18+ <span style="color:red;">&lt;- Correct</span></span><br>
-D. Only workers<br>
-</div>
-
-<div class="question">
-17. What must citizens do when voting?<br>
-A. Optional<br>
-B. Ignore election<br>
-C. <span style="color:blue;font-weight:bold;">Vote in elections <span style="color:red;">&lt;- Correct</span></span><br>
-D. Pay money<br>
-</div>
-
-<div class="question">
-18. What is a Mayor?<br>
-A. National leader<br>
-B. State leader<br>
-C. <span style="color:blue;font-weight:bold;">Head of local council <span style="color:red;">&lt;- Correct</span></span><br>
-D. Judge<br>
-</div>
+<div class="main">
+
+<!-- ══════════════════════════════
+  NHÓM 1 — Dân chủ & Luật pháp
+══════════════════════════════ -->
+<div class="divider"><span class="div-label">Nhóm 1 — Dân chủ &amp; Luật pháp (Q1–Q18)</span></div>
+
+<!-- Q1 – gốc Q1 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">1</div><div class="q-orig">Gốc Q1</div></div>
+    <div class="q-body"><div class="q-text">What do you pledge at the citizenship ceremony?</div></div>
+  </div>
+  <div class="trap">Dễ chọn A ("follow only federal laws") vì nghe giống khẩu hiệu. Nhưng đáp án đúng là <strong>B</strong> — cam kết chia sẻ <em>niềm tin dân chủ</em> và tôn trọng <em>quyền, tự do</em> của Úc. Không phải chỉ tuân luật hay học lịch sử.</div>
+  <div class="q-opts">
+    <div class="opt"><span class="ol">A.</span><span class="ot">To follow only federal laws.</span></div>
+    <div class="opt correct"><span class="ol">B.</span><span class="ot">To share Australia's democratic beliefs and respect its rights and liberties.</span><span class="ctag">← Correct</span></div>
+    <div class="opt"><span class="ol">C.</span><span class="ot">To learn the history of Australia.</span></div>
+    <div class="opt"><span class="ol">D.</span><span class="ot">To promote Australian culture.</span></div>
+  </div>
+</div>
+
+<!-- Q2 – gốc Q9 vs Q10 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">2</div><div class="q-orig">Gốc Q9 &amp; Q10</div></div>
+    <div class="q-body"><div class="q-text">What type of government system does Australia have, and what is its political system?</div></div>
+  </div>
+  <div class="trap">Hai câu dễ nhầm nhau: Q9 hỏi "system of government" → <strong>Parliamentary democracy</strong>. Q10 hỏi "political system" → <strong>Democracy</strong>. Cả hai đều đúng nhưng câu trả lời khác độ cụ thể. Ngoài ra, "Constitutional monarchy" (B của Q9) cũng đúng một phần — nhưng không phải đáp án chính xác nhất.</div>
+  <div class="q-opts">
+    <div class="opt correct"><span class="ol">A.</span><span class="ot">Parliamentary democracy (system of government) / Democracy (political system).</span><span class="ctag">← Correct</span></div>
+    <div class="opt"><span class="ol">B.</span><span class="ot">Constitutional monarchy / Monarchy.</span></div>
+    <div class="opt"><span class="ol">C.</span><span class="ot">Federal republic / Republic.</span></div>
+    <div class="opt"><span class="ol">D.</span><span class="ot">Presidential democracy / Autocracy.</span></div>
+  </div>
+</div>
+
+<!-- Q3 – gốc Q11 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">3</div><div class="q-orig">Gốc Q11</div></div>
+    <div class="q-body"><div class="q-text">Who should follow Australian law?</div></div>
+  </div>
+  <div class="trap">Dễ dừng lại ở đáp án A ("only government leaders") hay B ("community and religious leaders"). Đáp án đúng là <strong>C</strong> — liệt kê đầy đủ: government + community + religious leaders + business people + police. <strong>Thiếu một nhóm là sai.</strong></div>
+  <div class="q-opts">
+    <div class="opt"><span class="ol">A.</span><span class="ot">Only government leaders.</span></div>
+    <div class="opt"><span class="ol">B.</span><span class="ot">Only community and religious leaders.</span></div>
+    <div class="opt correct"><span class="ol">C.</span><span class="ot">Everyone including the government, community, religious leaders, business people and police.</span><span class="ctag">← Correct</span></div>
+    <div class="opt"><span class="ol">D.</span><span class="ot">Only business people and police.</span></div>
+  </div>
+</div>
+
+<!-- Q4 – gốc Q13 vs Q14 vs Q15 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">4</div><div class="q-orig">Gốc Q13–Q15</div></div>
+    <div class="q-body"><div class="q-text">According to the rule of law, who is above the law, and who is equal under the law?</div></div>
+  </div>
+  <div class="trap">Bộ ba câu liên quan: Q13 "ai trên luật" → <strong>No one</strong>. Q14 "rule of law nghĩa là gì" → không ai, không nhóm nào, không luật tôn giáo nào trên luật. Q15 "ai bình đẳng trước pháp luật" → <strong>All individuals regardless of background</strong>. Dễ nhầm "only Australian citizens" với "all individuals".</div>
+  <div class="q-opts">
+    <div class="opt"><span class="ol">A.</span><span class="ot">Military and elected representatives are above the law; only citizens are equal.</span></div>
+    <div class="opt"><span class="ol">B.</span><span class="ot">Government officials are above the law; only residents are equal.</span></div>
+    <div class="opt correct"><span class="ol">C.</span><span class="ot">No one is above the law; all individuals regardless of background are equal under the law.</span><span class="ctag">← Correct</span></div>
+    <div class="opt"><span class="ol">D.</span><span class="ot">Religious leaders are above the law; only people in government positions are equal.</span></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+  NHÓM 2 — Tự do Ngôn luận & Hội họp
+══════════════════════════════ -->
+<div class="divider"><span class="div-label">Nhóm 2 — Tự do Ngôn luận &amp; Hội họp (Q22–Q41)</span></div>
+
+<!-- Q5 – gốc Q27 vs Q30 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">5</div><div class="q-orig">Gốc Q27 &amp; Q30</div></div>
+    <div class="q-body"><div class="q-text">Can people in Australia express any idea they want, and what must they do while doing so?</div></div>
+  </div>
+  <div class="trap">Q27: "Yes, <strong>as long as it obeys the laws</strong>" — không phải "without any restrictions" (B). Q30: phải <strong>obey Australian laws</strong> — không phải "follow government instructions" hay "ignore others' opinions". Hai câu cùng chủ đề nhưng nhấn mạnh vào <em>điều kiện</em> khác nhau.</div>
+  <div class="q-opts">
+    <div class="opt"><span class="ol">A.</span><span class="ot">Yes, without any restrictions; they must only ignore other people's opinions.</span></div>
+    <div class="opt correct"><span class="ol">B.</span><span class="ot">Yes, as long as it obeys the laws of Australia; they must obey Australian laws while doing so.</span><span class="ctag">← Correct</span></div>
+    <div class="opt"><span class="ol">C.</span><span class="ot">Only government-approved ideas; they must follow government instructions.</span></div>
+    <div class="opt"><span class="ol">D.</span><span class="ot">Yes, freely; they must only speak about non-political issues.</span></div>
+  </div>
+</div>
+
+<!-- Q6 – gốc Q34 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">6</div><div class="q-orig">Gốc Q34</div></div>
+    <div class="q-body"><div class="q-text">What are Australians allowed to do under freedom of speech?</div></div>
+  </div>
+  <div class="trap">Đáp án A ("refuse to vote to express disagreement") nghe như một quyền hợp lý nhưng sai — bỏ phiếu là <em>bắt buộc</em>. Đáp án D ("spread hate speech") rõ ràng sai. Đáp án đúng là <strong>C</strong> — ba hành động cụ thể: criticize, protest peacefully, campaign to change laws.</div>
+  <div class="q-opts">
+    <div class="opt"><span class="ol">A.</span><span class="ot">Refuse to participate in elections to express disagreement.</span></div>
+    <div class="opt"><span class="ol">B.</span><span class="ot">Ignore laws while protesting against the government.</span></div>
+    <div class="opt correct"><span class="ol">C.</span><span class="ot">Criticize the government, protest peacefully against government decisions, and campaign to change laws.</span><span class="ctag">← Correct</span></div>
+    <div class="opt"><span class="ol">D.</span><span class="ot">Spread hate speech against certain groups.</span></div>
+  </div>
+</div>
 
-<div class="question">
-19. What does freedom of speech allow?<br>
-A. Say anything<br>
-B. No limits<br>
-C. <span style="color:blue;font-weight:bold;">Speak within the law <span style="color:red;">&lt;- Correct</span></span><br>
-D. Only media speak<br>
+<!-- Q7 – gốc Q37 vs Q38 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">7</div><div class="q-orig">Gốc Q37 &amp; Q38</div></div>
+    <div class="q-body"><div class="q-text">Can Australians gather freely? What is the key condition for any gathering or protest?</div></div>
+  </div>
+  <div class="trap">Q37 và Q38 gần như giống nhau — dễ lẫn lộn. Điều kiện cốt lõi luôn là: <strong>obeys the laws AND is peaceful</strong>. Đáp án B của Q37 ("for any reason") và D của Q38 ("illegal") đều là bẫy. Không có gathering nào "không cần điều kiện" hay "chỉ cho mục đích chính trị".</div>
+  <div class="q-opts">
+    <div class="opt"><span class="ol">A.</span><span class="ot">Yes, they can gather for any reason without conditions.</span></div>
+    <div class="opt correct"><span class="ol">B.</span><span class="ot">Yes, as long as the gathering obeys the laws and is peaceful — including protests against government.</span><span class="ctag">← Correct</span></div>
+    <div class="opt"><span class="ol">C.</span><span class="ot">No, only for political purposes with government approval.</span></div>
+    <div class="opt"><span class="ol">D.</span><span class="ot">No, all protests are illegal in Australia.</span></div>
+  </div>
+</div>
+
+<!-- Q8 – gốc Q40 vs Q41 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">8</div><div class="q-orig">Gốc Q40 &amp; Q41</div></div>
+    <div class="q-body"><div class="q-text">What types of organisations can Australians join, and what is the right of freedom of association?</div></div>
+  </div>
+  <div class="trap">Q40: Đáp án C liệt kê đầy đủ 5 loại: <strong>political parties, trade unions, religious, cultural, social groups</strong>. Chọn A (chỉ social/cultural) hay B (chỉ political/union) là bỏ sót. Q41: freedom of association = quyền <em>thành lập VÀ gia nhập</em> — không phải chỉ gia nhập, và không cần government approval.</div>
+  <div class="q-opts">
+    <div class="opt"><span class="ol">A.</span><span class="ot">Only social or cultural groups; the right to join only political parties.</span></div>
+    <div class="opt"><span class="ol">B.</span><span class="ot">Only political parties and trade unions; the right to join any group with government approval.</span></div>
+    <div class="opt correct"><span class="ol">C.</span><span class="ot">Political parties, trade unions, religious, cultural or social groups; the right to form and join associations to pursue common goals.</span><span class="ctag">← Correct</span></div>
+    <div class="opt"><span class="ol">D.</span><span class="ot">Only religious organizations; the right to form any group including unlawful ones.</span></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+  NHÓM 3 — Tôn giáo & Chính phủ thế tục
+══════════════════════════════ -->
+<div class="divider"><span class="div-label">Nhóm 3 — Tôn giáo &amp; Chính phủ thế tục (Q44–Q59)</span></div>
+
+<!-- Q9 – gốc Q44 vs Q45 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">9</div><div class="q-orig">Gốc Q44 &amp; Q45</div></div>
+    <div class="q-body"><div class="q-text">Can religious laws go against Australian law, and what is the legal status of religious laws?</div></div>
+  </div>
+  <div class="trap">Q44: Đáp án A ("never conflict") sai — một số phong tục <strong>CÓ</strong> mâu thuẫn (polygamy, forced marriage). Đáp án B ("all conflict") cũng sai — chỉ <em>một số</em>. Q45: religious laws có <strong>NO legal status</strong> — không phải "small part of legal system" (C). Hai câu phải được học cùng nhau.</div>
+  <div class="q-opts">
+    <div class="opt"><span class="ol">A.</span><span class="ot">No, religious laws never conflict with Australian law; they have a small legal role.</span></div>
+    <div class="opt"><span class="ol">B.</span><span class="ot">Yes, all religious laws conflict with Australian law; they are banned.</span></div>
+    <div class="opt correct"><span class="ol">C.</span><span class="ot">Yes, some practices like polygamy and forced marriage conflict with Australian law; religious laws have no legal status in Australia.</span><span class="ctag">← Correct</span></div>
+    <div class="opt"><span class="ol">D.</span><span class="ot">There are no religious laws; all religious practices are fully legal.</span></div>
+  </div>
+</div>
+
+<!-- Q10 – gốc Q53 vs Q54 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">10</div><div class="q-orig">Gốc Q53 &amp; Q54</div></div>
+    <div class="q-body"><div class="q-text">What does it mean that Australia's government is secular?</div></div>
+  </div>
+  <div class="trap">Bốn đáp án đều mô tả mối quan hệ khác nhau giữa chính phủ và tôn giáo. Đáp án đúng là <strong>A</strong>: chính phủ <em>hoạt động tách biệt</em> khỏi tôn giáo. Không phải "bị điều hành bởi nhà lãnh đạo tôn giáo" (B), không phải "kiểm soát tôn giáo" (C), và không phải "theo một tôn giáo cụ thể" (D).</div>
+  <div class="q-opts">
+    <div class="opt correct"><span class="ol">A.</span><span class="ot">The government operates separately from churches or other religious entities.</span><span class="ctag">← Correct</span></div>
+    <div class="opt"><span class="ol">B.</span><span class="ot">The government is run by religious leaders.</span></div>
+    <div class="opt"><span class="ol">C.</span><span class="ot">The government controls religious institutions.</span></div>
+    <div class="opt"><span class="ol">D.</span><span class="ot">The government follows a specific religion.</span></div>
+  </div>
+</div>
+
+<!-- Q11 – gốc Q56 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">11</div><div class="q-orig">Gốc Q56</div></div>
+    <div class="q-body"><div class="q-text">Which Christian days are public holidays in Australia?</div></div>
+  </div>
+  <div class="trap">Câu hỏi chi tiết nhất trong bộ — bốn đáp án đều chứa các ngày lễ quen thuộc, dễ nhầm. Đáp án đúng là <strong>D: Good Friday, Easter Sunday, và Christmas Day</strong>. Không phải Easter Monday (A), không phải Boxing Day (B), không phải Thanksgiving (C — không tồn tại ở Úc).</div>
+  <div class="q-opts">
+    <div class="opt"><span class="ol">A.</span><span class="ot">Good Friday, Christmas Eve, and Easter Monday.</span></div>
+    <div class="opt"><span class="ol">B.</span><span class="ot">Easter Monday, Boxing Day, and New Year's Day.</span></div>
+    <div class="opt"><span class="ol">C.</span><span class="ot">Christmas Day, Thanksgiving Day, and Easter Sunday.</span></div>
+    <div class="opt correct"><span class="ol">D.</span><span class="ot">Good Friday, Easter Sunday, and Christmas Day.</span><span class="ctag">← Correct</span></div>
+  </div>
+</div>
+
+<!-- Q12 – gốc Q58 vs Q59 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">12</div><div class="q-orig">Gốc Q58 &amp; Q59</div></div>
+    <div class="q-body"><div class="q-text">How do many Australians identify themselves religiously, and what kind of heritage does Australia have?</div></div>
+  </div>
+  <div class="trap">Q58: Nhiều người Úc tự nhận là <strong>Christians</strong> — không phải Buddhists, Muslims hay Hindus. Q59: Di sản của Úc là <strong>Judeo-Christian</strong> — không phải Hindu, Indo-Islamic hay Afro-American. Hai câu này đặc biệt dễ nhầm với nhau và với kiến thức đa văn hóa thông thường.</div>
+  <div class="q-opts">
+    <div class="opt"><span class="ol">A.</span><span class="ot">As Buddhists; Indo-Islamic heritage.</span></div>
+    <div class="opt"><span class="ol">B.</span><span class="ot">As Muslims; Afro-American heritage.</span></div>
+    <div class="opt correct"><span class="ol">C.</span><span class="ot">As Christians; Judeo-Christian heritage.</span><span class="ctag">← Correct</span></div>
+    <div class="opt"><span class="ol">D.</span><span class="ot">As Hindus; Hindu heritage.</span></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+  NHÓM 4 — Hôn nhân, Bình đẳng & Fair Go
+══════════════════════════════ -->
+<div class="divider"><span class="div-label">Nhóm 4 — Hôn nhân, Bình đẳng &amp; Fair Go (Q60–Q73)</span></div>
+
+<!-- Q13 – gốc Q60 vs Q65 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">13</div><div class="q-orig">Gốc Q60 &amp; Q65</div></div>
+    <div class="q-body"><div class="q-text">Who can apply for a divorce in Australia, and who can marry each other?</div></div>
+  </div>
+  <div class="trap">Q60: <strong>Either spouse</strong> can apply, even nếu người kia không muốn ly hôn — không phải "only if both agree" (C). Q65: <strong>Two people of any gender</strong> (kể cả hai nam, hai nữ) — không phải "only a man and a woman" (A). Đây là hai điểm pháp lý đặc thù của Úc mà nhiều người không biết.</div>
+  <div class="q-opts">
+    <div class="opt"><span class="ol">A.</span><span class="ot">Only the wife can divorce; only a man and a woman can marry.</span></div>
+    <div class="opt"><span class="ol">B.</span><span class="ot">Only if both agree to divorce; only two women can marry.</span></div>
+    <div class="opt correct"><span class="ol">C.</span><span class="ot">Either spouse can apply for divorce even if the other disagrees; two people of any gender can marry.</span><span class="ctag">← Correct</span></div>
+    <div class="opt"><span class="ol">D.</span><span class="ot">Divorce is not allowed; only two men can marry.</span></div>
+  </div>
+</div>
+
+<!-- Q14 – gốc Q64 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">14</div><div class="q-orig">Gốc Q64</div></div>
+    <div class="q-body"><div class="q-text">In Australia, what do both men and women have equal access to?</div></div>
+  </div>
+  <div class="trap">Đáp án A, B, C đều đúng một phần — mỗi cái chỉ liệt kê một số quyền. Đáp án đúng là <strong>D — All of the above</strong>: gồm giáo dục + việc làm + quyền bầu cử + quyền ứng cử + Lực lượng Quốc phòng + cảnh sát + toà án + dịch vụ xã hội. Bẫy "All of the above" — nhưng lần này là đúng thật.</div>
+  <div class="q-opts">
+    <div class="opt"><span class="ol">A.</span><span class="ot">Education, employment, and voting rights.</span></div>
+    <div class="opt"><span class="ol">B.</span><span class="ot">The right to stand for Parliament, join the Defence Force and police.</span></div>
+    <div class="opt"><span class="ol">C.</span><span class="ot">Equal treatment in courts and access to social services.</span></div>
+    <div class="opt correct"><span class="ol">D.</span><span class="ot">All of the above.</span><span class="ctag">← Correct</span></div>
+  </div>
+</div>
+
+<!-- Q15 – gốc Q71 vs Q73 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">15</div><div class="q-orig">Gốc Q71 &amp; Q73</div></div>
+    <div class="q-body"><div class="q-text">Why are people provided a "fair go" in Australia, and what does it mean?</div></div>
+  </div>
+  <div class="trap">Q71: mục đích là <strong>không có phân biệt giai cấp chính thức</strong> — không phải "để kinh tế vận hành" (B) hay "phân biệt giai cấp đúng cách" (D). Q73: thành công dựa trên <strong>talent, work and effort — not health or background</strong>. Từ "not health or background" là điểm quan trọng thường bị bỏ sót.</div>
+  <div class="q-opts">
+    <div class="opt"><span class="ol">A.</span><span class="ot">To ensure the economy keeps running; success depends on personal connections.</span></div>
+    <div class="opt"><span class="ol">B.</span><span class="ot">To ensure proper class distinctions; only certain groups get opportunities.</span></div>
+    <div class="opt correct"><span class="ol">C.</span><span class="ot">To ensure no formal class distinctions; achievements based on talent, work and effort — not health or background.</span><span class="ctag">← Correct</span></div>
+    <div class="opt"><span class="ol">D.</span><span class="ot">To prioritize wealthy citizens; success depends on family privilege.</span></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+  NHÓM 5 — Quyền & Trách nhiệm Công dân
+══════════════════════════════ -->
+<div class="divider"><span class="div-label">Nhóm 5 — Quyền &amp; Trách nhiệm Công dân (Q74–Q115)</span></div>
+
+<!-- Q16 – gốc Q87 vs Q88 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">16</div><div class="q-orig">Gốc Q87 &amp; Q88</div></div>
+    <div class="q-body"><div class="q-text">Is voting compulsory in local government elections? What about federal and state elections?</div></div>
+  </div>
+  <div class="trap">Đây là cặp câu cực kỳ dễ nhầm: <strong>Local</strong> elections → <strong>Not always — depends on the state</strong> (không bắt buộc toàn quốc). <strong>Federal and state</strong> elections → <strong>Yes, mandatory for all eligible citizens</strong>. Nhiều người nhầm cả hai đều bắt buộc hoặc cả hai đều tùy chọn.</div>
+  <div class="q-opts">
+    <div class="opt"><span class="ol">A.</span><span class="ot">Both local and federal/state voting are optional everywhere.</span></div>
+    <div class="opt"><span class="ol">B.</span><span class="ot">Both local and federal/state voting are mandatory nationwide.</span></div>
+    <div class="opt"><span class="ol">C.</span><span class="ot">Local voting is mandatory; federal/state voting depends on the state.</span></div>
+    <div class="opt correct"><span class="ol">D.</span><span class="ot">Local voting: not always, depends on the state. Federal/state voting: yes, mandatory for all eligible citizens.</span><span class="ctag">← Correct</span></div>
+  </div>
+</div>
+
+<!-- Q17 – gốc Q91 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">17</div><div class="q-orig">Gốc Q91</div></div>
+    <div class="q-body"><div class="q-text">What is voting for Australian citizens aged 18 years or over?</div></div>
+  </div>
+  <div class="trap">Đáp án B ("civic duty and legal obligation") nghe rất chính xác về mặt pháp lý. Nhưng đáp án đúng là <strong>A: a responsibility, right, AND privilege</strong> — ba từ đồng thời. Không phải chỉ "legal obligation" hay "personal choice". Cần nhớ cả ba yếu tố.</div>
+  <div class="q-opts">
+    <div class="opt correct"><span class="ol">A.</span><span class="ot">A responsibility, right, and privilege.</span><span class="ctag">← Correct</span></div>
+    <div class="opt"><span class="ol">B.</span><span class="ot">A civic duty and legal obligation.</span></div>
+    <div class="opt"><span class="ol">C.</span><span class="ot">A personal choice without consequences.</span></div>
+    <div class="opt"><span class="ol">D.</span><span class="ot">A government requirement only.</span></div>
+  </div>
+</div>
+
+<!-- Q18 – gốc Q93 vs Q94 vs Q97 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">18</div><div class="q-orig">Gốc Q93, Q94 &amp; Q97</div></div>
+    <div class="q-body"><div class="q-text">What must citizens be committed to defending, and is service in the Australian Defence Force compulsory?</div></div>
+  </div>
+  <div class="trap">Bộ ba câu dễ nhầm: Q93 "committed to" → <strong>Defending Australia and its way of life</strong> — không phải "join the Defence Force" (A) hay "serve in military" (C). Q94: trách nhiệm là <strong>defend if the need arises</strong> — không phải tự nguyện gia nhập quân đội. Q97: service là <strong>voluntary</strong> — không bắt buộc.</div>
+  <div class="q-opts">
+    <div class="opt"><span class="ol">A.</span><span class="ot">Committed to joining the Defence Force; service is mandatory for all.</span></div>
+    <div class="opt"><span class="ol">B.</span><span class="ot">Committed to volunteering in community; service depends on age.</span></div>
+    <div class="opt correct"><span class="ol">C.</span><span class="ot">Committed to defending Australia and its way of life if the need arises; service in the Defence Force is voluntary.</span><span class="ctag">← Correct</span></div>
+    <div class="opt"><span class="ol">D.</span><span class="ot">Committed to protecting local communities only; service is compulsory for one year.</span></div>
+  </div>
+</div>
+
+<!-- Q19 – gốc Q99 vs Q102 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">19</div><div class="q-orig">Gốc Q99 &amp; Q102</div></div>
+    <div class="q-body"><div class="q-text">Who can be called to serve on a jury, and who must serve?</div></div>
+  </div>
+  <div class="trap">Q99: Ai CÓ THỂ được gọi → <strong>Australian citizens on the electoral roll</strong> — không phải "any Australian citizen" (A) hay "citizens over 30" (D). Q102: Ai PHẢI phục vụ → <strong>Australian citizens aged 18 or older</strong>. Sự khác biệt giữa "on the electoral roll" và chỉ "aged 18+" là điểm tinh tế cần ghi nhớ.</div>
+  <div class="q-opts">
+    <div class="opt"><span class="ol">A.</span><span class="ot">Any Australian citizen can be called; anyone living in Australia must serve.</span></div>
+    <div class="opt"><span class="ol">B.</span><span class="ot">Only lawyers can be called; only people working in courts must serve.</span></div>
+    <div class="opt correct"><span class="ol">C.</span><span class="ot">Australian citizens on the electoral roll can be called; Australian citizens aged 18 or older must serve.</span><span class="ctag">← Correct</span></div>
+    <div class="opt"><span class="ol">D.</span><span class="ot">Australian citizens over 30 can be called; only lawyers and judges must serve.</span></div>
+  </div>
+</div>
+
+<!-- Q20 – gốc Q106 -->
+<div class="q-card">
+  <div class="q-top">
+    <div class="num-wrap"><div class="q-num">20</div><div class="q-orig">Gốc Q106</div></div>
+    <div class="q-body"><div class="q-text">Who can seek election to the Australian Parliament at the federal, state, or territory level?</div></div>
+  </div>
+  <div class="trap">Đây là câu khó nhất trong bộ 127 câu: đáp án đúng là <strong>A — Australian citizens aged 18 or over AND who are NOT dual citizens</strong>. Điều kiện <em>"not dual citizens"</em> rất dễ bị bỏ qua. Đáp án B ("only Australian citizens") thiếu điều kiện tuổi và dual citizenship. Đáp án C và D sai hoàn toàn.</div>
+  <div class="q-opts">
+    <div class="opt correct"><span class="ol">A.</span><span class="ot">Australian citizens aged 18 or over and who are not dual citizens.</span><span class="ctag">← Correct</span></div>
+    <div class="opt"><span class="ol">B.</span><span class="ot">Only Australian citizens (no age or dual-citizenship restriction).</span></div>
+    <div class="opt"><span class="ol">C.</span><span class="ot">Anyone living in Australia for more than 5 years.</span></div>
+    <div class="opt"><span class="ol">D.</span><span class="ot">Citizens of any country who are permanent residents.</span></div>
+  </div>
 </div>
 
-<div class="question">
-20. What must Australians respect?<br>
-A. Only laws<br>
-B. Only government<br>
-C. <span style="color:blue;font-weight:bold;">Rights and freedoms of others <span style="color:red;">&lt;- Correct</span></span><br>
-D. Only religion<br>
 </div>
-<script>
 
-document.querySelectorAll('.q-title').forEach(el => {
-    if (el.textContent.includes('?')) {
-        el.style.fontWeight = 'bold';
-    }
-});
-</script>
 </body>
 </html>
